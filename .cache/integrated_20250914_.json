@@ -1,0 +1,1743 @@
+{
+  "data": [
+    {
+      "title": "송송송 가족여행 : 전기차 지구횡단",
+      "theater": "CGV 용산아이파크몰",
+      "area": "용산구",
+      "screen": "19관(아트하우스)",
+      "movieCode": "20253369",
+      "time": "08:00",
+      "showtime": "2025-09-13T23:00:00.000Z"
+    },
+    {
+      "title": "린다 린다 린다",
+      "theater": "라이카시네마",
+      "area": "서대문구",
+      "screen": "S관",
+      "movieCode": "20060092",
+      "time": "08:30",
+      "showtime": "2025-09-13T23:30:00.000Z"
+    },
+    {
+      "title": "아임 스틸 히어",
+      "theater": "씨네큐브광화문(서울)",
+      "area": "종로구",
+      "screen": "01관",
+      "movieCode": "20256002",
+      "time": "09:20",
+      "showtime": "2025-09-14T00:20:00.000Z"
+    },
+    {
+      "title": "얼굴",
+      "theater": "아리랑시네센터(서울)",
+      "area": "성북구",
+      "screen": "02관",
+      "movieCode": "20242964",
+      "time": "09:30",
+      "showtime": "2025-09-14T00:30:00.000Z"
+    },
+    {
+      "title": "3학년 2학기",
+      "theater": "씨네큐브광화문(서울)",
+      "area": "종로구",
+      "screen": "02관",
+      "movieCode": "20249072",
+      "time": "09:30",
+      "showtime": "2025-09-14T00:30:00.000Z"
+    },
+    {
+      "title": "송송송 가족여행 : 전기차 지구횡단",
+      "theater": "CGV 명동역 씨네라이브러리",
+      "area": "중구",
+      "screen": "ART1관",
+      "movieCode": "20253369",
+      "time": "09:30",
+      "showtime": "2025-09-14T00:30:00.000Z"
+    },
+    {
+      "title": "스탑 메이킹 센스",
+      "theater": "CGV 명동역 씨네라이브러리",
+      "area": "중구",
+      "screen": "ART2관",
+      "movieCode": "20186343",
+      "time": "09:30",
+      "showtime": "2025-09-14T00:30:00.000Z"
+    },
+    {
+      "title": "얼굴",
+      "theater": "CINE de CHEF 압구정",
+      "area": "강남구",
+      "screen": "Cine de Chef A관(TEMPUR CINEMA)",
+      "movieCode": "20242964",
+      "time": "09:40",
+      "showtime": "2025-09-14T00:40:00.000Z"
+    },
+    {
+      "title": "빌리와 용감한 타이거 킹",
+      "theater": "씨네큐 신도림",
+      "area": "구로구",
+      "screen": "09관",
+      "movieCode": "20253962",
+      "time": "09:40",
+      "showtime": "2025-09-14T00:40:00.000Z"
+    },
+    {
+      "title": "좀비딸",
+      "theater": "씨네큐 신도림",
+      "area": "구로구",
+      "screen": "10관",
+      "movieCode": "20241941",
+      "time": "09:40",
+      "showtime": "2025-09-14T00:40:00.000Z"
+    },
+    {
+      "title": "비밀일 수밖에",
+      "theater": "KT&G 상상마당 Cinema",
+      "area": "마포구",
+      "screen": "01관",
+      "movieCode": "20234833",
+      "time": "09:40",
+      "showtime": "2025-09-14T00:40:00.000Z"
+    },
+    {
+      "title": "얼굴",
+      "theater": "씨네큐 신도림",
+      "area": "구로구",
+      "screen": "01관",
+      "movieCode": "20242964",
+      "time": "09:45",
+      "showtime": "2025-09-14T00:45:00.000Z"
+    },
+    {
+      "title": "건국전쟁2",
+      "theater": "씨네큐 신도림",
+      "area": "구로구",
+      "screen": "06관",
+      "movieCode": "20257083",
+      "time": "09:45",
+      "showtime": "2025-09-14T00:45:00.000Z"
+    },
+    {
+      "title": "첫사랑 엔딩",
+      "theater": "씨네큐 신도림",
+      "area": "구로구",
+      "screen": "05관(Reserve)",
+      "movieCode": "20256281",
+      "time": "09:50",
+      "showtime": "2025-09-14T00:50:00.000Z"
+    },
+    {
+      "title": "3학년 2학기",
+      "theater": "씨네큐 신도림",
+      "area": "구로구",
+      "screen": "08관",
+      "movieCode": "20249072",
+      "time": "09:50",
+      "showtime": "2025-09-14T00:50:00.000Z"
+    },
+    {
+      "title": "3학년 2학기",
+      "theater": "아트나인",
+      "area": "동작구",
+      "screen": "0관",
+      "movieCode": "20249072",
+      "time": "09:50",
+      "showtime": "2025-09-14T00:50:00.000Z"
+    },
+    {
+      "title": "여름정원",
+      "theater": "에무 시네마 앤 카페",
+      "area": "종로구",
+      "screen": "01관",
+      "movieCode": "20180110",
+      "time": "09:50",
+      "showtime": "2025-09-14T00:50:00.000Z"
+    },
+    {
+      "title": "너는 나를 불태워",
+      "theater": "에무 시네마 앤 카페",
+      "area": "종로구",
+      "screen": "02관",
+      "movieCode": "20251542",
+      "time": "09:50",
+      "showtime": "2025-09-14T00:50:00.000Z"
+    },
+    {
+      "title": "노바디2",
+      "theater": "씨네큐 신도림",
+      "area": "구로구",
+      "screen": "02관",
+      "movieCode": "20256202",
+      "time": "10:00",
+      "showtime": "2025-09-14T01:00:00.000Z"
+    },
+    {
+      "title": "3670",
+      "theater": "더숲 아트시네마",
+      "area": "노원구",
+      "screen": "02관",
+      "movieCode": "20246333",
+      "time": "10:00",
+      "showtime": "2025-09-14T01:00:00.000Z"
+    },
+    {
+      "title": "3670",
+      "theater": "아트나인",
+      "area": "동작구",
+      "screen": "9관",
+      "movieCode": "20246333",
+      "time": "10:00",
+      "showtime": "2025-09-14T01:00:00.000Z"
+    },
+    {
+      "title": "여름이 지나가면",
+      "theater": "CGV 용산아이파크몰",
+      "area": "용산구",
+      "screen": "19관(아트하우스)",
+      "movieCode": "20236814",
+      "time": "10:00",
+      "showtime": "2025-09-14T01:00:00.000Z"
+    },
+    {
+      "title": "다른 것으로 알려질 뿐이지",
+      "theater": "KU시네마테크",
+      "area": "광진구",
+      "screen": "01관",
+      "movieCode": "20240320",
+      "time": "10:10",
+      "showtime": "2025-09-14T01:10:00.000Z"
+    },
+    {
+      "title": "스탑 메이킹 센스",
+      "theater": "더숲 아트시네마",
+      "area": "노원구",
+      "screen": "01관",
+      "movieCode": "20186343",
+      "time": "10:10",
+      "showtime": "2025-09-14T01:10:00.000Z"
+    },
+    {
+      "title": "얼굴",
+      "theater": "CGV 명동역 씨네라이브러리",
+      "area": "중구",
+      "screen": "04관",
+      "movieCode": "20242964",
+      "time": "10:10",
+      "showtime": "2025-09-14T01:10:00.000Z"
+    },
+    {
+      "title": "3학년 2학기",
+      "theater": "아리랑시네센터(서울)",
+      "area": "성북구",
+      "screen": "아리랑인디웨이브",
+      "movieCode": "20249072",
+      "time": "10:15",
+      "showtime": "2025-09-14T01:15:00.000Z"
+    },
+    {
+      "title": "해밀턴 부인",
+      "theater": "낭만극장",
+      "area": "종로구",
+      "screen": "01관",
+      "movieCode": "20138782",
+      "time": "10:20",
+      "showtime": "2025-09-14T01:20:00.000Z"
+    },
+    {
+      "title": "역마차",
+      "theater": "허리우드클래식",
+      "area": "종로구",
+      "screen": "01관",
+      "movieCode": "20100040",
+      "time": "10:30",
+      "showtime": "2025-09-14T01:30:00.000Z"
+    },
+    {
+      "title": "너는 나를 불태워",
+      "theater": "CGV 명동역 씨네라이브러리",
+      "area": "중구",
+      "screen": "05관",
+      "movieCode": "20251542",
+      "time": "10:30",
+      "showtime": "2025-09-14T01:30:00.000Z"
+    },
+    {
+      "title": "차이나타운 투쟁기",
+      "theater": "아트하우스모모",
+      "area": "서대문구",
+      "screen": "01관",
+      "movieCode": "20257114",
+      "time": "10:40",
+      "showtime": "2025-09-14T01:40:00.000Z"
+    },
+    {
+      "title": "여름이 지나가면",
+      "theater": "씨네큐 신도림",
+      "area": "구로구",
+      "screen": "03관(Reserve)",
+      "movieCode": "20236814",
+      "time": "11:00",
+      "showtime": "2025-09-14T02:00:00.000Z"
+    },
+    {
+      "title": "THE 자연인",
+      "theater": "인디스페이스",
+      "area": "마포구",
+      "screen": "01관",
+      "movieCode": "20232153",
+      "time": "11:00",
+      "showtime": "2025-09-14T02:00:00.000Z"
+    },
+    {
+      "title": "제 17회 서울국제건축영화제 묶음 상영 5",
+      "theater": "아트하우스모모",
+      "area": "서대문구",
+      "screen": "02관",
+      "movieCode": "20257119",
+      "time": "11:00",
+      "showtime": "2025-09-14T02:00:00.000Z"
+    },
+    {
+      "title": "좀비딸",
+      "theater": "씨네큐 신도림",
+      "area": "구로구",
+      "screen": "09관",
+      "movieCode": "20241941",
+      "time": "11:10",
+      "showtime": "2025-09-14T02:10:00.000Z"
+    },
+    {
+      "title": "콜 미 바이 유어 네임",
+      "theater": "에무 시네마 앤 카페",
+      "area": "종로구",
+      "screen": "02관",
+      "movieCode": "20178522",
+      "time": "11:10",
+      "showtime": "2025-09-14T02:10:00.000Z"
+    },
+    {
+      "title": "모노노케 히메",
+      "theater": "CGV 용산아이파크몰",
+      "area": "용산구",
+      "screen": "IMAX",
+      "movieCode": "20030047",
+      "time": "11:20",
+      "showtime": "2025-09-14T02:20:00.000Z"
+    },
+    {
+      "title": "비밀일 수밖에",
+      "theater": "CGV 명동역 씨네라이브러리",
+      "area": "중구",
+      "screen": "ART2관",
+      "movieCode": "20234833",
+      "time": "11:25",
+      "showtime": "2025-09-14T02:25:00.000Z"
+    },
+    {
+      "title": "비밀일 수밖에",
+      "theater": "씨네큐브광화문(서울)",
+      "area": "종로구",
+      "screen": "02관",
+      "movieCode": "20234833",
+      "time": "11:30",
+      "showtime": "2025-09-14T02:30:00.000Z"
+    },
+    {
+      "title": "머티리얼리스트",
+      "theater": "라이카시네마",
+      "area": "서대문구",
+      "screen": "S관",
+      "movieCode": "20256149",
+      "time": "11:35",
+      "showtime": "2025-09-14T02:35:00.000Z"
+    },
+    {
+      "title": "가족의 비밀",
+      "theater": "CGV 명동역 씨네라이브러리",
+      "area": "중구",
+      "screen": "ART1관",
+      "movieCode": "20257037",
+      "time": "11:40",
+      "showtime": "2025-09-14T02:40:00.000Z"
+    },
+    {
+      "title": "챌린저스",
+      "theater": "CGV 용산아이파크몰",
+      "area": "용산구",
+      "screen": "13관",
+      "movieCode": "20249318",
+      "time": "11:45",
+      "showtime": "2025-09-14T02:45:00.000Z"
+    },
+    {
+      "title": "머티리얼리스트",
+      "theater": "아트나인",
+      "area": "동작구",
+      "screen": "0관",
+      "movieCode": "20256149",
+      "time": "11:50",
+      "showtime": "2025-09-14T02:50:00.000Z"
+    },
+    {
+      "title": "여름정원",
+      "theater": "KT&G 상상마당 Cinema",
+      "area": "마포구",
+      "screen": "01관",
+      "movieCode": "20180110",
+      "time": "11:50",
+      "showtime": "2025-09-14T02:50:00.000Z"
+    },
+    {
+      "title": "여름정원",
+      "theater": "씨네큐브광화문(서울)",
+      "area": "종로구",
+      "screen": "01관",
+      "movieCode": "20180110",
+      "time": "11:50",
+      "showtime": "2025-09-14T02:50:00.000Z"
+    },
+    {
+      "title": "비밀일 수밖에",
+      "theater": "에무 시네마 앤 카페",
+      "area": "종로구",
+      "screen": "01관",
+      "movieCode": "20234833",
+      "time": "11:55",
+      "showtime": "2025-09-14T02:55:00.000Z"
+    },
+    {
+      "title": "다른 것으로 알려질 뿐이지",
+      "theater": "픽처하우스",
+      "area": "강남구",
+      "screen": "01관",
+      "movieCode": "20240320",
+      "time": "12:00",
+      "showtime": "2025-09-14T03:00:00.000Z"
+    },
+    {
+      "title": "얼굴",
+      "theater": "씨네큐 신도림",
+      "area": "구로구",
+      "screen": "01관",
+      "movieCode": "20242964",
+      "time": "12:00",
+      "showtime": "2025-09-14T03:00:00.000Z"
+    },
+    {
+      "title": "건국전쟁2",
+      "theater": "씨네큐 신도림",
+      "area": "구로구",
+      "screen": "06관",
+      "movieCode": "20257083",
+      "time": "12:00",
+      "showtime": "2025-09-14T03:00:00.000Z"
+    },
+    {
+      "title": "악마가 이사왔다",
+      "theater": "씨네큐 신도림",
+      "area": "구로구",
+      "screen": "10관",
+      "movieCode": "20210546",
+      "time": "12:00",
+      "showtime": "2025-09-14T03:00:00.000Z"
+    },
+    {
+      "title": "내 말 좀 들어줘",
+      "theater": "더숲 아트시네마",
+      "area": "노원구",
+      "screen": "01관",
+      "movieCode": "20255538",
+      "time": "12:00",
+      "showtime": "2025-09-14T03:00:00.000Z"
+    },
+    {
+      "title": "투게더",
+      "theater": "CGV 명동역 씨네라이브러리",
+      "area": "중구",
+      "screen": "05관",
+      "movieCode": "20256071",
+      "time": "12:00",
+      "showtime": "2025-09-14T03:00:00.000Z"
+    },
+    {
+      "title": "스탑 메이킹 센스",
+      "theater": "씨네큐 신도림",
+      "area": "구로구",
+      "screen": "08관",
+      "movieCode": "20186343",
+      "time": "12:05",
+      "showtime": "2025-09-14T03:05:00.000Z"
+    },
+    {
+      "title": "THE 자연인",
+      "theater": "아리랑시네센터(서울)",
+      "area": "성북구",
+      "screen": "아리랑인디웨이브",
+      "movieCode": "20232153",
+      "time": "12:10",
+      "showtime": "2025-09-14T03:10:00.000Z"
+    },
+    {
+      "title": "미세리코르디아",
+      "theater": "아트나인",
+      "area": "동작구",
+      "screen": "9관",
+      "movieCode": "20245522",
+      "time": "12:20",
+      "showtime": "2025-09-14T03:20:00.000Z"
+    },
+    {
+      "title": "역마차",
+      "theater": "허리우드클래식",
+      "area": "종로구",
+      "screen": "01관",
+      "movieCode": "20100040",
+      "time": "12:20",
+      "showtime": "2025-09-14T03:20:00.000Z"
+    },
+    {
+      "title": "여름이 지나가면",
+      "theater": "CGV 명동역 씨네라이브러리",
+      "area": "중구",
+      "screen": "04관",
+      "movieCode": "20236814",
+      "time": "12:20",
+      "showtime": "2025-09-14T03:20:00.000Z"
+    },
+    {
+      "title": "클리어",
+      "theater": "CGV 용산아이파크몰",
+      "area": "용산구",
+      "screen": "19관(아트하우스)",
+      "movieCode": "20257458",
+      "time": "12:25",
+      "showtime": "2025-09-14T03:25:00.000Z"
+    },
+    {
+      "title": "마지막 숙제",
+      "theater": "더숲 아트시네마",
+      "area": "노원구",
+      "screen": "02관",
+      "movieCode": "20256101",
+      "time": "12:30",
+      "showtime": "2025-09-14T03:30:00.000Z"
+    },
+    {
+      "title": "레베렌츠, 어둠의 성역",
+      "theater": "아트하우스모모",
+      "area": "서대문구",
+      "screen": "01관",
+      "movieCode": "20257106",
+      "time": "12:30",
+      "showtime": "2025-09-14T03:30:00.000Z"
+    },
+    {
+      "title": "해밀턴 부인",
+      "theater": "낭만극장",
+      "area": "종로구",
+      "screen": "01관",
+      "movieCode": "20138782",
+      "time": "12:35",
+      "showtime": "2025-09-14T03:35:00.000Z"
+    },
+    {
+      "title": "얼굴",
+      "theater": "CINE de CHEF 압구정",
+      "area": "강남구",
+      "screen": "Cine de Chef A관(TEMPUR CINEMA)",
+      "movieCode": "20242964",
+      "time": "12:40",
+      "showtime": "2025-09-14T03:40:00.000Z"
+    },
+    {
+      "title": "린다 린다 린다",
+      "theater": "CGV 용산아이파크몰",
+      "area": "용산구",
+      "screen": "12관",
+      "movieCode": "20060092",
+      "time": "12:40",
+      "showtime": "2025-09-14T03:40:00.000Z"
+    },
+    {
+      "title": "어글리 시스터",
+      "theater": "KU시네마테크",
+      "area": "광진구",
+      "screen": "01관",
+      "movieCode": "20255937",
+      "time": "12:50",
+      "showtime": "2025-09-14T03:50:00.000Z"
+    },
+    {
+      "title": "누볼라",
+      "theater": "아트하우스모모",
+      "area": "서대문구",
+      "screen": "02관",
+      "movieCode": "20257110",
+      "time": "13:00",
+      "showtime": "2025-09-14T04:00:00.000Z"
+    },
+    {
+      "title": "얼굴",
+      "theater": "씨네큐 신도림",
+      "area": "구로구",
+      "screen": "03관(Reserve)",
+      "movieCode": "20242964",
+      "time": "13:25",
+      "showtime": "2025-09-14T04:25:00.000Z"
+    },
+    {
+      "title": "성적표의 김민영",
+      "theater": "씨네큐 신도림",
+      "area": "구로구",
+      "screen": "09관",
+      "movieCode": "20217124",
+      "time": "13:30",
+      "showtime": "2025-09-14T04:30:00.000Z"
+    },
+    {
+      "title": "너는 나를 불태워",
+      "theater": "인디스페이스",
+      "area": "마포구",
+      "screen": "01관",
+      "movieCode": "20251542",
+      "time": "13:30",
+      "showtime": "2025-09-14T04:30:00.000Z"
+    },
+    {
+      "title": "사라고사의 매뉴스크립트",
+      "theater": "서울아트시네마",
+      "area": "중구",
+      "screen": "01관",
+      "movieCode": "20134283",
+      "time": "13:30",
+      "showtime": "2025-09-14T04:30:00.000Z"
+    },
+    {
+      "title": "3670",
+      "theater": "씨네큐브광화문(서울)",
+      "area": "종로구",
+      "screen": "02관",
+      "movieCode": "20246333",
+      "time": "13:40",
+      "showtime": "2025-09-14T04:40:00.000Z"
+    },
+    {
+      "title": "500일의 썸머",
+      "theater": "에무 시네마 앤 카페",
+      "area": "종로구",
+      "screen": "02관",
+      "movieCode": "20090683",
+      "time": "13:40",
+      "showtime": "2025-09-14T04:40:00.000Z"
+    },
+    {
+      "title": "얼굴",
+      "theater": "씨네큐 신도림",
+      "area": "구로구",
+      "screen": "07관(Suite)",
+      "movieCode": "20242964",
+      "time": "13:45",
+      "showtime": "2025-09-14T04:45:00.000Z"
+    },
+    {
+      "title": "스탑 메이킹 센스",
+      "theater": "라이카시네마",
+      "area": "서대문구",
+      "screen": "S관",
+      "movieCode": "20186343",
+      "time": "13:45",
+      "showtime": "2025-09-14T04:45:00.000Z"
+    },
+    {
+      "title": "얼굴",
+      "theater": "아리랑시네센터(서울)",
+      "area": "성북구",
+      "screen": "02관",
+      "movieCode": "20242964",
+      "time": "13:45",
+      "showtime": "2025-09-14T04:45:00.000Z"
+    },
+    {
+      "title": "연의 편지",
+      "theater": "CGV 용산아이파크몰",
+      "area": "용산구",
+      "screen": "11관",
+      "movieCode": "20243864",
+      "time": "13:50",
+      "showtime": "2025-09-14T04:50:00.000Z"
+    },
+    {
+      "title": "너는 나를 불태워",
+      "theater": "CGV 명동역 씨네라이브러리",
+      "area": "중구",
+      "screen": "ART1관",
+      "movieCode": "20251542",
+      "time": "13:50",
+      "showtime": "2025-09-14T04:50:00.000Z"
+    },
+    {
+      "title": "챌린저스",
+      "theater": "CGV 명동역 씨네라이브러리",
+      "area": "중구",
+      "screen": "ART2관",
+      "movieCode": "20249318",
+      "time": "13:50",
+      "showtime": "2025-09-14T04:50:00.000Z"
+    },
+    {
+      "title": "이사",
+      "theater": "더숲 아트시네마",
+      "area": "노원구",
+      "screen": "01관",
+      "movieCode": "20180109",
+      "time": "14:00",
+      "showtime": "2025-09-14T05:00:00.000Z"
+    },
+    {
+      "title": "해피엔드",
+      "theater": "KT&G 상상마당 Cinema",
+      "area": "마포구",
+      "screen": "01관",
+      "movieCode": "20246318",
+      "time": "14:00",
+      "showtime": "2025-09-14T05:00:00.000Z"
+    },
+    {
+      "title": "스탑 메이킹 센스",
+      "theater": "씨네큐브광화문(서울)",
+      "area": "종로구",
+      "screen": "01관",
+      "movieCode": "20186343",
+      "time": "14:00",
+      "showtime": "2025-09-14T05:00:00.000Z"
+    },
+    {
+      "title": "피크닉",
+      "theater": "에무 시네마 앤 카페",
+      "area": "종로구",
+      "screen": "01관",
+      "movieCode": "20050120",
+      "time": "14:00",
+      "showtime": "2025-09-14T05:00:00.000Z"
+    },
+    {
+      "title": "3670",
+      "theater": "CGV 용산아이파크몰",
+      "area": "용산구",
+      "screen": "19관(아트하우스)",
+      "movieCode": "20246333",
+      "time": "14:00",
+      "showtime": "2025-09-14T05:00:00.000Z"
+    },
+    {
+      "title": "메이크 어 걸",
+      "theater": "씨네큐 신도림",
+      "area": "구로구",
+      "screen": "08관",
+      "movieCode": "20256985",
+      "time": "14:05",
+      "showtime": "2025-09-14T05:05:00.000Z"
+    },
+    {
+      "title": "모노노케 히메",
+      "theater": "CGV 용산아이파크몰",
+      "area": "용산구",
+      "screen": "IMAX",
+      "movieCode": "20030047",
+      "time": "14:05",
+      "showtime": "2025-09-14T05:05:00.000Z"
+    },
+    {
+      "title": "3670",
+      "theater": "아트나인",
+      "area": "동작구",
+      "screen": "0관",
+      "movieCode": "20246333",
+      "time": "14:10",
+      "showtime": "2025-09-14T05:10:00.000Z"
+    },
+    {
+      "title": "역마차",
+      "theater": "허리우드클래식",
+      "area": "종로구",
+      "screen": "01관",
+      "movieCode": "20100040",
+      "time": "14:10",
+      "showtime": "2025-09-14T05:10:00.000Z"
+    },
+    {
+      "title": "닥터 지바고",
+      "theater": "CGV 명동역 씨네라이브러리",
+      "area": "중구",
+      "screen": "05관",
+      "movieCode": "19650001",
+      "time": "14:10",
+      "showtime": "2025-09-14T05:10:00.000Z"
+    },
+    {
+      "title": "얼굴",
+      "theater": "씨네큐 신도림",
+      "area": "구로구",
+      "screen": "01관",
+      "movieCode": "20242964",
+      "time": "14:15",
+      "showtime": "2025-09-14T05:15:00.000Z"
+    },
+    {
+      "title": "건국전쟁2",
+      "theater": "씨네큐 신도림",
+      "area": "구로구",
+      "screen": "06관",
+      "movieCode": "20257083",
+      "time": "14:15",
+      "showtime": "2025-09-14T05:15:00.000Z"
+    },
+    {
+      "title": "내 말 좀 들어줘",
+      "theater": "아트나인",
+      "area": "동작구",
+      "screen": "9관",
+      "movieCode": "20255538",
+      "time": "14:20",
+      "showtime": "2025-09-14T05:20:00.000Z"
+    },
+    {
+      "title": "킹 오브 킹스",
+      "theater": "필름포럼",
+      "area": "서대문구",
+      "screen": "01관",
+      "movieCode": "20254275",
+      "time": "14:20",
+      "showtime": "2025-09-14T05:20:00.000Z"
+    },
+    {
+      "title": "비밀일 수밖에",
+      "theater": "아리랑시네센터(서울)",
+      "area": "성북구",
+      "screen": "아리랑인디웨이브",
+      "movieCode": "20234833",
+      "time": "14:25",
+      "showtime": "2025-09-14T05:25:00.000Z"
+    },
+    {
+      "title": "킹 오브 킹스",
+      "theater": "필름포럼",
+      "area": "서대문구",
+      "screen": "02관",
+      "movieCode": "20254275",
+      "time": "14:30",
+      "showtime": "2025-09-14T05:30:00.000Z"
+    },
+    {
+      "title": "린다 린다 린다",
+      "theater": "CGV 용산아이파크몰",
+      "area": "용산구",
+      "screen": "13관",
+      "movieCode": "20060092",
+      "time": "14:30",
+      "showtime": "2025-09-14T05:30:00.000Z"
+    },
+    {
+      "title": "비밀일 수밖에",
+      "theater": "더숲 아트시네마",
+      "area": "노원구",
+      "screen": "02관",
+      "movieCode": "20234833",
+      "time": "14:40",
+      "showtime": "2025-09-14T05:40:00.000Z"
+    },
+    {
+      "title": "제 17회 서울국제건축영화제 묶음 상영 6",
+      "theater": "아트하우스모모",
+      "area": "서대문구",
+      "screen": "01관",
+      "movieCode": "20257099",
+      "time": "14:40",
+      "showtime": "2025-09-14T05:40:00.000Z"
+    },
+    {
+      "title": "투게더",
+      "theater": "CGV 명동역 씨네라이브러리",
+      "area": "중구",
+      "screen": "04관",
+      "movieCode": "20256071",
+      "time": "14:40",
+      "showtime": "2025-09-14T05:40:00.000Z"
+    },
+    {
+      "title": "제 17회 서울국제건축영화제 묶음 상영 3",
+      "theater": "아트하우스모모",
+      "area": "서대문구",
+      "screen": "02관",
+      "movieCode": "20257117",
+      "time": "14:50",
+      "showtime": "2025-09-14T05:50:00.000Z"
+    },
+    {
+      "title": "해밀턴 부인",
+      "theater": "낭만극장",
+      "area": "종로구",
+      "screen": "01관",
+      "movieCode": "20138782",
+      "time": "14:50",
+      "showtime": "2025-09-14T05:50:00.000Z"
+    },
+    {
+      "title": "비밀일 수밖에",
+      "theater": "픽처하우스",
+      "area": "강남구",
+      "screen": "01관",
+      "movieCode": "20234833",
+      "time": "14:55",
+      "showtime": "2025-09-14T05:55:00.000Z"
+    },
+    {
+      "title": "#진상을 말씀드립니다",
+      "theater": "KU시네마테크",
+      "area": "광진구",
+      "screen": "01관",
+      "movieCode": "20255848",
+      "time": "15:00",
+      "showtime": "2025-09-14T06:00:00.000Z"
+    },
+    {
+      "title": "벨벳 골드마인",
+      "theater": "인디스페이스",
+      "area": "마포구",
+      "screen": "01관",
+      "movieCode": "19980044",
+      "time": "15:00",
+      "showtime": "2025-09-14T06:00:00.000Z"
+    },
+    {
+      "title": "어파이어",
+      "theater": "에무 시네마 앤 카페",
+      "area": "종로구",
+      "screen": "01관",
+      "movieCode": "20233412",
+      "time": "15:25",
+      "showtime": "2025-09-14T06:25:00.000Z"
+    },
+    {
+      "title": "투게더",
+      "theater": "라이카시네마",
+      "area": "서대문구",
+      "screen": "S관",
+      "movieCode": "20256071",
+      "time": "15:30",
+      "showtime": "2025-09-14T06:30:00.000Z"
+    },
+    {
+      "title": "첫여름",
+      "theater": "에무 시네마 앤 카페",
+      "area": "종로구",
+      "screen": "02관",
+      "movieCode": "20256332",
+      "time": "15:30",
+      "showtime": "2025-09-14T06:30:00.000Z"
+    },
+    {
+      "title": "클리어",
+      "theater": "CGV 명동역 씨네라이브러리",
+      "area": "중구",
+      "screen": "ART1관",
+      "movieCode": "20257458",
+      "time": "15:30",
+      "showtime": "2025-09-14T06:30:00.000Z"
+    },
+    {
+      "title": "벌새",
+      "theater": "씨네큐 신도림",
+      "area": "구로구",
+      "screen": "09관",
+      "movieCode": "20181103",
+      "time": "15:35",
+      "showtime": "2025-09-14T06:35:00.000Z"
+    },
+    {
+      "title": "얼굴",
+      "theater": "씨네큐 신도림",
+      "area": "구로구",
+      "screen": "07관(Suite)",
+      "movieCode": "20242964",
+      "time": "16:00",
+      "showtime": "2025-09-14T07:00:00.000Z"
+    },
+    {
+      "title": "투게더",
+      "theater": "씨네큐브광화문(서울)",
+      "area": "종로구",
+      "screen": "01관",
+      "movieCode": "20256071",
+      "time": "16:00",
+      "showtime": "2025-09-14T07:00:00.000Z"
+    },
+    {
+      "title": "역마차",
+      "theater": "허리우드클래식",
+      "area": "종로구",
+      "screen": "01관",
+      "movieCode": "20100040",
+      "time": "16:00",
+      "showtime": "2025-09-14T07:00:00.000Z"
+    },
+    {
+      "title": "3670",
+      "theater": "씨네큐 신도림",
+      "area": "구로구",
+      "screen": "08관",
+      "movieCode": "20246333",
+      "time": "16:10",
+      "showtime": "2025-09-14T07:10:00.000Z"
+    },
+    {
+      "title": "스왈로우테일 버터플라이",
+      "theater": "KT&G 상상마당 Cinema",
+      "area": "마포구",
+      "screen": "01관",
+      "movieCode": "20040683",
+      "time": "16:10",
+      "showtime": "2025-09-14T07:10:00.000Z"
+    },
+    {
+      "title": "미세리코르디아",
+      "theater": "필름포럼",
+      "area": "서대문구",
+      "screen": "01관",
+      "movieCode": "20245522",
+      "time": "16:10",
+      "showtime": "2025-09-14T07:10:00.000Z"
+    },
+    {
+      "title": "비밀일 수밖에",
+      "theater": "아트나인",
+      "area": "동작구",
+      "screen": "9관",
+      "movieCode": "20234833",
+      "time": "16:20",
+      "showtime": "2025-09-14T07:20:00.000Z"
+    },
+    {
+      "title": "3학년 2학기",
+      "theater": "씨네큐브광화문(서울)",
+      "area": "종로구",
+      "screen": "02관",
+      "movieCode": "20249072",
+      "time": "16:20",
+      "showtime": "2025-09-14T07:20:00.000Z"
+    },
+    {
+      "title": "머티리얼리스트",
+      "theater": "에무 시네마 앤 카페",
+      "area": "종로구",
+      "screen": "02관",
+      "movieCode": "20256149",
+      "time": "16:20",
+      "showtime": "2025-09-14T07:20:00.000Z"
+    },
+    {
+      "title": "얼굴",
+      "theater": "씨네큐 신도림",
+      "area": "구로구",
+      "screen": "01관",
+      "movieCode": "20242964",
+      "time": "16:30",
+      "showtime": "2025-09-14T07:30:00.000Z"
+    },
+    {
+      "title": "건국전쟁2",
+      "theater": "씨네큐 신도림",
+      "area": "구로구",
+      "screen": "06관",
+      "movieCode": "20257083",
+      "time": "16:30",
+      "showtime": "2025-09-14T07:30:00.000Z"
+    },
+    {
+      "title": "좀비딸",
+      "theater": "씨네큐 신도림",
+      "area": "구로구",
+      "screen": "10관",
+      "movieCode": "20241941",
+      "time": "16:30",
+      "showtime": "2025-09-14T07:30:00.000Z"
+    },
+    {
+      "title": "퍼펙트 블루",
+      "theater": "더숲 아트시네마",
+      "area": "노원구",
+      "screen": "01관",
+      "movieCode": "20040590",
+      "time": "16:30",
+      "showtime": "2025-09-14T07:30:00.000Z"
+    },
+    {
+      "title": "스탑 메이킹 센스",
+      "theater": "아트나인",
+      "area": "동작구",
+      "screen": "0관",
+      "movieCode": "20186343",
+      "time": "16:30",
+      "showtime": "2025-09-14T07:30:00.000Z"
+    },
+    {
+      "title": "무명 無名",
+      "theater": "필름포럼",
+      "area": "서대문구",
+      "screen": "02관",
+      "movieCode": "20254237",
+      "time": "16:30",
+      "showtime": "2025-09-14T07:30:00.000Z"
+    },
+    {
+      "title": "비밀일 수밖에",
+      "theater": "CGV 용산아이파크몰",
+      "area": "용산구",
+      "screen": "19관(아트하우스)",
+      "movieCode": "20234833",
+      "time": "16:30",
+      "showtime": "2025-09-14T07:30:00.000Z"
+    },
+    {
+      "title": "3학년 2학기",
+      "theater": "CGV 명동역 씨네라이브러리",
+      "area": "중구",
+      "screen": "ART2관",
+      "movieCode": "20249072",
+      "time": "16:30",
+      "showtime": "2025-09-14T07:30:00.000Z"
+    },
+    {
+      "title": "다른 것으로 알려질 뿐이지",
+      "theater": "아리랑시네센터(서울)",
+      "area": "성북구",
+      "screen": "아리랑인디웨이브",
+      "movieCode": "20240320",
+      "time": "16:35",
+      "showtime": "2025-09-14T07:35:00.000Z"
+    },
+    {
+      "title": "얼굴",
+      "theater": "CGV 용산아이파크몰",
+      "area": "용산구",
+      "screen": "15관",
+      "movieCode": "20242964",
+      "time": "16:45",
+      "showtime": "2025-09-14T07:45:00.000Z"
+    },
+    {
+      "title": "여름정원",
+      "theater": "더숲 아트시네마",
+      "area": "노원구",
+      "screen": "02관",
+      "movieCode": "20180110",
+      "time": "16:50",
+      "showtime": "2025-09-14T07:50:00.000Z"
+    },
+    {
+      "title": "움직이는 회관",
+      "theater": "아트하우스모모",
+      "area": "서대문구",
+      "screen": "01관",
+      "movieCode": "20257111",
+      "time": "16:50",
+      "showtime": "2025-09-14T07:50:00.000Z"
+    },
+    {
+      "title": "모노노케 히메",
+      "theater": "CGV 용산아이파크몰",
+      "area": "용산구",
+      "screen": "IMAX",
+      "movieCode": "20030047",
+      "time": "16:50",
+      "showtime": "2025-09-14T07:50:00.000Z"
+    },
+    {
+      "title": "스탑 메이킹 센스",
+      "theater": "CGV 명동역 씨네라이브러리",
+      "area": "중구",
+      "screen": "04관",
+      "movieCode": "20186343",
+      "time": "16:50",
+      "showtime": "2025-09-14T07:50:00.000Z"
+    },
+    {
+      "title": "얼굴",
+      "theater": "CGV 용산아이파크몰",
+      "area": "용산구",
+      "screen": "13관",
+      "movieCode": "20242964",
+      "time": "16:55",
+      "showtime": "2025-09-14T07:55:00.000Z"
+    },
+    {
+      "title": "제 17회 서울국제건축영화제 묶음 상영 7",
+      "theater": "아트하우스모모",
+      "area": "서대문구",
+      "screen": "02관",
+      "movieCode": "20257120",
+      "time": "17:00",
+      "showtime": "2025-09-14T08:00:00.000Z"
+    },
+    {
+      "title": "해밀턴 부인",
+      "theater": "낭만극장",
+      "area": "종로구",
+      "screen": "01관",
+      "movieCode": "20138782",
+      "time": "17:05",
+      "showtime": "2025-09-14T08:05:00.000Z"
+    },
+    {
+      "title": "3670",
+      "theater": "CGV 명동역 씨네라이브러리",
+      "area": "중구",
+      "screen": "ART1관",
+      "movieCode": "20246333",
+      "time": "17:10",
+      "showtime": "2025-09-14T08:10:00.000Z"
+    },
+    {
+      "title": "나의 아픈, 사랑이야기",
+      "theater": "픽처하우스",
+      "area": "강남구",
+      "screen": "01관",
+      "movieCode": "20256307",
+      "time": "17:20",
+      "showtime": "2025-09-14T08:20:00.000Z"
+    },
+    {
+      "title": "피크닉",
+      "theater": "KU시네마테크",
+      "area": "광진구",
+      "screen": "01관",
+      "movieCode": "20050120",
+      "time": "17:20",
+      "showtime": "2025-09-14T08:20:00.000Z"
+    },
+    {
+      "title": "장손",
+      "theater": "모노플렉스앳라이즈",
+      "area": "마포구",
+      "screen": "01관",
+      "movieCode": "20234709",
+      "time": "17:25",
+      "showtime": "2025-09-14T08:25:00.000Z"
+    },
+    {
+      "title": "이사",
+      "theater": "라이카시네마",
+      "area": "서대문구",
+      "screen": "S관",
+      "movieCode": "20180109",
+      "time": "17:25",
+      "showtime": "2025-09-14T08:25:00.000Z"
+    },
+    {
+      "title": "운디네",
+      "theater": "에무 시네마 앤 카페",
+      "area": "종로구",
+      "screen": "01관",
+      "movieCode": "20201173",
+      "time": "18:00",
+      "showtime": "2025-09-14T09:00:00.000Z"
+    },
+    {
+      "title": "얼굴",
+      "theater": "CGV 명동역 씨네라이브러리",
+      "area": "중구",
+      "screen": "05관",
+      "movieCode": "20242964",
+      "time": "18:00",
+      "showtime": "2025-09-14T09:00:00.000Z"
+    },
+    {
+      "title": "남색대문",
+      "theater": "더숲 아트시네마",
+      "area": "노원구",
+      "screen": "01관",
+      "movieCode": "20021031",
+      "time": "18:10",
+      "showtime": "2025-09-14T09:10:00.000Z"
+    },
+    {
+      "title": "태풍 클럽",
+      "theater": "필름포럼",
+      "area": "서대문구",
+      "screen": "01관",
+      "movieCode": "20180106",
+      "time": "18:10",
+      "showtime": "2025-09-14T09:10:00.000Z"
+    },
+    {
+      "title": "타히티의 고갱. 잃어버린 낙원",
+      "theater": "필름포럼",
+      "area": "서대문구",
+      "screen": "02관",
+      "movieCode": "20256793",
+      "time": "18:10",
+      "showtime": "2025-09-14T09:10:00.000Z"
+    },
+    {
+      "title": "님포매니악 감독판 볼륨1",
+      "theater": "아트나인",
+      "area": "동작구",
+      "screen": "0관",
+      "movieCode": "20159404",
+      "time": "18:20",
+      "showtime": "2025-09-14T09:20:00.000Z"
+    },
+    {
+      "title": "비밀일 수밖에",
+      "theater": "씨네큐브광화문(서울)",
+      "area": "종로구",
+      "screen": "02관",
+      "movieCode": "20234833",
+      "time": "18:20",
+      "showtime": "2025-09-14T09:20:00.000Z"
+    },
+    {
+      "title": "최선의 삶",
+      "theater": "씨네큐 신도림",
+      "area": "구로구",
+      "screen": "09관",
+      "movieCode": "20190969",
+      "time": "18:25",
+      "showtime": "2025-09-14T09:25:00.000Z"
+    },
+    {
+      "title": "3670",
+      "theater": "아트나인",
+      "area": "동작구",
+      "screen": "9관",
+      "movieCode": "20246333",
+      "time": "18:30",
+      "showtime": "2025-09-14T09:30:00.000Z"
+    },
+    {
+      "title": "여름정원",
+      "theater": "인디스페이스",
+      "area": "마포구",
+      "screen": "01관",
+      "movieCode": "20180110",
+      "time": "18:30",
+      "showtime": "2025-09-14T09:30:00.000Z"
+    },
+    {
+      "title": "투게더",
+      "theater": "에무 시네마 앤 카페",
+      "area": "종로구",
+      "screen": "02관",
+      "movieCode": "20256071",
+      "time": "18:30",
+      "showtime": "2025-09-14T09:30:00.000Z"
+    },
+    {
+      "title": "얼굴",
+      "theater": "씨네큐 신도림",
+      "area": "구로구",
+      "screen": "01관",
+      "movieCode": "20242964",
+      "time": "18:45",
+      "showtime": "2025-09-14T09:45:00.000Z"
+    },
+    {
+      "title": "건국전쟁2",
+      "theater": "씨네큐 신도림",
+      "area": "구로구",
+      "screen": "06관",
+      "movieCode": "20257083",
+      "time": "18:45",
+      "showtime": "2025-09-14T09:45:00.000Z"
+    },
+    {
+      "title": "메이크 어 걸",
+      "theater": "씨네큐 신도림",
+      "area": "구로구",
+      "screen": "08관",
+      "movieCode": "20256985",
+      "time": "18:45",
+      "showtime": "2025-09-14T09:45:00.000Z"
+    },
+    {
+      "title": "닥터 지바고",
+      "theater": "CGV 명동역 씨네라이브러리",
+      "area": "중구",
+      "screen": "04관",
+      "movieCode": "19650001",
+      "time": "18:45",
+      "showtime": "2025-09-14T09:45:00.000Z"
+    },
+    {
+      "title": "얼굴",
+      "theater": "CINE de CHEF 압구정",
+      "area": "강남구",
+      "screen": "Cine de Chef관",
+      "movieCode": "20242964",
+      "time": "18:50",
+      "showtime": "2025-09-14T09:50:00.000Z"
+    },
+    {
+      "title": "십계 3편 : 안식일을 지키라",
+      "theater": "KU시네마테크",
+      "area": "광진구",
+      "screen": "01관",
+      "movieCode": "19888058",
+      "time": "18:50",
+      "showtime": "2025-09-14T09:50:00.000Z"
+    },
+    {
+      "title": "3학년 2학기",
+      "theater": "CGV 용산아이파크몰",
+      "area": "용산구",
+      "screen": "19관(아트하우스)",
+      "movieCode": "20249072",
+      "time": "18:50",
+      "showtime": "2025-09-14T09:50:00.000Z"
+    },
+    {
+      "title": "내 말 좀 들어줘",
+      "theater": "씨네큐브광화문(서울)",
+      "area": "종로구",
+      "screen": "01관",
+      "movieCode": "20255538",
+      "time": "18:55",
+      "showtime": "2025-09-14T09:55:00.000Z"
+    },
+    {
+      "title": "피크닉",
+      "theater": "더숲 아트시네마",
+      "area": "노원구",
+      "screen": "02관",
+      "movieCode": "20050120",
+      "time": "19:00",
+      "showtime": "2025-09-14T10:00:00.000Z"
+    },
+    {
+      "title": "너는 나를 불태워",
+      "theater": "KT&G 상상마당 Cinema",
+      "area": "마포구",
+      "screen": "01관",
+      "movieCode": "20251542",
+      "time": "19:00",
+      "showtime": "2025-09-14T10:00:00.000Z"
+    },
+    {
+      "title": "인형",
+      "theater": "서울아트시네마",
+      "area": "중구",
+      "screen": "01관",
+      "movieCode": "20257235",
+      "time": "19:00",
+      "showtime": "2025-09-14T10:00:00.000Z"
+    },
+    {
+      "title": "얼굴",
+      "theater": "CGV 용산아이파크몰",
+      "area": "용산구",
+      "screen": "15관",
+      "movieCode": "20242964",
+      "time": "19:05",
+      "showtime": "2025-09-14T10:05:00.000Z"
+    },
+    {
+      "title": "물 위의 누각 - 일본 전통 미학을 따라서",
+      "theater": "아트하우스모모",
+      "area": "서대문구",
+      "screen": "01관",
+      "movieCode": "20257107",
+      "time": "19:10",
+      "showtime": "2025-09-14T10:10:00.000Z"
+    },
+    {
+      "title": "내일을 향한 첫걸음: 우크라이나 재건설",
+      "theater": "아트하우스모모",
+      "area": "서대문구",
+      "screen": "02관",
+      "movieCode": "20257096",
+      "time": "19:10",
+      "showtime": "2025-09-14T10:10:00.000Z"
+    },
+    {
+      "title": "3670",
+      "theater": "아리랑시네센터(서울)",
+      "area": "성북구",
+      "screen": "아리랑인디웨이브",
+      "movieCode": "20246333",
+      "time": "19:10",
+      "showtime": "2025-09-14T10:10:00.000Z"
+    },
+    {
+      "title": "스탑 메이킹 센스",
+      "theater": "CGV 용산아이파크몰",
+      "area": "용산구",
+      "screen": "13관",
+      "movieCode": "20186343",
+      "time": "19:15",
+      "showtime": "2025-09-14T10:15:00.000Z"
+    },
+    {
+      "title": "고독의 오후",
+      "theater": "CGV 명동역 씨네라이브러리",
+      "area": "중구",
+      "screen": "ART2관",
+      "movieCode": "20257302",
+      "time": "19:20",
+      "showtime": "2025-09-14T10:20:00.000Z"
+    },
+    {
+      "title": "3670",
+      "theater": "픽처하우스",
+      "area": "강남구",
+      "screen": "01관",
+      "movieCode": "20246333",
+      "time": "19:40",
+      "showtime": "2025-09-14T10:40:00.000Z"
+    },
+    {
+      "title": "모노노케 히메",
+      "theater": "CGV 용산아이파크몰",
+      "area": "용산구",
+      "screen": "IMAX",
+      "movieCode": "20030047",
+      "time": "19:40",
+      "showtime": "2025-09-14T10:40:00.000Z"
+    },
+    {
+      "title": "비밀일 수밖에",
+      "theater": "CGV 명동역 씨네라이브러리",
+      "area": "중구",
+      "screen": "ART1관",
+      "movieCode": "20234833",
+      "time": "19:40",
+      "showtime": "2025-09-14T10:40:00.000Z"
+    },
+    {
+      "title": "여름정원",
+      "theater": "라이카시네마",
+      "area": "서대문구",
+      "screen": "S관",
+      "movieCode": "20180110",
+      "time": "19:45",
+      "showtime": "2025-09-14T10:45:00.000Z"
+    },
+    {
+      "title": "얼굴",
+      "theater": "아리랑시네센터(서울)",
+      "area": "성북구",
+      "screen": "02관",
+      "movieCode": "20242964",
+      "time": "19:45",
+      "showtime": "2025-09-14T10:45:00.000Z"
+    },
+    {
+      "title": "혐오스런 마츠코의 일생",
+      "theater": "더숲 아트시네마",
+      "area": "노원구",
+      "screen": "01관",
+      "movieCode": "20070122",
+      "time": "19:50",
+      "showtime": "2025-09-14T10:50:00.000Z"
+    },
+    {
+      "title": "남색대문",
+      "theater": "필름포럼",
+      "area": "서대문구",
+      "screen": "02관",
+      "movieCode": "20021031",
+      "time": "19:50",
+      "showtime": "2025-09-14T10:50:00.000Z"
+    },
+    {
+      "title": "3학년 2학기",
+      "theater": "KU시네마테크",
+      "area": "광진구",
+      "screen": "01관",
+      "movieCode": "20249072",
+      "time": "20:00",
+      "showtime": "2025-09-14T11:00:00.000Z"
+    },
+    {
+      "title": "곤지암",
+      "theater": "CGV 용산아이파크몰",
+      "area": "용산구",
+      "screen": "4DX",
+      "movieCode": "20180804",
+      "time": "20:10",
+      "showtime": "2025-09-14T11:10:00.000Z"
+    },
+    {
+      "title": "시인의 마음",
+      "theater": "CGV 명동역 씨네라이브러리",
+      "area": "중구",
+      "screen": "05관",
+      "movieCode": "20257286",
+      "time": "20:10",
+      "showtime": "2025-09-14T11:10:00.000Z"
+    },
+    {
+      "title": "얼굴",
+      "theater": "씨네큐 신도림",
+      "area": "구로구",
+      "screen": "03관(Reserve)",
+      "movieCode": "20242964",
+      "time": "20:20",
+      "showtime": "2025-09-14T11:20:00.000Z"
+    },
+    {
+      "title": "남색대문",
+      "theater": "KT&G 상상마당 Cinema",
+      "area": "마포구",
+      "screen": "01관",
+      "movieCode": "20021031",
+      "time": "20:20",
+      "showtime": "2025-09-14T11:20:00.000Z"
+    },
+    {
+      "title": "너는 나를 불태워",
+      "theater": "필름포럼",
+      "area": "서대문구",
+      "screen": "01관",
+      "movieCode": "20251542",
+      "time": "20:20",
+      "showtime": "2025-09-14T11:20:00.000Z"
+    },
+    {
+      "title": "3670",
+      "theater": "씨네큐브광화문(서울)",
+      "area": "종로구",
+      "screen": "02관",
+      "movieCode": "20246333",
+      "time": "20:25",
+      "showtime": "2025-09-14T11:25:00.000Z"
+    },
+    {
+      "title": "얼굴",
+      "theater": "모노플렉스앳라이즈",
+      "area": "마포구",
+      "screen": "01관",
+      "movieCode": "20242964",
+      "time": "20:30",
+      "showtime": "2025-09-14T11:30:00.000Z"
+    },
+    {
+      "title": "유령",
+      "theater": "에무 시네마 앤 카페",
+      "area": "종로구",
+      "screen": "01관",
+      "movieCode": "20051351",
+      "time": "20:30",
+      "showtime": "2025-09-14T11:30:00.000Z"
+    },
+    {
+      "title": "어글리 시스터",
+      "theater": "에무 시네마 앤 카페",
+      "area": "종로구",
+      "screen": "02관",
+      "movieCode": "20255937",
+      "time": "20:30",
+      "showtime": "2025-09-14T11:30:00.000Z"
+    },
+    {
+      "title": "스탑 메이킹 센스",
+      "theater": "더숲 아트시네마",
+      "area": "노원구",
+      "screen": "02관",
+      "movieCode": "20186343",
+      "time": "20:40",
+      "showtime": "2025-09-14T11:40:00.000Z"
+    },
+    {
+      "title": "이사",
+      "theater": "씨네큐브광화문(서울)",
+      "area": "종로구",
+      "screen": "01관",
+      "movieCode": "20180109",
+      "time": "20:45",
+      "showtime": "2025-09-14T11:45:00.000Z"
+    },
+    {
+      "title": "3670",
+      "theater": "씨네큐 신도림",
+      "area": "구로구",
+      "screen": "08관",
+      "movieCode": "20246333",
+      "time": "20:50",
+      "showtime": "2025-09-14T11:50:00.000Z"
+    },
+    {
+      "title": "콜 미 바이 유어 네임",
+      "theater": "아트나인",
+      "area": "동작구",
+      "screen": "9관",
+      "movieCode": "20178522",
+      "time": "20:50",
+      "showtime": "2025-09-14T11:50:00.000Z"
+    },
+    {
+      "title": "얼굴",
+      "theater": "씨네큐 신도림",
+      "area": "구로구",
+      "screen": "01관",
+      "movieCode": "20242964",
+      "time": "21:00",
+      "showtime": "2025-09-14T12:00:00.000Z"
+    },
+    {
+      "title": "가족의 비밀",
+      "theater": "CGV 용산아이파크몰",
+      "area": "용산구",
+      "screen": "19관(아트하우스)",
+      "movieCode": "20257037",
+      "time": "21:05",
+      "showtime": "2025-09-14T12:05:00.000Z"
+    },
+    {
+      "title": "투게더",
+      "theater": "아트나인",
+      "area": "동작구",
+      "screen": "0관",
+      "movieCode": "20256071",
+      "time": "21:10",
+      "showtime": "2025-09-14T12:10:00.000Z"
+    },
+    {
+      "title": "너는 나를 불태워",
+      "theater": "라이카시네마",
+      "area": "서대문구",
+      "screen": "S관",
+      "movieCode": "20251542",
+      "time": "21:55",
+      "showtime": "2025-09-14T12:55:00.000Z"
+    },
+    {
+      "title": "모노노케 히메",
+      "theater": "CGV 용산아이파크몰",
+      "area": "용산구",
+      "screen": "IMAX",
+      "movieCode": "20030047",
+      "time": "22:25",
+      "showtime": "2025-09-14T13:25:00.000Z"
+    },
+    {
+      "title": "마지막 숙제",
+      "theater": "CGV 용산아이파크몰",
+      "area": "용산구",
+      "screen": "19관(아트하우스)",
+      "movieCode": "20256101",
+      "time": "23:20",
+      "showtime": "2025-09-14T14:20:00.000Z"
+    },
+    {
+      "title": "3670",
+      "theater": "CGV 용산아이파크몰",
+      "area": "용산구",
+      "screen": "19관(아트하우스)",
+      "movieCode": "20246333",
+      "time": "25:35",
+      "showtime": "2025-09-14T16:35:00.000Z"
+    }
+  ],
+  "timestamp": 1757593916926,
+  "expiresAt": 1757615516926
+}

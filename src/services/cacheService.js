@@ -1,23 +1,32 @@
-import fs from 'fs';
-import path from 'path';
+import fs from "fs";
+import path from "path";
 
 class CacheService {
   constructor() {
     this.memoryCache = new Map();
-    this.cacheDir = path.join(process.cwd(), '.cache');
+    // Vercel 환경에서는 /tmp 디렉토리만 쓰기 가능
+    const isVercel = process.env.VERCEL === "1";
+    this.cacheDir = isVercel
+      ? "/tmp/cache"
+      : path.join(process.cwd(), ".cache");
     this.ensureCacheDir();
   }
 
   ensureCacheDir() {
-    if (!fs.existsSync(this.cacheDir)) {
-      fs.mkdirSync(this.cacheDir, { recursive: true });
+    try {
+      if (!fs.existsSync(this.cacheDir)) {
+        fs.mkdirSync(this.cacheDir, { recursive: true });
+      }
+    } catch (error) {
+      console.warn("캐시 디렉토리 생성 실패:", error.message);
+      // Vercel 환경에서는 파일 캐시 비활성화, 메모리 캐시만 사용
     }
   }
 
   generateCacheKey(type, date, params = null) {
-    const dateStr = date.replace(/[^\d]/g, ''); // YYYYMMDD 형식
-    const paramStr = params ? JSON.stringify(params) : '';
-    return `${type}_${dateStr}_${Buffer.from(paramStr).toString('base64')}`;
+    const dateStr = date.replace(/[^\d]/g, ""); // YYYYMMDD 형식
+    const paramStr = params ? JSON.stringify(params) : "";
+    return `${type}_${dateStr}_${Buffer.from(paramStr).toString("base64")}`;
   }
 
   getFilePath(key) {
@@ -44,17 +53,21 @@ class CacheService {
     if (!fs.existsSync(filePath)) return null;
 
     try {
-      const content = fs.readFileSync(filePath, 'utf-8');
+      const content = fs.readFileSync(filePath, "utf-8");
       const item = JSON.parse(content);
-      
+
       if (this.isExpired(item)) {
-        fs.unlinkSync(filePath);
+        try {
+          fs.unlinkSync(filePath);
+        } catch (unlinkError) {
+          console.warn("캐시 파일 삭제 실패:", unlinkError.message);
+        }
         return null;
       }
 
       return item.data;
     } catch (error) {
-      console.error('파일 캐시 읽기 실패:', error);
+      console.warn("파일 캐시 읽기 실패 (메모리 캐시만 사용):", error.message);
       return null;
     }
   }
@@ -64,7 +77,7 @@ class CacheService {
     const item = {
       data,
       timestamp: Date.now(),
-      expiresAt: Date.now() + ttlMs
+      expiresAt: Date.now() + ttlMs,
     };
     this.memoryCache.set(key, item);
   }
@@ -74,14 +87,15 @@ class CacheService {
     const item = {
       data,
       timestamp: Date.now(),
-      expiresAt: Date.now() + ttlMs
+      expiresAt: Date.now() + ttlMs,
     };
 
     try {
       const filePath = this.getFilePath(key);
       fs.writeFileSync(filePath, JSON.stringify(item, null, 2));
     } catch (error) {
-      console.error('파일 캐시 저장 실패:', error);
+      console.warn("파일 캐시 저장 실패 (메모리 캐시만 사용):", error.message);
+      // Vercel 환경에서는 파일 시스템 접근이 제한적이므로 메모리 캐시만 사용
     }
   }
 
@@ -93,7 +107,7 @@ class CacheService {
    */
   get(type, date, params = null) {
     const key = this.generateCacheKey(type, date, params);
-    
+
     // 1. 메모리 캐시에서 먼저 조회
     const memoryData = this.getFromMemory(key);
     if (memoryData) {
@@ -126,7 +140,7 @@ class CacheService {
     const ttl = this.getTTL(type);
 
     console.log(`캐시 저장: ${key}, TTL: ${ttl}ms`);
-    
+
     // 메모리와 파일 모두에 저장
     this.setToMemory(key, data, ttl);
     this.setToFile(key, data, ttl);
@@ -140,11 +154,11 @@ class CacheService {
     const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
     const tomorrow = new Date(today);
     tomorrow.setDate(tomorrow.getDate() + 1);
-    
+
     // 당일 데이터는 자정까지, 미래 데이터는 환경 변수에서 설정된 시간 (기본 6시간)
-    const isToday = type.includes(today.toISOString().split('T')[0]);
+    const isToday = type.includes(today.toISOString().split("T")[0]);
     const defaultHours = parseInt(process.env.CACHE_TTL_HOURS) || 6;
-    
+
     if (isToday) {
       // 당일 데이터: 자정까지
       return tomorrow.getTime() - Date.now();
@@ -159,16 +173,16 @@ class CacheService {
    */
   delete(type, date, params = null) {
     const key = this.generateCacheKey(type, date, params);
-    
+
     // 메모리에서 삭제
     this.memoryCache.delete(key);
-    
+
     // 파일에서 삭제
     const filePath = this.getFilePath(key);
     if (fs.existsSync(filePath)) {
       fs.unlinkSync(filePath);
     }
-    
+
     console.log(`캐시 삭제: ${key}`);
   }
 
@@ -187,11 +201,11 @@ class CacheService {
     try {
       const files = fs.readdirSync(this.cacheDir);
       for (const file of files) {
-        if (file.endsWith('.json')) {
+        if (file.endsWith(".json")) {
           const filePath = path.join(this.cacheDir, file);
-          const content = fs.readFileSync(filePath, 'utf-8');
+          const content = fs.readFileSync(filePath, "utf-8");
           const item = JSON.parse(content);
-          
+
           if (this.isExpired(item)) {
             fs.unlinkSync(filePath);
             console.log(`만료된 캐시 파일 삭제: ${file}`);
@@ -199,7 +213,7 @@ class CacheService {
         }
       }
     } catch (error) {
-      console.error('캐시 정리 중 오류:', error);
+      console.error("캐시 정리 중 오류:", error);
     }
   }
 
@@ -208,17 +222,17 @@ class CacheService {
    */
   clear() {
     this.memoryCache.clear();
-    
+
     try {
       const files = fs.readdirSync(this.cacheDir);
       for (const file of files) {
-        if (file.endsWith('.json')) {
+        if (file.endsWith(".json")) {
           fs.unlinkSync(path.join(this.cacheDir, file));
         }
       }
-      console.log('전체 캐시 삭제 완료');
+      console.log("전체 캐시 삭제 완료");
     } catch (error) {
-      console.error('캐시 삭제 중 오류:', error);
+      console.error("캐시 삭제 중 오류:", error);
     }
   }
 
@@ -229,7 +243,7 @@ class CacheService {
     let fileCount = 0;
     try {
       const files = fs.readdirSync(this.cacheDir);
-      fileCount = files.filter(f => f.endsWith('.json')).length;
+      fileCount = files.filter((f) => f.endsWith(".json")).length;
     } catch (error) {
       // 디렉토리가 없거나 읽기 실패
     }
@@ -237,7 +251,7 @@ class CacheService {
     return {
       memoryCount: this.memoryCache.size,
       fileCount,
-      cacheHits: 0 // 실제 구현에서는 히트 카운터 추가 필요
+      cacheHits: 0, // 실제 구현에서는 히트 카운터 추가 필요
     };
   }
 }

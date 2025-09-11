@@ -31,6 +31,23 @@ You can check out [the Next.js GitHub repository](https://github.com/vercel/next
 
 ## Deploy on Vercel
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+이 앱은 Vercel 서버리스 환경에 최적화되어 있습니다.
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+### 필수 환경 변수 설정
+
+Vercel 대시보드 > Settings > Environment Variables에서 다음 환경 변수를 설정하세요:
+
+```bash
+KOBIS_API_KEY=your_kobis_api_key_here
+CACHE_TTL_HOURS=6
+NEXT_PUBLIC_APP_URL=https://your-domain.com
+```
+
+### 주요 최적화 사항
+
+- ✅ Vercel 환경 감지 및 자동 최적화
+- ✅ 서버리스 환경에 맞춘 파일 캐시 시스템
+- ✅ Puppeteer Vercel 호환성 설정
+- ✅ 타임아웃 및 재시도 로직 최적화
+
+자세한 배포 가이드는 [DEPLOYMENT.md](./DEPLOYMENT.md)를 참고하세요.

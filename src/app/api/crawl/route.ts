@@ -1,7 +1,7 @@
-import { NextResponse } from 'next/server';
+import { NextResponse } from "next/server";
 
 // 동적 렌더링 강제
-export const dynamic = 'force-dynamic';
+export const dynamic = "force-dynamic";
 
 // TypeScript 타입 정의
 interface MovieSchedule {
@@ -18,23 +18,23 @@ interface MovieSchedule {
 
 // JavaScript 모듈을 동적으로 import
 async function getCrawlerService() {
-  const { CrawlerService } = await import('@/services/crawler.js');
+  const { CrawlerService } = await import("@/services/crawler.js");
   return new CrawlerService();
 }
 
 // 캐시 서비스 import
 async function getCacheService() {
-  const { cacheService } = await import('@/services/cacheService');
+  const { cacheService } = await import("@/services/cacheService");
   return cacheService;
 }
 
 export async function GET(request: Request) {
   try {
     const { searchParams } = new URL(request.url);
-    const type = searchParams.get('type') || 'integrated'; // 'integrated', 'kofa', 'art'
-    const dateParam = searchParams.get('date'); // YYYY-MM-DD 형식
-    const forceFresh = searchParams.get('force') === 'true'; // 강제 새로고침
-    
+    const type = searchParams.get("type") || "integrated"; // 'integrated', 'kofa', 'art'
+    const dateParam = searchParams.get("date"); // YYYY-MM-DD 형식
+    const forceFresh = searchParams.get("force") === "true"; // 강제 새로고침
+
     const crawler = await getCrawlerService();
     const cache = await getCacheService();
     let movies: MovieSchedule[] = [];
@@ -50,7 +50,7 @@ export async function GET(request: Request) {
       }
     }
 
-    const dateStr = targetDate.toISOString().split('T')[0]; // YYYY-MM-DD 형식
+    const dateStr = targetDate.toISOString().split("T")[0]; // YYYY-MM-DD 형식
 
     // 강제 새로고침이 아닌 경우 캐시 먼저 확인
     if (!forceFresh) {
@@ -58,9 +58,12 @@ export async function GET(request: Request) {
       if (cachedData) {
         console.log(`캐시에서 ${type} 데이터 반환`);
         // 캐시된 데이터의 showtime을 Date 객체로 복원
-        movies = cachedData.map(movie => ({
+        movies = cachedData.map((movie) => ({
           ...movie,
-          showtime: typeof movie.showtime === 'string' ? new Date(movie.showtime) : movie.showtime
+          showtime:
+            typeof movie.showtime === "string"
+              ? new Date(movie.showtime)
+              : movie.showtime,
         }));
         fromCache = true;
       }
@@ -75,7 +78,12 @@ export async function GET(request: Request) {
     // 시간 정보를 문자열로 변환 (JSON 직렬화를 위해)
     const serializedMovies = movies.map((movie: MovieSchedule) => ({
       ...movie,
-      showtime: movie.showtime.toISOString()
+      showtime:
+        movie.showtime instanceof Date
+          ? movie.showtime.toISOString()
+          : typeof movie.showtime === "string"
+          ? movie.showtime
+          : new Date(movie.showtime).toISOString(),
     }));
 
     // 캐시 통계 정보 가져오기
@@ -89,17 +97,32 @@ export async function GET(request: Request) {
         fromCache,
         stats: cacheStats,
         date: dateStr,
-        type
+        type,
       },
-      timestamp: new Date().toISOString()
+      timestamp: new Date().toISOString(),
     });
   } catch (error) {
-    console.error('크롤링 API 에러:', error);
+    console.error("크롤링 API 에러:", error);
+
+    // Vercel 환경에서 더 상세한 에러 로깅
+    if (process.env.VERCEL === "1") {
+      console.error("Vercel 환경 정보:", {
+        region: process.env.VERCEL_REGION,
+        url: process.env.VERCEL_URL,
+        nodeEnv: process.env.NODE_ENV,
+      });
+    }
+
     return NextResponse.json(
-      { 
+      {
         success: false,
-        error: '크롤링 중 오류가 발생했습니다',
-        details: error instanceof Error ? error.message : '알 수 없는 오류'
+        error: "크롤링 중 오류가 발생했습니다",
+        details: error instanceof Error ? error.message : "알 수 없는 오류",
+        stack:
+          process.env.NODE_ENV === "development" && error instanceof Error
+            ? error.stack
+            : undefined,
+        environment: process.env.VERCEL === "1" ? "vercel" : "local",
       },
       { status: 500 }
     );
