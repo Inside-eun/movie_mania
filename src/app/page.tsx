@@ -209,9 +209,16 @@ export default function Home() {
         </div>
       )}
       <footer className="mt-16 text-center pb-8">
-        <p className="text-lg font-bold">
-          - 만든사람 : 제육볶음 달달볶아 -
-        </p>
+        <div className="flex items-center justify-center gap-3">
+          <img 
+            src="/npjMucg7sLxIm8Uca8O3lygeM9UX2Dsu4RVnVxcDdaItsLZ6w0N0Ju54gVqn8O7r7taBR6bAEwL9qOLoUKKbzg.webp" 
+            alt="프로필" 
+            className="w-12 h-12 rounded-full object-cover"
+          />
+          <p className="text-lg font-bold">
+            - 만든사람 : 제육볶음 달달볶아 -
+          </p>
+        </div>
       </footer>
     </main>
   );
