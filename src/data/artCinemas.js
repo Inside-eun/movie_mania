@@ -1,0 +1,138 @@
+// 예술영화관 및 독립영화관 코드 목록
+// CGV, 메가박스, 롯데시네마를 제외한 극장들
+
+export const artCinemas = [
+  {
+    cd: '001128',
+    cdNm: 'CINE de CHEF 압구정',
+    area: '강남구'
+  },
+  {
+    cd: '001293',
+    cdNm: '씨티극장',
+    area: '강남구'
+  },
+  {
+    cd: '001242',
+    cdNm: '픽처하우스',
+    area: '강남구'
+  },
+  {
+    cd: '001166',
+    cdNm: 'KU시네마테크',
+    area: '광진구'
+  },
+  {
+    cd: '001248',
+    cdNm: '씨네큐 신도림',
+    area: '구로구'
+  },
+  {
+    cd: '001240',
+    cdNm: '더숲 아트시네마',
+    area: '노원구'
+  },
+  {
+    cd: '001197',
+    cdNm: '아트나인',
+    area: '동작구'
+  },
+  {
+    cd: '001146',
+    cdNm: 'KT&G 상상마당 Cinema',
+    area: '마포구'
+  },
+  {
+    cd: '001297',
+    cdNm: '모노플렉스앳라이즈',
+    area: '마포구'
+  },
+  {
+    cd: '001193',
+    cdNm: '인디스페이스',
+    area: '마포구'
+  },
+  {
+    cd: '001282',
+    cdNm: '라이카시네마',
+    area: '서대문구'
+  },
+  {
+    cd: '001148',
+    cdNm: '아트하우스모모',
+    area: '서대문구'
+  },
+  {
+    cd: '001149',
+    cdNm: '필름포럼',
+    area: '서대문구'
+  },
+  {
+    cd: '001098',
+    cdNm: '아리랑시네센터(서울)',
+    area: '성북구'
+  },
+  {
+    cd: '001126',
+    cdNm: '잠실자동차극장',
+    area: '송파구'
+  },
+  {
+    cd: '001245',
+    cdNm: 'CINE de CHEF 용산아이파크몰',
+    area: '용산구'
+  },
+  {
+    cd: '001227',
+    cdNm: '낭만극장',
+    area: '종로구'
+  },
+  {
+    cd: '001083',
+    cdNm: '씨네큐브광화문(서울)',
+    area: '종로구'
+  },
+  {
+    cd: '001237',
+    cdNm: '에무 시네마 앤 카페',
+    area: '종로구'
+  },
+  {
+    cd: '001103',
+    cdNm: '허리우드클래식',
+    area: '종로구'
+  },
+  {
+    cd: '001062',
+    cdNm: '서울아트시네마',
+    area: '중구'
+  },
+  {
+    cd: '001165',
+    cdNm: '청춘극장',
+    area: '중구'
+  },
+  {
+    cd: '001088',
+    cdNm: 'CGV 용산아이파크몰',
+    area: '용산구'
+  },
+  {
+    cd: '001163',
+    cdNm: 'CGV 명동역 씨네라이브러리',
+    area: '중구'
+  },
+];
+
+// 멀티플렉스 체인 필터링용
+export const multiplexChains = ['CGV', '메가박스', '롯데시네마'];
+
+// 예술영화관 여부 판단 함수
+export function isArtCinema(theaterName) {
+  return !multiplexChains.some(chain => theaterName.includes(chain));
+}
+
+// 예술영화관만 필터링하는 함수
+export function filterArtCinemas(theaterList) {
+  return theaterList.filter(theater => isArtCinema(theater.cdNm));
+}
