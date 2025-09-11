@@ -1,5 +1,8 @@
 import { NextResponse } from 'next/server';
 
+// 동적 렌더링 강제
+export const dynamic = 'force-dynamic';
+
 // TypeScript 타입 정의
 interface MovieSchedule {
   title: string;
@@ -65,22 +68,8 @@ export async function GET(request: Request) {
 
     // 캐시에서 데이터를 찾지 못한 경우에만 크롤링 실행
     if (!fromCache) {
-      switch (type) {
-        case 'kofa':
-          // 한국영상자료원만
-          movies = await crawler.getKOFAScheduleByDate(targetDate);
-          break;
-        case 'art':
-          // 예술영화관만
-          const top5Movies = await crawler.getBoxOfficeTop5();
-          movies = await crawler.getArtCinemaSchedulesByDate(top5Movies, targetDate);
-          break;
-        case 'integrated':
-        default:
-          // 통합 (예술영화관 + 한국영상자료원)
-          movies = await crawler.crawlArtCinemasWithKMDBByDate(targetDate);
-          break;
-      }
+      // 통합 크롤링 (예술영화관 + KMDB)
+      movies = await crawler.crawlArtCinemasWithKMDBByDate(targetDate);
     }
 
     // 시간 정보를 문자열로 변환 (JSON 직렬화를 위해)

@@ -1,5 +1,8 @@
 import { NextResponse } from 'next/server';
 
+// 동적 렌더링 강제
+export const dynamic = 'force-dynamic';
+
 // 캐시 서비스 import
 async function getCacheService() {
   const { cacheService } = await import('@/services/cacheService');

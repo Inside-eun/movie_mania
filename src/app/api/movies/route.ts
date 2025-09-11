@@ -1,4 +1,7 @@
 import { NextResponse } from 'next/server';
+
+// 동적 렌더링 강제
+export const dynamic = 'force-dynamic';
 import { connectDB } from '@/lib/db';
 import { Movie } from '@/models/Movie';
 
