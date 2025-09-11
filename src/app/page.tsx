@@ -208,6 +208,11 @@ export default function Home() {
           선택한 영화의 상영시간이 없습니다.
         </div>
       )}
+      <footer className="mt-16 text-center pb-8">
+        <p className="text-lg font-bold">
+          - 만든사람 : 제육볶음 달달볶아 -
+        </p>
+      </footer>
     </main>
   );
 }
