@@ -418,6 +418,9 @@ export class CrawlerService {
 
                 // 박스오피스 1~5위 영화는 제외
                 if (top5Movies.includes(cleanTitle)) {
+                  console.log(
+                    `🚫 [제외됨] 박스오피스 상위 영화: ${cleanTitle}`
+                  );
                   return;
                 }
 
@@ -607,6 +610,7 @@ export class CrawlerService {
 
               // 박스오피스 1~5위 영화는 제외
               if (top5Movies.includes(cleanTitle)) {
+                console.log(`🚫 [제외됨] 박스오피스 상위 영화: ${cleanTitle}`);
                 return;
               }
 
@@ -707,6 +711,7 @@ export class CrawlerService {
 
               // 박스오피스 1~5위 영화는 제외
               if (top5Movies.includes(cleanTitle)) {
+                console.log(`🚫 [제외됨] 박스오피스 상위 영화: ${cleanTitle}`);
                 return; // 건너뛰기
               }
 
