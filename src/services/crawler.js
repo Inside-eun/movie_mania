@@ -96,7 +96,19 @@ export class CrawlerService {
       }
     } catch (error) {
       console.error("박스오피스 조회 실패:", error);
-      return []; // 실패시 빈 배열 반환
+      console.error("박스오피스 API 실패로 기본 제외 목록 사용");
+      
+      // API 실패시 기본 제외 목록 사용 (최근 인기 영화들)
+      const defaultExcludeList = [
+        "베놈",
+        "글래디에이터",
+        "위키드",
+        "모아나",
+        "청설"
+      ];
+      
+      console.log("기본 제외 목록:", defaultExcludeList);
+      return defaultExcludeList;
     }
   }
 
@@ -612,6 +624,11 @@ export class CrawlerService {
               if (top5Movies.includes(cleanTitle)) {
                 console.log(`🚫 [제외됨] 박스오피스 상위 영화: ${cleanTitle}`);
                 return;
+              }
+              
+              // 디버깅: 모든 영화 제목 로깅 (Vercel에서만)
+              if (process.env.VERCEL === "1") {
+                console.log(`✅ [포함됨] ${cleanTitle} (박스오피스 제외 목록: ${top5Movies.join(', ')})`);
               }
 
               const showtimes = item.showTm.split(",");
