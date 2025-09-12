@@ -298,62 +298,71 @@ export default function Home() {
   };
 
   return (
-    <main className="container mx-auto px-4 py-8 max-w-4xl">
-      <h1 className="text-3xl font-bold mb-1 text-center">
-        홍대병들을 위한 서울 예술영화관 상영시간표
+    <main className="container mx-auto px-4 py-4 sm:py-8 max-w-4xl">
+      <h1 className="text-3xl sm:text-3xl font-bold mb-1 text-center">
+        홍대병들을 위한<br className="sm:hidden"/> 서울예술영화관 상영시간표
       </h1>
-      <h2 className="text-xl font-bold mb-6 text-center">
+      <h2 className="text-lg sm:text-xl font-bold mb-4 sm:mb-6 text-center">
         박스오피스 5위까지의 작품은 제외합니다
       </h2>
 
-      <p className="text-sm text-gray-500 mb-8 text-center">
-        KOBIS조회 방식이기 때문에 실제 상영내역과 일치하지 않을 수 있으며,<br/> 각 전송사업자별로 상영스케줄 운영방식에 따라 개별 영화상영관의 상영스케줄 일부 정보가 제공되지 않을 수 있습니다.
+      <p className="text-xs sm:text-sm text-gray-500 mb-4 sm:mb-8 text-center px-2">
+        KOBIS조회 방식이기 때문에 실제 상영내역과 일치하지 않을 수 있으며,<br className="hidden sm:block"/> 각 전송사업자별로 상영스케줄 운영방식에 따라 개별 영화상영관의 상영스케줄 일부 정보가 제공되지 않을 수 있습니다.
       </p>
 
-      <div className="flex flex-col gap-4 mb-6">
-        <div className="flex flex-col sm:flex-row gap-4 items-center">
-          <input
-            type="date"
-            className="px-4 py-2 border rounded-lg h-10"
-            value={selectedDate}
-            onChange={(e) => {
-              setSelectedDate(e.target.value);
-              // 날짜가 바뀌면 기존 영화 목록 초기화하여 혼란 방지
-              setAllMovies([]);
-              setFilteredMovies([]);
-              setSelectedMovie("all");
-              setLastUpdate(null);
-            }}
-            min={new Date().toISOString().split("T")[0]}
-            max={
-              new Date(Date.now() + 7 * 24 * 60 * 60 * 1000)
-                .toISOString()
-                .split("T")[0]
-            } // 7일 후까지
-            disabled={showWishlistView}
-          />
-
-          <div className="flex gap-2">
+      <div className="flex flex-col gap-3 sm:gap-4 mb-4 sm:mb-6">
+        <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 items-start sm:items-center">
+          <div className="flex gap-2 w-full flex-wrap">
+            <input
+              type="date"
+              className="px-3 py-2 border rounded-lg h-10 text-sm flex-shrink-0 w-auto"
+              value={selectedDate}
+              onChange={(e) => {
+                setSelectedDate(e.target.value);
+                // 날짜가 바뀌면 기존 영화 목록 초기화하여 혼란 방지
+                setAllMovies([]);
+                setFilteredMovies([]);
+                setSelectedMovie("all");
+                setLastUpdate(null);
+              }}
+              min={new Date().toISOString().split("T")[0]}
+              max={
+                new Date(Date.now() + 7 * 24 * 60 * 60 * 1000)
+                  .toISOString()
+                  .split("T")[0]
+              } // 7일 후까지 (모바일에서도 적용)
+              disabled={false}
+            />
             <button
-              onClick={fetchMovies}
-              disabled={loading || showWishlistView}
+              onClick={() => {
+                if (showWishlistView) {
+                  setShowWishlistView(false);
+                }
+                fetchMovies();
+              }}
+              disabled={loading}
               className="px-6 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 disabled:opacity-50 disabled:cursor-not-allowed h-10 flex items-center justify-center whitespace-nowrap"
             >
-              {loading ? "크롤링 중... " : "상영시간표 조회"}
+              {loading ? "크롤링 중... " : "시간표 조회"}
             </button>
 
             <button
-              onClick={() => setShowWishlistView(!showWishlistView)}
+              onClick={() => {
+                if (!showWishlistView) {
+                  setShowWishlistView(true);
+                }
+              }}
+              disabled={showWishlistView}
               className={`px-6 py-2 rounded-lg h-10 flex items-center justify-center gap-2 whitespace-nowrap transition-colors ${
                 showWishlistView 
-                  ? 'bg-red-500 text-white hover:bg-red-600' 
-                  : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                  ? 'bg-red-600 text-white cursor-not-allowed opacity-75' 
+                  : 'bg-red-500 text-white hover:bg-red-600'
               }`}
             >
-              <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
+              <svg className="w-6 h-8" fill="currentColor" viewBox="0 0 24 24">
                 <path d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
               </svg>
-              {showWishlistView ? '목록으로 돌아가기' : `찜 목록 (${getWishlistCount()})`}
+               {getWishlistCount()}
             </button>
           </div>
 
@@ -365,15 +374,12 @@ export default function Home() {
         </div>
 
         {allMovies.length > 0 && !showWishlistView && (
-          <div className="flex flex-col gap-4">
-            <div className="flex flex-col sm:flex-row gap-4 items-center">
-              <label className="text-sm font-medium text-gray-700">
-                영화별 필터:
-              </label>
-              <div className="relative flex-1 sm:flex-none sm:min-w-[300px]" ref={dropdownRef}>
+          <div className="flex flex-col gap-3 sm:gap-4">
+            <div className="flex flex-col gap-3 sm:gap-4">
+              <div className="relative w-full" ref={dropdownRef}>
                 <button
                   onClick={() => setIsDropdownOpen(!isDropdownOpen)}
-                  className="w-full px-4 py-2 border border-gray-300 rounded-lg h-10 bg-white text-left text-gray-900 hover:border-blue-400 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-200 flex items-center justify-between"
+                  className="w-full px-4 py-3 border border-gray-300 rounded-lg bg-white text-left text-gray-900 hover:border-blue-400 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-200 flex items-center justify-between min-h-[48px] sm:min-h-[40px]"
                 >
                   <span className="truncate">{getSelectedMovieText()}</span>
                   <svg
@@ -392,7 +398,7 @@ export default function Home() {
                   <div className="absolute z-10 w-full mt-1 bg-white border border-gray-200 rounded-lg shadow-lg max-h-60 overflow-y-auto">
                     <div
                       onClick={() => handleMovieFilter("all")}
-                      className={`px-4 py-3 cursor-pointer hover:bg-blue-50 hover:text-blue-700 transition-colors ${
+                      className={`px-4 py-4 cursor-pointer hover:bg-blue-50 hover:text-blue-700 transition-colors text-base ${
                         selectedMovie === "all" ? 'bg-blue-100 text-blue-800 font-medium' : 'text-gray-900'
                       }`}
                     >
@@ -404,7 +410,7 @@ export default function Home() {
                         <div
                           key={movieTitle}
                           onClick={() => handleMovieFilter(movieTitle)}
-                          className={`px-4 py-3 cursor-pointer hover:bg-blue-50 hover:text-blue-700 transition-colors border-t border-gray-100 ${
+                          className={`px-4 py-4 cursor-pointer hover:bg-blue-50 hover:text-blue-700 transition-colors border-t border-gray-100 text-base ${
                             selectedMovie === movieTitle ? 'bg-blue-100 text-blue-800 font-medium' : 'text-gray-900'
                           }`}
                         >

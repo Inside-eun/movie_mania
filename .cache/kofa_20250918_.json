@@ -1,0 +1,46 @@
+{
+  "data": [
+    {
+      "title": "영웅본색 (4K)",
+      "theater": "한국영상자료원 시네마테크KOFA",
+      "area": "마포구",
+      "screen": "1관",
+      "time": "13:00",
+      "showtime": "2025-09-18T04:00:00.000Z",
+      "director": "",
+      "source": "KOFA"
+    },
+    {
+      "title": "빅 퍼레이드",
+      "theater": "한국영상자료원 시네마테크KOFA",
+      "area": "마포구",
+      "screen": "2관",
+      "time": "15:00",
+      "showtime": "2025-09-18T06:00:00.000Z",
+      "director": "",
+      "source": "KOFA"
+    },
+    {
+      "title": "영웅본색 (4K)",
+      "theater": "한국영상자료원 시네마테크KOFA",
+      "area": "마포구",
+      "screen": "1관",
+      "time": "15:30",
+      "showtime": "2025-09-18T06:30:00.000Z",
+      "director": "",
+      "source": "KOFA"
+    },
+    {
+      "title": "집안의 주인",
+      "theater": "한국영상자료원 시네마테크KOFA",
+      "area": "마포구",
+      "screen": "2관",
+      "time": "19:00",
+      "showtime": "2025-09-18T10:00:00.000Z",
+      "director": "",
+      "source": "KOFA"
+    }
+  ],
+  "timestamp": 1757655541664,
+  "expiresAt": 1757677141664
+}

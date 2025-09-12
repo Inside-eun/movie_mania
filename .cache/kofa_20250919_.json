@@ -1,26 +1,26 @@
 {
   "data": [
     {
-      "title": "삼포가는 길 (4K)",
+      "title": "오페라의 유령",
       "theater": "한국영상자료원 시네마테크KOFA",
       "area": "마포구",
       "screen": "2관",
       "time": "16:00",
-      "showtime": "2025-09-12T07:00:00.000Z",
+      "showtime": "2025-09-19T07:00:00.000Z",
       "director": "",
       "source": "KOFA"
     },
     {
-      "title": "태양닮은 소녀 (4K)",
+      "title": "잃어버린 세계",
       "theater": "한국영상자료원 시네마테크KOFA",
       "area": "마포구",
       "screen": "2관",
-      "time": "18:30",
-      "showtime": "2025-09-12T09:30:00.000Z",
+      "time": "19:00",
+      "showtime": "2025-09-19T10:00:00.000Z",
       "director": "",
       "source": "KOFA"
     }
   ],
-  "timestamp": 1757651854005,
-  "expiresAt": 1757673454005
+  "timestamp": 1757653131137,
+  "expiresAt": 1757674731137
 }
