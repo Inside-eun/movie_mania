@@ -9,7 +9,6 @@ interface MovieSchedule {
   screen: string;
   time: string;
   showtime: string;
-  director?: string;
   source?: string;
   movieCode?: string;
 }
@@ -33,6 +32,8 @@ export default function Home() {
     new Date().toISOString().split("T")[0]
   );
   const [selectedMovie, setSelectedMovie] = useState("all");
+  const [selectedTheater, setSelectedTheater] = useState("all");
+  const [filterType, setFilterType] = useState<"movie" | "theater">("movie");
   const [lastUpdate, setLastUpdate] = useState<string | null>(null);
   const [showPastSchedules, setShowPastSchedules] = useState(false);
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
@@ -103,6 +104,11 @@ export default function Home() {
     return uniqueTitles.sort();
   };
 
+  // 고유한 영화관 목록 가져오기
+  const getUniqueTheaters = () => {
+    return [...new Set(allMovies.map((movie) => movie.theater))].sort();
+  };
+
   // 시간 파싱 함수
   const parseMovieTime = (timeStr: string, selectedDate: string): Date => {
     const [hours, minutes] = timeStr.split(':').map(Number);
@@ -139,6 +145,11 @@ export default function Home() {
       movies = movies.filter((movie) => movie.title === selectedMovie);
     }
     
+    // 영화관별 필터링
+    if (selectedTheater !== "all") {
+      movies = movies.filter((movie) => movie.theater === selectedTheater);
+    }
+    
     // 오늘 날짜이고 과거 스케줄을 숨기는 옵션이 켜져있다면
     if (isToday && !showPastSchedules) {
       movies = movies.filter((movie) => {
@@ -148,7 +159,7 @@ export default function Home() {
     }
     
     return movies;
-  }, [allMovies, selectedMovie, selectedDate, showPastSchedules, wishlist]);
+  }, [allMovies, selectedMovie, selectedTheater, selectedDate, showPastSchedules, wishlist]);
 
   // 과거 스케줄 개수 계산
   const pastSchedulesCount = useMemo(() => {
@@ -161,17 +172,38 @@ export default function Home() {
     if (selectedMovie !== "all") {
       movies = movies.filter((movie) => movie.title === selectedMovie);
     }
+    if (selectedTheater !== "all") {
+      movies = movies.filter((movie) => movie.theater === selectedTheater);
+    }
     
     return movies.filter((movie) => {
       const movieTime = parseMovieTime(movie.time, selectedDate);
       return movieTime <= now;
     }).length;
-  }, [allMovies, selectedMovie, selectedDate, wishlist]);
+  }, [allMovies, selectedMovie, selectedTheater, selectedDate, wishlist]);
 
   // 영화 필터링
   const handleMovieFilter = (movieTitle: string) => {
     setSelectedMovie(movieTitle);
     setIsDropdownOpen(false);
+  };
+
+  // 영화관 필터링
+  const handleTheaterFilter = (theaterName: string) => {
+    setSelectedTheater(theaterName);
+    setIsDropdownOpen(false);
+  };
+
+  // 필터 타입 변경
+  const handleFilterTypeChange = (type: "movie" | "theater") => {
+    setFilterType(type);
+    setIsDropdownOpen(false);
+    // 필터 타입 변경시 선택된 필터 초기화
+    if (type === "movie") {
+      setSelectedTheater("all");
+    } else {
+      setSelectedMovie("all");
+    }
   };
 
   // 위시리스트 토글 함수
@@ -291,10 +323,19 @@ export default function Home() {
   // 선택된 영화 표시 텍스트
   const getSelectedMovieText = () => {
     if (selectedMovie === "all") {
-      return `전체 영화 (${allMovies.length}개)`;
+      return `전체 영화 (${getUniqueMovies().length}개)`;
     }
     const count = allMovies.filter((m) => m.title === selectedMovie).length;
     return `${selectedMovie} (${count}개)`;
+  };
+
+  // 선택된 영화관 텍스트 표시
+  const getSelectedTheaterText = () => {
+    if (selectedTheater === "all") {
+      return `전체 영화관 (${getUniqueTheaters().length}개)`;
+    }
+    const count = allMovies.filter((m) => m.theater === selectedTheater).length;
+    return `${selectedTheater} (${count}개)`;
   };
 
   return (
@@ -323,6 +364,7 @@ export default function Home() {
                 setAllMovies([]);
                 setFilteredMovies([]);
                 setSelectedMovie("all");
+                setSelectedTheater("all");
                 setLastUpdate(null);
               }}
               min={new Date().toISOString().split("T")[0]}
@@ -375,13 +417,40 @@ export default function Home() {
 
         {allMovies.length > 0 && !showWishlistView && (
           <div className="flex flex-col gap-3 sm:gap-4">
+            {/* 탭 메뉴 */}
+            <div className="flex bg-gray-100 rounded-lg p-1">
+              <button
+                onClick={() => handleFilterTypeChange("movie")}
+                className={`flex-1 py-2 px-4 rounded-md text-sm font-medium transition-all duration-200 ${
+                  filterType === "movie"
+                    ? 'bg-white text-blue-600 shadow-sm'
+                    : 'text-gray-600 hover:text-gray-900'
+                }`}
+              >
+                영화별 필터
+              </button>
+              <button
+                onClick={() => handleFilterTypeChange("theater")}
+                className={`flex-1 py-2 px-4 rounded-md text-sm font-medium transition-all duration-200 ${
+                  filterType === "theater"
+                    ? 'bg-white text-blue-600 shadow-sm'
+                    : 'text-gray-600 hover:text-gray-900'
+                }`}
+              >
+                영화관별 필터
+              </button>
+            </div>
+
+            {/* 필터 드롭다운 */}
             <div className="flex flex-col gap-3 sm:gap-4">
               <div className="relative w-full" ref={dropdownRef}>
                 <button
                   onClick={() => setIsDropdownOpen(!isDropdownOpen)}
                   className="w-full px-4 py-3 border border-gray-300 rounded-lg bg-white text-left text-gray-900 hover:border-blue-400 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-200 flex items-center justify-between min-h-[48px] sm:min-h-[40px]"
                 >
-                  <span className="truncate">{getSelectedMovieText()}</span>
+                  <span className="truncate">
+                    {filterType === "movie" ? getSelectedMovieText() : getSelectedTheaterText()}
+                  </span>
                   <svg
                     className={`w-4 h-4 text-gray-500 transition-transform duration-200 ${
                       isDropdownOpen ? 'rotate-180' : 'rotate-0'
@@ -396,28 +465,59 @@ export default function Home() {
                 
                 {isDropdownOpen && (
                   <div className="absolute z-10 w-full mt-1 bg-white border border-gray-200 rounded-lg shadow-lg max-h-60 overflow-y-auto">
-                    <div
-                      onClick={() => handleMovieFilter("all")}
-                      className={`px-4 py-4 cursor-pointer hover:bg-blue-50 hover:text-blue-700 transition-colors text-base ${
-                        selectedMovie === "all" ? 'bg-blue-100 text-blue-800 font-medium' : 'text-gray-900'
-                      }`}
-                    >
-                      전체 영화 ({allMovies.length}개)
-                    </div>
-                    {getUniqueMovies().map((movieTitle) => {
-                      const count = allMovies.filter((m) => m.title === movieTitle).length;
-                      return (
+                    {filterType === "movie" ? (
+                      // 영화별 필터 옵션
+                      <>
                         <div
-                          key={movieTitle}
-                          onClick={() => handleMovieFilter(movieTitle)}
-                          className={`px-4 py-4 cursor-pointer hover:bg-blue-50 hover:text-blue-700 transition-colors border-t border-gray-100 text-base ${
-                            selectedMovie === movieTitle ? 'bg-blue-100 text-blue-800 font-medium' : 'text-gray-900'
+                          onClick={() => handleMovieFilter("all")}
+                          className={`px-4 py-4 cursor-pointer hover:bg-blue-50 hover:text-blue-700 transition-colors text-base ${
+                            selectedMovie === "all" ? 'bg-blue-100 text-blue-800 font-medium' : 'text-gray-900'
                           }`}
                         >
-                          {movieTitle} ({count}개)
+                          전체 영화 ({getUniqueMovies().length}개)
                         </div>
-                      );
-                    })}
+                        {getUniqueMovies().map((movieTitle) => {
+                          const count = allMovies.filter((m) => m.title === movieTitle).length;
+                          return (
+                            <div
+                              key={movieTitle}
+                              onClick={() => handleMovieFilter(movieTitle)}
+                              className={`px-4 py-4 cursor-pointer hover:bg-blue-50 hover:text-blue-700 transition-colors border-t border-gray-100 text-base ${
+                                selectedMovie === movieTitle ? 'bg-blue-100 text-blue-800 font-medium' : 'text-gray-900'
+                              }`}
+                            >
+                              {movieTitle} ({count}개)
+                            </div>
+                          );
+                        })}
+                      </>
+                    ) : (
+                      // 영화관별 필터 옵션
+                      <>
+                        <div
+                          onClick={() => handleTheaterFilter("all")}
+                          className={`px-4 py-4 cursor-pointer hover:bg-blue-50 hover:text-blue-700 transition-colors text-base ${
+                            selectedTheater === "all" ? 'bg-blue-100 text-blue-800 font-medium' : 'text-gray-900'
+                          }`}
+                        >
+                          전체 영화관 ({getUniqueTheaters().length}개)
+                        </div>
+                        {getUniqueTheaters().map((theaterName) => {
+                          const count = allMovies.filter((m) => m.theater === theaterName).length;
+                          return (
+                            <div
+                              key={theaterName}
+                              onClick={() => handleTheaterFilter(theaterName)}
+                              className={`px-4 py-4 cursor-pointer hover:bg-blue-50 hover:text-blue-700 transition-colors border-t border-gray-100 text-base ${
+                                selectedTheater === theaterName ? 'bg-blue-100 text-blue-800 font-medium' : 'text-gray-900'
+                              }`}
+                            >
+                              {theaterName} ({count}개)
+                            </div>
+                          );
+                        })}
+                      </>
+                    )}
                   </div>
                 )}
               </div>
@@ -476,9 +576,9 @@ export default function Home() {
               weekday: "long",
             })}{" "}
             - 총 {getFilteredMoviesByTime.length}개의 상영 스케줄
-            {selectedMovie !== "all" && (
+            {(selectedMovie !== "all" || selectedTheater !== "all") && (
               <span className="ml-2 text-blue-600 font-medium">
-                (&apos;{selectedMovie}&apos; 필터 적용)
+                ({selectedMovie !== "all" ? `'${selectedMovie}'` : `'${selectedTheater}'`} 필터 적용)
               </span>
             )}
           </div>
@@ -529,7 +629,14 @@ export default function Home() {
                   </button>
                 </div>
 
-                <h2 className="text-sm md:text-base font-semibold mb-1 md:mb-2 line-clamp-2">
+                <h2 className="text-sm md:text-base font-semibold mb-1 md:mb-2 leading-tight" style={{
+                  overflow: 'hidden',
+                  textOverflow: 'ellipsis',
+                  display: '-webkit-box',
+                  WebkitLineClamp: 2,
+                  WebkitBoxOrient: 'vertical',
+                  wordBreak: 'keep-all'
+                }}>
                   {movie.title}
                 </h2>
 
@@ -547,11 +654,6 @@ export default function Home() {
                 {movie.screen && (
                   <p className="text-gray-500 text-xs mb-1 truncate">
                     {movie.screen}
-                  </p>
-                )}
-                {movie.director && (
-                  <p className="text-gray-500 text-xs truncate">
-                    감독: {movie.director}
                   </p>
                 )}
               </div>
@@ -654,9 +756,16 @@ export default function Home() {
                           </button>
                         </div>
 
-                        <h3 className={`text-base font-semibold mb-2 line-clamp-2 ${
+                        <h3 className={`text-base font-semibold mb-2 leading-tight ${
                           isPast ? 'text-gray-600' : 'text-gray-900'
-                        }`}>
+                        }`} style={{
+                          overflow: 'hidden',
+                          textOverflow: 'ellipsis',
+                          display: '-webkit-box',
+                          WebkitLineClamp: 2,
+                          WebkitBoxOrient: 'vertical',
+                          wordBreak: 'keep-all'
+                        }}>
                           {movie.title}
                         </h3>
 
@@ -664,7 +773,6 @@ export default function Home() {
                           <p className="font-medium truncate">{movie.theater}</p>
                           {movie.area && <p className="text-gray-500">{movie.area}</p>}
                           {movie.screen && <p className="text-gray-500 truncate">{movie.screen}</p>}
-                          {movie.director && <p className="text-gray-500 truncate">감독: {movie.director}</p>}
                         </div>
                         
                         {isPast && (

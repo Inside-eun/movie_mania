@@ -40,6 +40,7 @@ async function delay(ms = 1000) {
 }
 
 export class CrawlerService {
+
   async getBoxOfficeTop5() {
     try {
       // 오늘 날짜 YYYYMMDD 형식으로 변환 (박스오피스는 전날 기준)
@@ -368,7 +369,6 @@ export class CrawlerService {
                       hours,
                       minutes
                     ),
-                    director: "",
                     source: "KOFA",
                   });
                 }
@@ -423,7 +423,7 @@ export class CrawlerService {
 
             const movies = [];
             if (schedule.schedule) {
-              schedule.schedule.forEach((item) => {
+              for (const item of schedule.schedule) {
                 const cleanTitle = item.movieNm
                   .replace(/\s*\([^)]*\)/g, "")
                   .trim();
@@ -433,11 +433,11 @@ export class CrawlerService {
                   console.log(
                     `🚫 [제외됨] 박스오피스 상위 영화: ${cleanTitle}`
                   );
-                  return;
+                  continue;
                 }
 
                 const showtimes = item.showTm.split(",");
-                showtimes.forEach((time) => {
+                for (const time of showtimes) {
                   const [hours, minutes] = time
                     .match(/(\d{2})(\d{2})/)
                     .slice(1)
@@ -460,8 +460,8 @@ export class CrawlerService {
                       minutes
                     ),
                   });
-                });
-              });
+                }
+              }
             }
             return movies;
           } catch (error) {
@@ -615,7 +615,7 @@ export class CrawlerService {
 
           const movies = [];
           if (schedule.schedule) {
-            schedule.schedule.forEach((item) => {
+            for (const item of schedule.schedule) {
               const cleanTitle = item.movieNm
                 .replace(/\s*\([^)]*\)/g, "")
                 .trim();
@@ -623,7 +623,7 @@ export class CrawlerService {
               // 박스오피스 1~5위 영화는 제외
               if (top5Movies.includes(cleanTitle)) {
                 console.log(`🚫 [제외됨] 박스오피스 상위 영화: ${cleanTitle}`);
-                return;
+                continue;
               }
               
               // 디버깅: 모든 영화 제목 로깅 (Vercel에서만)
@@ -631,8 +631,9 @@ export class CrawlerService {
                 console.log(`✅ [포함됨] ${cleanTitle} (박스오피스 제외 목록: ${top5Movies.join(', ')})`);
               }
 
+
               const showtimes = item.showTm.split(",");
-              showtimes.forEach((time) => {
+              for (const time of showtimes) {
                 const [hours, minutes] = time
                   .match(/(\d{2})(\d{2})/)
                   .slice(1)
@@ -655,8 +656,8 @@ export class CrawlerService {
                     minutes
                   ),
                 });
-              });
-            });
+              }
+            }
           }
           return movies;
         } catch (error) {
