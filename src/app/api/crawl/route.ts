@@ -91,6 +91,13 @@ export async function GET(request: Request) {
 
     // 수동 스케줄을 기존 영화 목록에 추가
     movies = [...movies, ...manualMovies];
+    
+    // 전체 영화 목록을 시간순으로 정렬
+    movies.sort((a, b) => {
+      const timeA = a.time;
+      const timeB = b.time;
+      return timeA.localeCompare(timeB);
+    });
 
     // 시간 정보를 문자열로 변환 (JSON 직렬화를 위해)
     const serializedMovies = movies.map((movie: MovieSchedule) => ({

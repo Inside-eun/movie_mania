@@ -607,18 +607,11 @@ export default function Home() {
                 } border-gray-200 dark:border-gray-700`}
               >
                 <div className="flex justify-between items-start mb-1 md:mb-2">
-                  <div className="flex items-center gap-2">
-                    <time className={`text-xs md:text-sm font-bold px-1 md:px-2 py-1 rounded ${
-                      isPast ? 'text-gray-500 dark:text-gray-400 bg-gray-200 dark:bg-gray-700' : 'text-blue-600 dark:text-blue-400 bg-blue-50 dark:bg-blue-900'
-                    }`}>
-                      {movie.time}
-                    </time>
-                    {movie.source === 'manual' && (
-                      <span className="text-xs px-2 py-1 bg-green-100 dark:bg-green-900 text-green-700 dark:text-green-300 rounded-full font-medium">
-                        수동
-                      </span>
-                    )}
-                  </div>
+                  <time className={`text-xs md:text-sm font-bold px-1 md:px-2 py-1 rounded ${
+                    isPast ? 'text-gray-500 dark:text-gray-400 bg-gray-200 dark:bg-gray-700' : 'text-blue-600 dark:text-blue-400 bg-blue-50 dark:bg-blue-900'
+                  }`}>
+                    {movie.time}
+                  </time>
                   <button
                     onClick={(e) => {
                       e.stopPropagation();
@@ -754,20 +747,13 @@ export default function Home() {
                         } border-gray-200 dark:border-gray-600`}
                       >
                         <div className="flex justify-between items-start mb-2">
-                          <div className="flex items-center gap-2">
-                            <time className={`text-sm font-bold px-2 py-1 rounded ${
-                              isPast 
-                                ? 'text-gray-500 dark:text-gray-400 bg-gray-200 dark:bg-gray-700' 
-                                : 'text-blue-600 dark:text-blue-400 bg-blue-50 dark:bg-blue-900'
-                            }`}>
-                              {movie.time}
-                            </time>
-                            {movie.source === 'manual' && (
-                              <span className="text-xs px-2 py-1 bg-green-100 dark:bg-green-900 text-green-700 dark:text-green-300 rounded-full font-medium">
-                                수동
-                              </span>
-                            )}
-                          </div>
+                          <time className={`text-sm font-bold px-2 py-1 rounded ${
+                            isPast 
+                              ? 'text-gray-500 dark:text-gray-400 bg-gray-200 dark:bg-gray-700' 
+                              : 'text-blue-600 dark:text-blue-400 bg-blue-50 dark:bg-blue-900'
+                          }`}>
+                            {movie.time}
+                          </time>
                           <button
                             onClick={() => toggleWishlist(movie)}
                             className="p-2 hover:bg-gray-200 dark:hover:bg-gray-600 rounded-full transition-colors"

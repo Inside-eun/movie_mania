@@ -153,88 +153,13 @@ export function filterArtCinemas(theaterList) {
   return theaterList.filter(theater => isArtCinema(theater.cdNm));
 }
 
-// // 수동 스케줄 데이터 (KOBIS에서 조회되지 않는 극장)
-// export const manualSchedules = {
-//   // 2025년 9월 15일 예시 데이터
-//   '2025-09-15': [
-//     {
-//       title: '예술영화 1',
-//       theater: '수동극장 A',
-//       area: '강남구',
-//       screen: '1관',
-//       time: '14:00',
-//       source: 'manual'
-//     },
-//     {
-//       title: '예술영화 2',
-//       theater: '수동극장 A',
-//       area: '강남구',
-//       screen: '2관',
-//       time: '16:30',
-//       source: 'manual'
-//     },
-//     {
-//       title: '독립영화 1',
-//       theater: '수동극장 B',
-//       area: '마포구',
-//       screen: '특별관',
-//       time: '19:00',
-//       source: 'manual'
-//     },
-//     {
-//       title: '독립영화 2',
-//       theater: '수동극장 B',
-//       area: '마포구',
-//       screen: '특별관',
-//       time: '21:30',
-//       source: 'manual'
-//     }
-//   ],
-//   // 2025년 9월 16일 예시 데이터
-//   '2025-09-16': [
-//     {
-//       title: '예술영화 3',
-//       theater: '수동극장 A',
-//       area: '강남구',
-//       screen: '1관',
-//       time: '15:00',
-//       source: 'manual'
-//     },
-//     {
-//       title: '예술영화 4',
-//       theater: '수동극장 A',
-//       area: '강남구',
-//       screen: '2관',
-//       time: '17:30',
-//       source: 'manual'
-//     },
-//     {
-//       title: '독립영화 3',
-//       theater: '수동극장 B',
-//       area: '마포구',
-//       screen: '특별관',
-//       time: '20:00',
-//       source: 'manual'
-//     },
-//     {
-//       title: '독립영화 4',
-//       theater: '수동극장 B',
-//       area: '마포구',
-//       screen: '특별관',
-//       time: '22:30',
-//       source: 'manual'
-//     }
-//   ]
-//   // 필요에 따라 더 많은 날짜 추가 가능
-// };
-
 // 실버영화관 스케줄 자동 생성
 const silverCinemaSchedules = {
-  // 역마차: 2025-09-15 하루만
   ...generateSilverCinemaSchedules('역마차', '20100040', '2025-09-15', '2025-09-15'),
-  
-  // 바로 지금 여기: 2025-09-16 ~ 2025-09-17 (2일간)
-  ...generateSilverCinemaSchedules('바로 지금 여기', '20244606', '2025-09-16', '2025-09-17'),
+  ...generateSilverCinemaSchedules('바로 지금 여기', '20244606', '2025-09-16', '2025-09-19'),
+  ...generateSilverCinemaSchedules('셰인', '19538019', '2025-09-20', '2025-09-22'),
+  ...generateSilverCinemaSchedules('성공의 달콤한 향기', '20135745', '2025-09-23', '2025-09-25'),
+  ...generateSilverCinemaSchedules('매매꾼', '20135745', '2025-09-30', '2025-10-02'),
 };
 
 // 수동 스케줄 데이터 (자동 생성된 스케줄 + 기타 수동 스케줄)
@@ -302,6 +227,3 @@ export function addSilverCinemaMovie(movieTitle, movieCode, startDate, endDate) 
   
   return newSchedules;
 }
-
-// 사용 예시:
-// addSilverCinemaMovie('새로운 영화', '20249999', '2025-09-20', '2025-09-22');
