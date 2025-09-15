@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useMemo, useEffect, useRef } from "react";
+import DarkModeToggle from "../components/DarkModeToggle";
 
 interface MovieSchedule {
   title: string;
@@ -86,7 +87,7 @@ export default function Home() {
         setAllMovies(data.data);
         setFilteredMovies(data.data);
         setSelectedMovie("all"); // 새로 크롤링하면 필터 초기화
-        setLastUpdate(new Date(data.timestamp).toLocaleString("ko-KR"));
+        setLastUpdate(new Date(data.timestamp).toLocaleTimeString("ko-KR"));
       } else {
         setError(data.error || "크롤링 실패");
       }
@@ -339,15 +340,20 @@ export default function Home() {
   };
 
   return (
-    <main className="container mx-auto px-4 py-4 sm:py-8 max-w-4xl">
-      <h1 className="text-3xl sm:text-3xl font-bold mb-1 text-center">
-        홍대병들을 위한<br className="sm:hidden"/> 서울예술영화관 상영시간표
-      </h1>
-      <h2 className="text-lg sm:text-xl font-bold mb-4 sm:mb-6 text-center">
+    <main className="container mx-auto px-4 py-12 sm:py-12 max-w-4xl text-gray-900 dark:text-gray-100 min-h-screen">
+      <div className="relative mb-4">
+        <h1 className="text-3xl sm:text-3xl font-bold mb-1 text-center text-gray-900 dark:text-white">
+          홍대병들을 위한<br className="sm:hidden"/> 서울예술영화관 상영시간표
+        </h1>
+        <div className="absolute top-0 right-0">
+          <DarkModeToggle />
+        </div>
+      </div>
+      <h2 className="text-lg sm:text-xl font-bold mb-4 sm:mb-6 text-center text-gray-800 dark:text-gray-200">
         박스오피스 5위까지의 작품은 제외합니다
       </h2>
 
-      <p className="text-xs sm:text-sm text-gray-500 mb-4 sm:mb-8 text-center px-2">
+      <p className="text-xs sm:text-sm text-gray-500 dark:text-gray-400 mb-4 sm:mb-8 text-center px-2">
         KOBIS조회 방식이기 때문에 실제 상영내역과 일치하지 않을 수 있으며,<br className="hidden sm:block"/> 각 전송사업자별로 상영스케줄 운영방식에 따라 개별 영화상영관의 상영스케줄 일부 정보가 제공되지 않을 수 있습니다.
       </p>
 
@@ -356,7 +362,7 @@ export default function Home() {
           <div className="flex gap-2 w-full flex-wrap">
             <input
               type="date"
-              className="px-3 py-2 border rounded-lg h-10 text-sm flex-shrink-0 w-auto"
+              className="px-3 py-2 border rounded-lg h-10 text-sm flex-shrink-0 w-auto bg-white dark:bg-gray-800 border-gray-300 dark:border-gray-600 text-gray-900 dark:text-gray-100"
               value={selectedDate}
               onChange={(e) => {
                 setSelectedDate(e.target.value);
@@ -383,7 +389,7 @@ export default function Home() {
                 fetchMovies();
               }}
               disabled={loading}
-              className="px-6 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 disabled:opacity-50 disabled:cursor-not-allowed h-10 flex items-center justify-center whitespace-nowrap"
+              className="px-6 py-2 bg-blue-500 dark:bg-blue-600 text-white rounded-lg hover:bg-blue-600 dark:hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed h-10 flex items-center justify-center whitespace-nowrap"
             >
               {loading ? "크롤링 중... " : "시간표 조회"}
             </button>
@@ -397,8 +403,8 @@ export default function Home() {
               disabled={showWishlistView}
               className={`px-6 py-2 rounded-lg h-10 flex items-center justify-center gap-2 whitespace-nowrap transition-colors ${
                 showWishlistView 
-                  ? 'bg-red-600 text-white cursor-not-allowed opacity-75' 
-                  : 'bg-red-500 text-white hover:bg-red-600'
+                  ? 'bg-red-600 dark:bg-red-700 text-white cursor-not-allowed opacity-75' 
+                  : 'bg-red-500 dark:bg-red-600 text-white hover:bg-red-600 dark:hover:bg-red-700'
               }`}
             >
               <svg className="w-6 h-8" fill="currentColor" viewBox="0 0 24 24">
@@ -409,7 +415,7 @@ export default function Home() {
           </div>
 
           {lastUpdate && !showWishlistView && (
-            <span className="text-sm text-gray-500">
+            <span className="text-sm text-gray-500 dark:text-gray-400 whitespace-nowrap">
               마지막 업데이트: {lastUpdate}
             </span>
           )}
@@ -418,13 +424,13 @@ export default function Home() {
         {allMovies.length > 0 && !showWishlistView && (
           <div className="flex flex-col gap-3 sm:gap-4">
             {/* 탭 메뉴 */}
-            <div className="flex bg-gray-100 rounded-lg p-1">
+            <div className="flex bg-gray-100 dark:bg-gray-800 rounded-lg p-1">
               <button
                 onClick={() => handleFilterTypeChange("movie")}
                 className={`flex-1 py-2 px-4 rounded-md text-sm font-medium transition-all duration-200 ${
                   filterType === "movie"
-                    ? 'bg-white text-blue-600 shadow-sm'
-                    : 'text-gray-600 hover:text-gray-900'
+                    ? 'bg-white dark:bg-gray-700 text-blue-600 dark:text-blue-400 shadow-sm'
+                    : 'text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-200'
                 }`}
               >
                 영화별 필터
@@ -433,8 +439,8 @@ export default function Home() {
                 onClick={() => handleFilterTypeChange("theater")}
                 className={`flex-1 py-2 px-4 rounded-md text-sm font-medium transition-all duration-200 ${
                   filterType === "theater"
-                    ? 'bg-white text-blue-600 shadow-sm'
-                    : 'text-gray-600 hover:text-gray-900'
+                    ? 'bg-white dark:bg-gray-700 text-blue-600 dark:text-blue-400 shadow-sm'
+                    : 'text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-200'
                 }`}
               >
                 영화관별 필터
@@ -446,13 +452,13 @@ export default function Home() {
               <div className="relative w-full" ref={dropdownRef}>
                 <button
                   onClick={() => setIsDropdownOpen(!isDropdownOpen)}
-                  className="w-full px-4 py-3 border border-gray-300 rounded-lg bg-white text-left text-gray-900 hover:border-blue-400 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-200 flex items-center justify-between min-h-[48px] sm:min-h-[40px]"
+                  className="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-800 text-left text-gray-900 dark:text-gray-100 hover:border-blue-400 dark:hover:border-blue-500 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-200 flex items-center justify-between min-h-[48px] sm:min-h-[40px]"
                 >
                   <span className="truncate">
                     {filterType === "movie" ? getSelectedMovieText() : getSelectedTheaterText()}
                   </span>
                   <svg
-                    className={`w-4 h-4 text-gray-500 transition-transform duration-200 ${
+                    className={`w-4 h-4 text-gray-500 dark:text-gray-400 transition-transform duration-200 ${
                       isDropdownOpen ? 'rotate-180' : 'rotate-0'
                     }`}
                     fill="none"
@@ -464,14 +470,14 @@ export default function Home() {
                 </button>
                 
                 {isDropdownOpen && (
-                  <div className="absolute z-10 w-full mt-1 bg-white border border-gray-200 rounded-lg shadow-lg max-h-60 overflow-y-auto">
+                  <div className="absolute z-10 w-full mt-1 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg shadow-lg max-h-60 overflow-y-auto">
                     {filterType === "movie" ? (
                       // 영화별 필터 옵션
                       <>
                         <div
                           onClick={() => handleMovieFilter("all")}
-                          className={`px-4 py-4 cursor-pointer hover:bg-blue-50 hover:text-blue-700 transition-colors text-base ${
-                            selectedMovie === "all" ? 'bg-blue-100 text-blue-800 font-medium' : 'text-gray-900'
+                          className={`px-4 py-4 cursor-pointer hover:bg-blue-50 dark:hover:bg-blue-900 hover:text-blue-700 dark:hover:text-blue-300 transition-colors text-base ${
+                            selectedMovie === "all" ? 'bg-blue-100 dark:bg-blue-900 text-blue-800 dark:text-blue-200 font-medium' : 'text-gray-900 dark:text-gray-100'
                           }`}
                         >
                           전체 영화 ({getUniqueMovies().length}개)
@@ -482,8 +488,8 @@ export default function Home() {
                             <div
                               key={movieTitle}
                               onClick={() => handleMovieFilter(movieTitle)}
-                              className={`px-4 py-4 cursor-pointer hover:bg-blue-50 hover:text-blue-700 transition-colors border-t border-gray-100 text-base ${
-                                selectedMovie === movieTitle ? 'bg-blue-100 text-blue-800 font-medium' : 'text-gray-900'
+                              className={`px-4 py-4 cursor-pointer hover:bg-blue-50 dark:hover:bg-blue-900 hover:text-blue-700 dark:hover:text-blue-300 transition-colors border-t border-gray-100 dark:border-gray-700 text-base ${
+                                selectedMovie === movieTitle ? 'bg-blue-100 dark:bg-blue-900 text-blue-800 dark:text-blue-200 font-medium' : 'text-gray-900 dark:text-gray-100'
                               }`}
                             >
                               {movieTitle} ({count}개)
@@ -496,8 +502,8 @@ export default function Home() {
                       <>
                         <div
                           onClick={() => handleTheaterFilter("all")}
-                          className={`px-4 py-4 cursor-pointer hover:bg-blue-50 hover:text-blue-700 transition-colors text-base ${
-                            selectedTheater === "all" ? 'bg-blue-100 text-blue-800 font-medium' : 'text-gray-900'
+                          className={`px-4 py-4 cursor-pointer hover:bg-blue-50 dark:hover:bg-blue-900 hover:text-blue-700 dark:hover:text-blue-300 transition-colors text-base ${
+                            selectedTheater === "all" ? 'bg-blue-100 dark:bg-blue-900 text-blue-800 dark:text-blue-200 font-medium' : 'text-gray-900 dark:text-gray-100'
                           }`}
                         >
                           전체 영화관 ({getUniqueTheaters().length}개)
@@ -508,8 +514,8 @@ export default function Home() {
                             <div
                               key={theaterName}
                               onClick={() => handleTheaterFilter(theaterName)}
-                              className={`px-4 py-4 cursor-pointer hover:bg-blue-50 hover:text-blue-700 transition-colors border-t border-gray-100 text-base ${
-                                selectedTheater === theaterName ? 'bg-blue-100 text-blue-800 font-medium' : 'text-gray-900'
+                              className={`px-4 py-4 cursor-pointer hover:bg-blue-50 dark:hover:bg-blue-900 hover:text-blue-700 dark:hover:text-blue-300 transition-colors border-t border-gray-100 dark:border-gray-700 text-base ${
+                                selectedTheater === theaterName ? 'bg-blue-100 dark:bg-blue-900 text-blue-800 dark:text-blue-200 font-medium' : 'text-gray-900 dark:text-gray-100'
                               }`}
                             >
                               {theaterName} ({count}개)
@@ -524,10 +530,10 @@ export default function Home() {
             </div>
             
             {selectedDate === new Date().toISOString().split("T")[0] && pastSchedulesCount > 0 && (
-              <div className="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
+              <div className="flex items-center justify-between p-3 bg-gray-50 dark:bg-gray-800 rounded-lg">
                 <button
                   onClick={() => setShowPastSchedules(!showPastSchedules)}
-                  className="flex items-center gap-2 text-sm text-gray-700 hover:text-gray-900 transition-colors"
+                  className="flex items-center gap-2 text-sm text-gray-700 dark:text-gray-300 hover:text-gray-900 dark:hover:text-gray-100 transition-colors"
                 >
                   <svg
                     className={`w-4 h-4 transition-transform duration-200 ${
@@ -543,7 +549,7 @@ export default function Home() {
                     지난 상영시간 {showPastSchedules ? '접기' : '펼치기'} ({pastSchedulesCount}개)
                   </span>
                 </button>
-                <span className="text-xs text-gray-500">
+                <span className="text-xs text-gray-500 dark:text-gray-400">
                   현재 시간: {new Date().toLocaleTimeString('ko-KR', { hour: '2-digit', minute: '2-digit' })}
                 </span>
               </div>
@@ -553,7 +559,7 @@ export default function Home() {
       </div>
 
       {error && (
-        <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-6">
+        <div className="bg-red-100 dark:bg-red-900 border border-red-400 dark:border-red-600 text-red-700 dark:text-red-200 px-4 py-3 rounded mb-6">
           {error}
         </div>
       )}
@@ -561,14 +567,14 @@ export default function Home() {
       {loading && (
         <div className="text-center py-8">
           <div className="inline-block animate-spin rounded-full h-8 w-8 border-b-2 border-blue-500"></div>
-          <p className="mt-2 text-gray-600">상영시간표를 불러오는 중...</p>
-          <p className="mt-2 text-gray-600">최대 1분정도 걸릴 수 있습니다</p>
+          <p className="mt-2 text-gray-600 dark:text-gray-400">상영시간표를 불러오는 중...</p>
+          <p className="mt-2 text-gray-600 dark:text-gray-400">최대 1분정도 걸릴 수 있습니다</p>
         </div>
       )}
 
       {!loading && !showWishlistView && getFilteredMoviesByTime.length > 0 && (
         <div>
-          <div className="mb-4 text-sm text-gray-600">
+          <div className="mb-4 text-sm text-gray-600 dark:text-gray-400">
             {new Date(selectedDate).toLocaleDateString("ko-KR", {
               year: "numeric",
               month: "long",
@@ -577,7 +583,7 @@ export default function Home() {
             })}{" "}
             - 총 {getFilteredMoviesByTime.length}개의 상영 스케줄
             {(selectedMovie !== "all" || selectedTheater !== "all") && (
-              <span className="ml-2 text-blue-600 font-medium">
+              <span className="ml-2 text-blue-600 dark:text-blue-400 font-medium">
                 ({selectedMovie !== "all" ? `'${selectedMovie}'` : `'${selectedTheater}'`} 필터 적용)
               </span>
             )}
@@ -594,12 +600,12 @@ export default function Home() {
               <div
                 key={index}
                 className={`p-2 md:p-3 border rounded-lg shadow-sm hover:shadow-md transition-shadow ${
-                  isPast ? 'bg-gray-50 opacity-75' : 'bg-white'
-                }`}
+                  isPast ? 'bg-gray-50 dark:bg-gray-800 opacity-75' : 'bg-white dark:bg-gray-800'
+                } border-gray-200 dark:border-gray-700`}
               >
                 <div className="flex justify-between items-start mb-1 md:mb-2">
                   <time className={`text-xs md:text-sm font-bold px-1 md:px-2 py-1 rounded ${
-                    isPast ? 'text-gray-500 bg-gray-200' : 'text-blue-600 bg-blue-50'
+                    isPast ? 'text-gray-500 dark:text-gray-400 bg-gray-200 dark:bg-gray-700' : 'text-blue-600 dark:text-blue-400 bg-blue-50 dark:bg-blue-900'
                   }`}>
                     {movie.time}
                   </time>
@@ -608,12 +614,12 @@ export default function Home() {
                       e.stopPropagation();
                       toggleWishlist(movie);
                     }}
-                    className="p-2 hover:bg-gray-100 rounded-full transition-colors"
+                    className="p-2 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-full transition-colors"
                     title={isInWishlist(movie) ? "위시리스트에서 제거" : "위시리스트에 추가"}
                   >
                     <svg
                       className={`w-5 h-5 ${
-                        isInWishlist(movie) ? 'text-red-500 fill-current' : 'text-gray-400'
+                        isInWishlist(movie) ? 'text-red-500 dark:text-red-400 fill-current' : 'text-gray-400 dark:text-gray-500'
                       }`}
                       fill={isInWishlist(movie) ? 'currentColor' : 'none'}
                       stroke="currentColor"
@@ -629,7 +635,7 @@ export default function Home() {
                   </button>
                 </div>
 
-                <h2 className="text-sm md:text-base font-semibold mb-1 md:mb-2 leading-tight" style={{
+                <h2 className="text-sm md:text-base font-semibold mb-1 md:mb-2 leading-tight text-gray-900 dark:text-gray-100" style={{
                   overflow: 'hidden',
                   textOverflow: 'ellipsis',
                   display: '-webkit-box',
@@ -640,19 +646,19 @@ export default function Home() {
                   {movie.title}
                 </h2>
 
-                <div className="flex justify-between items-center text-xs text-gray-600 mb-1">
+                <div className="flex justify-between items-center text-xs text-gray-600 dark:text-gray-400 mb-1">
                   <span className="font-medium truncate text-xs">
                     {movie.theater}
                   </span>
                   {movie.area && (
-                    <span className="text-gray-500 ml-1 md:ml-2 flex-shrink-0 text-xs">
+                    <span className="text-gray-500 dark:text-gray-500 ml-1 md:ml-2 flex-shrink-0 text-xs">
                       {movie.area}
                     </span>
                   )}
                 </div>
 
                 {movie.screen && (
-                  <p className="text-gray-500 text-xs mb-1 truncate">
+                  <p className="text-gray-500 dark:text-gray-500 text-xs mb-1 truncate">
                     {movie.screen}
                   </p>
                 )}
@@ -664,7 +670,7 @@ export default function Home() {
       )}
 
       {!loading && !showWishlistView && allMovies.length === 0 && !error && (
-        <div className="text-center py-8 text-gray-500">
+        <div className="text-center py-8 text-gray-500 dark:text-gray-400">
           <div className="mb-2">
             {new Date(selectedDate).toLocaleDateString("ko-KR", {
               year: "numeric",
@@ -673,14 +679,14 @@ export default function Home() {
               weekday: "long",
             })} 상영시간표를 조회해주세요.
           </div>
-          <div className="text-sm">
+          <div className="text-sm text-gray-500 dark:text-gray-400">
             상영시간표 조회 버튼을 클릭하시면 해당 날짜의 스케줄을 불러옵니다.
           </div>
         </div>
       )}
 
       {!loading && !showWishlistView && allMovies.length > 0 && getFilteredMoviesByTime.length === 0 && (
-        <div className="text-center py-8 text-gray-500">
+        <div className="text-center py-8 text-gray-500 dark:text-gray-400">
           {selectedDate === new Date().toISOString().split("T")[0] && !showPastSchedules 
             ? "현재 시간 이후의 상영시간이 없습니다. 지난 상영시간을 보시려면 위의 체크박스를 선택해주세요."
             : "선택한 영화의 상영시간이 없습니다."
@@ -692,24 +698,24 @@ export default function Home() {
       {showWishlistView && (
         <div className="space-y-6">
           <div className="text-center">
-            <h2 className="text-2xl font-bold text-gray-800 mb-2">나의 찜 목록</h2>
-            <p className="text-sm text-gray-600">동일 브라우저에서 접속 시에만 유지됩니다</p>
+            <h2 className="text-2xl font-bold text-gray-800 dark:text-gray-200 mb-2">나의 찜 목록</h2>
+            <p className="text-sm text-gray-600 dark:text-gray-400">동일 브라우저에서 접속 시에만 유지됩니다</p>
           </div>
 
           {getWishlistCount() === 0 ? (
-            <div className="text-center py-12 text-gray-500">
-              <svg className="w-16 h-16 mx-auto mb-4 text-gray-300" fill="currentColor" viewBox="0 0 24 24">
+            <div className="text-center py-12 text-gray-500 dark:text-gray-400">
+              <svg className="w-16 h-16 mx-auto mb-4 text-gray-300 dark:text-gray-600" fill="currentColor" viewBox="0 0 24 24">
                 <path d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
               </svg>
-              <p className="text-lg mb-2">아직 찜한 영화가 없습니다</p>
-              <p className="text-sm">영화 카드의 하트 아이콘을 클릭해서 찜 목록에 추가해보세요!</p>
+              <p className="text-lg mb-2 text-gray-900 dark:text-gray-100">아직 찜한 영화가 없습니다</p>
+              <p className="text-sm text-gray-600 dark:text-gray-400">영화 카드의 하트 아이콘을 클릭해서 찜 목록에 추가해보세요!</p>
             </div>
           ) : (
             <div className="space-y-8">
               {getWishlistByDate().map(({ date, movies }) => (
-                <div key={date} className="bg-white border rounded-lg p-6 shadow-sm">
-                  <h3 className="text-lg font-semibold text-gray-800 mb-4 flex items-center gap-2">
-                    <svg className="w-5 h-5 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <div key={date} className="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg p-6 shadow-sm">
+                  <h3 className="text-lg font-semibold text-gray-800 dark:text-gray-200 mb-4 flex items-center gap-2">
+                    <svg className="w-5 h-5 text-blue-500 dark:text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
                     </svg>
                     {new Date(date).toLocaleDateString("ko-KR", {
@@ -718,7 +724,7 @@ export default function Home() {
                       day: "numeric",
                       weekday: "long",
                     })}
-                    <span className="text-sm font-normal text-gray-500">({movies.length}개)</span>
+                    <span className="text-sm font-normal text-gray-500 dark:text-gray-400">({movies.length}개)</span>
                   </h3>
                   
                   <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
@@ -733,31 +739,31 @@ export default function Home() {
                       <div
                         key={`${movie.title}-${movie.theater}-${movie.time}`}
                         className={`p-4 border rounded-lg hover:shadow-md transition-shadow ${
-                          isPast ? 'bg-gray-100 opacity-80' : 'bg-gray-50'
-                        }`}
+                          isPast ? 'bg-gray-100 dark:bg-gray-800 opacity-80' : 'bg-gray-50 dark:bg-gray-700'
+                        } border-gray-200 dark:border-gray-600`}
                       >
                         <div className="flex justify-between items-start mb-2">
                           <time className={`text-sm font-bold px-2 py-1 rounded ${
                             isPast 
-                              ? 'text-gray-500 bg-gray-200' 
-                              : 'text-blue-600 bg-blue-50'
+                              ? 'text-gray-500 dark:text-gray-400 bg-gray-200 dark:bg-gray-700' 
+                              : 'text-blue-600 dark:text-blue-400 bg-blue-50 dark:bg-blue-900'
                           }`}>
                             {movie.time}
 
                           </time>
                           <button
                             onClick={() => toggleWishlist(movie)}
-                            className="p-2 hover:bg-gray-200 rounded-full transition-colors"
+                            className="p-2 hover:bg-gray-200 dark:hover:bg-gray-600 rounded-full transition-colors"
                             title="찜 목록에서 제거"
                           >
-                            <svg className="w-5 h-5 text-red-500 fill-current" viewBox="0 0 24 24">
+                            <svg className="w-5 h-5 text-red-500 dark:text-red-400 fill-current" viewBox="0 0 24 24">
                               <path d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
                             </svg>
                           </button>
                         </div>
 
                         <h3 className={`text-base font-semibold mb-2 leading-tight ${
-                          isPast ? 'text-gray-600' : 'text-gray-900'
+                          isPast ? 'text-gray-600 dark:text-gray-400' : 'text-gray-900 dark:text-gray-100'
                         }`} style={{
                           overflow: 'hidden',
                           textOverflow: 'ellipsis',
@@ -769,14 +775,14 @@ export default function Home() {
                           {movie.title}
                         </h3>
 
-                        <div className="space-y-1 text-sm text-gray-600">
+                        <div className="space-y-1 text-sm text-gray-600 dark:text-gray-400">
                           <p className="font-medium truncate">{movie.theater}</p>
-                          {movie.area && <p className="text-gray-500">{movie.area}</p>}
-                          {movie.screen && <p className="text-gray-500 truncate">{movie.screen}</p>}
+                          {movie.area && <p className="text-gray-500 dark:text-gray-500">{movie.area}</p>}
+                          {movie.screen && <p className="text-gray-500 dark:text-gray-500 truncate">{movie.screen}</p>}
                         </div>
                         
                         {isPast && (
-                          <div className="mt-2 text-xs text-gray-500 italic">
+                          <div className="mt-2 text-xs text-gray-500 dark:text-gray-400 italic">
                             {isToday ? '이미 상영이 시작되었습니다' : '지난 상영 일정입니다'}
                           </div>
                         )}
@@ -798,9 +804,9 @@ export default function Home() {
               alt="프로필"
               className="w-12 h-12 rounded-full object-cover"
             />
-            <p className="text-lg font-bold">- 만든사람 : 제육볶음 달달볶아 -</p>
+            <p className="text-lg font-bold text-gray-900 dark:text-gray-100">- 만든사람 : 제육볶음 달달볶아 -</p>
           </div>
-          <div className="text-sm text-gray-500 space-y-1">
+          <div className="text-sm text-gray-500 dark:text-gray-400 space-y-1">
             <p>ver 1.2.0 | last: 2025-09-12</p>
           </div>
         </div>
