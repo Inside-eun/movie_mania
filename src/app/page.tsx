@@ -14,6 +14,7 @@ interface MovieSchedule {
   movieCode?: string;
 }
 
+
 interface CrawlResponse {
   success: boolean;
   count: number;
@@ -98,6 +99,7 @@ export default function Home() {
       setLoading(false);
     }
   };
+
 
   // 고유한 영화 목록 가져오기
   const getUniqueMovies = () => {
@@ -354,7 +356,7 @@ export default function Home() {
       </h2>
 
       <p className="text-xs sm:text-sm text-gray-500 dark:text-gray-400 mb-4 sm:mb-8 text-center px-2">
-        KOBIS조회 방식이기 때문에 실제 상영내역과 일치하지 않을 수 있으며,<br className="hidden sm:block"/> 각 전송사업자별로 상영스케줄 운영방식에 따라 개별 영화상영관의 상영스케줄 일부 정보가 제공되지 않을 수 있습니다.
+        KOBIS조회 방식이기 때문에 실제 상영내역과 일치하지 않을 수 있으며,<br className="hidden sm:block" /> 각 전송사업자별로 상영스케줄 운영방식에 따라 개별 영화상영관의 상영스케줄 일부 정보가 제공되지 않을 수 있습니다.
       </p>
 
       <div className="flex flex-col gap-3 sm:gap-4 mb-4 sm:mb-6">
@@ -393,6 +395,7 @@ export default function Home() {
             >
               {loading ? "크롤링 중... " : "시간표 조회"}
             </button>
+
 
             <button
               onClick={() => {
@@ -604,11 +607,18 @@ export default function Home() {
                 } border-gray-200 dark:border-gray-700`}
               >
                 <div className="flex justify-between items-start mb-1 md:mb-2">
-                  <time className={`text-xs md:text-sm font-bold px-1 md:px-2 py-1 rounded ${
-                    isPast ? 'text-gray-500 dark:text-gray-400 bg-gray-200 dark:bg-gray-700' : 'text-blue-600 dark:text-blue-400 bg-blue-50 dark:bg-blue-900'
-                  }`}>
-                    {movie.time}
-                  </time>
+                  <div className="flex items-center gap-2">
+                    <time className={`text-xs md:text-sm font-bold px-1 md:px-2 py-1 rounded ${
+                      isPast ? 'text-gray-500 dark:text-gray-400 bg-gray-200 dark:bg-gray-700' : 'text-blue-600 dark:text-blue-400 bg-blue-50 dark:bg-blue-900'
+                    }`}>
+                      {movie.time}
+                    </time>
+                    {movie.source === 'manual' && (
+                      <span className="text-xs px-2 py-1 bg-green-100 dark:bg-green-900 text-green-700 dark:text-green-300 rounded-full font-medium">
+                        수동
+                      </span>
+                    )}
+                  </div>
                   <button
                     onClick={(e) => {
                       e.stopPropagation();
@@ -645,6 +655,7 @@ export default function Home() {
                 }}>
                   {movie.title}
                 </h2>
+
 
                 <div className="flex justify-between items-center text-xs text-gray-600 dark:text-gray-400 mb-1">
                   <span className="font-medium truncate text-xs">
@@ -743,14 +754,20 @@ export default function Home() {
                         } border-gray-200 dark:border-gray-600`}
                       >
                         <div className="flex justify-between items-start mb-2">
-                          <time className={`text-sm font-bold px-2 py-1 rounded ${
-                            isPast 
-                              ? 'text-gray-500 dark:text-gray-400 bg-gray-200 dark:bg-gray-700' 
-                              : 'text-blue-600 dark:text-blue-400 bg-blue-50 dark:bg-blue-900'
-                          }`}>
-                            {movie.time}
-
-                          </time>
+                          <div className="flex items-center gap-2">
+                            <time className={`text-sm font-bold px-2 py-1 rounded ${
+                              isPast 
+                                ? 'text-gray-500 dark:text-gray-400 bg-gray-200 dark:bg-gray-700' 
+                                : 'text-blue-600 dark:text-blue-400 bg-blue-50 dark:bg-blue-900'
+                            }`}>
+                              {movie.time}
+                            </time>
+                            {movie.source === 'manual' && (
+                              <span className="text-xs px-2 py-1 bg-green-100 dark:bg-green-900 text-green-700 dark:text-green-300 rounded-full font-medium">
+                                수동
+                              </span>
+                            )}
+                          </div>
                           <button
                             onClick={() => toggleWishlist(movie)}
                             className="p-2 hover:bg-gray-200 dark:hover:bg-gray-600 rounded-full transition-colors"
@@ -775,6 +792,7 @@ export default function Home() {
                           {movie.title}
                         </h3>
 
+
                         <div className="space-y-1 text-sm text-gray-600 dark:text-gray-400">
                           <p className="font-medium truncate">{movie.theater}</p>
                           {movie.area && <p className="text-gray-500 dark:text-gray-500">{movie.area}</p>}
@@ -796,6 +814,8 @@ export default function Home() {
           )}
         </div>
       )}
+
+
       <footer className="mt-16 text-center pb-8">
         <div className="flex flex-col items-center gap-3">
           <div className="flex items-center gap-3">
@@ -807,7 +827,7 @@ export default function Home() {
             <p className="text-lg font-bold text-gray-900 dark:text-gray-100">- 만든사람 : 제육볶음 달달볶아 -</p>
           </div>
           <div className="text-sm text-gray-500 dark:text-gray-400 space-y-1">
-            <p>ver 1.2.0 | last: 2025-09-12</p>
+            <p>ver 1.2.2 | last: 2025-09-15</p>
           </div>
         </div>
       </footer>

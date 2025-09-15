@@ -1,4 +1,5 @@
 import { NextResponse } from "next/server";
+import { getManualSchedules } from "@/data/artCinemas";
 
 // 동적 렌더링 강제
 export const dynamic = "force-dynamic";
@@ -74,6 +75,22 @@ export async function GET(request: Request) {
       // 통합 크롤링 (예술영화관 + KMDB)
       movies = await crawler.crawlArtCinemasWithKMDBByDate(targetDate);
     }
+
+    // 수동 스케줄 추가
+    const manualSchedules = getManualSchedules(dateStr);
+    const manualMovies: MovieSchedule[] = manualSchedules.map(schedule => ({
+      title: schedule.title,
+      theater: schedule.theater,
+      area: schedule.area,
+      screen: schedule.screen,
+      time: schedule.time,
+      showtime: new Date(`${dateStr}T${schedule.time}:00`),
+      source: 'manual',
+      movieCode: schedule.movieCode || undefined
+    }));
+
+    // 수동 스케줄을 기존 영화 목록에 추가
+    movies = [...movies, ...manualMovies];
 
     // 시간 정보를 문자열로 변환 (JSON 직렬화를 위해)
     const serializedMovies = movies.map((movie: MovieSchedule) => ({
