@@ -5,9 +5,10 @@ import { cacheService } from "./cacheService.js";
 
 // 네트워크 설정
 const isVercel = process.env.VERCEL === "1";
-const DEFAULT_TIMEOUT = isVercel ? 4000 : 15000; // Vercel: 4초로 더 단축
-const MAX_RETRIES = isVercel ? 1 : 3; // Vercel에서는 재시도 1회만
-const RETRY_DELAY = isVercel ? 200 : 2000; // Vercel에서는 재시도 딜레이 최소화
+// Vercel 네트워크 변동성 고려: 기본 타임아웃/재시도 상향
+const DEFAULT_TIMEOUT = isVercel ? 10000 : 15000; // Vercel: 10초
+const MAX_RETRIES = isVercel ? 2 : 3; // Vercel에서도 최소 2회 재시도
+const RETRY_DELAY = isVercel ? 400 : 2000; // 초기 딜레이 소폭 증가
 
 // 재시도 함수
 async function retryRequest(
@@ -319,7 +320,8 @@ export class CrawlerService {
 
       const response = await retryRequest(async () => {
         return await axios.get(apiUrl, {
-          timeout: DEFAULT_TIMEOUT,
+          // KMDB는 간헐적 지연이 있어 Vercel에서 더 긴 타임아웃 적용
+          timeout: isVercel ? 15000 : DEFAULT_TIMEOUT,
           headers: {
             "User-Agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/139.0.0.0 Safari/537.36",
             "Accept": "application/json",
