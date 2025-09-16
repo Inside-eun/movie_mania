@@ -2,6 +2,7 @@
 
 import { useState, useMemo, useEffect, useRef } from "react";
 import DarkModeToggle from "../components/DarkModeToggle";
+import MovieModal from "../components/MovieModal";
 
 interface MovieSchedule {
   title: string;
@@ -12,6 +13,12 @@ interface MovieSchedule {
   showtime: string;
   source?: string;
   movieCode?: string;
+  director?: string;
+  posterUrl?: string;
+  prodYear?: string;
+  runtime?: string;
+  cActors?: string;
+  cCodeSubName2?: string;
 }
 
 
@@ -42,6 +49,8 @@ export default function Home() {
   const [wishlist, setWishlist] = useState<Set<string>>(new Set());
   const [wishlistMovies, setWishlistMovies] = useState<MovieSchedule[]>([]);
   const [showWishlistView, setShowWishlistView] = useState(false);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [selectedMovieForModal, setSelectedMovieForModal] = useState<MovieSchedule | null>(null);
   const dropdownRef = useRef<HTMLDivElement>(null);
 
   // localStorage에서 위시리스트 로드
@@ -134,6 +143,18 @@ export default function Home() {
     const movieKey = getMovieKey(movie);
     const isInList = wishlist.has(movieKey);
     return isInList;
+  };
+
+  // 모달 열기
+  const openModal = (movie: MovieSchedule) => {
+    setSelectedMovieForModal(movie);
+    setIsModalOpen(true);
+  };
+
+  // 모달 닫기
+  const closeModal = () => {
+    setIsModalOpen(false);
+    setSelectedMovieForModal(null);
   };
 
   // 현재 시간 기준으로 영화 스케줄 필터링
@@ -602,9 +623,10 @@ export default function Home() {
               return (
               <div
                 key={index}
-                className={`p-2 md:p-3 border rounded-lg shadow-sm hover:shadow-md transition-shadow ${
+                onClick={() => openModal(movie)}
+                className={`p-2 md:p-3 border rounded-lg shadow-sm hover:shadow-md transition-shadow cursor-pointer ${
                   isPast ? 'bg-gray-50 dark:bg-gray-800 opacity-75' : 'bg-white dark:bg-gray-800'
-                } border-gray-200 dark:border-gray-700`}
+                } border-gray-200 dark:border-gray-700 hover:border-blue-300 dark:hover:border-blue-600`}
               >
                 <div className="flex justify-between items-start mb-1 md:mb-2">
                   <time className={`text-xs md:text-sm font-bold px-1 md:px-2 py-1 rounded ${
@@ -617,7 +639,7 @@ export default function Home() {
                       e.stopPropagation();
                       toggleWishlist(movie);
                     }}
-                    className="p-2 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-full transition-colors"
+                    className="p-2 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-full transition-colors z-10 relative"
                     title={isInWishlist(movie) ? "위시리스트에서 제거" : "위시리스트에 추가"}
                   >
                     <svg
@@ -742,9 +764,10 @@ export default function Home() {
                       return (
                       <div
                         key={`${movie.title}-${movie.theater}-${movie.time}`}
-                        className={`p-4 border rounded-lg hover:shadow-md transition-shadow ${
+                        onClick={() => openModal(movie)}
+                        className={`p-4 border rounded-lg hover:shadow-md transition-shadow cursor-pointer ${
                           isPast ? 'bg-gray-100 dark:bg-gray-800 opacity-80' : 'bg-gray-50 dark:bg-gray-700'
-                        } border-gray-200 dark:border-gray-600`}
+                        } border-gray-200 dark:border-gray-600 hover:border-blue-300 dark:hover:border-blue-600`}
                       >
                         <div className="flex justify-between items-start mb-2">
                           <time className={`text-sm font-bold px-2 py-1 rounded ${
@@ -755,8 +778,11 @@ export default function Home() {
                             {movie.time}
                           </time>
                           <button
-                            onClick={() => toggleWishlist(movie)}
-                            className="p-2 hover:bg-gray-200 dark:hover:bg-gray-600 rounded-full transition-colors"
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              toggleWishlist(movie);
+                            }}
+                            className="p-2 hover:bg-gray-200 dark:hover:bg-gray-600 rounded-full transition-colors z-10 relative"
                             title="찜 목록에서 제거"
                           >
                             <svg className="w-5 h-5 text-red-500 dark:text-red-400 fill-current" viewBox="0 0 24 24">
@@ -813,10 +839,17 @@ export default function Home() {
             <p className="text-lg font-bold text-gray-900 dark:text-gray-100">- 만든사람 : 제육볶음 달달볶아 -</p>
           </div>
           <div className="text-sm text-gray-500 dark:text-gray-400 space-y-1">
-            <p>ver 1.2.2 | last: 2025-09-15</p>
+            <p>ver 1.2.3 | last: 2025-09-16</p>
           </div>
         </div>
       </footer>
+
+      {/* 영화 상세 정보 모달 */}
+      <MovieModal
+        isOpen={isModalOpen}
+        onClose={closeModal}
+        movie={selectedMovieForModal}
+      />
     </main>
   );
 }

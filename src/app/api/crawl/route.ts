@@ -1,5 +1,4 @@
 import { NextResponse } from "next/server";
-import { getManualSchedules } from "@/data/artCinemas";
 
 // 동적 렌더링 강제
 export const dynamic = "force-dynamic";
@@ -15,6 +14,11 @@ interface MovieSchedule {
   director?: string;
   source?: string;
   movieCode?: string;
+  posterUrl?: string;
+  prodYear?: string;
+  runtime?: string;
+  cActors?: string;
+  cCodeSubName2?: string;
 }
 
 // JavaScript 모듈을 동적으로 import
@@ -72,25 +76,10 @@ export async function GET(request: Request) {
 
     // 캐시에서 데이터를 찾지 못한 경우에만 크롤링 실행
     if (!fromCache) {
-      // 통합 크롤링 (예술영화관 + KMDB)
-      movies = await crawler.crawlArtCinemasWithKMDBByDate(targetDate);
+      // 통합 크롤링 (예술영화관 + KMDB) - 선택된 날짜로 실행
+      movies = await (crawler as any).crawlArtCinemasWithKMDBByDate(targetDate);
     }
 
-    // 수동 스케줄 추가
-    const manualSchedules = getManualSchedules(dateStr);
-    const manualMovies: MovieSchedule[] = manualSchedules.map(schedule => ({
-      title: schedule.title,
-      theater: schedule.theater,
-      area: schedule.area,
-      screen: schedule.screen,
-      time: schedule.time,
-      showtime: new Date(`${dateStr}T${schedule.time}:00`),
-      source: 'manual',
-      movieCode: schedule.movieCode || undefined
-    }));
-
-    // 수동 스케줄을 기존 영화 목록에 추가
-    movies = [...movies, ...manualMovies];
     
     // 전체 영화 목록을 시간순으로 정렬
     movies.sort((a, b) => {

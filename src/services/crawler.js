@@ -65,8 +65,7 @@ export class CrawlerService {
           `http://www.kobis.or.kr/kobisopenapi/webservice/rest/boxoffice/searchDailyBoxOfficeList.json`,
           {
             params: {
-              key:
-                process.env.KOBIS_API_KEY || "609eba269acb357be05be4ec60202702",
+              key: process.env.KOBIS_API_KEY,
               targetDt: targetDt,
             },
             timeout: DEFAULT_TIMEOUT,
@@ -282,118 +281,119 @@ export class CrawlerService {
   }
 
   async getKOFASchedule() {
-    return this.getKOFAScheduleByDate(new Date());
+    // KMDB API 사용으로 변경
+    return this.getKOFAScheduleFromAPIByDate(new Date());
   }
 
-  async getKOFAScheduleByDate(targetDate) {
+  // KMDB API를 사용한 한국영상자료원 상영 스케줄 조회
+  async getKOFAScheduleFromAPI() {
+    return this.getKOFAScheduleFromAPIByDate(new Date());
+  }
+
+  async getKOFAScheduleFromAPIByDate(targetDate) {
     try {
       const dateStr = targetDate.toISOString().split("T")[0]; // YYYY-MM-DD 형식
+      const dateYYYYMMDD = dateStr.replace(/-/g, ''); // YYYYMMDD 형식으로 변환
 
       // 캐시에서 먼저 확인
-      const cachedData = cacheService.get("kofa", dateStr);
+      const cachedData = cacheService.get("kofa_api", dateStr);
       if (cachedData) {
-        console.log("한국영상자료원 시네마테크KOFA: 캐시된 데이터 사용");
-        return cachedData;
+        console.log("한국영상자료원 KMDB API: 캐시된 데이터 사용");
+        // 캐시된 데이터의 showtime을 Date 객체로 복원
+        return cachedData.map((movie) => ({
+          ...movie,
+          showtime: typeof movie.showtime === "string" 
+            ? new Date(movie.showtime) 
+            : movie.showtime,
+        }));
       }
 
-      console.log("한국영상자료원 시네마테크KOFA 상영시간표 조회 중...");
+      console.log("한국영상자료원 KMDB API 상영시간표 조회 중...");
+
+      const apiKey = process.env.KMDB_API_KEY;
+      if (!apiKey) {
+        console.error("KMDB_API_KEY 환경 변수가 설정되지 않았습니다.");
+        return [];
+      }
+      const apiUrl = `https://www.kmdb.or.kr/info/api/3/api.json?serviceKey=${apiKey}&StartDate=${dateYYYYMMDD}&EndDate=${dateYYYYMMDD}`;
 
       const response = await retryRequest(async () => {
-        return await axios.get(
-          "https://www.koreafilm.or.kr/cinematheque/schedule",
-          {
-            headers: {
-              "User-Agent":
-                "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/139.0.0.0 Safari/537.36",
-              Accept:
-                "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8",
-              "Accept-Language": "ko-KR,ko;q=0.9,en-US;q=0.8,en;q=0.7",
-            },
-            timeout: DEFAULT_TIMEOUT,
-          }
-        );
+        return await axios.get(apiUrl, {
+          timeout: DEFAULT_TIMEOUT,
+          headers: {
+            "User-Agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/139.0.0.0 Safari/537.36",
+            "Accept": "application/json",
+            "Accept-Language": "ko-KR,ko;q=0.9,en-US;q=0.8,en;q=0.7",
+          },
+        });
       });
 
-      const $ = cheerio.load(response.data);
+      if (!response.data || response.data.resultMsg !== "INFO-000") {
+        console.log("KMDB API 응답 에러:", response.data?.resultMsg || "알 수 없는 에러");
+        return [];
+      }
+
       const schedules = [];
+      const resultList = response.data.resultList || [];
 
-      // 지정된 날짜에 해당하는 섹션 찾기
-      const targetDateNum = targetDate.getDate();
+      for (const item of resultList) {
+        if (!item.cMovieTime || !item.cMovieName) continue;
 
-      // 오늘 날짜가 포함된 txt-day 클래스 찾기 (dt 태그)
-      $("dt.txt-day").each((index, element) => {
-        const $dayElement = $(element);
-        const dayText = $dayElement.text().trim();
+        // 시간 파싱 (HH:MM 형식)
+        const timeMatch = item.cMovieTime.match(/(\d{1,2}):(\d{2})/);
+        if (!timeMatch) continue;
 
-        // 지정된 날짜가 포함되어 있는지 확인 (예: "11.목")
-        if (dayText.includes(`${targetDateNum}.`)) {
-          // dt 다음에 오는 모든 dd 요소들 찾기
-          const $ddElements = $dayElement.nextAll("dd");
+        const hours = parseInt(timeMatch[1]);
+        const minutes = parseInt(timeMatch[2]);
 
-          $ddElements.each((ddIndex, ddElement) => {
-            const $dd = $(ddElement);
+        // 상영관 정보 파싱
+        const theaterInfo = item.cCodeSubName3 || "시네마테크KOFA";
+        const screenInfo = theaterInfo.includes("관") ? theaterInfo : `${theaterInfo} 상영관`;
 
-            // dd 안의 list-detail-1 ul 찾기
-            const $scheduleList = $dd.find("ul.list-detail-1");
+        const schedule = {
+          title: item.cMovieName,
+          theater: "한국영상자료원 시네마테크KOFA",
+          area: "마포구",
+          screen: screenInfo,
+          time: `${String(hours).padStart(2, "0")}:${String(minutes).padStart(2, "0")}`,
+          showtime: new Date(
+            targetDate.getFullYear(),
+            targetDate.getMonth(),
+            targetDate.getDate(),
+            hours,
+            minutes
+          ),
+          movieCode: item.cMovieId,
+          director: item.cDirector || null,
+          prodYear: item.cProductionYear || null,
+          runtime: item.cRunningTime || null,
+          actors: item.cActors || null,
+          synopsis: item.cSynopsys || null,
+          posterUrl: item.image1URL || null,
+          rating: item.cCodeSubName2 || null,
+          format: item.cCodeSubName || null,
+          source: "KMDB_API",
+        };
 
-            $scheduleList.each((ulIndex, ulElement) => {
-              const $ul = $(ulElement);
-
-              // 시간 정보 추출
-              const timeText = $ul.find(".txt-time .icon-dot").text().trim();
-
-              // 영화 제목 추출
-              const titleText = $ul.find(".txt-detail .txt-1 a").text().trim();
-
-              // 상영관 정보 추출
-              const roomText = $ul.find(".txt-room").text().trim();
-
-              if (timeText && titleText) {
-                const timeMatch = timeText.match(/(\d{1,2}):(\d{2})/);
-                if (timeMatch) {
-                  const hours = parseInt(timeMatch[1]);
-                  const minutes = parseInt(timeMatch[2]);
-
-                  schedules.push({
-                    title: titleText,
-                    theater: "한국영상자료원 시네마테크KOFA",
-                    area: "마포구",
-                    screen: roomText || "시네마테크",
-                    time: `${String(hours).padStart(2, "0")}:${String(
-                      minutes
-                    ).padStart(2, "0")}`,
-                    showtime: new Date(
-                      targetDate.getFullYear(),
-                      targetDate.getMonth(),
-                      targetDate.getDate(),
-                      hours,
-                      minutes
-                    ),
-                    source: "KOFA",
-                  });
-                }
-              }
-            });
-          });
-        }
-      });
+        schedules.push(schedule);
+      }
 
       // 시간순 정렬
       schedules.sort((a, b) => a.showtime.getTime() - b.showtime.getTime());
 
-      console.log(
-        `한국영상자료원 시네마테크KOFA: ${schedules.length}개 상영 스케줄 발견`
-      );
+      console.log(`한국영상자료원 KMDB API: ${schedules.length}개 상영 스케줄 발견`);
 
       // 캐시에 저장
-      cacheService.set("kofa", dateStr, schedules);
+      cacheService.set("kofa_api", dateStr, schedules);
 
       return schedules;
     } catch (error) {
-      console.error("시네마테크KOFA 조회 실패:", error.message);
+      console.error("KMDB API 조회 실패:", error.message);
       return [];
     }
   }
+
+
 
   async crawlArtCinemas() {
     try {
@@ -527,7 +527,13 @@ export class CrawlerService {
       const cachedData = cacheService.get("integrated", dateStr);
       if (cachedData) {
         console.log("통합 예술영화 데이터: 캐시된 데이터 사용");
-        return cachedData;
+        // 캐시된 데이터의 showtime을 Date 객체로 복원
+        return cachedData.map((movie) => ({
+          ...movie,
+          showtime: typeof movie.showtime === "string" 
+            ? new Date(movie.showtime) 
+            : movie.showtime,
+        }));
       }
 
       console.log("=== 예술영화관 + 한국영상자료원 통합 조회 ===\n");
@@ -542,17 +548,26 @@ export class CrawlerService {
         targetDate
       );
 
-      // 한국영상자료원 시네마테크KOFA 스케줄 조회
-      const kofaMovies = await this.getKOFAScheduleByDate(targetDate);
+      // 한국영상자료원 시네마테크KOFA 스케줄 조회 (KMDB API 사용)
+      const kofaMovies = await this.getKOFAScheduleFromAPIByDate(targetDate);
 
       // 통합 및 정렬
       const allMovies = [...artCinemaMovies, ...kofaMovies];
-      allMovies.sort((a, b) => a.showtime.getTime() - b.showtime.getTime());
+      
+      // 모든 영화의 showtime을 Date 객체로 보장
+      const normalizedMovies = allMovies.map((movie) => ({
+        ...movie,
+        showtime: typeof movie.showtime === "string" 
+          ? new Date(movie.showtime) 
+          : movie.showtime,
+      }));
+      
+      normalizedMovies.sort((a, b) => a.showtime.getTime() - b.showtime.getTime());
 
       // 결과 출력
       console.log("\n=== 통합 예술영화 상영시간표 ===");
 
-      allMovies.forEach((movie) => {
+      normalizedMovies.forEach((movie) => {
         const timeStr = movie.showtime.toLocaleTimeString("ko-KR", {
           hour: "2-digit",
           minute: "2-digit",
@@ -566,13 +581,13 @@ export class CrawlerService {
       });
 
       console.log(
-        `\n총 ${allMovies.length}개 상영 스케줄 (예술영화관: ${artCinemaMovies.length}, 한국영상자료원: ${kofaMovies.length})`
+        `\n총 ${normalizedMovies.length}개 상영 스케줄 (예술영화관: ${artCinemaMovies.length}, 한국영상자료원: ${kofaMovies.length})`
       );
 
       // 통합 결과를 캐시에 저장
-      cacheService.set("integrated", dateStr, allMovies);
+      cacheService.set("integrated", dateStr, normalizedMovies);
 
-      return allMovies;
+      return normalizedMovies;
     } catch (error) {
       console.error("통합 크롤링 실패:", error);
       throw error;

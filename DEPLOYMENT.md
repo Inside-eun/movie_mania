@@ -9,6 +9,9 @@
 ```bash
 # KOBIS API 키 (영화진흥위원회 오픈 API)
 KOBIS_API_KEY=your_kobis_api_key_here
+
+# KMDB API 키 (한국영상자료원 API)
+KMDB_API_KEY=your_kmdb_api_key_here
 ```
 
 ### 선택적 환경 변수
@@ -43,8 +46,10 @@ vercel
 
 3. Vercel 대시보드에서 환경 변수 설정:
    - Settings > Environment Variables
-   - `KOBIS_API_KEY` 추가
-   - 기타 필요한 환경 변수 추가
+   - 다음 환경 변수들을 추가:
+     - `KOBIS_API_KEY`: 609eba269acb357be05be4ec60202702
+     - `KMDB_API_KEY`: 23QYU3V707Y5O2M7R25J
+     - `CACHE_TTL_HOURS`: 6 (선택사항)
 
 ### 2. Netlify 배포
 
