@@ -40,67 +40,6 @@ interface KMDBApiData {
   cCodeSubName2?: string;
 }
 
-// KMDB API 캐시
-const kmdbCache = new Map<string, { data: KMDBApiData | null; timestamp: number }>();
-const KMDB_CACHE_TTL = 30 * 60 * 1000; // 30분
-
-// KMDB API 호출 함수
-async function getKMDBMovieInfo(movieCode: string): Promise<KMDBApiData | null> {
-  // 캐시 확인
-  const cached = kmdbCache.get(movieCode);
-  if (cached && Date.now() - cached.timestamp < KMDB_CACHE_TTL) {
-    console.log(`KMDB API 캐시 히트: ${movieCode}`);
-    return cached.data;
-  }
-
-  try {
-    const apiKey = process.env.KMDB_API_KEY;
-    if (!apiKey) {
-      console.error("KMDB_API_KEY 환경 변수가 설정되지 않았습니다.");
-      return null;
-    }
-    const url = `https://www.kmdb.or.kr/info/api/3/api.json`;
-    
-    const controller = new AbortController();
-    const timeoutId = setTimeout(() => controller.abort(), 5000); // 5초 타임아웃
-    
-    const response = await fetch(`${url}?serviceKey=${apiKey}&movieId=${movieCode}`, {
-      method: 'GET',
-      headers: {
-        'Accept': 'application/json',
-        'Accept-Encoding': 'gzip, deflate',
-      },
-      signal: controller.signal,
-    });
-
-    clearTimeout(timeoutId);
-
-    if (!response.ok) {
-      throw new Error(`HTTP error! status: ${response.status}`);
-    }
-
-    const data = await response.json();
-    
-    let result: KMDBApiData | null = null;
-    if (data.resultMsg === "INFO-000" && data.resultList && data.resultList.length > 0) {
-      const movieInfo = data.resultList[0];
-      result = {
-        cActors: movieInfo.cActors,
-        cCodeSubName2: movieInfo.cCodeSubName2,
-      };
-    }
-    
-    // 캐시에 저장
-    kmdbCache.set(movieCode, { data: result, timestamp: Date.now() });
-    
-    return result;
-  } catch (error) {
-    console.error("KMDB API 호출 실패:", error);
-    // 실패한 경우에도 캐시에 null 저장
-    kmdbCache.set(movieCode, { data: null, timestamp: Date.now() });
-    return null;
-  }
-}
 
 export default function MovieModal({ isOpen, onClose, movie }: MovieModalProps) {
   const [kobisData, setKobisData] = useState<KOBISMovieInfo | null>(null);
@@ -117,45 +56,42 @@ export default function MovieModal({ isOpen, onClose, movie }: MovieModalProps) 
         setLoading(false);
       }, 1000); // 최대 1초 로딩
       
-      const promises = [];
-      
-      // KOBIS API 호출 (영상자료원이 아닌 경우)
-      if (movie.source !== 'KMDB_API') {
-        promises.push(
-          getMovieInfoFromKOBIS(movie.movieCode)
-            .then((data) => {
-              setKobisData(data);
-            })
-            .catch((error) => {
-              console.error('KOBIS API 호출 실패:', error);
-              setKobisData(null);
-            })
-        );
-      } else {
-        setKobisData(null);
-      }
-      
-      // KMDB API 호출 (영상자료원인 경우)
-      if (movie.source === 'KMDB_API') {
-        promises.push(
-          getKMDBMovieInfo(movie.movieCode)
-            .then((data) => {
-              setKmdbData(data);
-            })
-            .catch((error) => {
-              console.error('KMDB API 호출 실패:', error);
+      // 새로운 API 라우트를 통해 영화 정보 가져오기
+      const fetchMovieInfo = async () => {
+        try {
+          const response = await fetch(
+            `/api/movie-info?movieCode=${movie.movieCode}&source=${movie.source || 'KOBIS'}`
+          );
+          const result = await response.json();
+          
+          if (result.success && result.data) {
+            if (movie.source === 'KMDB_API') {
+              setKmdbData(result.data);
+            } else {
+              setKobisData(result.data);
+            }
+          } else {
+            console.error('영화 정보 API 호출 실패:', result.error);
+            if (movie.source === 'KMDB_API') {
               setKmdbData(null);
-            })
-        );
-      } else {
-        setKmdbData(null);
-      }
+            } else {
+              setKobisData(null);
+            }
+          }
+        } catch (error) {
+          console.error('영화 정보 API 호출 중 오류:', error);
+          if (movie.source === 'KMDB_API') {
+            setKmdbData(null);
+          } else {
+            setKobisData(null);
+          }
+        } finally {
+          clearTimeout(loadingTimer);
+          setLoading(false);
+        }
+      };
       
-      // 모든 API 호출이 완료되면 로딩 종료
-      Promise.allSettled(promises).finally(() => {
-        clearTimeout(loadingTimer);
-        setLoading(false);
-      });
+      fetchMovieInfo();
     } else {
       setKobisData(null);
       setKmdbData(null);
