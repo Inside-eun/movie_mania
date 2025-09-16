@@ -59,15 +59,20 @@ export default function MovieModal({ isOpen, onClose, movie }: MovieModalProps) 
       // 새로운 API 라우트를 통해 영화 정보 가져오기
       const fetchMovieInfo = async () => {
         try {
-          const response = await fetch(
-            `/api/movie-info?movieCode=${movie.movieCode}&source=${movie.source || 'KOBIS'}`
-          );
+          const apiUrl = `/api/movie-info?movieCode=${movie.movieCode}&source=${movie.source || 'KOBIS'}`;
+          console.log(`모달에서 API 호출: ${apiUrl}`);
+          
+          const response = await fetch(apiUrl);
           const result = await response.json();
+          
+          console.log(`모달 API 응답:`, result);
           
           if (result.success && result.data) {
             if (movie.source === 'KMDB_API') {
+              console.log(`KMDB 데이터 설정:`, result.data);
               setKmdbData(result.data);
             } else {
+              console.log(`KOBIS 데이터 설정:`, result.data);
               setKobisData(result.data);
             }
           } else {

@@ -20,28 +20,73 @@ export async function GET(request: Request) {
       // KMDB API 호출 (서버 사이드에서)
       const apiKey = process.env.KMDB_API_KEY;
       if (!apiKey) {
+        console.error("KMDB_API_KEY 환경 변수가 설정되지 않았습니다.");
         return NextResponse.json(
           { success: false, error: "KMDB_API_KEY가 설정되지 않았습니다." },
           { status: 500 }
         );
       }
 
+      console.log(`KMDB API 호출 시작: movieCode=${movieCode}`);
       const url = `https://www.kmdb.or.kr/info/api/3/api.json`;
-      const response = await fetch(`${url}?serviceKey=${apiKey}&movieId=${movieCode}`, {
-        method: 'GET',
-        headers: {
-          'Accept': 'application/json',
-        },
-      });
+      
+      // KMDB API는 여러 파라미터를 시도해보자
+      const apiUrls = [
+        `${url}?serviceKey=${apiKey}&movieId=${movieCode}`,
+        `${url}?serviceKey=${apiKey}&movieSeq=${movieCode}`,
+        `${url}?serviceKey=${apiKey}&movieId=${movieCode}&detail=Y`,
+        `${url}?serviceKey=${apiKey}&movieSeq=${movieCode}&detail=Y`,
+      ];
+      
+      let apiUrl = apiUrls[0]; // 기본값
+      
+      // 여러 URL을 시도해보자
+      for (let i = 0; i < apiUrls.length; i++) {
+        apiUrl = apiUrls[i];
+        console.log(`KMDB API 시도 ${i + 1}/${apiUrls.length}: ${apiUrl}`);
+        
+        try {
+          const response = await fetch(apiUrl, {
+            method: 'GET',
+            headers: {
+              'Accept': 'application/json',
+              'User-Agent': 'Mozilla/5.0 (compatible; MovieApp/1.0)',
+            },
+            timeout: 10000, // 10초 타임아웃
+          });
 
-      if (response.ok) {
-        const data = await response.json();
-        if (data.resultMsg === "INFO-000" && data.resultList && data.resultList.length > 0) {
-          const movieInfo = data.resultList[0];
-          result = {
-            cActors: movieInfo.cActors,
-            cCodeSubName2: movieInfo.cCodeSubName2,
-          };
+          console.log(`KMDB API 응답 상태: ${response.status}`);
+          
+          if (response.ok) {
+            const data = await response.json();
+            console.log(`KMDB API 응답 데이터:`, JSON.stringify(data, null, 2));
+            
+            if (data.resultMsg === "INFO-000" && data.resultList && data.resultList.length > 0) {
+              const movieInfo = data.resultList[0];
+              result = {
+                cActors: movieInfo.cActors,
+                cCodeSubName2: movieInfo.cCodeSubName2,
+              };
+              console.log(`KMDB API 성공 (시도 ${i + 1}): cActors=${movieInfo.cActors}, cCodeSubName2=${movieInfo.cCodeSubName2}`);
+              break; // 성공하면 루프 종료
+            } else {
+              console.log(`KMDB API 실패 (시도 ${i + 1}): resultMsg=${data.resultMsg}, resultList 길이=${data.resultList?.length || 0}`);
+              if (i === apiUrls.length - 1) {
+                // 마지막 시도에서도 실패
+                console.log("모든 KMDB API 시도 실패");
+              }
+            }
+          } else {
+            console.error(`KMDB API HTTP 에러 (시도 ${i + 1}): ${response.status} ${response.statusText}`);
+            const errorText = await response.text();
+            console.error(`KMDB API 에러 응답:`, errorText);
+          }
+        } catch (fetchError) {
+          console.error(`KMDB API fetch 에러 (시도 ${i + 1}):`, fetchError);
+          if (i === apiUrls.length - 1) {
+            // 마지막 시도에서도 실패
+            throw fetchError;
+          }
         }
       }
     } else {
