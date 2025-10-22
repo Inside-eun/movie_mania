@@ -3,11 +3,6 @@
 
 export const artCinemas = [
   {
-    cd: '001128',
-    cdNm: 'CINE de CHEF 압구정',
-    area: '강남구'
-  },
-  {
     cd: '001293',
     cdNm: '씨티극장',
     area: '강남구'
@@ -78,11 +73,6 @@ export const artCinemas = [
     area: '송파구'
   },
   {
-    cd: '001245',
-    cdNm: 'CINE de CHEF 용산아이파크몰',
-    area: '용산구'
-  },
-  {
     cd: '001227',
     cdNm: '낭만극장',
     area: '종로구'
@@ -137,7 +127,26 @@ export const artCinemas = [
     cdNm: 'CGV 대학로',
     area: '종로구'
   },
-
+  {
+    cd: '001016',
+    cdNm: 'CGV 강변',
+    area: '광진구'
+  },
+  {
+    cd: '001034',
+    cdNm: 'CGV 여의도',
+    area: '영등포구'
+  },
+  {
+    cd: '001109',
+    cdNm: '롯데시네마 노원',
+    area: '노원구'
+  },
+  {
+    cd: '001217',
+    cdNm: '롯데시네마 신도림',
+    area: '구로구'
+  }
 ];
 
 // 멀티플렉스 체인 필터링용

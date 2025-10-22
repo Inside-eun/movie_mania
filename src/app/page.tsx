@@ -3,6 +3,7 @@
 import { useState, useMemo, useEffect, useRef } from "react";
 import DarkModeToggle from "../components/DarkModeToggle";
 import MovieModal from "../components/MovieModal";
+import CalendarView from "../components/CalendarView";
 
 interface MovieSchedule {
   title: string;
@@ -37,9 +38,16 @@ export default function Home() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [crawlType, setCrawlType] = useState("integrated");
-  const [selectedDate, setSelectedDate] = useState(
-    new Date().toISOString().split("T")[0]
-  );
+  // 서울 시간 기준 날짜 문자열 생성 함수 (Asia/Seoul 시간대)
+  const getLocalDateString = (date: Date): string => {
+    const seoulDate = new Date(date.toLocaleString('en-US', { timeZone: 'Asia/Seoul' }));
+    const year = seoulDate.getFullYear();
+    const month = String(seoulDate.getMonth() + 1).padStart(2, '0');
+    const day = String(seoulDate.getDate()).padStart(2, '0');
+    return `${year}-${month}-${day}`;
+  };
+
+  const [selectedDate, setSelectedDate] = useState(getLocalDateString(new Date()));
   const [selectedMovie, setSelectedMovie] = useState("all");
   const [selectedTheater, setSelectedTheater] = useState("all");
   const [filterType, setFilterType] = useState<"movie" | "theater">("movie");
@@ -49,6 +57,7 @@ export default function Home() {
   const [wishlist, setWishlist] = useState<Set<string>>(new Set());
   const [wishlistMovies, setWishlistMovies] = useState<MovieSchedule[]>([]);
   const [showWishlistView, setShowWishlistView] = useState(false);
+  const [wishlistViewMode, setWishlistViewMode] = useState<"list" | "calendar">("calendar");
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedMovieForModal, setSelectedMovieForModal] = useState<MovieSchedule | null>(null);
   const dropdownRef = useRef<HTMLDivElement>(null);
@@ -97,7 +106,7 @@ export default function Home() {
         setAllMovies(data.data);
         setFilteredMovies(data.data);
         setSelectedMovie("all"); // 새로 크롤링하면 필터 초기화
-        setLastUpdate(new Date(data.timestamp).toLocaleTimeString("ko-KR"));
+        setLastUpdate(new Date(data.timestamp).toLocaleTimeString("ko-KR", { timeZone: 'Asia/Seoul' }));
       } else {
         setError(data.error || "크롤링 실패");
       }
@@ -160,7 +169,7 @@ export default function Home() {
   // 현재 시간 기준으로 영화 스케줄 필터링
   const getFilteredMoviesByTime = useMemo(() => {
     const now = new Date();
-    const isToday = selectedDate === new Date().toISOString().split("T")[0];
+    const isToday = selectedDate === getLocalDateString(new Date());
     
     let movies = allMovies;
     
@@ -188,7 +197,7 @@ export default function Home() {
   // 과거 스케줄 개수 계산
   const pastSchedulesCount = useMemo(() => {
     const now = new Date();
-    const isToday = selectedDate === new Date().toISOString().split("T")[0];
+    const isToday = selectedDate === getLocalDateString(new Date());
     
     if (!isToday) return 0;
     
@@ -316,7 +325,7 @@ export default function Home() {
         try {
           const parsedDate = new Date(movie.showtime);
           if (!isNaN(parsedDate.getTime())) {
-            date = parsedDate.toISOString().split('T')[0];
+            date = getLocalDateString(parsedDate);
           }
         } catch (e) {
           // 날짜 파싱 실패 시 기본값 사용
@@ -364,22 +373,18 @@ export default function Home() {
 
   return (
     <main className="container mx-auto px-4 py-12 sm:py-12 max-w-4xl text-gray-900 dark:text-gray-100 min-h-screen">
-      <div className="relative mb-4">
-        <h1 className="text-3xl sm:text-3xl font-bold mb-1 text-center text-gray-900 dark:text-white">
-          홍대병들을 위한<br className="sm:hidden"/> 서울예술영화관 상영시간표
-        </h1>
-        <div className="absolute top-0 right-0">
+        <div className="absolute top-5 right-5 md:top-10 md:right-20 mb-2">
           <DarkModeToggle />
         </div>
+      <div className="relative mb-2">
+        <h1 className="text-2xl sm:text-2xl font-bold mb-1 text-center text-gray-900 dark:text-white">
+          서울예술영화관 상영시간표
+        </h1>
+
       </div>
-      <h2 className="text-lg sm:text-xl font-bold mb-4 sm:mb-6 text-center text-gray-800 dark:text-gray-200">
-        박스오피스 5위까지의 작품은 제외합니다
+      <h2 className="text-xs sm:text-sm mb-4 sm:mb-12 text-center text-gray-800 dark:text-gray-200">
+        박스오피스 5위 이하의 작품들을 상영하는 서울시 예술영화관과 예술전용관의 상영정보를 조회합니다
       </h2>
-
-      <p className="text-xs sm:text-sm text-gray-500 dark:text-gray-400 mb-4 sm:mb-8 text-center px-2">
-        KOBIS조회 방식이기 때문에 실제 상영내역과 일치하지 않을 수 있으며,<br className="hidden sm:block" /> 각 전송사업자별로 상영스케줄 운영방식에 따라 개별 영화상영관의 상영스케줄 일부 정보가 제공되지 않을 수 있습니다.
-      </p>
-
       <div className="flex flex-col gap-3 sm:gap-4 mb-4 sm:mb-6">
         <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 items-start sm:items-center">
           <div className="flex gap-2 w-full flex-wrap">
@@ -396,12 +401,8 @@ export default function Home() {
                 setSelectedTheater("all");
                 setLastUpdate(null);
               }}
-              min={new Date().toISOString().split("T")[0]}
-              max={
-                new Date(Date.now() + 7 * 24 * 60 * 60 * 1000)
-                  .toISOString()
-                  .split("T")[0]
-              } // 7일 후까지 (모바일에서도 적용)
+              min={getLocalDateString(new Date())}
+              max={getLocalDateString(new Date(Date.now() + 7 * 24 * 60 * 60 * 1000))} // 7일 후까지 (모바일에서도 적용)
               disabled={false}
             />
             <button
@@ -412,7 +413,7 @@ export default function Home() {
                 fetchMovies();
               }}
               disabled={loading}
-              className="px-6 py-2 bg-blue-500 dark:bg-blue-600 text-white rounded-lg hover:bg-blue-600 dark:hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed h-10 flex items-center justify-center whitespace-nowrap"
+              className="px-3 sm:px-6 py-2 bg-blue-500 dark:bg-blue-600 text-white rounded-lg hover:bg-blue-600 dark:hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed h-10 flex items-center justify-center whitespace-nowrap text-sm sm:text-base"
             >
               {loading ? "크롤링 중... " : "시간표 조회"}
             </button>
@@ -425,7 +426,7 @@ export default function Home() {
                 }
               }}
               disabled={showWishlistView}
-              className={`px-6 py-2 rounded-lg h-10 flex items-center justify-center gap-2 whitespace-nowrap transition-colors ${
+              className={`px-3 sm:px-6 py-2 rounded-lg h-10 flex items-center justify-center gap-2 whitespace-nowrap transition-colors text-sm sm:text-base ${
                 showWishlistView 
                   ? 'bg-red-600 dark:bg-red-700 text-white cursor-not-allowed opacity-75' 
                   : 'bg-red-500 dark:bg-red-600 text-white hover:bg-red-600 dark:hover:bg-red-700'
@@ -553,7 +554,7 @@ export default function Home() {
               </div>
             </div>
             
-            {selectedDate === new Date().toISOString().split("T")[0] && pastSchedulesCount > 0 && (
+            {selectedDate === getLocalDateString(new Date()) && pastSchedulesCount > 0 && (
               <div className="flex items-center justify-between p-3 bg-gray-50 dark:bg-gray-800 rounded-lg">
                 <button
                   onClick={() => setShowPastSchedules(!showPastSchedules)}
@@ -574,7 +575,7 @@ export default function Home() {
                   </span>
                 </button>
                 <span className="text-xs text-gray-500 dark:text-gray-400">
-                  현재 시간: {new Date().toLocaleTimeString('ko-KR', { hour: '2-digit', minute: '2-digit' })}
+                  현재 시간: {new Date().toLocaleTimeString('ko-KR', { hour: '2-digit', minute: '2-digit', timeZone: 'Asia/Seoul' })}
                 </span>
               </div>
             )}
@@ -617,7 +618,7 @@ export default function Home() {
             {getFilteredMoviesByTime.map((movie, index) => {
               const movieTime = parseMovieTime(movie.time, selectedDate);
               const now = new Date();
-              const isToday = selectedDate === new Date().toISOString().split("T")[0];
+              const isToday = selectedDate === getLocalDateString(new Date());
               const isPast = isToday && movieTime <= now;
               
               return (
@@ -697,23 +698,22 @@ export default function Home() {
 
       {!loading && !showWishlistView && allMovies.length === 0 && !error && (
         <div className="text-center py-8 text-gray-500 dark:text-gray-400">
-          <div className="mb-2">
+          <div className="mb-2 mt-4 text-sm sm:text-base">
             {new Date(selectedDate).toLocaleDateString("ko-KR", {
               year: "numeric",
               month: "long",
               day: "numeric",
               weekday: "long",
-            })} 상영시간표를 조회해주세요.
+            })}
+            <br className="sm:hidden" /> 상영시간표를 조회해주세요.
           </div>
-          <div className="text-sm text-gray-500 dark:text-gray-400">
-            상영시간표 조회 버튼을 클릭하시면 해당 날짜의 스케줄을 불러옵니다.
-          </div>
+
         </div>
       )}
 
       {!loading && !showWishlistView && allMovies.length > 0 && getFilteredMoviesByTime.length === 0 && (
         <div className="text-center py-8 text-gray-500 dark:text-gray-400">
-          {selectedDate === new Date().toISOString().split("T")[0] && !showPastSchedules 
+          {selectedDate === getLocalDateString(new Date()) && !showPastSchedules 
             ? "현재 시간 이후의 상영시간이 없습니다. 지난 상영시간을 보시려면 위의 체크박스를 선택해주세요."
             : "선택한 영화의 상영시간이 없습니다."
           }
@@ -728,6 +728,38 @@ export default function Home() {
             <p className="text-sm text-gray-600 dark:text-gray-400">동일 브라우저에서 접속 시에만 유지됩니다</p>
           </div>
 
+          {/* 달력/리스트 전환 탭 */}
+          {getWishlistCount() > 0 && (
+            <div className="flex bg-gray-100 dark:bg-gray-800 rounded-lg p-1 max-w-md mx-auto">
+              <button
+                onClick={() => setWishlistViewMode("calendar")}
+                className={`flex-1 py-2 px-4 rounded-md text-sm font-medium transition-all duration-200 flex items-center justify-center gap-2 ${
+                  wishlistViewMode === "calendar"
+                    ? 'bg-white dark:bg-gray-700 text-blue-600 dark:text-blue-400 shadow-sm'
+                    : 'text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-200'
+                }`}
+              >
+                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                </svg>
+                달력
+              </button>
+              <button
+                onClick={() => setWishlistViewMode("list")}
+                className={`flex-1 py-2 px-4 rounded-md text-sm font-medium transition-all duration-200 flex items-center justify-center gap-2 ${
+                  wishlistViewMode === "list"
+                    ? 'bg-white dark:bg-gray-700 text-blue-600 dark:text-blue-400 shadow-sm'
+                    : 'text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-200'
+                }`}
+              >
+                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 10h16M4 14h16M4 18h16" />
+                </svg>
+                리스트
+              </button>
+            </div>
+          )}
+
           {getWishlistCount() === 0 ? (
             <div className="text-center py-12 text-gray-500 dark:text-gray-400">
               <svg className="w-16 h-16 mx-auto mb-4 text-gray-300 dark:text-gray-600" fill="currentColor" viewBox="0 0 24 24">
@@ -736,6 +768,12 @@ export default function Home() {
               <p className="text-lg mb-2 text-gray-900 dark:text-gray-100">아직 찜한 영화가 없습니다</p>
               <p className="text-sm text-gray-600 dark:text-gray-400">영화 카드의 하트 아이콘을 클릭해서 찜 목록에 추가해보세요!</p>
             </div>
+          ) : wishlistViewMode === "calendar" ? (
+            <CalendarView 
+              wishlistMovies={wishlistMovies}
+              onMovieClick={openModal}
+              onRemoveFromWishlist={toggleWishlist}
+            />
           ) : (
             <div className="space-y-8">
               {getWishlistByDate().map(({ date, movies }) => (
@@ -759,7 +797,7 @@ export default function Home() {
                       const now = new Date();
                       const movieDateTime = new Date(movie.showtime || `${date}T${movie.time}:00`);
                       const isPast = movieDateTime < now;
-                      const isToday = date === new Date().toISOString().split('T')[0];
+                      const isToday = date === getLocalDateString(new Date());
                       
                       return (
                       <div
@@ -828,18 +866,13 @@ export default function Home() {
       )}
 
 
-      <footer className="mt-16 text-center pb-8">
+      <footer className="mt-40 sm:mt-16 text-center pb-8">
         <div className="flex flex-col items-center gap-3">
-          <div className="flex items-center gap-3">
-            <img
-              src="/npjMucg7sLxIm8Uca8O3lygeM9UX2Dsu4RVnVxcDdaItsLZ6w0N0Ju54gVqn8O7r7taBR6bAEwL9qOLoUKKbzg.webp"
-              alt="프로필"
-              className="w-12 h-12 rounded-full object-cover"
-            />
-            <p className="text-lg font-bold text-gray-900 dark:text-gray-100">- 만든사람 : 제육볶음 달달볶아 -</p>
-          </div>
+          <p className="text-xs sm:text-sm text-gray-500 dark:text-gray-400 mb-4 sm:mb-8 text-center px-2">
+            KOBIS조회 방식이기 때문에 실제 상영내역과 일치하지 않을 수 있으며,<br className="hidden sm:block" /> 각 전송사업자별로 상영스케줄 운영방식에 따라 개별 영화상영관의 상영스케줄 일부 정보가 제공되지 않을 수 있습니다.
+          </p>
           <div className="text-sm text-gray-500 dark:text-gray-400 space-y-1">
-            <p>ver 1.2.3 | last: 2025-09-16</p>
+            <p>- 만든사람 : 제육볶음 달달볶아 - </p><p>ver 1.3.0 | last: 2025-10-22</p>
           </div>
         </div>
       </footer>
