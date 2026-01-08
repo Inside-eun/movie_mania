@@ -1,0 +1,2076 @@
+{
+  "data": [
+    {
+      "title": "디바 야누스",
+      "theater": "픽처하우스",
+      "area": "강남구",
+      "screen": "01관",
+      "movieCode": "20227228",
+      "time": "13:00",
+      "showtime": "2025-10-22T04:00:00.000Z"
+    },
+    {
+      "title": "베르메르: 위대한 전시회",
+      "theater": "픽처하우스",
+      "area": "강남구",
+      "screen": "01관",
+      "movieCode": "20240549",
+      "time": "11:00",
+      "showtime": "2025-10-22T02:00:00.000Z"
+    },
+    {
+      "title": "얼굴",
+      "theater": "픽처하우스",
+      "area": "강남구",
+      "screen": "01관",
+      "movieCode": "20242964",
+      "time": "19:45",
+      "showtime": "2025-10-22T10:45:00.000Z"
+    },
+    {
+      "title": "3670",
+      "theater": "픽처하우스",
+      "area": "강남구",
+      "screen": "01관",
+      "movieCode": "20246333",
+      "time": "17:15",
+      "showtime": "2025-10-22T08:15:00.000Z"
+    },
+    {
+      "title": "세계의 주인",
+      "theater": "픽처하우스",
+      "area": "강남구",
+      "screen": "01관",
+      "movieCode": "20247429",
+      "time": "14:50",
+      "showtime": "2025-10-22T05:50:00.000Z"
+    },
+    {
+      "title": "세계의 주인",
+      "theater": "KU시네마테크",
+      "area": "광진구",
+      "screen": "01관",
+      "movieCode": "20247429",
+      "time": "13:40",
+      "showtime": "2025-10-22T04:40:00.000Z"
+    },
+    {
+      "title": "3학년 2학기",
+      "theater": "KU시네마테크",
+      "area": "광진구",
+      "screen": "01관",
+      "movieCode": "20249072",
+      "time": "19:00",
+      "showtime": "2025-10-22T10:00:00.000Z"
+    },
+    {
+      "title": "원 배틀 애프터 어나더",
+      "theater": "KU시네마테크",
+      "area": "광진구",
+      "screen": "01관",
+      "movieCode": "20256397",
+      "time": "10:40",
+      "showtime": "2025-10-22T01:40:00.000Z"
+    },
+    {
+      "title": "프랑켄슈타인",
+      "theater": "KU시네마테크",
+      "area": "광진구",
+      "screen": "01관",
+      "movieCode": "20258285",
+      "time": "16:00",
+      "showtime": "2025-10-22T07:00:00.000Z"
+    },
+    {
+      "title": "8번 출구",
+      "theater": "씨네큐 신도림",
+      "area": "구로구",
+      "screen": "01관",
+      "movieCode": "20257570",
+      "time": "10:55",
+      "showtime": "2025-10-22T01:55:00.000Z"
+    },
+    {
+      "title": "8번 출구",
+      "theater": "씨네큐 신도림",
+      "area": "구로구",
+      "screen": "01관",
+      "movieCode": "20257570",
+      "time": "13:00",
+      "showtime": "2025-10-22T04:00:00.000Z"
+    },
+    {
+      "title": "8번 출구",
+      "theater": "씨네큐 신도림",
+      "area": "구로구",
+      "screen": "01관",
+      "movieCode": "20257570",
+      "time": "15:05",
+      "showtime": "2025-10-22T06:05:00.000Z"
+    },
+    {
+      "title": "8번 출구",
+      "theater": "씨네큐 신도림",
+      "area": "구로구",
+      "screen": "01관",
+      "movieCode": "20257570",
+      "time": "17:10",
+      "showtime": "2025-10-22T08:10:00.000Z"
+    },
+    {
+      "title": "8번 출구",
+      "theater": "씨네큐 신도림",
+      "area": "구로구",
+      "screen": "01관",
+      "movieCode": "20257570",
+      "time": "19:15",
+      "showtime": "2025-10-22T10:15:00.000Z"
+    },
+    {
+      "title": "8번 출구",
+      "theater": "씨네큐 신도림",
+      "area": "구로구",
+      "screen": "01관",
+      "movieCode": "20257570",
+      "time": "21:20",
+      "showtime": "2025-10-22T12:20:00.000Z"
+    },
+    {
+      "title": "웨폰",
+      "theater": "씨네큐 신도림",
+      "area": "구로구",
+      "screen": "03관(Reserve)",
+      "movieCode": "20256684",
+      "time": "10:05",
+      "showtime": "2025-10-22T01:05:00.000Z"
+    },
+    {
+      "title": "빅 볼드 뷰티풀",
+      "theater": "씨네큐 신도림",
+      "area": "구로구",
+      "screen": "03관(Reserve)",
+      "movieCode": "20257743",
+      "time": "12:35",
+      "showtime": "2025-10-22T03:35:00.000Z"
+    },
+    {
+      "title": "원 배틀 애프터 어나더",
+      "theater": "씨네큐 신도림",
+      "area": "구로구",
+      "screen": "04관",
+      "movieCode": "20256397",
+      "time": "17:50",
+      "showtime": "2025-10-22T08:50:00.000Z"
+    },
+    {
+      "title": "원 배틀 애프터 어나더",
+      "theater": "씨네큐 신도림",
+      "area": "구로구",
+      "screen": "04관",
+      "movieCode": "20256397",
+      "time": "21:00",
+      "showtime": "2025-10-22T12:00:00.000Z"
+    },
+    {
+      "title": "웨폰",
+      "theater": "씨네큐 신도림",
+      "area": "구로구",
+      "screen": "06관",
+      "movieCode": "20256684",
+      "time": "16:40",
+      "showtime": "2025-10-22T07:40:00.000Z"
+    },
+    {
+      "title": "빅 볼드 뷰티풀",
+      "theater": "씨네큐 신도림",
+      "area": "구로구",
+      "screen": "06관",
+      "movieCode": "20257743",
+      "time": "10:00",
+      "showtime": "2025-10-22T01:00:00.000Z"
+    },
+    {
+      "title": "빅 볼드 뷰티풀",
+      "theater": "씨네큐 신도림",
+      "area": "구로구",
+      "screen": "06관",
+      "movieCode": "20257743",
+      "time": "14:20",
+      "showtime": "2025-10-22T05:20:00.000Z"
+    },
+    {
+      "title": "빅 볼드 뷰티풀",
+      "theater": "씨네큐 신도림",
+      "area": "구로구",
+      "screen": "06관",
+      "movieCode": "20257743",
+      "time": "19:15",
+      "showtime": "2025-10-22T10:15:00.000Z"
+    },
+    {
+      "title": "빅 볼드 뷰티풀",
+      "theater": "씨네큐 신도림",
+      "area": "구로구",
+      "screen": "06관",
+      "movieCode": "20257743",
+      "time": "21:30",
+      "showtime": "2025-10-22T12:30:00.000Z"
+    },
+    {
+      "title": "원 배틀 애프터 어나더",
+      "theater": "씨네큐 신도림",
+      "area": "구로구",
+      "screen": "07관(Suite)",
+      "movieCode": "20256397",
+      "time": "13:10",
+      "showtime": "2025-10-22T04:10:00.000Z"
+    },
+    {
+      "title": "8번 출구",
+      "theater": "씨네큐 신도림",
+      "area": "구로구",
+      "screen": "07관(Suite)",
+      "movieCode": "20257570",
+      "time": "16:20",
+      "showtime": "2025-10-22T07:20:00.000Z"
+    },
+    {
+      "title": "8번 출구",
+      "theater": "씨네큐 신도림",
+      "area": "구로구",
+      "screen": "07관(Suite)",
+      "movieCode": "20257570",
+      "time": "20:35",
+      "showtime": "2025-10-22T11:35:00.000Z"
+    },
+    {
+      "title": "연의 편지",
+      "theater": "씨네큐 신도림",
+      "area": "구로구",
+      "screen": "08관",
+      "movieCode": "20243864",
+      "time": "12:05",
+      "showtime": "2025-10-22T03:05:00.000Z"
+    },
+    {
+      "title": "세계의 주인",
+      "theater": "씨네큐 신도림",
+      "area": "구로구",
+      "screen": "08관",
+      "movieCode": "20247429",
+      "time": "16:05",
+      "showtime": "2025-10-22T07:05:00.000Z"
+    },
+    {
+      "title": "세계의 주인",
+      "theater": "씨네큐 신도림",
+      "area": "구로구",
+      "screen": "08관",
+      "movieCode": "20247429",
+      "time": "21:25",
+      "showtime": "2025-10-22T12:25:00.000Z"
+    },
+    {
+      "title": "나쁜계집애: 달려라 하니",
+      "theater": "씨네큐 신도림",
+      "area": "구로구",
+      "screen": "08관",
+      "movieCode": "20249641",
+      "time": "10:05",
+      "showtime": "2025-10-22T01:05:00.000Z"
+    },
+    {
+      "title": "그저 사고였을 뿐",
+      "theater": "씨네큐 신도림",
+      "area": "구로구",
+      "screen": "09관",
+      "movieCode": "20257321",
+      "time": "15:45",
+      "showtime": "2025-10-22T06:45:00.000Z"
+    },
+    {
+      "title": "모노노케 히메",
+      "theater": "씨네큐 신도림",
+      "area": "구로구",
+      "screen": "10관",
+      "movieCode": "20030047",
+      "time": "18:40",
+      "showtime": "2025-10-22T09:40:00.000Z"
+    },
+    {
+      "title": "트론: 아레스",
+      "theater": "씨네큐 신도림",
+      "area": "구로구",
+      "screen": "10관",
+      "movieCode": "20254021",
+      "time": "14:00",
+      "showtime": "2025-10-22T05:00:00.000Z"
+    },
+    {
+      "title": "원 배틀 애프터 어나더",
+      "theater": "씨네큐 신도림",
+      "area": "구로구",
+      "screen": "10관",
+      "movieCode": "20256397",
+      "time": "10:50",
+      "showtime": "2025-10-22T01:50:00.000Z"
+    },
+    {
+      "title": "프랑켄슈타인",
+      "theater": "씨네큐 신도림",
+      "area": "구로구",
+      "screen": "10관",
+      "movieCode": "20258285",
+      "time": "21:20",
+      "showtime": "2025-10-22T12:20:00.000Z"
+    },
+    {
+      "title": "양양",
+      "theater": "더숲 아트시네마",
+      "area": "노원구",
+      "screen": "01관",
+      "movieCode": "20212369",
+      "time": "14:20",
+      "showtime": "2025-10-22T05:20:00.000Z"
+    },
+    {
+      "title": "사람과 고기",
+      "theater": "더숲 아트시네마",
+      "area": "노원구",
+      "screen": "01관",
+      "movieCode": "20244267",
+      "time": "18:00",
+      "showtime": "2025-10-22T09:00:00.000Z"
+    },
+    {
+      "title": "세계의 주인",
+      "theater": "더숲 아트시네마",
+      "area": "노원구",
+      "screen": "01관",
+      "movieCode": "20247429",
+      "time": "10:00",
+      "showtime": "2025-10-22T01:00:00.000Z"
+    },
+    {
+      "title": "세계의 주인",
+      "theater": "더숲 아트시네마",
+      "area": "노원구",
+      "screen": "01관",
+      "movieCode": "20247429",
+      "time": "20:10",
+      "showtime": "2025-10-22T11:10:00.000Z"
+    },
+    {
+      "title": "3학년 2학기",
+      "theater": "더숲 아트시네마",
+      "area": "노원구",
+      "screen": "01관",
+      "movieCode": "20249072",
+      "time": "12:20",
+      "showtime": "2025-10-22T03:20:00.000Z"
+    },
+    {
+      "title": "3학년 2학기",
+      "theater": "더숲 아트시네마",
+      "area": "노원구",
+      "screen": "01관",
+      "movieCode": "20249072",
+      "time": "16:00",
+      "showtime": "2025-10-22T07:00:00.000Z"
+    },
+    {
+      "title": "대부 2",
+      "theater": "더숲 아트시네마",
+      "area": "노원구",
+      "screen": "02관",
+      "movieCode": "19780073",
+      "time": "12:20",
+      "showtime": "2025-10-22T03:20:00.000Z"
+    },
+    {
+      "title": "마작",
+      "theater": "더숲 아트시네마",
+      "area": "노원구",
+      "screen": "02관",
+      "movieCode": "19968703",
+      "time": "10:00",
+      "showtime": "2025-10-22T01:00:00.000Z"
+    },
+    {
+      "title": "린다 린다 린다",
+      "theater": "더숲 아트시네마",
+      "area": "노원구",
+      "screen": "02관",
+      "movieCode": "20060092",
+      "time": "18:00",
+      "showtime": "2025-10-22T09:00:00.000Z"
+    },
+    {
+      "title": "영원히 그대를 사랑해",
+      "theater": "더숲 아트시네마",
+      "area": "노원구",
+      "screen": "02관",
+      "movieCode": "20190206",
+      "time": "21:10",
+      "showtime": "2025-10-22T12:10:00.000Z"
+    },
+    {
+      "title": "아무렇지 않은 얼굴",
+      "theater": "더숲 아트시네마",
+      "area": "노원구",
+      "screen": "02관",
+      "movieCode": "20256457",
+      "time": "20:10",
+      "showtime": "2025-10-22T11:10:00.000Z"
+    },
+    {
+      "title": "그저 사고였을 뿐",
+      "theater": "더숲 아트시네마",
+      "area": "노원구",
+      "screen": "02관",
+      "movieCode": "20257321",
+      "time": "16:00",
+      "showtime": "2025-10-22T07:00:00.000Z"
+    },
+    {
+      "title": "양양",
+      "theater": "아트나인",
+      "area": "동작구",
+      "screen": "0관",
+      "movieCode": "20212369",
+      "time": "13:40",
+      "showtime": "2025-10-22T04:40:00.000Z"
+    },
+    {
+      "title": "디바 야누스",
+      "theater": "아트나인",
+      "area": "동작구",
+      "screen": "0관",
+      "movieCode": "20227228",
+      "time": "09:30",
+      "showtime": "2025-10-22T00:30:00.000Z"
+    },
+    {
+      "title": "디바 야누스",
+      "theater": "아트나인",
+      "area": "동작구",
+      "screen": "0관",
+      "movieCode": "20227228",
+      "time": "15:20",
+      "showtime": "2025-10-22T06:20:00.000Z"
+    },
+    {
+      "title": "세계의 주인",
+      "theater": "아트나인",
+      "area": "동작구",
+      "screen": "0관",
+      "movieCode": "20247429",
+      "time": "11:20",
+      "showtime": "2025-10-22T02:20:00.000Z"
+    },
+    {
+      "title": "세계의 주인",
+      "theater": "아트나인",
+      "area": "동작구",
+      "screen": "0관",
+      "movieCode": "20247429",
+      "time": "17:10",
+      "showtime": "2025-10-22T08:10:00.000Z"
+    },
+    {
+      "title": "3학년 2학기",
+      "theater": "아트나인",
+      "area": "동작구",
+      "screen": "0관",
+      "movieCode": "20249072",
+      "time": "19:30",
+      "showtime": "2025-10-22T10:30:00.000Z"
+    },
+    {
+      "title": "스탑 메이킹 센스",
+      "theater": "아트나인",
+      "area": "동작구",
+      "screen": "9관",
+      "movieCode": "20186343",
+      "time": "11:40",
+      "showtime": "2025-10-22T02:40:00.000Z"
+    },
+    {
+      "title": "세계의 주인",
+      "theater": "아트나인",
+      "area": "동작구",
+      "screen": "9관",
+      "movieCode": "20247429",
+      "time": "20:20",
+      "showtime": "2025-10-22T11:20:00.000Z"
+    },
+    {
+      "title": "그저 사고였을 뿐",
+      "theater": "아트나인",
+      "area": "동작구",
+      "screen": "9관",
+      "movieCode": "20257321",
+      "time": "13:30",
+      "showtime": "2025-10-22T04:30:00.000Z"
+    },
+    {
+      "title": "그저 사고였을 뿐",
+      "theater": "아트나인",
+      "area": "동작구",
+      "screen": "9관",
+      "movieCode": "20257321",
+      "time": "18:20",
+      "showtime": "2025-10-22T09:20:00.000Z"
+    },
+    {
+      "title": "미러 넘버 3",
+      "theater": "아트나인",
+      "area": "동작구",
+      "screen": "9관",
+      "movieCode": "20257671",
+      "time": "09:50",
+      "showtime": "2025-10-22T00:50:00.000Z"
+    },
+    {
+      "title": "프랑켄슈타인",
+      "theater": "아트나인",
+      "area": "동작구",
+      "screen": "9관",
+      "movieCode": "20258285",
+      "time": "15:30",
+      "showtime": "2025-10-22T06:30:00.000Z"
+    },
+    {
+      "title": "린다 린다 린다",
+      "theater": "KT&G 상상마당 Cinema",
+      "area": "마포구",
+      "screen": "01관",
+      "movieCode": "20060092",
+      "time": "17:00",
+      "showtime": "2025-10-22T08:00:00.000Z"
+    },
+    {
+      "title": "세계의 주인",
+      "theater": "KT&G 상상마당 Cinema",
+      "area": "마포구",
+      "screen": "01관",
+      "movieCode": "20247429",
+      "time": "14:45",
+      "showtime": "2025-10-22T05:45:00.000Z"
+    },
+    {
+      "title": "원 배틀 애프터 어나더",
+      "theater": "KT&G 상상마당 Cinema",
+      "area": "마포구",
+      "screen": "01관",
+      "movieCode": "20256397",
+      "time": "19:10",
+      "showtime": "2025-10-22T10:10:00.000Z"
+    },
+    {
+      "title": "그저 사고였을 뿐",
+      "theater": "KT&G 상상마당 Cinema",
+      "area": "마포구",
+      "screen": "01관",
+      "movieCode": "20257321",
+      "time": "12:45",
+      "showtime": "2025-10-22T03:45:00.000Z"
+    },
+    {
+      "title": "프랑켄슈타인",
+      "theater": "KT&G 상상마당 Cinema",
+      "area": "마포구",
+      "screen": "01관",
+      "movieCode": "20258285",
+      "time": "10:00",
+      "showtime": "2025-10-22T01:00:00.000Z"
+    },
+    {
+      "title": "양양",
+      "theater": "인디스페이스",
+      "area": "마포구",
+      "screen": "01관",
+      "movieCode": "20212369",
+      "time": "19:30",
+      "showtime": "2025-10-22T10:30:00.000Z"
+    },
+    {
+      "title": "홍이",
+      "theater": "인디스페이스",
+      "area": "마포구",
+      "screen": "01관",
+      "movieCode": "20241102",
+      "time": "10:40",
+      "showtime": "2025-10-22T01:40:00.000Z"
+    },
+    {
+      "title": "3670",
+      "theater": "인디스페이스",
+      "area": "마포구",
+      "screen": "01관",
+      "movieCode": "20246333",
+      "time": "14:40",
+      "showtime": "2025-10-22T05:40:00.000Z"
+    },
+    {
+      "title": "세계의 주인",
+      "theater": "인디스페이스",
+      "area": "마포구",
+      "screen": "01관",
+      "movieCode": "20247429",
+      "time": "17:10",
+      "showtime": "2025-10-22T08:10:00.000Z"
+    },
+    {
+      "title": "3학년 2학기",
+      "theater": "인디스페이스",
+      "area": "마포구",
+      "screen": "01관",
+      "movieCode": "20249072",
+      "time": "12:30",
+      "showtime": "2025-10-22T03:30:00.000Z"
+    },
+    {
+      "title": "접속",
+      "theater": "라이카시네마",
+      "area": "서대문구",
+      "screen": "S관",
+      "movieCode": "19970014",
+      "time": "20:00",
+      "showtime": "2025-10-22T11:00:00.000Z"
+    },
+    {
+      "title": "양양",
+      "theater": "라이카시네마",
+      "area": "서대문구",
+      "screen": "S관",
+      "movieCode": "20212369",
+      "time": "13:05",
+      "showtime": "2025-10-22T04:05:00.000Z"
+    },
+    {
+      "title": "디바 야누스",
+      "theater": "라이카시네마",
+      "area": "서대문구",
+      "screen": "S관",
+      "movieCode": "20227228",
+      "time": "11:25",
+      "showtime": "2025-10-22T02:25:00.000Z"
+    },
+    {
+      "title": "세계의 주인",
+      "theater": "라이카시네마",
+      "area": "서대문구",
+      "screen": "S관",
+      "movieCode": "20247429",
+      "time": "09:10",
+      "showtime": "2025-10-22T00:10:00.000Z"
+    },
+    {
+      "title": "세계의 주인",
+      "theater": "라이카시네마",
+      "area": "서대문구",
+      "screen": "S관",
+      "movieCode": "20247429",
+      "time": "17:45",
+      "showtime": "2025-10-22T08:45:00.000Z"
+    },
+    {
+      "title": "포제션",
+      "theater": "아트하우스모모",
+      "area": "서대문구",
+      "screen": "01관",
+      "movieCode": "19818111",
+      "time": "15:20",
+      "showtime": "2025-10-22T06:20:00.000Z"
+    },
+    {
+      "title": "마작",
+      "theater": "아트하우스모모",
+      "area": "서대문구",
+      "screen": "01관",
+      "movieCode": "19968703",
+      "time": "10:00",
+      "showtime": "2025-10-22T01:00:00.000Z"
+    },
+    {
+      "title": "원 배틀 애프터 어나더",
+      "theater": "아트하우스모모",
+      "area": "서대문구",
+      "screen": "01관",
+      "movieCode": "20256397",
+      "time": "12:20",
+      "showtime": "2025-10-22T03:20:00.000Z"
+    },
+    {
+      "title": "그저 사고였을 뿐",
+      "theater": "아트하우스모모",
+      "area": "서대문구",
+      "screen": "01관",
+      "movieCode": "20257321",
+      "time": "17:40",
+      "showtime": "2025-10-22T08:40:00.000Z"
+    },
+    {
+      "title": "프랑켄슈타인",
+      "theater": "아트하우스모모",
+      "area": "서대문구",
+      "screen": "01관",
+      "movieCode": "20258285",
+      "time": "19:40",
+      "showtime": "2025-10-22T10:40:00.000Z"
+    },
+    {
+      "title": "양양",
+      "theater": "아트하우스모모",
+      "area": "서대문구",
+      "screen": "02관",
+      "movieCode": "20212369",
+      "time": "18:00",
+      "showtime": "2025-10-22T09:00:00.000Z"
+    },
+    {
+      "title": "세계의 주인",
+      "theater": "아트하우스모모",
+      "area": "서대문구",
+      "screen": "02관",
+      "movieCode": "20247429",
+      "time": "10:30",
+      "showtime": "2025-10-22T01:30:00.000Z"
+    },
+    {
+      "title": "세계의 주인",
+      "theater": "아트하우스모모",
+      "area": "서대문구",
+      "screen": "02관",
+      "movieCode": "20247429",
+      "time": "15:30",
+      "showtime": "2025-10-22T06:30:00.000Z"
+    },
+    {
+      "title": "세계의 주인",
+      "theater": "아트하우스모모",
+      "area": "서대문구",
+      "screen": "02관",
+      "movieCode": "20247429",
+      "time": "20:00",
+      "showtime": "2025-10-22T11:00:00.000Z"
+    },
+    {
+      "title": "수학영재 형주",
+      "theater": "아트하우스모모",
+      "area": "서대문구",
+      "screen": "02관",
+      "movieCode": "20249462",
+      "time": "13:00",
+      "showtime": "2025-10-22T04:00:00.000Z"
+    },
+    {
+      "title": "퍼펙트 블루",
+      "theater": "필름포럼",
+      "area": "서대문구",
+      "screen": "01관",
+      "movieCode": "20040590",
+      "time": "10:20",
+      "showtime": "2025-10-22T01:20:00.000Z"
+    },
+    {
+      "title": "너는 나를 불태워",
+      "theater": "필름포럼",
+      "area": "서대문구",
+      "screen": "01관",
+      "movieCode": "20251542",
+      "time": "11:50",
+      "showtime": "2025-10-22T02:50:00.000Z"
+    },
+    {
+      "title": "결혼 피로연",
+      "theater": "필름포럼",
+      "area": "서대문구",
+      "screen": "01관",
+      "movieCode": "20256963",
+      "time": "17:20",
+      "showtime": "2025-10-22T08:20:00.000Z"
+    },
+    {
+      "title": "미러 넘버 3",
+      "theater": "필름포럼",
+      "area": "서대문구",
+      "screen": "01관",
+      "movieCode": "20257671",
+      "time": "15:40",
+      "showtime": "2025-10-22T06:40:00.000Z"
+    },
+    {
+      "title": "프랑켄슈타인",
+      "theater": "필름포럼",
+      "area": "서대문구",
+      "screen": "01관",
+      "movieCode": "20258285",
+      "time": "19:10",
+      "showtime": "2025-10-22T10:10:00.000Z"
+    },
+    {
+      "title": "린다 린다 린다",
+      "theater": "필름포럼",
+      "area": "서대문구",
+      "screen": "02관",
+      "movieCode": "20060092",
+      "time": "16:40",
+      "showtime": "2025-10-22T07:40:00.000Z"
+    },
+    {
+      "title": "동경의 황혼",
+      "theater": "필름포럼",
+      "area": "서대문구",
+      "screen": "02관",
+      "movieCode": "20112341",
+      "time": "12:20",
+      "showtime": "2025-10-22T03:20:00.000Z"
+    },
+    {
+      "title": "디바 야누스",
+      "theater": "필름포럼",
+      "area": "서대문구",
+      "screen": "02관",
+      "movieCode": "20227228",
+      "time": "20:30",
+      "showtime": "2025-10-22T11:30:00.000Z"
+    },
+    {
+      "title": "킹 오브 킹스",
+      "theater": "필름포럼",
+      "area": "서대문구",
+      "screen": "02관",
+      "movieCode": "20254275",
+      "time": "10:30",
+      "showtime": "2025-10-22T01:30:00.000Z"
+    },
+    {
+      "title": "그저 사고였을 뿐",
+      "theater": "필름포럼",
+      "area": "서대문구",
+      "screen": "02관",
+      "movieCode": "20257321",
+      "time": "14:50",
+      "showtime": "2025-10-22T05:50:00.000Z"
+    },
+    {
+      "title": "클림트와 쉴레. 에로스와 프시케",
+      "theater": "필름포럼",
+      "area": "서대문구",
+      "screen": "02관",
+      "movieCode": "20257846",
+      "time": "18:50",
+      "showtime": "2025-10-22T09:50:00.000Z"
+    },
+    {
+      "title": "트론: 아레스",
+      "theater": "아리랑시네센터(서울)",
+      "area": "성북구",
+      "screen": "01관",
+      "movieCode": "20254021",
+      "time": "11:25",
+      "showtime": "2025-10-22T02:25:00.000Z"
+    },
+    {
+      "title": "원 배틀 애프터 어나더",
+      "theater": "아리랑시네센터(서울)",
+      "area": "성북구",
+      "screen": "01관",
+      "movieCode": "20256397",
+      "time": "18:10",
+      "showtime": "2025-10-22T09:10:00.000Z"
+    },
+    {
+      "title": "웨폰",
+      "theater": "아리랑시네센터(서울)",
+      "area": "성북구",
+      "screen": "01관",
+      "movieCode": "20256684",
+      "time": "13:45",
+      "showtime": "2025-10-22T04:45:00.000Z"
+    },
+    {
+      "title": "8번 출구",
+      "theater": "아리랑시네센터(서울)",
+      "area": "성북구",
+      "screen": "01관",
+      "movieCode": "20257570",
+      "time": "09:30",
+      "showtime": "2025-10-22T00:30:00.000Z"
+    },
+    {
+      "title": "8번 출구",
+      "theater": "아리랑시네센터(서울)",
+      "area": "성북구",
+      "screen": "01관",
+      "movieCode": "20257570",
+      "time": "16:15",
+      "showtime": "2025-10-22T07:15:00.000Z"
+    },
+    {
+      "title": "양양",
+      "theater": "아리랑시네센터(서울)",
+      "area": "성북구",
+      "screen": "아리랑인디웨이브",
+      "movieCode": "20212369",
+      "time": "19:45",
+      "showtime": "2025-10-22T10:45:00.000Z"
+    },
+    {
+      "title": "만남의 집",
+      "theater": "아리랑시네센터(서울)",
+      "area": "성북구",
+      "screen": "아리랑인디웨이브",
+      "movieCode": "20236434",
+      "time": "13:05",
+      "showtime": "2025-10-22T04:05:00.000Z"
+    },
+    {
+      "title": "세계의 주인",
+      "theater": "아리랑시네센터(서울)",
+      "area": "성북구",
+      "screen": "아리랑인디웨이브",
+      "movieCode": "20247429",
+      "time": "10:45",
+      "showtime": "2025-10-22T01:45:00.000Z"
+    },
+    {
+      "title": "세계의 주인",
+      "theater": "아리랑시네센터(서울)",
+      "area": "성북구",
+      "screen": "아리랑인디웨이브",
+      "movieCode": "20247429",
+      "time": "17:35",
+      "showtime": "2025-10-22T08:35:00.000Z"
+    },
+    {
+      "title": "수학영재 형주",
+      "theater": "아리랑시네센터(서울)",
+      "area": "성북구",
+      "screen": "아리랑인디웨이브",
+      "movieCode": "20249462",
+      "time": "15:25",
+      "showtime": "2025-10-22T06:25:00.000Z"
+    },
+    {
+      "title": "줄리어스 시저",
+      "theater": "낭만극장",
+      "area": "종로구",
+      "screen": "01관",
+      "movieCode": "20129386",
+      "time": "10:20",
+      "showtime": "2025-10-22T01:20:00.000Z"
+    },
+    {
+      "title": "줄리어스 시저",
+      "theater": "낭만극장",
+      "area": "종로구",
+      "screen": "01관",
+      "movieCode": "20129386",
+      "time": "12:30",
+      "showtime": "2025-10-22T03:30:00.000Z"
+    },
+    {
+      "title": "줄리어스 시저",
+      "theater": "낭만극장",
+      "area": "종로구",
+      "screen": "01관",
+      "movieCode": "20129386",
+      "time": "14:40",
+      "showtime": "2025-10-22T05:40:00.000Z"
+    },
+    {
+      "title": "줄리어스 시저",
+      "theater": "낭만극장",
+      "area": "종로구",
+      "screen": "01관",
+      "movieCode": "20129386",
+      "time": "16:50",
+      "showtime": "2025-10-22T07:50:00.000Z"
+    },
+    {
+      "title": "양양",
+      "theater": "씨네큐브광화문(서울)",
+      "area": "종로구",
+      "screen": "01관",
+      "movieCode": "20212369",
+      "time": "10:55",
+      "showtime": "2025-10-22T01:55:00.000Z"
+    },
+    {
+      "title": "디바 야누스",
+      "theater": "씨네큐브광화문(서울)",
+      "area": "종로구",
+      "screen": "01관",
+      "movieCode": "20227228",
+      "time": "09:15",
+      "showtime": "2025-10-22T00:15:00.000Z"
+    },
+    {
+      "title": "세계의 주인",
+      "theater": "씨네큐브광화문(서울)",
+      "area": "종로구",
+      "screen": "01관",
+      "movieCode": "20247429",
+      "time": "12:25",
+      "showtime": "2025-10-22T03:25:00.000Z"
+    },
+    {
+      "title": "세계의 주인",
+      "theater": "씨네큐브광화문(서울)",
+      "area": "종로구",
+      "screen": "01관",
+      "movieCode": "20247429",
+      "time": "20:20",
+      "showtime": "2025-10-22T11:20:00.000Z"
+    },
+    {
+      "title": "3학년 2학기",
+      "theater": "씨네큐브광화문(서울)",
+      "area": "종로구",
+      "screen": "01관",
+      "movieCode": "20249072",
+      "time": "17:30",
+      "showtime": "2025-10-22T08:30:00.000Z"
+    },
+    {
+      "title": "린다 린다 린다",
+      "theater": "씨네큐브광화문(서울)",
+      "area": "종로구",
+      "screen": "02관",
+      "movieCode": "20060092",
+      "time": "09:45",
+      "showtime": "2025-10-22T00:45:00.000Z"
+    },
+    {
+      "title": "그저 사고였을 뿐",
+      "theater": "씨네큐브광화문(서울)",
+      "area": "종로구",
+      "screen": "02관",
+      "movieCode": "20257321",
+      "time": "11:55",
+      "showtime": "2025-10-22T02:55:00.000Z"
+    },
+    {
+      "title": "그저 사고였을 뿐",
+      "theater": "씨네큐브광화문(서울)",
+      "area": "종로구",
+      "screen": "02관",
+      "movieCode": "20257321",
+      "time": "18:00",
+      "showtime": "2025-10-22T09:00:00.000Z"
+    },
+    {
+      "title": "미러 넘버 3",
+      "theater": "씨네큐브광화문(서울)",
+      "area": "종로구",
+      "screen": "02관",
+      "movieCode": "20257671",
+      "time": "16:15",
+      "showtime": "2025-10-22T07:15:00.000Z"
+    },
+    {
+      "title": "빅 볼드 뷰티풀",
+      "theater": "씨네큐브광화문(서울)",
+      "area": "종로구",
+      "screen": "02관",
+      "movieCode": "20257743",
+      "time": "13:55",
+      "showtime": "2025-10-22T04:55:00.000Z"
+    },
+    {
+      "title": "프랑켄슈타인",
+      "theater": "씨네큐브광화문(서울)",
+      "area": "종로구",
+      "screen": "02관",
+      "movieCode": "20258285",
+      "time": "20:00",
+      "showtime": "2025-10-22T11:00:00.000Z"
+    },
+    {
+      "title": "마다가스카르 뮤직",
+      "theater": "허리우드클래식",
+      "area": "종로구",
+      "screen": "01관",
+      "movieCode": "20236296",
+      "time": "10:30",
+      "showtime": "2025-10-22T01:30:00.000Z"
+    },
+    {
+      "title": "마다가스카르 뮤직",
+      "theater": "허리우드클래식",
+      "area": "종로구",
+      "screen": "01관",
+      "movieCode": "20236296",
+      "time": "12:00",
+      "showtime": "2025-10-22T03:00:00.000Z"
+    },
+    {
+      "title": "마다가스카르 뮤직",
+      "theater": "허리우드클래식",
+      "area": "종로구",
+      "screen": "01관",
+      "movieCode": "20236296",
+      "time": "13:30",
+      "showtime": "2025-10-22T04:30:00.000Z"
+    },
+    {
+      "title": "마다가스카르 뮤직",
+      "theater": "허리우드클래식",
+      "area": "종로구",
+      "screen": "01관",
+      "movieCode": "20236296",
+      "time": "15:00",
+      "showtime": "2025-10-22T06:00:00.000Z"
+    },
+    {
+      "title": "마다가스카르 뮤직",
+      "theater": "허리우드클래식",
+      "area": "종로구",
+      "screen": "01관",
+      "movieCode": "20236296",
+      "time": "16:30",
+      "showtime": "2025-10-22T07:30:00.000Z"
+    },
+    {
+      "title": "수학영재 형주",
+      "theater": "허리우드클래식",
+      "area": "종로구",
+      "screen": "01관",
+      "movieCode": "20249462",
+      "time": "18:00",
+      "showtime": "2025-10-22T09:00:00.000Z"
+    },
+    {
+      "title": "마작",
+      "theater": "서울아트시네마",
+      "area": "중구",
+      "screen": "01관",
+      "movieCode": "19968703",
+      "time": "14:30",
+      "showtime": "2025-10-22T05:30:00.000Z"
+    },
+    {
+      "title": "고기",
+      "theater": "서울아트시네마",
+      "area": "중구",
+      "screen": "01관",
+      "movieCode": "20258357",
+      "time": "20:00",
+      "showtime": "2025-10-22T11:00:00.000Z"
+    },
+    {
+      "title": "시나이 현장 임무",
+      "theater": "서울아트시네마",
+      "area": "중구",
+      "screen": "01관",
+      "movieCode": "20258358",
+      "time": "17:00",
+      "showtime": "2025-10-22T08:00:00.000Z"
+    },
+    {
+      "title": "파문",
+      "theater": "청춘극장",
+      "area": "중구",
+      "screen": "01관",
+      "movieCode": "20194400",
+      "time": "10:20",
+      "showtime": "2025-10-22T01:20:00.000Z"
+    },
+    {
+      "title": "파문",
+      "theater": "청춘극장",
+      "area": "중구",
+      "screen": "01관",
+      "movieCode": "20194400",
+      "time": "12:25",
+      "showtime": "2025-10-22T03:25:00.000Z"
+    },
+    {
+      "title": "부산포니아",
+      "theater": "CGV 용산아이파크몰",
+      "area": "용산구",
+      "screen": "19관(아트하우스)",
+      "movieCode": "20175301",
+      "time": "11:05",
+      "showtime": "2025-10-22T02:05:00.000Z"
+    },
+    {
+      "title": "첫잔처럼",
+      "theater": "CGV 용산아이파크몰",
+      "area": "용산구",
+      "screen": "19관(아트하우스)",
+      "movieCode": "20198435",
+      "time": "25:15",
+      "showtime": "2025-10-22T16:15:00.000Z"
+    },
+    {
+      "title": "양양",
+      "theater": "CGV 용산아이파크몰",
+      "area": "용산구",
+      "screen": "19관(아트하우스)",
+      "movieCode": "20212369",
+      "time": "16:25",
+      "showtime": "2025-10-22T07:25:00.000Z"
+    },
+    {
+      "title": "디바 야누스",
+      "theater": "CGV 용산아이파크몰",
+      "area": "용산구",
+      "screen": "19관(아트하우스)",
+      "movieCode": "20227228",
+      "time": "18:15",
+      "showtime": "2025-10-22T09:15:00.000Z"
+    },
+    {
+      "title": "만남의 집",
+      "theater": "CGV 용산아이파크몰",
+      "area": "용산구",
+      "screen": "19관(아트하우스)",
+      "movieCode": "20236434",
+      "time": "08:30",
+      "showtime": "2025-10-21T23:30:00.000Z"
+    },
+    {
+      "title": "사람과 고기",
+      "theater": "CGV 용산아이파크몰",
+      "area": "용산구",
+      "screen": "19관(아트하우스)",
+      "movieCode": "20244267",
+      "time": "13:05",
+      "showtime": "2025-10-22T04:05:00.000Z"
+    },
+    {
+      "title": "세계의 주인",
+      "theater": "CGV 용산아이파크몰",
+      "area": "용산구",
+      "screen": "19관(아트하우스)",
+      "movieCode": "20247429",
+      "time": "20:15",
+      "showtime": "2025-10-22T11:15:00.000Z"
+    },
+    {
+      "title": "수학영재 형주",
+      "theater": "CGV 용산아이파크몰",
+      "area": "용산구",
+      "screen": "19관(아트하우스)",
+      "movieCode": "20249462",
+      "time": "22:45",
+      "showtime": "2025-10-22T13:45:00.000Z"
+    },
+    {
+      "title": "꽃놀이 간다",
+      "theater": "CGV 용산아이파크몰",
+      "area": "용산구",
+      "screen": "19관(아트하우스)",
+      "movieCode": "20257277",
+      "time": "15:25",
+      "showtime": "2025-10-22T06:25:00.000Z"
+    },
+    {
+      "title": "포제션",
+      "theater": "CGV 명동역 씨네라이브러리",
+      "area": "중구",
+      "screen": "ART1관",
+      "movieCode": "19818111",
+      "time": "12:40",
+      "showtime": "2025-10-22T03:40:00.000Z"
+    },
+    {
+      "title": "부산포니아",
+      "theater": "CGV 명동역 씨네라이브러리",
+      "area": "중구",
+      "screen": "ART1관",
+      "movieCode": "20175301",
+      "time": "09:40",
+      "showtime": "2025-10-22T00:40:00.000Z"
+    },
+    {
+      "title": "세계의 주인",
+      "theater": "CGV 명동역 씨네라이브러리",
+      "area": "중구",
+      "screen": "ART1관",
+      "movieCode": "20247429",
+      "time": "19:25",
+      "showtime": "2025-10-22T10:25:00.000Z"
+    },
+    {
+      "title": "꽃놀이 간다",
+      "theater": "CGV 명동역 씨네라이브러리",
+      "area": "중구",
+      "screen": "ART1관",
+      "movieCode": "20257277",
+      "time": "11:40",
+      "showtime": "2025-10-22T02:40:00.000Z"
+    },
+    {
+      "title": "미러 넘버 3",
+      "theater": "CGV 명동역 씨네라이브러리",
+      "area": "중구",
+      "screen": "ART1관",
+      "movieCode": "20257671",
+      "time": "15:10",
+      "showtime": "2025-10-22T06:10:00.000Z"
+    },
+    {
+      "title": "빅 볼드 뷰티풀",
+      "theater": "CGV 명동역 씨네라이브러리",
+      "area": "중구",
+      "screen": "ART1관",
+      "movieCode": "20257743",
+      "time": "17:05",
+      "showtime": "2025-10-22T08:05:00.000Z"
+    },
+    {
+      "title": "린다 린다 린다",
+      "theater": "CGV 명동역 씨네라이브러리",
+      "area": "중구",
+      "screen": "ART2관",
+      "movieCode": "20060092",
+      "time": "09:30",
+      "showtime": "2025-10-22T00:30:00.000Z"
+    },
+    {
+      "title": "양양",
+      "theater": "CGV 명동역 씨네라이브러리",
+      "area": "중구",
+      "screen": "ART2관",
+      "movieCode": "20212369",
+      "time": "11:50",
+      "showtime": "2025-10-22T02:50:00.000Z"
+    },
+    {
+      "title": "디바 야누스",
+      "theater": "CGV 명동역 씨네라이브러리",
+      "area": "중구",
+      "screen": "ART2관",
+      "movieCode": "20227228",
+      "time": "19:20",
+      "showtime": "2025-10-22T10:20:00.000Z"
+    },
+    {
+      "title": "사람과 고기",
+      "theater": "CGV 명동역 씨네라이브러리",
+      "area": "중구",
+      "screen": "ART2관",
+      "movieCode": "20244267",
+      "time": "13:35",
+      "showtime": "2025-10-22T04:35:00.000Z"
+    },
+    {
+      "title": "꽃놀이 간다",
+      "theater": "CGV 명동역 씨네라이브러리",
+      "area": "중구",
+      "screen": "ART2관",
+      "movieCode": "20257277",
+      "time": "15:50",
+      "showtime": "2025-10-22T06:50:00.000Z"
+    },
+    {
+      "title": "그저 사고였을 뿐",
+      "theater": "CGV 명동역 씨네라이브러리",
+      "area": "중구",
+      "screen": "ART2관",
+      "movieCode": "20257321",
+      "time": "17:00",
+      "showtime": "2025-10-22T08:00:00.000Z"
+    },
+    {
+      "title": "8번 출구",
+      "theater": "CGV 명동역 씨네라이브러리",
+      "area": "중구",
+      "screen": "03관",
+      "movieCode": "20257570",
+      "time": "10:10",
+      "showtime": "2025-10-22T01:10:00.000Z"
+    },
+    {
+      "title": "8번 출구",
+      "theater": "CGV 명동역 씨네라이브러리",
+      "area": "중구",
+      "screen": "03관",
+      "movieCode": "20257570",
+      "time": "12:10",
+      "showtime": "2025-10-22T03:10:00.000Z"
+    },
+    {
+      "title": "8번 출구",
+      "theater": "CGV 명동역 씨네라이브러리",
+      "area": "중구",
+      "screen": "03관",
+      "movieCode": "20257570",
+      "time": "14:15",
+      "showtime": "2025-10-22T05:15:00.000Z"
+    },
+    {
+      "title": "8번 출구",
+      "theater": "CGV 명동역 씨네라이브러리",
+      "area": "중구",
+      "screen": "03관",
+      "movieCode": "20257570",
+      "time": "16:20",
+      "showtime": "2025-10-22T07:20:00.000Z"
+    },
+    {
+      "title": "8번 출구",
+      "theater": "CGV 명동역 씨네라이브러리",
+      "area": "중구",
+      "screen": "03관",
+      "movieCode": "20257570",
+      "time": "18:25",
+      "showtime": "2025-10-22T09:25:00.000Z"
+    },
+    {
+      "title": "8번 출구",
+      "theater": "CGV 명동역 씨네라이브러리",
+      "area": "중구",
+      "screen": "03관",
+      "movieCode": "20257570",
+      "time": "20:30",
+      "showtime": "2025-10-22T11:30:00.000Z"
+    },
+    {
+      "title": "코렐라인",
+      "theater": "CGV 명동역 씨네라이브러리",
+      "area": "중구",
+      "screen": "04관",
+      "movieCode": "20090284",
+      "time": "16:10",
+      "showtime": "2025-10-22T07:10:00.000Z"
+    },
+    {
+      "title": "코렐라인",
+      "theater": "CGV 명동역 씨네라이브러리",
+      "area": "중구",
+      "screen": "04관",
+      "movieCode": "20090284",
+      "time": "18:20",
+      "showtime": "2025-10-22T09:20:00.000Z"
+    },
+    {
+      "title": "코렐라인",
+      "theater": "CGV 명동역 씨네라이브러리",
+      "area": "중구",
+      "screen": "04관",
+      "movieCode": "20090284",
+      "time": "20:30",
+      "showtime": "2025-10-22T11:30:00.000Z"
+    },
+    {
+      "title": "원 배틀 애프터 어나더",
+      "theater": "CGV 명동역 씨네라이브러리",
+      "area": "중구",
+      "screen": "04관",
+      "movieCode": "20256397",
+      "time": "13:00",
+      "showtime": "2025-10-22T04:00:00.000Z"
+    },
+    {
+      "title": "코렐라인",
+      "theater": "CGV 명동역 씨네라이브러리",
+      "area": "중구",
+      "screen": "05관",
+      "movieCode": "20090284",
+      "time": "14:35",
+      "showtime": "2025-10-22T05:35:00.000Z"
+    },
+    {
+      "title": "원 배틀 애프터 어나더",
+      "theater": "CGV 명동역 씨네라이브러리",
+      "area": "중구",
+      "screen": "05관",
+      "movieCode": "20256397",
+      "time": "11:15",
+      "showtime": "2025-10-22T02:15:00.000Z"
+    },
+    {
+      "title": "원 배틀 애프터 어나더",
+      "theater": "CGV 명동역 씨네라이브러리",
+      "area": "중구",
+      "screen": "05관",
+      "movieCode": "20256397",
+      "time": "19:00",
+      "showtime": "2025-10-22T10:00:00.000Z"
+    },
+    {
+      "title": "세븐",
+      "theater": "CGV 압구정",
+      "area": "강남구",
+      "screen": "IMAX관",
+      "movieCode": "19950327",
+      "time": "13:50",
+      "showtime": "2025-10-22T04:50:00.000Z"
+    },
+    {
+      "title": "세븐",
+      "theater": "CGV 압구정",
+      "area": "강남구",
+      "screen": "IMAX관",
+      "movieCode": "19950327",
+      "time": "19:00",
+      "showtime": "2025-10-22T10:00:00.000Z"
+    },
+    {
+      "title": "원 배틀 애프터 어나더",
+      "theater": "CGV 압구정",
+      "area": "강남구",
+      "screen": "IMAX관",
+      "movieCode": "20256397",
+      "time": "10:20",
+      "showtime": "2025-10-22T01:20:00.000Z"
+    },
+    {
+      "title": "원 배틀 애프터 어나더",
+      "theater": "CGV 압구정",
+      "area": "강남구",
+      "screen": "IMAX관",
+      "movieCode": "20256397",
+      "time": "21:50",
+      "showtime": "2025-10-22T12:50:00.000Z"
+    },
+    {
+      "title": "8번 출구",
+      "theater": "CGV 압구정",
+      "area": "강남구",
+      "screen": "IMAX관",
+      "movieCode": "20257570",
+      "time": "16:40",
+      "showtime": "2025-10-22T07:40:00.000Z"
+    },
+    {
+      "title": "세계의 주인",
+      "theater": "CGV 압구정",
+      "area": "강남구",
+      "screen": "02관",
+      "movieCode": "20247429",
+      "time": "22:10",
+      "showtime": "2025-10-22T13:10:00.000Z"
+    },
+    {
+      "title": "코렐라인",
+      "theater": "CGV 압구정",
+      "area": "강남구",
+      "screen": "03관",
+      "movieCode": "20090284",
+      "time": "13:10",
+      "showtime": "2025-10-22T04:10:00.000Z"
+    },
+    {
+      "title": "코렐라인",
+      "theater": "CGV 압구정",
+      "area": "강남구",
+      "screen": "03관",
+      "movieCode": "20090284",
+      "time": "18:40",
+      "showtime": "2025-10-22T09:40:00.000Z"
+    },
+    {
+      "title": "원 배틀 애프터 어나더",
+      "theater": "CGV 압구정",
+      "area": "강남구",
+      "screen": "03관",
+      "movieCode": "20256397",
+      "time": "15:20",
+      "showtime": "2025-10-22T06:20:00.000Z"
+    },
+    {
+      "title": "부산포니아",
+      "theater": "CGV 압구정",
+      "area": "강남구",
+      "screen": "아트하우스 ART1관",
+      "movieCode": "20175301",
+      "time": "17:10",
+      "showtime": "2025-10-22T08:10:00.000Z"
+    },
+    {
+      "title": "양양",
+      "theater": "CGV 압구정",
+      "area": "강남구",
+      "screen": "아트하우스 ART1관",
+      "movieCode": "20212369",
+      "time": "15:25",
+      "showtime": "2025-10-22T06:25:00.000Z"
+    },
+    {
+      "title": "디바 야누스",
+      "theater": "CGV 압구정",
+      "area": "강남구",
+      "screen": "아트하우스 ART1관",
+      "movieCode": "20227228",
+      "time": "20:10",
+      "showtime": "2025-10-22T11:10:00.000Z"
+    },
+    {
+      "title": "만남의 집",
+      "theater": "CGV 압구정",
+      "area": "강남구",
+      "screen": "아트하우스 ART1관",
+      "movieCode": "20236434",
+      "time": "10:40",
+      "showtime": "2025-10-22T01:40:00.000Z"
+    },
+    {
+      "title": "사람과 고기",
+      "theater": "CGV 압구정",
+      "area": "강남구",
+      "screen": "아트하우스 ART1관",
+      "movieCode": "20244267",
+      "time": "13:10",
+      "showtime": "2025-10-22T04:10:00.000Z"
+    },
+    {
+      "title": "수학영재 형주",
+      "theater": "CGV 압구정",
+      "area": "강남구",
+      "screen": "아트하우스 ART1관",
+      "movieCode": "20249462",
+      "time": "22:10",
+      "showtime": "2025-10-22T13:10:00.000Z"
+    },
+    {
+      "title": "꽃놀이 간다",
+      "theater": "CGV 압구정",
+      "area": "강남구",
+      "screen": "아트하우스 ART1관",
+      "movieCode": "20257277",
+      "time": "19:10",
+      "showtime": "2025-10-22T10:10:00.000Z"
+    },
+    {
+      "title": "세계의 주인",
+      "theater": "CGV 압구정",
+      "area": "강남구",
+      "screen": "아트하우스 ART2관",
+      "movieCode": "20247429",
+      "time": "18:10",
+      "showtime": "2025-10-22T09:10:00.000Z"
+    },
+    {
+      "title": "꽃놀이 간다",
+      "theater": "CGV 압구정",
+      "area": "강남구",
+      "screen": "아트하우스 ART2관",
+      "movieCode": "20257277",
+      "time": "14:50",
+      "showtime": "2025-10-22T05:50:00.000Z"
+    },
+    {
+      "title": "그저 사고였을 뿐",
+      "theater": "CGV 압구정",
+      "area": "강남구",
+      "screen": "아트하우스 ART2관",
+      "movieCode": "20257321",
+      "time": "12:40",
+      "showtime": "2025-10-22T03:40:00.000Z"
+    },
+    {
+      "title": "미러 넘버 3",
+      "theater": "CGV 압구정",
+      "area": "강남구",
+      "screen": "아트하우스 ART2관",
+      "movieCode": "20257671",
+      "time": "10:40",
+      "showtime": "2025-10-22T01:40:00.000Z"
+    },
+    {
+      "title": "빅 볼드 뷰티풀",
+      "theater": "CGV 압구정",
+      "area": "강남구",
+      "screen": "아트하우스 ART2관",
+      "movieCode": "20257743",
+      "time": "15:45",
+      "showtime": "2025-10-22T06:45:00.000Z"
+    },
+    {
+      "title": "프랑켄슈타인",
+      "theater": "CGV 압구정",
+      "area": "강남구",
+      "screen": "아트하우스 ART2관",
+      "movieCode": "20258285",
+      "time": "20:40",
+      "showtime": "2025-10-22T11:40:00.000Z"
+    },
+    {
+      "title": "코렐라인",
+      "theater": "CGV 압구정",
+      "area": "강남구",
+      "screen": "04관",
+      "movieCode": "20090284",
+      "time": "14:50",
+      "showtime": "2025-10-22T05:50:00.000Z"
+    },
+    {
+      "title": "웨폰",
+      "theater": "CGV 압구정",
+      "area": "강남구",
+      "screen": "04관",
+      "movieCode": "20256684",
+      "time": "17:05",
+      "showtime": "2025-10-22T08:05:00.000Z"
+    },
+    {
+      "title": "8번 출구",
+      "theater": "CGV 압구정",
+      "area": "강남구",
+      "screen": "04관",
+      "movieCode": "20257570",
+      "time": "10:40",
+      "showtime": "2025-10-22T01:40:00.000Z"
+    },
+    {
+      "title": "8번 출구",
+      "theater": "CGV 압구정",
+      "area": "강남구",
+      "screen": "04관",
+      "movieCode": "20257570",
+      "time": "12:45",
+      "showtime": "2025-10-22T03:45:00.000Z"
+    },
+    {
+      "title": "8번 출구",
+      "theater": "CGV 압구정",
+      "area": "강남구",
+      "screen": "04관",
+      "movieCode": "20257570",
+      "time": "19:40",
+      "showtime": "2025-10-22T10:40:00.000Z"
+    },
+    {
+      "title": "8번 출구",
+      "theater": "CGV 압구정",
+      "area": "강남구",
+      "screen": "04관",
+      "movieCode": "20257570",
+      "time": "21:45",
+      "showtime": "2025-10-22T12:45:00.000Z"
+    },
+    {
+      "title": "부산포니아",
+      "theater": "CGV 신촌아트레온",
+      "area": "서대문구",
+      "screen": "10관 [아트하우스]",
+      "movieCode": "20175301",
+      "time": "10:10",
+      "showtime": "2025-10-22T01:10:00.000Z"
+    },
+    {
+      "title": "양양",
+      "theater": "CGV 신촌아트레온",
+      "area": "서대문구",
+      "screen": "10관 [아트하우스]",
+      "movieCode": "20212369",
+      "time": "17:35",
+      "showtime": "2025-10-22T08:35:00.000Z"
+    },
+    {
+      "title": "디바 야누스",
+      "theater": "CGV 신촌아트레온",
+      "area": "서대문구",
+      "screen": "10관 [아트하우스]",
+      "movieCode": "20227228",
+      "time": "14:30",
+      "showtime": "2025-10-22T05:30:00.000Z"
+    },
+    {
+      "title": "만남의 집",
+      "theater": "CGV 신촌아트레온",
+      "area": "서대문구",
+      "screen": "10관 [아트하우스]",
+      "movieCode": "20236434",
+      "time": "21:55",
+      "showtime": "2025-10-22T12:55:00.000Z"
+    },
+    {
+      "title": "사람과 고기",
+      "theater": "CGV 신촌아트레온",
+      "area": "서대문구",
+      "screen": "10관 [아트하우스]",
+      "movieCode": "20244267",
+      "time": "12:15",
+      "showtime": "2025-10-22T03:15:00.000Z"
+    },
+    {
+      "title": "세계의 주인",
+      "theater": "CGV 신촌아트레온",
+      "area": "서대문구",
+      "screen": "10관 [아트하우스]",
+      "movieCode": "20247429",
+      "time": "19:25",
+      "showtime": "2025-10-22T10:25:00.000Z"
+    },
+    {
+      "title": "꽃놀이 간다",
+      "theater": "CGV 신촌아트레온",
+      "area": "서대문구",
+      "screen": "10관 [아트하우스]",
+      "movieCode": "20257277",
+      "time": "16:30",
+      "showtime": "2025-10-22T07:30:00.000Z"
+    },
+    {
+      "title": "양양",
+      "theater": "CGV 대학로",
+      "area": "종로구",
+      "screen": "05관",
+      "movieCode": "20212369",
+      "time": "17:00",
+      "showtime": "2025-10-22T08:00:00.000Z"
+    },
+    {
+      "title": "디바 야누스",
+      "theater": "CGV 대학로",
+      "area": "종로구",
+      "screen": "05관",
+      "movieCode": "20227228",
+      "time": "18:45",
+      "showtime": "2025-10-22T09:45:00.000Z"
+    },
+    {
+      "title": "만남의 집",
+      "theater": "CGV 대학로",
+      "area": "종로구",
+      "screen": "05관",
+      "movieCode": "20236434",
+      "time": "11:20",
+      "showtime": "2025-10-22T02:20:00.000Z"
+    },
+    {
+      "title": "사람과 고기",
+      "theater": "CGV 대학로",
+      "area": "종로구",
+      "screen": "05관",
+      "movieCode": "20244267",
+      "time": "13:50",
+      "showtime": "2025-10-22T04:50:00.000Z"
+    },
+    {
+      "title": "세계의 주인",
+      "theater": "CGV 대학로",
+      "area": "종로구",
+      "screen": "05관",
+      "movieCode": "20247429",
+      "time": "20:40",
+      "showtime": "2025-10-22T11:40:00.000Z"
+    },
+    {
+      "title": "꽃놀이 간다",
+      "theater": "CGV 대학로",
+      "area": "종로구",
+      "screen": "05관",
+      "movieCode": "20257277",
+      "time": "16:05",
+      "showtime": "2025-10-22T07:05:00.000Z"
+    },
+    {
+      "title": "부산포니아",
+      "theater": "CGV 강변",
+      "area": "광진구",
+      "screen": "04관(아트하우스)",
+      "movieCode": "20175301",
+      "time": "22:10",
+      "showtime": "2025-10-22T13:10:00.000Z"
+    },
+    {
+      "title": "양양",
+      "theater": "CGV 강변",
+      "area": "광진구",
+      "screen": "04관(아트하우스)",
+      "movieCode": "20212369",
+      "time": "15:10",
+      "showtime": "2025-10-22T06:10:00.000Z"
+    },
+    {
+      "title": "디바 야누스",
+      "theater": "CGV 강변",
+      "area": "광진구",
+      "screen": "04관(아트하우스)",
+      "movieCode": "20227228",
+      "time": "16:55",
+      "showtime": "2025-10-22T07:55:00.000Z"
+    },
+    {
+      "title": "만남의 집",
+      "theater": "CGV 강변",
+      "area": "광진구",
+      "screen": "04관(아트하우스)",
+      "movieCode": "20236434",
+      "time": "10:20",
+      "showtime": "2025-10-22T01:20:00.000Z"
+    },
+    {
+      "title": "사람과 고기",
+      "theater": "CGV 강변",
+      "area": "광진구",
+      "screen": "04관(아트하우스)",
+      "movieCode": "20244267",
+      "time": "12:50",
+      "showtime": "2025-10-22T03:50:00.000Z"
+    },
+    {
+      "title": "세계의 주인",
+      "theater": "CGV 강변",
+      "area": "광진구",
+      "screen": "04관(아트하우스)",
+      "movieCode": "20247429",
+      "time": "19:45",
+      "showtime": "2025-10-22T10:45:00.000Z"
+    },
+    {
+      "title": "꽃놀이 간다",
+      "theater": "CGV 강변",
+      "area": "광진구",
+      "screen": "04관(아트하우스)",
+      "movieCode": "20257277",
+      "time": "18:50",
+      "showtime": "2025-10-22T09:50:00.000Z"
+    },
+    {
+      "title": "부산포니아",
+      "theater": "CGV 여의도",
+      "area": "영등포구",
+      "screen": "05관 [아트하우스/Sonictier]",
+      "movieCode": "20175301",
+      "time": "21:40",
+      "showtime": "2025-10-22T12:40:00.000Z"
+    },
+    {
+      "title": "양양",
+      "theater": "CGV 여의도",
+      "area": "영등포구",
+      "screen": "05관 [아트하우스/Sonictier]",
+      "movieCode": "20212369",
+      "time": "14:10",
+      "showtime": "2025-10-22T05:10:00.000Z"
+    },
+    {
+      "title": "디바 야누스",
+      "theater": "CGV 여의도",
+      "area": "영등포구",
+      "screen": "05관 [아트하우스/Sonictier]",
+      "movieCode": "20227228",
+      "time": "17:00",
+      "showtime": "2025-10-22T08:00:00.000Z"
+    },
+    {
+      "title": "만남의 집",
+      "theater": "CGV 여의도",
+      "area": "영등포구",
+      "screen": "05관 [아트하우스/Sonictier]",
+      "movieCode": "20236434",
+      "time": "09:05",
+      "showtime": "2025-10-22T00:05:00.000Z"
+    },
+    {
+      "title": "사람과 고기",
+      "theater": "CGV 여의도",
+      "area": "영등포구",
+      "screen": "05관 [아트하우스/Sonictier]",
+      "movieCode": "20244267",
+      "time": "11:45",
+      "showtime": "2025-10-22T02:45:00.000Z"
+    },
+    {
+      "title": "세계의 주인",
+      "theater": "CGV 여의도",
+      "area": "영등포구",
+      "screen": "05관 [아트하우스/Sonictier]",
+      "movieCode": "20247429",
+      "time": "19:05",
+      "showtime": "2025-10-22T10:05:00.000Z"
+    },
+    {
+      "title": "꽃놀이 간다",
+      "theater": "CGV 여의도",
+      "area": "영등포구",
+      "screen": "05관 [아트하우스/Sonictier]",
+      "movieCode": "20257277",
+      "time": "16:00",
+      "showtime": "2025-10-22T07:00:00.000Z"
+    },
+    {
+      "title": "부산포니아",
+      "theater": "롯데시네마 노원",
+      "area": "노원구",
+      "screen": "06관(아르떼)",
+      "movieCode": "20175301",
+      "time": "15:00",
+      "showtime": "2025-10-22T06:00:00.000Z"
+    },
+    {
+      "title": "양양",
+      "theater": "롯데시네마 노원",
+      "area": "노원구",
+      "screen": "06관(아르떼)",
+      "movieCode": "20212369",
+      "time": "13:10",
+      "showtime": "2025-10-22T04:10:00.000Z"
+    },
+    {
+      "title": "디바 야누스",
+      "theater": "롯데시네마 노원",
+      "area": "노원구",
+      "screen": "06관(아르떼)",
+      "movieCode": "20227228",
+      "time": "11:10",
+      "showtime": "2025-10-22T02:10:00.000Z"
+    },
+    {
+      "title": "연의 편지",
+      "theater": "롯데시네마 노원",
+      "area": "노원구",
+      "screen": "06관(아르떼)",
+      "movieCode": "20243864",
+      "time": "19:20",
+      "showtime": "2025-10-22T10:20:00.000Z"
+    },
+    {
+      "title": "보이 킬스 월드",
+      "theater": "롯데시네마 노원",
+      "area": "노원구",
+      "screen": "06관(아르떼)",
+      "movieCode": "20246253",
+      "time": "21:30",
+      "showtime": "2025-10-22T12:30:00.000Z"
+    },
+    {
+      "title": "그저 사고였을 뿐",
+      "theater": "롯데시네마 노원",
+      "area": "노원구",
+      "screen": "06관(아르떼)",
+      "movieCode": "20257321",
+      "time": "17:05",
+      "showtime": "2025-10-22T08:05:00.000Z"
+    },
+    {
+      "title": "디바 야누스",
+      "theater": "롯데시네마 신도림",
+      "area": "구로구",
+      "screen": "04관",
+      "movieCode": "20227228",
+      "time": "10:35",
+      "showtime": "2025-10-22T01:35:00.000Z"
+    },
+    {
+      "title": "세계의 주인",
+      "theater": "롯데시네마 신도림",
+      "area": "구로구",
+      "screen": "04관",
+      "movieCode": "20247429",
+      "time": "12:45",
+      "showtime": "2025-10-22T03:45:00.000Z"
+    },
+    {
+      "title": "그저 사고였을 뿐",
+      "theater": "롯데시네마 신도림",
+      "area": "구로구",
+      "screen": "04관",
+      "movieCode": "20257321",
+      "time": "15:30",
+      "showtime": "2025-10-22T06:30:00.000Z"
+    }
+  ],
+  "timestamp": 1761094360796,
+  "expiresAt": 1761115960796
+}

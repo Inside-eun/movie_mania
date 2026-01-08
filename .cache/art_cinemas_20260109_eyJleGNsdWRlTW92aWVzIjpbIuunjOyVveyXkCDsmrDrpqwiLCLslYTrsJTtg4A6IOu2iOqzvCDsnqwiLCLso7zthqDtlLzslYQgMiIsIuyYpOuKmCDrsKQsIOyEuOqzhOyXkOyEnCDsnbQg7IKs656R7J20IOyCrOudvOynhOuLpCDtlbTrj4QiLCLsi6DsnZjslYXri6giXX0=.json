@@ -1,0 +1,1653 @@
+{
+  "data": [
+    {
+      "title": "영생인",
+      "theater": "픽처하우스",
+      "area": "강남구",
+      "screen": "01관",
+      "movieCode": "20213014",
+      "time": "09:20",
+      "showtime": "2026-01-09T00:20:00.000Z"
+    },
+    {
+      "title": "세계의 주인",
+      "theater": "픽처하우스",
+      "area": "강남구",
+      "screen": "01관",
+      "movieCode": "20247429",
+      "time": "20:10",
+      "showtime": "2026-01-09T11:10:00.000Z"
+    },
+    {
+      "title": "어리석은 자는 누구인가",
+      "theater": "픽처하우스",
+      "area": "강남구",
+      "screen": "01관",
+      "movieCode": "20250381",
+      "time": "17:30",
+      "showtime": "2026-01-09T08:30:00.000Z"
+    },
+    {
+      "title": "척의 일생",
+      "theater": "픽처하우스",
+      "area": "강남구",
+      "screen": "01관",
+      "movieCode": "20258621",
+      "time": "13:00",
+      "showtime": "2026-01-09T04:00:00.000Z"
+    },
+    {
+      "title": "롤링스톤",
+      "theater": "픽처하우스",
+      "area": "강남구",
+      "screen": "01관",
+      "movieCode": "20259190",
+      "time": "11:00",
+      "showtime": "2026-01-09T02:00:00.000Z"
+    },
+    {
+      "title": "누벨바그",
+      "theater": "픽처하우스",
+      "area": "강남구",
+      "screen": "01관",
+      "movieCode": "20259333",
+      "time": "15:15",
+      "showtime": "2026-01-09T06:15:00.000Z"
+    },
+    {
+      "title": "화양연화 특별판",
+      "theater": "픽처하우스",
+      "area": "강남구",
+      "screen": "01관",
+      "movieCode": "20259893",
+      "time": "22:30",
+      "showtime": "2026-01-09T13:30:00.000Z"
+    },
+    {
+      "title": "소매치기",
+      "theater": "KU시네마테크",
+      "area": "광진구",
+      "screen": "01관",
+      "movieCode": "19598017",
+      "time": "20:25",
+      "showtime": "2026-01-09T11:25:00.000Z"
+    },
+    {
+      "title": "네 멋대로 해라",
+      "theater": "KU시네마테크",
+      "area": "광진구",
+      "screen": "01관",
+      "movieCode": "19600042",
+      "time": "18:40",
+      "showtime": "2026-01-09T09:40:00.000Z"
+    },
+    {
+      "title": "세계의 주인",
+      "theater": "KU시네마테크",
+      "area": "광진구",
+      "screen": "01관",
+      "movieCode": "20247429",
+      "time": "12:20",
+      "showtime": "2026-01-09T03:20:00.000Z"
+    },
+    {
+      "title": "이사벨라 두크로트 언리미티드",
+      "theater": "KU시네마테크",
+      "area": "광진구",
+      "screen": "01관",
+      "movieCode": "20258126",
+      "time": "10:30",
+      "showtime": "2026-01-09T01:30:00.000Z"
+    },
+    {
+      "title": "파리, 밤의 여행자들",
+      "theater": "KU시네마테크",
+      "area": "광진구",
+      "screen": "01관",
+      "movieCode": "20258951",
+      "time": "14:40",
+      "showtime": "2026-01-09T05:40:00.000Z"
+    },
+    {
+      "title": "마이 선샤인",
+      "theater": "KU시네마테크",
+      "area": "광진구",
+      "screen": "01관",
+      "movieCode": "20259584",
+      "time": "16:50",
+      "showtime": "2026-01-09T07:50:00.000Z"
+    },
+    {
+      "title": "마이 선샤인",
+      "theater": "씨네큐 신도림",
+      "area": "구로구",
+      "screen": "03관(Reserve)",
+      "movieCode": "20259584",
+      "time": "10:00",
+      "showtime": "2026-01-09T01:00:00.000Z"
+    },
+    {
+      "title": "스폰지밥 무비: 네모바지를 찾아서",
+      "theater": "씨네큐 신도림",
+      "area": "구로구",
+      "screen": "05관(Reserve)",
+      "movieCode": "20256173",
+      "time": "10:40",
+      "showtime": "2026-01-09T01:40:00.000Z"
+    },
+    {
+      "title": "척의 일생",
+      "theater": "씨네큐 신도림",
+      "area": "구로구",
+      "screen": "05관(Reserve)",
+      "movieCode": "20258621",
+      "time": "14:45",
+      "showtime": "2026-01-09T05:45:00.000Z"
+    },
+    {
+      "title": "극장판 짱구는 못말려: 초화려! 작열하는 떡잎마을 댄서즈",
+      "theater": "씨네큐 신도림",
+      "area": "구로구",
+      "screen": "05관(Reserve)",
+      "movieCode": "20259383",
+      "time": "17:05",
+      "showtime": "2026-01-09T08:05:00.000Z"
+    },
+    {
+      "title": "마이 선샤인",
+      "theater": "씨네큐 신도림",
+      "area": "구로구",
+      "screen": "05관(Reserve)",
+      "movieCode": "20259584",
+      "time": "12:45",
+      "showtime": "2026-01-09T03:45:00.000Z"
+    },
+    {
+      "title": "마이 선샤인",
+      "theater": "씨네큐 신도림",
+      "area": "구로구",
+      "screen": "05관(Reserve)",
+      "movieCode": "20259584",
+      "time": "19:20",
+      "showtime": "2026-01-09T10:20:00.000Z"
+    },
+    {
+      "title": "하나 그리고 둘",
+      "theater": "씨네큐 신도림",
+      "area": "구로구",
+      "screen": "09관",
+      "movieCode": "20000059",
+      "time": "12:20",
+      "showtime": "2026-01-09T03:20:00.000Z"
+    },
+    {
+      "title": "어리석은 자는 누구인가",
+      "theater": "씨네큐 신도림",
+      "area": "구로구",
+      "screen": "09관",
+      "movieCode": "20250381",
+      "time": "20:05",
+      "showtime": "2026-01-09T11:05:00.000Z"
+    },
+    {
+      "title": "시수: 복수의 길",
+      "theater": "씨네큐 신도림",
+      "area": "구로구",
+      "screen": "09관",
+      "movieCode": "20250420",
+      "time": "18:05",
+      "showtime": "2026-01-09T09:05:00.000Z"
+    },
+    {
+      "title": "톰과 제리: 황금나침반 대소동",
+      "theater": "씨네큐 신도림",
+      "area": "구로구",
+      "screen": "09관",
+      "movieCode": "20258272",
+      "time": "10:10",
+      "showtime": "2026-01-09T01:10:00.000Z"
+    },
+    {
+      "title": "파더 마더 시스터 브라더",
+      "theater": "씨네큐 신도림",
+      "area": "구로구",
+      "screen": "09관",
+      "movieCode": "20259563",
+      "time": "15:45",
+      "showtime": "2026-01-09T06:45:00.000Z"
+    },
+    {
+      "title": "라스베가스를 떠나며",
+      "theater": "씨네큐 신도림",
+      "area": "구로구",
+      "screen": "10관",
+      "movieCode": "19960103",
+      "time": "10:40",
+      "showtime": "2026-01-09T01:40:00.000Z"
+    },
+    {
+      "title": "라스베가스를 떠나며",
+      "theater": "씨네큐 신도림",
+      "area": "구로구",
+      "screen": "10관",
+      "movieCode": "19960103",
+      "time": "21:45",
+      "showtime": "2026-01-09T12:45:00.000Z"
+    },
+    {
+      "title": "극장판 짱구는 못말려: 초화려! 작열하는 떡잎마을 댄서즈",
+      "theater": "씨네큐 신도림",
+      "area": "구로구",
+      "screen": "10관",
+      "movieCode": "20259383",
+      "time": "13:05",
+      "showtime": "2026-01-09T04:05:00.000Z"
+    },
+    {
+      "title": "슈퍼 해피 포에버",
+      "theater": "씨네큐 신도림",
+      "area": "구로구",
+      "screen": "10관",
+      "movieCode": "20259564",
+      "time": "19:40",
+      "showtime": "2026-01-09T10:40:00.000Z"
+    },
+    {
+      "title": "마이 선샤인",
+      "theater": "씨네큐 신도림",
+      "area": "구로구",
+      "screen": "10관",
+      "movieCode": "20259584",
+      "time": "15:20",
+      "showtime": "2026-01-09T06:20:00.000Z"
+    },
+    {
+      "title": "화양연화 특별판",
+      "theater": "씨네큐 신도림",
+      "area": "구로구",
+      "screen": "10관",
+      "movieCode": "20259893",
+      "time": "17:20",
+      "showtime": "2026-01-09T08:20:00.000Z"
+    },
+    {
+      "title": "하나와 앨리스",
+      "theater": "더숲 아트시네마",
+      "area": "노원구",
+      "screen": "01관",
+      "movieCode": "20040704",
+      "time": "19:50",
+      "showtime": "2026-01-09T10:50:00.000Z"
+    },
+    {
+      "title": "드라이브 마이 카",
+      "theater": "더숲 아트시네마",
+      "area": "노원구",
+      "screen": "01관",
+      "movieCode": "20218415",
+      "time": "16:20",
+      "showtime": "2026-01-09T07:20:00.000Z"
+    },
+    {
+      "title": "여행과 나날",
+      "theater": "더숲 아트시네마",
+      "area": "노원구",
+      "screen": "01관",
+      "movieCode": "20254054",
+      "time": "14:30",
+      "showtime": "2026-01-09T05:30:00.000Z"
+    },
+    {
+      "title": "고스트라이트",
+      "theater": "더숲 아트시네마",
+      "area": "노원구",
+      "screen": "01관",
+      "movieCode": "20255209",
+      "time": "10:20",
+      "showtime": "2026-01-09T01:20:00.000Z"
+    },
+    {
+      "title": "피렌체",
+      "theater": "더숲 아트시네마",
+      "area": "노원구",
+      "screen": "01관",
+      "movieCode": "20259250",
+      "time": "12:30",
+      "showtime": "2026-01-09T03:30:00.000Z"
+    },
+    {
+      "title": "소매치기",
+      "theater": "더숲 아트시네마",
+      "area": "노원구",
+      "screen": "02관",
+      "movieCode": "19598017",
+      "time": "18:30",
+      "showtime": "2026-01-09T09:30:00.000Z"
+    },
+    {
+      "title": "철도원",
+      "theater": "더숲 아트시네마",
+      "area": "노원구",
+      "screen": "02관",
+      "movieCode": "20000089",
+      "time": "14:20",
+      "showtime": "2026-01-09T05:20:00.000Z"
+    },
+    {
+      "title": "세계의 주인",
+      "theater": "더숲 아트시네마",
+      "area": "노원구",
+      "screen": "02관",
+      "movieCode": "20247429",
+      "time": "10:00",
+      "showtime": "2026-01-09T01:00:00.000Z"
+    },
+    {
+      "title": "어리석은 자는 누구인가",
+      "theater": "더숲 아트시네마",
+      "area": "노원구",
+      "screen": "02관",
+      "movieCode": "20250381",
+      "time": "20:00",
+      "showtime": "2026-01-09T11:00:00.000Z"
+    },
+    {
+      "title": "누벨바그",
+      "theater": "더숲 아트시네마",
+      "area": "노원구",
+      "screen": "02관",
+      "movieCode": "20259333",
+      "time": "16:30",
+      "showtime": "2026-01-09T07:30:00.000Z"
+    },
+    {
+      "title": "화양연화 특별판",
+      "theater": "더숲 아트시네마",
+      "area": "노원구",
+      "screen": "02관",
+      "movieCode": "20259893",
+      "time": "12:20",
+      "showtime": "2026-01-09T03:20:00.000Z"
+    },
+    {
+      "title": "어리석은 자는 누구인가",
+      "theater": "아트나인",
+      "area": "동작구",
+      "screen": "0관",
+      "movieCode": "20250381",
+      "time": "19:30",
+      "showtime": "2026-01-09T10:30:00.000Z"
+    },
+    {
+      "title": "여행과 나날",
+      "theater": "아트나인",
+      "area": "동작구",
+      "screen": "0관",
+      "movieCode": "20254054",
+      "time": "09:50",
+      "showtime": "2026-01-09T00:50:00.000Z"
+    },
+    {
+      "title": "여행과 나날",
+      "theater": "아트나인",
+      "area": "동작구",
+      "screen": "0관",
+      "movieCode": "20254054",
+      "time": "17:40",
+      "showtime": "2026-01-09T08:40:00.000Z"
+    },
+    {
+      "title": "피렌체",
+      "theater": "아트나인",
+      "area": "동작구",
+      "screen": "0관",
+      "movieCode": "20259250",
+      "time": "11:40",
+      "showtime": "2026-01-09T02:40:00.000Z"
+    },
+    {
+      "title": "마이 선샤인",
+      "theater": "아트나인",
+      "area": "동작구",
+      "screen": "0관",
+      "movieCode": "20259584",
+      "time": "15:50",
+      "showtime": "2026-01-09T06:50:00.000Z"
+    },
+    {
+      "title": "화양연화 특별판",
+      "theater": "아트나인",
+      "area": "동작구",
+      "screen": "0관",
+      "movieCode": "20259893",
+      "time": "13:40",
+      "showtime": "2026-01-09T04:40:00.000Z"
+    },
+    {
+      "title": "하나 그리고 둘",
+      "theater": "아트나인",
+      "area": "동작구",
+      "screen": "9관",
+      "movieCode": "20000059",
+      "time": "14:10",
+      "showtime": "2026-01-09T05:10:00.000Z"
+    },
+    {
+      "title": "류이치 사카모토: 오퍼스",
+      "theater": "아트나인",
+      "area": "동작구",
+      "screen": "9관",
+      "movieCode": "20236080",
+      "time": "19:00",
+      "showtime": "2026-01-09T10:00:00.000Z"
+    },
+    {
+      "title": "고백하지마",
+      "theater": "아트나인",
+      "area": "동작구",
+      "screen": "9관",
+      "movieCode": "20246110",
+      "time": "17:30",
+      "showtime": "2026-01-09T08:30:00.000Z"
+    },
+    {
+      "title": "누벨바그",
+      "theater": "아트나인",
+      "area": "동작구",
+      "screen": "9관",
+      "movieCode": "20259333",
+      "time": "12:00",
+      "showtime": "2026-01-09T03:00:00.000Z"
+    },
+    {
+      "title": "파더 마더 시스터 브라더",
+      "theater": "아트나인",
+      "area": "동작구",
+      "screen": "9관",
+      "movieCode": "20259563",
+      "time": "09:50",
+      "showtime": "2026-01-09T00:50:00.000Z"
+    },
+    {
+      "title": "화양연화 특별판",
+      "theater": "아트나인",
+      "area": "동작구",
+      "screen": "9관",
+      "movieCode": "20259893",
+      "time": "21:00",
+      "showtime": "2026-01-09T12:00:00.000Z"
+    },
+    {
+      "title": "러브레터",
+      "theater": "KT&G 상상마당 Cinema",
+      "area": "마포구",
+      "screen": "01관",
+      "movieCode": "20000067",
+      "time": "19:55",
+      "showtime": "2026-01-09T10:55:00.000Z"
+    },
+    {
+      "title": "여행과 나날",
+      "theater": "KT&G 상상마당 Cinema",
+      "area": "마포구",
+      "screen": "01관",
+      "movieCode": "20254054",
+      "time": "14:00",
+      "showtime": "2026-01-09T05:00:00.000Z"
+    },
+    {
+      "title": "파더 마더 시스터 브라더",
+      "theater": "KT&G 상상마당 Cinema",
+      "area": "마포구",
+      "screen": "01관",
+      "movieCode": "20259563",
+      "time": "15:45",
+      "showtime": "2026-01-09T06:45:00.000Z"
+    },
+    {
+      "title": "마이 선샤인",
+      "theater": "KT&G 상상마당 Cinema",
+      "area": "마포구",
+      "screen": "01관",
+      "movieCode": "20259584",
+      "time": "10:20",
+      "showtime": "2026-01-09T01:20:00.000Z"
+    },
+    {
+      "title": "화양연화 특별판",
+      "theater": "KT&G 상상마당 Cinema",
+      "area": "마포구",
+      "screen": "01관",
+      "movieCode": "20259893",
+      "time": "17:50",
+      "showtime": "2026-01-09T08:50:00.000Z"
+    },
+    {
+      "title": "굿 포츈",
+      "theater": "모노플렉스앳라이즈",
+      "area": "마포구",
+      "screen": "01관",
+      "movieCode": "20250115",
+      "time": "13:40",
+      "showtime": "2026-01-09T04:40:00.000Z"
+    },
+    {
+      "title": "굿 포츈",
+      "theater": "모노플렉스앳라이즈",
+      "area": "마포구",
+      "screen": "01관",
+      "movieCode": "20250115",
+      "time": "19:00",
+      "showtime": "2026-01-09T10:00:00.000Z"
+    },
+    {
+      "title": "바얌섬",
+      "theater": "인디스페이스",
+      "area": "마포구",
+      "screen": "01관",
+      "movieCode": "20234714",
+      "time": "10:40",
+      "showtime": "2026-01-09T01:40:00.000Z"
+    },
+    {
+      "title": "세계의 주인",
+      "theater": "인디스페이스",
+      "area": "마포구",
+      "screen": "01관",
+      "movieCode": "20247429",
+      "time": "19:00",
+      "showtime": "2026-01-09T10:00:00.000Z"
+    },
+    {
+      "title": "3학년 2학기",
+      "theater": "인디스페이스",
+      "area": "마포구",
+      "screen": "01관",
+      "movieCode": "20249072",
+      "time": "16:50",
+      "showtime": "2026-01-09T07:50:00.000Z"
+    },
+    {
+      "title": "맨홀",
+      "theater": "인디스페이스",
+      "area": "마포구",
+      "screen": "01관",
+      "movieCode": "20253249",
+      "time": "13:00",
+      "showtime": "2026-01-09T04:00:00.000Z"
+    },
+    {
+      "title": "종이 울리는 순간",
+      "theater": "인디스페이스",
+      "area": "마포구",
+      "screen": "01관",
+      "movieCode": "20254938",
+      "time": "15:10",
+      "showtime": "2026-01-09T06:10:00.000Z"
+    },
+    {
+      "title": "하나 그리고 둘",
+      "theater": "라이카시네마",
+      "area": "서대문구",
+      "screen": "S관",
+      "movieCode": "20000059",
+      "time": "09:30",
+      "showtime": "2026-01-09T00:30:00.000Z"
+    },
+    {
+      "title": "철도원",
+      "theater": "라이카시네마",
+      "area": "서대문구",
+      "screen": "S관",
+      "movieCode": "20000089",
+      "time": "16:50",
+      "showtime": "2026-01-09T07:50:00.000Z"
+    },
+    {
+      "title": "어리석은 자는 누구인가",
+      "theater": "라이카시네마",
+      "area": "서대문구",
+      "screen": "S관",
+      "movieCode": "20250381",
+      "time": "12:40",
+      "showtime": "2026-01-09T03:40:00.000Z"
+    },
+    {
+      "title": "사운드 오브 폴링",
+      "theater": "라이카시네마",
+      "area": "서대문구",
+      "screen": "S관",
+      "movieCode": "20259467",
+      "time": "19:00",
+      "showtime": "2026-01-09T10:00:00.000Z"
+    },
+    {
+      "title": "슈퍼 해피 포에버",
+      "theater": "라이카시네마",
+      "area": "서대문구",
+      "screen": "S관",
+      "movieCode": "20259564",
+      "time": "15:05",
+      "showtime": "2026-01-09T06:05:00.000Z"
+    },
+    {
+      "title": "마이 선샤인",
+      "theater": "라이카시네마",
+      "area": "서대문구",
+      "screen": "S관",
+      "movieCode": "20259584",
+      "time": "21:55",
+      "showtime": "2026-01-09T12:55:00.000Z"
+    },
+    {
+      "title": "여행과 나날",
+      "theater": "아트하우스모모",
+      "area": "서대문구",
+      "screen": "01관",
+      "movieCode": "20254054",
+      "time": "17:30",
+      "showtime": "2026-01-09T08:30:00.000Z"
+    },
+    {
+      "title": "파더 마더 시스터 브라더",
+      "theater": "아트하우스모모",
+      "area": "서대문구",
+      "screen": "01관",
+      "movieCode": "20259563",
+      "time": "11:00",
+      "showtime": "2026-01-09T02:00:00.000Z"
+    },
+    {
+      "title": "슈퍼 해피 포에버",
+      "theater": "아트하우스모모",
+      "area": "서대문구",
+      "screen": "01관",
+      "movieCode": "20259564",
+      "time": "15:20",
+      "showtime": "2026-01-09T06:20:00.000Z"
+    },
+    {
+      "title": "마이 선샤인",
+      "theater": "아트하우스모모",
+      "area": "서대문구",
+      "screen": "01관",
+      "movieCode": "20259584",
+      "time": "13:20",
+      "showtime": "2026-01-09T04:20:00.000Z"
+    },
+    {
+      "title": "마이 선샤인",
+      "theater": "아트하우스모모",
+      "area": "서대문구",
+      "screen": "01관",
+      "movieCode": "20259584",
+      "time": "19:30",
+      "showtime": "2026-01-09T10:30:00.000Z"
+    },
+    {
+      "title": "하나 그리고 둘",
+      "theater": "아트하우스모모",
+      "area": "서대문구",
+      "screen": "02관",
+      "movieCode": "20000059",
+      "time": "12:40",
+      "showtime": "2026-01-09T03:40:00.000Z"
+    },
+    {
+      "title": "석류의 빛깔",
+      "theater": "아트하우스모모",
+      "area": "서대문구",
+      "screen": "02관",
+      "movieCode": "20125316",
+      "time": "18:10",
+      "showtime": "2026-01-09T09:10:00.000Z"
+    },
+    {
+      "title": "세계의 주인",
+      "theater": "아트하우스모모",
+      "area": "서대문구",
+      "screen": "02관",
+      "movieCode": "20247429",
+      "time": "15:50",
+      "showtime": "2026-01-09T06:50:00.000Z"
+    },
+    {
+      "title": "누벨바그",
+      "theater": "아트하우스모모",
+      "area": "서대문구",
+      "screen": "02관",
+      "movieCode": "20259333",
+      "time": "10:30",
+      "showtime": "2026-01-09T01:30:00.000Z"
+    },
+    {
+      "title": "화양연화 특별판",
+      "theater": "아트하우스모모",
+      "area": "서대문구",
+      "screen": "02관",
+      "movieCode": "20259893",
+      "time": "20:00",
+      "showtime": "2026-01-09T11:00:00.000Z"
+    },
+    {
+      "title": "하나 그리고 둘",
+      "theater": "필름포럼",
+      "area": "서대문구",
+      "screen": "01관",
+      "movieCode": "20000059",
+      "time": "10:10",
+      "showtime": "2026-01-09T01:10:00.000Z"
+    },
+    {
+      "title": "석류의 빛깔",
+      "theater": "필름포럼",
+      "area": "서대문구",
+      "screen": "01관",
+      "movieCode": "20125316",
+      "time": "15:20",
+      "showtime": "2026-01-09T06:20:00.000Z"
+    },
+    {
+      "title": "드라이브 마이 카",
+      "theater": "필름포럼",
+      "area": "서대문구",
+      "screen": "01관",
+      "movieCode": "20218415",
+      "time": "16:50",
+      "showtime": "2026-01-09T07:50:00.000Z"
+    },
+    {
+      "title": "파더 마더 시스터 브라더",
+      "theater": "필름포럼",
+      "area": "서대문구",
+      "screen": "01관",
+      "movieCode": "20259563",
+      "time": "13:20",
+      "showtime": "2026-01-09T04:20:00.000Z"
+    },
+    {
+      "title": "화양연화 특별판",
+      "theater": "필름포럼",
+      "area": "서대문구",
+      "screen": "01관",
+      "movieCode": "20259893",
+      "time": "20:00",
+      "showtime": "2026-01-09T11:00:00.000Z"
+    },
+    {
+      "title": "행복한 라짜로",
+      "theater": "필름포럼",
+      "area": "서대문구",
+      "screen": "02관",
+      "movieCode": "20191801",
+      "time": "13:10",
+      "showtime": "2026-01-09T04:10:00.000Z"
+    },
+    {
+      "title": "세계의 주인",
+      "theater": "필름포럼",
+      "area": "서대문구",
+      "screen": "02관",
+      "movieCode": "20247429",
+      "time": "11:00",
+      "showtime": "2026-01-09T02:00:00.000Z"
+    },
+    {
+      "title": "부흥",
+      "theater": "필름포럼",
+      "area": "서대문구",
+      "screen": "02관",
+      "movieCode": "20250052",
+      "time": "15:30",
+      "showtime": "2026-01-09T06:30:00.000Z"
+    },
+    {
+      "title": "여행과 나날",
+      "theater": "필름포럼",
+      "area": "서대문구",
+      "screen": "02관",
+      "movieCode": "20254054",
+      "time": "17:20",
+      "showtime": "2026-01-09T08:20:00.000Z"
+    },
+    {
+      "title": "누벨바그",
+      "theater": "필름포럼",
+      "area": "서대문구",
+      "screen": "02관",
+      "movieCode": "20259333",
+      "time": "19:00",
+      "showtime": "2026-01-09T10:00:00.000Z"
+    },
+    {
+      "title": "고백하지마",
+      "theater": "아리랑시네센터(서울)",
+      "area": "성북구",
+      "screen": "아리랑인디웨이브",
+      "movieCode": "20246110",
+      "time": "15:30",
+      "showtime": "2026-01-09T06:30:00.000Z"
+    },
+    {
+      "title": "세계의 주인",
+      "theater": "아리랑시네센터(서울)",
+      "area": "성북구",
+      "screen": "아리랑인디웨이브",
+      "movieCode": "20247429",
+      "time": "13:10",
+      "showtime": "2026-01-09T04:10:00.000Z"
+    },
+    {
+      "title": "척의 일생",
+      "theater": "아리랑시네센터(서울)",
+      "area": "성북구",
+      "screen": "아리랑인디웨이브",
+      "movieCode": "20258621",
+      "time": "11:10",
+      "showtime": "2026-01-09T02:10:00.000Z"
+    },
+    {
+      "title": "누벨바그",
+      "theater": "아리랑시네센터(서울)",
+      "area": "성북구",
+      "screen": "아리랑인디웨이브",
+      "movieCode": "20259333",
+      "time": "17:35",
+      "showtime": "2026-01-09T08:35:00.000Z"
+    },
+    {
+      "title": "파더 마더 시스터 브라더",
+      "theater": "아리랑시네센터(서울)",
+      "area": "성북구",
+      "screen": "아리랑인디웨이브",
+      "movieCode": "20259563",
+      "time": "19:30",
+      "showtime": "2026-01-09T10:30:00.000Z"
+    },
+    {
+      "title": "제3의 사나이",
+      "theater": "낭만극장",
+      "area": "종로구",
+      "screen": "01관",
+      "movieCode": "20080983",
+      "time": "10:20",
+      "showtime": "2026-01-09T01:20:00.000Z"
+    },
+    {
+      "title": "제3의 사나이",
+      "theater": "낭만극장",
+      "area": "종로구",
+      "screen": "01관",
+      "movieCode": "20080983",
+      "time": "12:20",
+      "showtime": "2026-01-09T03:20:00.000Z"
+    },
+    {
+      "title": "제3의 사나이",
+      "theater": "낭만극장",
+      "area": "종로구",
+      "screen": "01관",
+      "movieCode": "20080983",
+      "time": "14:20",
+      "showtime": "2026-01-09T05:20:00.000Z"
+    },
+    {
+      "title": "하나 그리고 둘",
+      "theater": "씨네큐브광화문(서울)",
+      "area": "종로구",
+      "screen": "01관",
+      "movieCode": "20000059",
+      "time": "19:00",
+      "showtime": "2026-01-09T10:00:00.000Z"
+    },
+    {
+      "title": "여행과 나날",
+      "theater": "씨네큐브광화문(서울)",
+      "area": "종로구",
+      "screen": "01관",
+      "movieCode": "20254054",
+      "time": "13:20",
+      "showtime": "2026-01-09T04:20:00.000Z"
+    },
+    {
+      "title": "파더 마더 시스터 브라더",
+      "theater": "씨네큐브광화문(서울)",
+      "area": "종로구",
+      "screen": "01관",
+      "movieCode": "20259563",
+      "time": "11:15",
+      "showtime": "2026-01-09T02:15:00.000Z"
+    },
+    {
+      "title": "파더 마더 시스터 브라더",
+      "theater": "씨네큐브광화문(서울)",
+      "area": "종로구",
+      "screen": "01관",
+      "movieCode": "20259563",
+      "time": "16:50",
+      "showtime": "2026-01-09T07:50:00.000Z"
+    },
+    {
+      "title": "마이 선샤인",
+      "theater": "씨네큐브광화문(서울)",
+      "area": "종로구",
+      "screen": "01관",
+      "movieCode": "20259584",
+      "time": "09:30",
+      "showtime": "2026-01-09T00:30:00.000Z"
+    },
+    {
+      "title": "마이 선샤인",
+      "theater": "씨네큐브광화문(서울)",
+      "area": "종로구",
+      "screen": "01관",
+      "movieCode": "20259584",
+      "time": "15:05",
+      "showtime": "2026-01-09T06:05:00.000Z"
+    },
+    {
+      "title": "세계의 주인",
+      "theater": "씨네큐브광화문(서울)",
+      "area": "종로구",
+      "screen": "02관",
+      "movieCode": "20247429",
+      "time": "09:50",
+      "showtime": "2026-01-09T00:50:00.000Z"
+    },
+    {
+      "title": "어리석은 자는 누구인가",
+      "theater": "씨네큐브광화문(서울)",
+      "area": "종로구",
+      "screen": "02관",
+      "movieCode": "20250381",
+      "time": "20:00",
+      "showtime": "2026-01-09T11:00:00.000Z"
+    },
+    {
+      "title": "파리, 밤의 여행자들",
+      "theater": "씨네큐브광화문(서울)",
+      "area": "종로구",
+      "screen": "02관",
+      "movieCode": "20258951",
+      "time": "15:55",
+      "showtime": "2026-01-09T06:55:00.000Z"
+    },
+    {
+      "title": "누벨바그",
+      "theater": "씨네큐브광화문(서울)",
+      "area": "종로구",
+      "screen": "02관",
+      "movieCode": "20259333",
+      "time": "12:05",
+      "showtime": "2026-01-09T03:05:00.000Z"
+    },
+    {
+      "title": "누벨바그",
+      "theater": "씨네큐브광화문(서울)",
+      "area": "종로구",
+      "screen": "02관",
+      "movieCode": "20259333",
+      "time": "18:00",
+      "showtime": "2026-01-09T09:00:00.000Z"
+    },
+    {
+      "title": "슈퍼 해피 포에버",
+      "theater": "씨네큐브광화문(서울)",
+      "area": "종로구",
+      "screen": "02관",
+      "movieCode": "20259564",
+      "time": "14:05",
+      "showtime": "2026-01-09T05:05:00.000Z"
+    },
+    {
+      "title": "하나 그리고 둘",
+      "theater": "에무 시네마 앤 카페",
+      "area": "종로구",
+      "screen": "01관",
+      "movieCode": "20000059",
+      "time": "19:50",
+      "showtime": "2026-01-09T10:50:00.000Z"
+    },
+    {
+      "title": "해피엔드",
+      "theater": "에무 시네마 앤 카페",
+      "area": "종로구",
+      "screen": "01관",
+      "movieCode": "20246318",
+      "time": "17:40",
+      "showtime": "2026-01-09T08:40:00.000Z"
+    },
+    {
+      "title": "여행과 나날",
+      "theater": "에무 시네마 앤 카페",
+      "area": "종로구",
+      "screen": "01관",
+      "movieCode": "20254054",
+      "time": "11:50",
+      "showtime": "2026-01-09T02:50:00.000Z"
+    },
+    {
+      "title": "척의 일생",
+      "theater": "에무 시네마 앤 카페",
+      "area": "종로구",
+      "screen": "01관",
+      "movieCode": "20258621",
+      "time": "09:50",
+      "showtime": "2026-01-09T00:50:00.000Z"
+    },
+    {
+      "title": "파더 마더 시스터 브라더",
+      "theater": "에무 시네마 앤 카페",
+      "area": "종로구",
+      "screen": "01관",
+      "movieCode": "20259563",
+      "time": "13:30",
+      "showtime": "2026-01-09T04:30:00.000Z"
+    },
+    {
+      "title": "화양연화 특별판",
+      "theater": "에무 시네마 앤 카페",
+      "area": "종로구",
+      "screen": "01관",
+      "movieCode": "20259893",
+      "time": "15:35",
+      "showtime": "2026-01-09T06:35:00.000Z"
+    },
+    {
+      "title": "네 멋대로 해라",
+      "theater": "에무 시네마 앤 카페",
+      "area": "종로구",
+      "screen": "02관",
+      "movieCode": "19600042",
+      "time": "19:30",
+      "showtime": "2026-01-09T10:30:00.000Z"
+    },
+    {
+      "title": "하나 그리고 둘",
+      "theater": "에무 시네마 앤 카페",
+      "area": "종로구",
+      "screen": "02관",
+      "movieCode": "20000059",
+      "time": "14:25",
+      "showtime": "2026-01-09T05:25:00.000Z"
+    },
+    {
+      "title": "우리가 빛이라 상상하는 모든 것",
+      "theater": "에무 시네마 앤 카페",
+      "area": "종로구",
+      "screen": "02관",
+      "movieCode": "20246298",
+      "time": "09:50",
+      "showtime": "2026-01-09T00:50:00.000Z"
+    },
+    {
+      "title": "어리석은 자는 누구인가",
+      "theater": "에무 시네마 앤 카페",
+      "area": "종로구",
+      "screen": "02관",
+      "movieCode": "20250381",
+      "time": "12:00",
+      "showtime": "2026-01-09T03:00:00.000Z"
+    },
+    {
+      "title": "누벨바그",
+      "theater": "에무 시네마 앤 카페",
+      "area": "종로구",
+      "screen": "02관",
+      "movieCode": "20259333",
+      "time": "17:30",
+      "showtime": "2026-01-09T08:30:00.000Z"
+    },
+    {
+      "title": "화양연화 특별판",
+      "theater": "에무 시네마 앤 카페",
+      "area": "종로구",
+      "screen": "02관",
+      "movieCode": "20259893",
+      "time": "21:15",
+      "showtime": "2026-01-09T12:15:00.000Z"
+    },
+    {
+      "title": "레드 리버",
+      "theater": "허리우드클래식",
+      "area": "종로구",
+      "screen": "01관",
+      "movieCode": "19488009",
+      "time": "10:30",
+      "showtime": "2026-01-09T01:30:00.000Z"
+    },
+    {
+      "title": "레드 리버",
+      "theater": "허리우드클래식",
+      "area": "종로구",
+      "screen": "01관",
+      "movieCode": "19488009",
+      "time": "13:00",
+      "showtime": "2026-01-09T04:00:00.000Z"
+    },
+    {
+      "title": "레드 리버",
+      "theater": "허리우드클래식",
+      "area": "종로구",
+      "screen": "01관",
+      "movieCode": "19488009",
+      "time": "15:30",
+      "showtime": "2026-01-09T06:30:00.000Z"
+    },
+    {
+      "title": "마지막 숙제",
+      "theater": "허리우드클래식",
+      "area": "종로구",
+      "screen": "01관",
+      "movieCode": "20256101",
+      "time": "17:55",
+      "showtime": "2026-01-09T08:55:00.000Z"
+    },
+    {
+      "title": "수집가",
+      "theater": "서울아트시네마",
+      "area": "중구",
+      "screen": "01관",
+      "movieCode": "20171615",
+      "time": "13:30",
+      "showtime": "2026-01-09T04:30:00.000Z"
+    },
+    {
+      "title": "임사",
+      "theater": "서울아트시네마",
+      "area": "중구",
+      "screen": "01관",
+      "movieCode": "20250662",
+      "time": "15:30",
+      "showtime": "2026-01-09T06:30:00.000Z"
+    },
+    {
+      "title": "라스베가스를 떠나며",
+      "theater": "CGV 용산아이파크몰",
+      "area": "용산구",
+      "screen": "19관(아트하우스)",
+      "movieCode": "19960103",
+      "time": "21:30",
+      "showtime": "2026-01-09T12:30:00.000Z"
+    },
+    {
+      "title": "하나 그리고 둘",
+      "theater": "CGV 용산아이파크몰",
+      "area": "용산구",
+      "screen": "19관(아트하우스)",
+      "movieCode": "20000059",
+      "time": "06:40",
+      "showtime": "2026-01-08T21:40:00.000Z"
+    },
+    {
+      "title": "미스테리 트레인",
+      "theater": "CGV 용산아이파크몰",
+      "area": "용산구",
+      "screen": "19관(아트하우스)",
+      "movieCode": "20157234",
+      "time": "26:15",
+      "showtime": "2026-01-09T17:15:00.000Z"
+    },
+    {
+      "title": "어리석은 자는 누구인가",
+      "theater": "CGV 용산아이파크몰",
+      "area": "용산구",
+      "screen": "19관(아트하우스)",
+      "movieCode": "20250381",
+      "time": "14:30",
+      "showtime": "2026-01-09T05:30:00.000Z"
+    },
+    {
+      "title": "피렌체",
+      "theater": "CGV 용산아이파크몰",
+      "area": "용산구",
+      "screen": "19관(아트하우스)",
+      "movieCode": "20259250",
+      "time": "17:10",
+      "showtime": "2026-01-09T08:10:00.000Z"
+    },
+    {
+      "title": "파더 마더 시스터 브라더",
+      "theater": "CGV 용산아이파크몰",
+      "area": "용산구",
+      "screen": "19관(아트하우스)",
+      "movieCode": "20259563",
+      "time": "23:55",
+      "showtime": "2026-01-09T14:55:00.000Z"
+    },
+    {
+      "title": "슈퍼 해피 포에버",
+      "theater": "CGV 용산아이파크몰",
+      "area": "용산구",
+      "screen": "19관(아트하우스)",
+      "movieCode": "20259564",
+      "time": "10:05",
+      "showtime": "2026-01-09T01:05:00.000Z"
+    },
+    {
+      "title": "마이 선샤인",
+      "theater": "CGV 용산아이파크몰",
+      "area": "용산구",
+      "screen": "19관(아트하우스)",
+      "movieCode": "20259584",
+      "time": "19:25",
+      "showtime": "2026-01-09T10:25:00.000Z"
+    },
+    {
+      "title": "화양연화 특별판",
+      "theater": "CGV 용산아이파크몰",
+      "area": "용산구",
+      "screen": "19관(아트하우스)",
+      "movieCode": "20259893",
+      "time": "12:10",
+      "showtime": "2026-01-09T03:10:00.000Z"
+    },
+    {
+      "title": "라스베가스를 떠나며",
+      "theater": "CGV 압구정",
+      "area": "강남구",
+      "screen": "아트하우스 ART1관",
+      "movieCode": "19960103",
+      "time": "09:40",
+      "showtime": "2026-01-09T00:40:00.000Z"
+    },
+    {
+      "title": "고백하지마",
+      "theater": "CGV 압구정",
+      "area": "강남구",
+      "screen": "아트하우스 ART1관",
+      "movieCode": "20246110",
+      "time": "19:30",
+      "showtime": "2026-01-09T10:30:00.000Z"
+    },
+    {
+      "title": "어리석은 자는 누구인가",
+      "theater": "CGV 압구정",
+      "area": "강남구",
+      "screen": "아트하우스 ART1관",
+      "movieCode": "20250381",
+      "time": "16:50",
+      "showtime": "2026-01-09T07:50:00.000Z"
+    },
+    {
+      "title": "피렌체",
+      "theater": "CGV 압구정",
+      "area": "강남구",
+      "screen": "아트하우스 ART1관",
+      "movieCode": "20259250",
+      "time": "12:10",
+      "showtime": "2026-01-09T03:10:00.000Z"
+    },
+    {
+      "title": "파더 마더 시스터 브라더",
+      "theater": "CGV 압구정",
+      "area": "강남구",
+      "screen": "아트하우스 ART1관",
+      "movieCode": "20259563",
+      "time": "14:30",
+      "showtime": "2026-01-09T05:30:00.000Z"
+    },
+    {
+      "title": "파더 마더 시스터 브라더",
+      "theater": "CGV 압구정",
+      "area": "강남구",
+      "screen": "아트하우스 ART1관",
+      "movieCode": "20259563",
+      "time": "22:40",
+      "showtime": "2026-01-09T13:40:00.000Z"
+    },
+    {
+      "title": "하나 그리고 둘",
+      "theater": "CGV 압구정",
+      "area": "강남구",
+      "screen": "아트하우스 ART2관",
+      "movieCode": "20000059",
+      "time": "14:20",
+      "showtime": "2026-01-09T05:20:00.000Z"
+    },
+    {
+      "title": "국보",
+      "theater": "CGV 압구정",
+      "area": "강남구",
+      "screen": "아트하우스 ART2관",
+      "movieCode": "20257161",
+      "time": "20:10",
+      "showtime": "2026-01-09T11:10:00.000Z"
+    },
+    {
+      "title": "척의 일생",
+      "theater": "CGV 압구정",
+      "area": "강남구",
+      "screen": "아트하우스 ART2관",
+      "movieCode": "20258621",
+      "time": "09:40",
+      "showtime": "2026-01-09T00:40:00.000Z"
+    },
+    {
+      "title": "마이 선샤인",
+      "theater": "CGV 압구정",
+      "area": "강남구",
+      "screen": "아트하우스 ART2관",
+      "movieCode": "20259584",
+      "time": "12:10",
+      "showtime": "2026-01-09T03:10:00.000Z"
+    },
+    {
+      "title": "화양연화 특별판",
+      "theater": "CGV 압구정",
+      "area": "강남구",
+      "screen": "아트하우스 ART2관",
+      "movieCode": "20259893",
+      "time": "17:45",
+      "showtime": "2026-01-09T08:45:00.000Z"
+    },
+    {
+      "title": "라스베가스를 떠나며",
+      "theater": "CGV 신촌아트레온",
+      "area": "서대문구",
+      "screen": "10관 [아트하우스]",
+      "movieCode": "19960103",
+      "time": "18:30",
+      "showtime": "2026-01-09T09:30:00.000Z"
+    },
+    {
+      "title": "하나 그리고 둘",
+      "theater": "CGV 신촌아트레온",
+      "area": "서대문구",
+      "screen": "10관 [아트하우스]",
+      "movieCode": "20000059",
+      "time": "12:30",
+      "showtime": "2026-01-09T03:30:00.000Z"
+    },
+    {
+      "title": "척의 일생",
+      "theater": "CGV 신촌아트레온",
+      "area": "서대문구",
+      "screen": "10관 [아트하우스]",
+      "movieCode": "20258621",
+      "time": "16:00",
+      "showtime": "2026-01-09T07:00:00.000Z"
+    },
+    {
+      "title": "피렌체",
+      "theater": "CGV 신촌아트레온",
+      "area": "서대문구",
+      "screen": "10관 [아트하우스]",
+      "movieCode": "20259250",
+      "time": "23:40",
+      "showtime": "2026-01-09T14:40:00.000Z"
+    },
+    {
+      "title": "마이 선샤인",
+      "theater": "CGV 신촌아트레온",
+      "area": "서대문구",
+      "screen": "10관 [아트하우스]",
+      "movieCode": "20259584",
+      "time": "10:20",
+      "showtime": "2026-01-09T01:20:00.000Z"
+    },
+    {
+      "title": "화양연화 특별판",
+      "theater": "CGV 신촌아트레온",
+      "area": "서대문구",
+      "screen": "10관 [아트하우스]",
+      "movieCode": "20259893",
+      "time": "21:10",
+      "showtime": "2026-01-09T12:10:00.000Z"
+    },
+    {
+      "title": "하나 그리고 둘",
+      "theater": "CGV 대학로",
+      "area": "종로구",
+      "screen": "05관",
+      "movieCode": "20000059",
+      "time": "21:00",
+      "showtime": "2026-01-09T12:00:00.000Z"
+    },
+    {
+      "title": "어리석은 자는 누구인가",
+      "theater": "CGV 대학로",
+      "area": "종로구",
+      "screen": "05관",
+      "movieCode": "20250381",
+      "time": "13:40",
+      "showtime": "2026-01-09T04:40:00.000Z"
+    },
+    {
+      "title": "척의 일생",
+      "theater": "CGV 대학로",
+      "area": "종로구",
+      "screen": "05관",
+      "movieCode": "20258621",
+      "time": "18:40",
+      "showtime": "2026-01-09T09:40:00.000Z"
+    },
+    {
+      "title": "마이 선샤인",
+      "theater": "CGV 대학로",
+      "area": "종로구",
+      "screen": "05관",
+      "movieCode": "20259584",
+      "time": "16:30",
+      "showtime": "2026-01-09T07:30:00.000Z"
+    },
+    {
+      "title": "화양연화 특별판",
+      "theater": "CGV 대학로",
+      "area": "종로구",
+      "screen": "05관",
+      "movieCode": "20259893",
+      "time": "11:20",
+      "showtime": "2026-01-09T02:20:00.000Z"
+    },
+    {
+      "title": "라스베가스를 떠나며",
+      "theater": "CGV 강변",
+      "area": "광진구",
+      "screen": "04관(아트하우스)",
+      "movieCode": "19960103",
+      "time": "21:20",
+      "showtime": "2026-01-09T12:20:00.000Z"
+    },
+    {
+      "title": "어리석은 자는 누구인가",
+      "theater": "CGV 강변",
+      "area": "광진구",
+      "screen": "04관(아트하우스)",
+      "movieCode": "20250381",
+      "time": "16:20",
+      "showtime": "2026-01-09T07:20:00.000Z"
+    },
+    {
+      "title": "여행과 나날",
+      "theater": "CGV 강변",
+      "area": "광진구",
+      "screen": "04관(아트하우스)",
+      "movieCode": "20254054",
+      "time": "09:40",
+      "showtime": "2026-01-09T00:40:00.000Z"
+    },
+    {
+      "title": "척의 일생",
+      "theater": "CGV 강변",
+      "area": "광진구",
+      "screen": "04관(아트하우스)",
+      "movieCode": "20258621",
+      "time": "13:55",
+      "showtime": "2026-01-09T04:55:00.000Z"
+    },
+    {
+      "title": "피렌체",
+      "theater": "CGV 강변",
+      "area": "광진구",
+      "screen": "04관(아트하우스)",
+      "movieCode": "20259250",
+      "time": "11:40",
+      "showtime": "2026-01-09T02:40:00.000Z"
+    },
+    {
+      "title": "화양연화 특별판",
+      "theater": "CGV 강변",
+      "area": "광진구",
+      "screen": "04관(아트하우스)",
+      "movieCode": "20259893",
+      "time": "19:00",
+      "showtime": "2026-01-09T10:00:00.000Z"
+    },
+    {
+      "title": "라스베가스를 떠나며",
+      "theater": "CGV 여의도",
+      "area": "영등포구",
+      "screen": "05관 [아트하우스/Sonictier]",
+      "movieCode": "19960103",
+      "time": "21:15",
+      "showtime": "2026-01-09T12:15:00.000Z"
+    },
+    {
+      "title": "어리석은 자는 누구인가",
+      "theater": "CGV 여의도",
+      "area": "영등포구",
+      "screen": "05관 [아트하우스/Sonictier]",
+      "movieCode": "20250381",
+      "time": "16:15",
+      "showtime": "2026-01-09T07:15:00.000Z"
+    },
+    {
+      "title": "척의 일생",
+      "theater": "CGV 여의도",
+      "area": "영등포구",
+      "screen": "05관 [아트하우스/Sonictier]",
+      "movieCode": "20258621",
+      "time": "09:30",
+      "showtime": "2026-01-09T00:30:00.000Z"
+    },
+    {
+      "title": "피렌체",
+      "theater": "CGV 여의도",
+      "area": "영등포구",
+      "screen": "05관 [아트하우스/Sonictier]",
+      "movieCode": "20259250",
+      "time": "14:00",
+      "showtime": "2026-01-09T05:00:00.000Z"
+    },
+    {
+      "title": "파더 마더 시스터 브라더",
+      "theater": "CGV 여의도",
+      "area": "영등포구",
+      "screen": "05관 [아트하우스/Sonictier]",
+      "movieCode": "20259563",
+      "time": "23:40",
+      "showtime": "2026-01-09T14:40:00.000Z"
+    },
+    {
+      "title": "마이 선샤인",
+      "theater": "CGV 여의도",
+      "area": "영등포구",
+      "screen": "05관 [아트하우스/Sonictier]",
+      "movieCode": "20259584",
+      "time": "11:55",
+      "showtime": "2026-01-09T02:55:00.000Z"
+    },
+    {
+      "title": "화양연화 특별판",
+      "theater": "CGV 여의도",
+      "area": "영등포구",
+      "screen": "05관 [아트하우스/Sonictier]",
+      "movieCode": "20259893",
+      "time": "18:55",
+      "showtime": "2026-01-09T09:55:00.000Z"
+    },
+    {
+      "title": "라스베가스를 떠나며",
+      "theater": "롯데시네마 노원",
+      "area": "노원구",
+      "screen": "06관(아르떼)",
+      "movieCode": "19960103",
+      "time": "15:20",
+      "showtime": "2026-01-09T06:20:00.000Z"
+    },
+    {
+      "title": "하나 그리고 둘",
+      "theater": "롯데시네마 노원",
+      "area": "노원구",
+      "screen": "06관(아르떼)",
+      "movieCode": "20000059",
+      "time": "09:45",
+      "showtime": "2026-01-09T00:45:00.000Z"
+    },
+    {
+      "title": "어리석은 자는 누구인가",
+      "theater": "롯데시네마 노원",
+      "area": "노원구",
+      "screen": "06관(아르떼)",
+      "movieCode": "20250381",
+      "time": "22:25",
+      "showtime": "2026-01-09T13:25:00.000Z"
+    },
+    {
+      "title": "척의 일생",
+      "theater": "롯데시네마 노원",
+      "area": "노원구",
+      "screen": "06관(아르떼)",
+      "movieCode": "20258621",
+      "time": "20:05",
+      "showtime": "2026-01-09T11:05:00.000Z"
+    },
+    {
+      "title": "파더 마더 시스터 브라더",
+      "theater": "롯데시네마 노원",
+      "area": "노원구",
+      "screen": "06관(아르떼)",
+      "movieCode": "20259563",
+      "time": "13:05",
+      "showtime": "2026-01-09T04:05:00.000Z"
+    },
+    {
+      "title": "파더 마더 시스터 브라더",
+      "theater": "롯데시네마 노원",
+      "area": "노원구",
+      "screen": "06관(아르떼)",
+      "movieCode": "20259563",
+      "time": "17:45",
+      "showtime": "2026-01-09T08:45:00.000Z"
+    },
+    {
+      "title": "여행과 나날",
+      "theater": "롯데시네마 신도림",
+      "area": "구로구",
+      "screen": "04관",
+      "movieCode": "20254054",
+      "time": "13:00",
+      "showtime": "2026-01-09T04:00:00.000Z"
+    },
+    {
+      "title": "여행과 나날",
+      "theater": "롯데시네마 신도림",
+      "area": "구로구",
+      "screen": "04관",
+      "movieCode": "20254054",
+      "time": "17:30",
+      "showtime": "2026-01-09T08:30:00.000Z"
+    },
+    {
+      "title": "마이 선샤인",
+      "theater": "롯데시네마 신도림",
+      "area": "구로구",
+      "screen": "04관",
+      "movieCode": "20259584",
+      "time": "10:50",
+      "showtime": "2026-01-09T01:50:00.000Z"
+    },
+    {
+      "title": "화양연화 특별판",
+      "theater": "롯데시네마 신도림",
+      "area": "구로구",
+      "screen": "04관",
+      "movieCode": "20259893",
+      "time": "15:10",
+      "showtime": "2026-01-09T06:10:00.000Z"
+    }
+  ],
+  "timestamp": 1767859275879,
+  "expiresAt": 1767880875879
+}
