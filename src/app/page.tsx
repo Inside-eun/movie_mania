@@ -497,7 +497,7 @@ export default function Home() {
             <br className="sm:hidden" /> 상영시간표를 조회해주세요.
           </div>
             <div>
-              영화 보러 서울 횡당하는 여행자를 위한 사이트
+              영화를 위해 도시를 떠도는 여행자를 위한 사이트
           </div>
 
         </div>

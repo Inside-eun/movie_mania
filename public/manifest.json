@@ -1,7 +1,7 @@
 {
-  "name": "씨케쥴 - 서울 예술영화관 상영시간표",
-  "short_name": "씨케쥴",
-  "description": "서울시 예술영화관과 예술전용관의 상영정보를 한눈에",
+  "name": "영화방랑자 - 서울 예술영화관 상영시간표",
+  "short_name": "영화방랑자",
+  "description": "영화를 위해 도시를 떠도는 여행자를 위한 사이트",
   "start_url": "/",
   "display": "standalone",
   "background_color": "#ffffff",
