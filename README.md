@@ -1,53 +1,71 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# 예술영화 상영시간표
 
-## Getting Started
+전국 예술영화관의 상영 정보를 한곳에서 확인할 수 있는 웹 서비스.
 
-First, run the development server:
+## 주요 기능
+
+- 전국 예술영화관 상영시간표 통합 조회
+- 박스오피스 상위 5위 자동 필터링 (예술영화 특화)
+- 영화/극장별 멀티 필터링
+- 위시리스트 (로컬 저장)
+- 다크모드 지원
+- PWA 지원 (모바일 앱처럼 설치 가능)
+
+## 기술 스택
+
+- **Frontend**: Next.js 14, React 18, TypeScript
+- **Styling**: Tailwind CSS
+- **API**: KOBIS (영화진흥위원회), KMDB (한국영화데이터베이스)
+- **Deploy**: Vercel (서버리스)
+- **Cache**: 메모리 + 파일 이중 캐시 시스템
+
+## 시작하기
+
+### 환경 변수 설정
+
+`.env.local` 파일 생성:
 
 ```bash
+KOBIS_API_KEY=your_kobis_api_key
+KMDB_API_KEY=your_kmdb_api_key
+```
+
+API 키 발급:
+- KOBIS: https://www.kobis.or.kr/kobisopenapi
+- KMDB: https://www.kmdb.or.kr/info/api/apiDetail/6
+
+### 실행
+
+```bash
+npm install
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+http://localhost:3000 에서 확인.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## 프로젝트 구조
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
-
-## Learn More
-
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-이 앱은 Vercel 서버리스 환경에 최적화되어 있습니다.
-
-### 필수 환경 변수 설정
-
-Vercel 대시보드 > Settings > Environment Variables에서 다음 환경 변수를 설정하세요:
-
-```bash
-KOBIS_API_KEY=your_kobis_api_key_here
-CACHE_TTL_HOURS=6
-NEXT_PUBLIC_APP_URL=https://your-domain.com
+```
+src/
+├── app/
+│   ├── api/
+│   │   ├── schedules/    # 상영시간표 조회 API
+│   │   ├── movie-info/   # 영화 상세정보 API
+│   │   └── cache/        # 캐시 관리 API
+│   └── page.tsx          # 메인 페이지
+├── components/           # UI 컴포넌트
+├── services/
+│   ├── scheduleService.js  # 스케줄 조회 서비스
+│   └── cacheService.ts     # 캐시 서비스
+├── data/
+│   └── artCinemas.js     # 예술영화관 목록
+└── types/                # TypeScript 타입 정의
 ```
 
-### 주요 최적화 사항
+## 배포
 
-- ✅ Vercel 환경 감지 및 자동 최적화
-- ✅ 서버리스 환경에 맞춘 파일 캐시 시스템
-- ✅ Puppeteer Vercel 호환성 설정
-- ✅ 타임아웃 및 재시도 로직 최적화
+Vercel에 배포 시 환경 변수 설정 필요. 자세한 내용은 [DEPLOYMENT.md](./DEPLOYMENT.md) 참고.
 
-자세한 배포 가이드는 [DEPLOYMENT.md](./DEPLOYMENT.md)를 참고하세요.
+## 라이선스
+
+MIT
