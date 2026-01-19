@@ -1,4 +1,4 @@
-import { ScheduleService } from '../services/scheduleService.js';
+import { ScheduleService } from '../services/scheduleService';
 
 async function testArtCinemas() {
   const scheduleService = new ScheduleService();

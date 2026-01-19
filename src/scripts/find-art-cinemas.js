@@ -1,5 +1,5 @@
-import { ScheduleService } from '../services/scheduleService.js';
-import { multiplexChains, isArtCinema } from '../data/artCinemas.js';
+import { ScheduleService } from '../services/scheduleService';
+import { multiplexChains, isArtCinema } from '../data/artCinemas';
 
 // 서울시 주요 구 코드 (KOBIS 지역코드)
 const seoulDistricts = [

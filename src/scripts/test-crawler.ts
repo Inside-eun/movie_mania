@@ -1,5 +1,5 @@
-import { ScheduleService } from '../services/scheduleService.js';
-import { Movie } from '../types/index.js';
+import { ScheduleService } from '../services/scheduleService';
+import { Movie } from '../types';
 
 async function testScheduleService() {
   const scheduleService = new ScheduleService();

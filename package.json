@@ -7,7 +7,7 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "test:crawler": "node src/scripts/test-crawler.js",
+    "test:crawler": "npx tsx src/scripts/test-crawler.ts",
     "test:art": "node src/scripts/test-art-cinemas.js",
     "test:kmdb": "node src/scripts/test-kmdb-integration.js",
     "test:kmdb-only": "node src/scripts/test-kmdb-only.js",

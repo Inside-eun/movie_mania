@@ -1,7 +1,8 @@
 import axios from "axios";
 import * as cheerio from "cheerio";
-import { artCinemas } from "../data/artCinemas.js";
-import { cacheService } from "./cacheService.js";
+import { artCinemas } from "../data/artCinemas";
+import { cacheService } from "./cacheService";
+import { checkScreenFilter } from "../data/theaterScreenFilters";
 
 // 네트워크 설정
 const isVercel = process.env.VERCEL === "1";
@@ -437,45 +438,10 @@ export class ScheduleService {
                   continue;
                 }
 
-                // CGV 용산아이파크몰에서만 19관(아트하우스) 상영관 필터링
-                if (theater.cdNm === "CGV 용산아이파크몰" && !item.scrnNm.includes("19관")) {
-                  console.log(`🚫 [제외됨] CGV 용산아이파크몰 상영관 필터: ${item.scrnNm}`);
-                  continue;
-                }
-
-                // CGV 대학로에서만 5관 상영관 필터링
-                if (theater.cdNm === "CGV 대학로" && !item.scrnNm.includes("5관")) {
-                  console.log(`🚫 [제외됨] CGV 대학로 상영관 필터: ${item.scrnNm}`);
-                  continue;
-                }
-
-                // CGV 강변에서만 4관 상영관 필터링
-                if (theater.cdNm === "CGV 강변" && !item.scrnNm.includes("4관")) {
-                  console.log(`🚫 [제외됨] CGV 강변 상영관 필터: ${item.scrnNm}`);
-                  continue;
-                }
-
-                // CGV 신촌아트레온에서만 10관 상영관 필터링
-                if (theater.cdNm === "CGV 신촌아트레온" && !item.scrnNm.includes("10관")) {
-                  console.log(`🚫 [제외됨] CGV 신촌아트레온 상영관 필터: ${item.scrnNm}`);
-                  continue;
-                }
-
-                // CGV 여의도에서만 5관 상영관 필터링
-                if (theater.cdNm === "CGV 여의도" && !item.scrnNm.includes("5관")) {
-                  console.log(`🚫 [제외됨] CGV 여의도 상영관 필터: ${item.scrnNm}`);
-                  continue;
-                }
-
-                // 롯데시네마 노원에서만 6관 상영관 필터링
-                if (theater.cdNm === "롯데시네마 노원" && !item.scrnNm.includes("6관")) {
-                  console.log(`🚫 [제외됨] 롯데시네마 노원 상영관 필터: ${item.scrnNm}`);
-                  continue;
-                }
-
-                // 롯데시네마 신도림에서만 4관 상영관 필터링
-                if (theater.cdNm === "롯데시네마 신도림" && !item.scrnNm.includes("4관")) {
-                  console.log(`🚫 [제외됨] 롯데시네마 신도림 상영관 필터: ${item.scrnNm}`);
+                // 상영관 필터 체크
+                const screenCheck = checkScreenFilter(theater.cdNm, item.scrnNm);
+                if (!screenCheck.pass) {
+                  console.log(`🚫 [제외됨] ${screenCheck.reason}`);
                   continue;
                 }
 
@@ -690,45 +656,10 @@ export class ScheduleService {
               }
 
 
-              // CGV 용산아이파크몰에서만 19관(아트하우스) 상영관 필터링
-              if (theater.cdNm === "CGV 용산아이파크몰" && !item.scrnNm.includes("19관")) {
-                console.log(`🚫 [제외됨] CGV 용산아이파크몰 상영관 필터: ${item.scrnNm}`);
-                continue;
-              }
-
-              // CGV 대학로에서만 5관 상영관 필터링
-              if (theater.cdNm === "CGV 대학로" && !item.scrnNm.includes("5관")) {
-                console.log(`🚫 [제외됨] CGV 대학로 상영관 필터: ${item.scrnNm}`);
-                continue;
-              }
-
-              // CGV 강변에서만 4관 상영관 필터링
-              if (theater.cdNm === "CGV 강변" && !item.scrnNm.includes("4관")) {
-                console.log(`🚫 [제외됨] CGV 강변 상영관 필터: ${item.scrnNm}`);
-                continue;
-              }
-
-              // CGV 신촌아트레온에서만 10관 상영관 필터링
-              if (theater.cdNm === "CGV 신촌아트레온" && !item.scrnNm.includes("10관")) {
-                console.log(`🚫 [제외됨] CGV 신촌아트레온 상영관 필터: ${item.scrnNm}`);
-                continue;
-              }
-
-              // CGV 여의도에서만 5관 상영관 필터링
-              if (theater.cdNm === "CGV 여의도" && !item.scrnNm.includes("5관")) {
-                console.log(`🚫 [제외됨] CGV 여의도 상영관 필터: ${item.scrnNm}`);
-                continue;
-              }
-
-              // 롯데시네마 노원에서만 6관 상영관 필터링
-              if (theater.cdNm === "롯데시네마 노원" && !item.scrnNm.includes("6관")) {
-                console.log(`🚫 [제외됨] 롯데시네마 노원 상영관 필터: ${item.scrnNm}`);
-                continue;
-              }
-
-              // 롯데시네마 신도림에서만 4관 상영관 필터링
-              if (theater.cdNm === "롯데시네마 신도림" && !item.scrnNm.includes("4관")) {
-                console.log(`🚫 [제외됨] 롯데시네마 신도림 상영관 필터: ${item.scrnNm}`);
+              // 상영관 필터 체크
+              const screenCheck = checkScreenFilter(theater.cdNm, item.scrnNm);
+              if (!screenCheck.pass) {
+                console.log(`🚫 [제외됨] ${screenCheck.reason}`);
                 continue;
               }
 
@@ -833,45 +764,10 @@ export class ScheduleService {
                 return; // 건너뛰기
               }
 
-              // CGV 용산아이파크몰에서만 19관(아트하우스) 상영관 필터링
-              if (theater.cdNm === "CGV 용산아이파크몰" && !item.scrnNm.includes("19관")) {
-                console.log(`🚫 [제외됨] CGV 용산아이파크몰 상영관 필터: ${item.scrnNm}`);
-                return; // 건너뛰기
-              }
-
-              // CGV 대학로에서만 5관 상영관 필터링
-              if (theater.cdNm === "CGV 대학로" && !item.scrnNm.includes("5관")) {
-                console.log(`🚫 [제외됨] CGV 대학로 상영관 필터: ${item.scrnNm}`);
-                return; // 건너뛰기
-              }
-
-              // CGV 강변에서만 4관 상영관 필터링
-              if (theater.cdNm === "CGV 강변" && !item.scrnNm.includes("4관")) {
-                console.log(`🚫 [제외됨] CGV 강변 상영관 필터: ${item.scrnNm}`);
-                return; // 건너뛰기
-              }
-
-              // CGV 신촌아트레온에서만 10관 상영관 필터링
-              if (theater.cdNm === "CGV 신촌아트레온" && !item.scrnNm.includes("10관")) {
-                console.log(`🚫 [제외됨] CGV 신촌아트레온 상영관 필터: ${item.scrnNm}`);
-                return; // 건너뛰기
-              }
-
-              // CGV 여의도에서만 5관 상영관 필터링
-              if (theater.cdNm === "CGV 여의도" && !item.scrnNm.includes("5관")) {
-                console.log(`🚫 [제외됨] CGV 여의도 상영관 필터: ${item.scrnNm}`);
-                return; // 건너뛰기
-              }
-
-              // 롯데시네마 노원에서만 6관 상영관 필터링
-              if (theater.cdNm === "롯데시네마 노원" && !item.scrnNm.includes("6관")) {
-                console.log(`🚫 [제외됨] 롯데시네마 노원 상영관 필터: ${item.scrnNm}`);
-                return; // 건너뛰기
-              }
-
-              // 롯데시네마 신도림에서만 4관 상영관 필터링
-              if (theater.cdNm === "롯데시네마 신도림" && !item.scrnNm.includes("4관")) {
-                console.log(`🚫 [제외됨] 롯데시네마 신도림 상영관 필터: ${item.scrnNm}`);
+              // 상영관 필터 체크
+              const screenCheck = checkScreenFilter(theater.cdNm, item.scrnNm);
+              if (!screenCheck.pass) {
+                console.log(`🚫 [제외됨] ${screenCheck.reason}`);
                 return; // 건너뛰기
               }
 

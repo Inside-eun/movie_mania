@@ -1,17 +1,7 @@
 "use client";
 
 import { useRef, useEffect, useState } from "react";
-
-interface MovieSchedule {
-  title: string;
-  theater: string;
-  area: string;
-  screen: string;
-  time: string;
-  showtime: string;
-  source?: string;
-  movieCode?: string;
-}
+import { MovieSchedule } from "@/types";
 
 interface MovieFilterProps {
   filterType: "movie" | "theater";

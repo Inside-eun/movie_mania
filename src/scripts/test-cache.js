@@ -1,4 +1,4 @@
-import { cacheService } from '../services/cacheService.js';
+import { cacheService } from '../services/cacheService';
 
 async function testCaching() {
   console.log('=== 캐시 서비스 테스트 ===\n');

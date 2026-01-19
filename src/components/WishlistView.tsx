@@ -2,23 +2,7 @@
 
 import { useState } from "react";
 import CalendarView from "./CalendarView";
-
-interface MovieSchedule {
-  title: string;
-  theater: string;
-  area: string;
-  screen: string;
-  time: string;
-  showtime: string;
-  source?: string;
-  movieCode?: string;
-  director?: string;
-  posterUrl?: string;
-  prodYear?: string;
-  runtime?: string;
-  cActors?: string;
-  cCodeSubName2?: string;
-}
+import { MovieSchedule } from "@/types";
 
 interface WishlistViewProps {
   wishlistMovies: MovieSchedule[];

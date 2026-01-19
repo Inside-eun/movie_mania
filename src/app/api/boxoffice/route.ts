@@ -5,7 +5,7 @@ export const dynamic = "force-dynamic";
 
 // JavaScript 모듈을 동적으로 import
 async function getScheduleService() {
-  const { ScheduleService } = await import("@/services/scheduleService.js");
+  const { ScheduleService } = await import("@/services/scheduleService");
   return new ScheduleService();
 }
 

@@ -1,29 +1,12 @@
 import { NextResponse } from "next/server";
+import { MovieSchedule } from "@/types";
 
 // 동적 렌더링 강제
 export const dynamic = "force-dynamic";
 
-// TypeScript 타입 정의
-interface MovieSchedule {
-  title: string;
-  theater: string;
-  area: string;
-  screen: string;
-  time: string;
-  showtime: Date;
-  director?: string;
-  source?: string;
-  movieCode?: string;
-  posterUrl?: string;
-  prodYear?: string;
-  runtime?: string;
-  cActors?: string;
-  cCodeSubName2?: string;
-}
-
 // JavaScript 모듈을 동적으로 import
 async function getScheduleService() {
-  const { ScheduleService } = await import("@/services/scheduleService.js");
+  const { ScheduleService } = await import("@/services/scheduleService");
   return new ScheduleService();
 }
 

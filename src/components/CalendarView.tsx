@@ -1,23 +1,7 @@
 "use client";
 
 import { useState, useMemo } from "react";
-
-interface MovieSchedule {
-  title: string;
-  theater: string;
-  area: string;
-  screen: string;
-  time: string;
-  showtime: string;
-  source?: string;
-  movieCode?: string;
-  director?: string;
-  posterUrl?: string;
-  prodYear?: string;
-  runtime?: string;
-  cActors?: string;
-  cCodeSubName2?: string;
-}
+import { MovieSchedule } from "@/types";
 
 interface CalendarViewProps {
   wishlistMovies: MovieSchedule[];
