@@ -4,17 +4,17 @@ import { NextResponse } from "next/server";
 export const dynamic = "force-dynamic";
 
 // JavaScript 모듈을 동적으로 import
-async function getCrawlerService() {
-  const { CrawlerService } = await import("@/services/crawler.js");
-  return new CrawlerService();
+async function getScheduleService() {
+  const { ScheduleService } = await import("@/services/scheduleService.js");
+  return new ScheduleService();
 }
 
 export async function GET() {
   try {
-    const crawler = await getCrawlerService();
+    const scheduleService = await getScheduleService();
 
     // 박스오피스 1~5위 데이터 조회
-    const boxOfficeTop5 = await crawler.getBoxOfficeTop5();
+    const boxOfficeTop5 = await scheduleService.getBoxOfficeTop5();
 
     // 어제 날짜 계산 (박스오피스 기준일)
     const yesterday = new Date();

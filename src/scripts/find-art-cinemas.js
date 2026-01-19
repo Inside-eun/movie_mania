@@ -1,4 +1,4 @@
-import { CrawlerService } from '../services/crawler.js';
+import { ScheduleService } from '../services/scheduleService.js';
 import { multiplexChains, isArtCinema } from '../data/artCinemas.js';
 
 // 서울시 주요 구 코드 (KOBIS 지역코드)
@@ -31,7 +31,7 @@ const seoulDistricts = [
 ];
 
 async function findArtCinemas() {
-  const crawler = new CrawlerService();
+  const scheduleService = new ScheduleService();
   const allArtCinemas = [];
   
   console.log('=== 서울시 전체 구 예술영화관 조회 시작 ===\n');
@@ -41,7 +41,7 @@ async function findArtCinemas() {
       console.log(`${district.name} 조회 중...`);
       
       // 구별 극장 목록 조회
-      const theaters = await crawler.getTheaterListByDistrict(district.wideAreaCd, district.basAreaCd);
+      const theaters = await scheduleService.getTheaterListByDistrict(district.wideAreaCd, district.basAreaCd);
       
       if (theaters && theaters.theaCdList) {
         // 예술영화관만 필터링

@@ -1,12 +1,12 @@
-import { CrawlerService } from '../services/crawler.js';
+import { ScheduleService } from '../services/scheduleService.js';
 
 async function testArtCinemas() {
-  const crawler = new CrawlerService();
+  const scheduleService = new ScheduleService();
   
   console.log('\n=== 예술영화관 전용 크롤링 시작 ===\n');
   
   try {
-    const movies = await crawler.crawlArtCinemas();
+    const movies = await scheduleService.crawlArtCinemas();
     
     if (!movies || movies.length === 0) {
       console.log('크롤링된 상영 스케줄이 없습니다.');

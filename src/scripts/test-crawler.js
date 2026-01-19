@@ -1,12 +1,12 @@
-import { CrawlerService } from '../services/crawler.js';
+import { ScheduleService } from '../services/scheduleService.js';
 
-async function testCrawler() {
-  const crawler = new CrawlerService();
+async function testScheduleService() {
+  const scheduleService = new ScheduleService();
   
   console.log('\n=== 서울시 마포구 영화 상영시간표 크롤링 시작 ===\n');
   
   try {
-    const movies = await crawler.crawlKOBIS();
+    const movies = await scheduleService.crawlKOBIS();
     
     if (!movies || movies.length === 0) {
       console.log('크롤링된 상영 스케줄이 없습니다.');
@@ -34,4 +34,4 @@ process.on('unhandledRejection', (error) => {
   process.exit(1);
 });
 
-testCrawler();
+testScheduleService();

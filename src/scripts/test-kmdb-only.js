@@ -1,12 +1,12 @@
-import { CrawlerService } from '../services/crawler.js';
+import { ScheduleService } from '../services/scheduleService.js';
 
 async function testKMDBOnly() {
-  const crawler = new CrawlerService();
+  const scheduleService = new ScheduleService();
   
   console.log('\n=== 한국영상자료원 단독 테스트 ===\n');
   
   try {
-    const movies = await crawler.getKOFASchedule();
+    const movies = await scheduleService.getKOFASchedule();
     
     if (!movies || movies.length === 0) {
       console.log('한국영상자료원 상영 스케줄이 없습니다.');

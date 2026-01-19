@@ -39,7 +39,7 @@ async function delay(ms = 1000) {
   await new Promise((resolve) => setTimeout(resolve, ms));
 }
 
-export class CrawlerService {
+export class ScheduleService {
 
   async getBoxOfficeTop5() {
     try {

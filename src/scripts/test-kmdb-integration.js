@@ -1,12 +1,12 @@
-import { CrawlerService } from '../services/crawler.js';
+import { ScheduleService } from '../services/scheduleService.js';
 
 async function testKMDBIntegration() {
-  const crawler = new CrawlerService();
+  const scheduleService = new ScheduleService();
   
   console.log('\n=== 예술영화관 + 한국영상자료원 통합 테스트 ===\n');
   
   try {
-    const movies = await crawler.crawlArtCinemasWithKMDB();
+    const movies = await scheduleService.crawlArtCinemasWithKMDB();
     
     if (!movies || movies.length === 0) {
       console.log('크롤링된 상영 스케줄이 없습니다.');

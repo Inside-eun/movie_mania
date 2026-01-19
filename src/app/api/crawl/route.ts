@@ -22,9 +22,9 @@ interface MovieSchedule {
 }
 
 // JavaScript 모듈을 동적으로 import
-async function getCrawlerService() {
-  const { CrawlerService } = await import("@/services/crawler.js");
-  return new CrawlerService();
+async function getScheduleService() {
+  const { ScheduleService } = await import("@/services/scheduleService.js");
+  return new ScheduleService();
 }
 
 // 캐시 서비스 import
@@ -40,7 +40,7 @@ export async function GET(request: Request) {
     const dateParam = searchParams.get("date"); // YYYY-MM-DD 형식
     const forceFresh = searchParams.get("force") === "true"; // 강제 새로고침
 
-    const crawler = await getCrawlerService();
+    const scheduleService = await getScheduleService();
     const cache = await getCacheService();
     let movies: MovieSchedule[] = [];
     let fromCache = false;
@@ -74,10 +74,10 @@ export async function GET(request: Request) {
       }
     }
 
-    // 캐시에서 데이터를 찾지 못한 경우에만 크롤링 실행
+    // 캐시에서 데이터를 찾지 못한 경우에만 스케줄 조회 실행
     if (!fromCache) {
-      // 통합 크롤링 (예술영화관 + KMDB) - 선택된 날짜로 실행
-      movies = await (crawler as any).crawlArtCinemasWithKMDBByDate(targetDate);
+      // 통합 조회 (예술영화관 + KMDB) - 선택된 날짜로 실행
+      movies = await (scheduleService as any).crawlArtCinemasWithKMDBByDate(targetDate);
     }
 
     
@@ -115,7 +115,7 @@ export async function GET(request: Request) {
       timestamp: new Date().toISOString(),
     });
   } catch (error) {
-    console.error("크롤링 API 에러:", error);
+    console.error("스케줄 API 에러:", error);
 
     // Vercel 환경에서 더 상세한 에러 로깅
     if (process.env.VERCEL === "1") {
@@ -129,7 +129,7 @@ export async function GET(request: Request) {
     return NextResponse.json(
       {
         success: false,
-        error: "크롤링 중 오류가 발생했습니다",
+        error: "스케줄 조회 중 오류가 발생했습니다",
         details: error instanceof Error ? error.message : "알 수 없는 오류",
         stack:
           process.env.NODE_ENV === "development" && error instanceof Error
