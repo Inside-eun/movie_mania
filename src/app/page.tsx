@@ -87,7 +87,7 @@ export default function Home() {
 
     try {
       const response = await fetch(
-        `/api/crawl?type=${crawlType}&date=${selectedDate}`
+        `/api/schedules?type=${crawlType}&date=${selectedDate}`
       );
       const data: CrawlResponse = await response.json();
 
