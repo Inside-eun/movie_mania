@@ -1,3 +1,20 @@
+// undici(cheerio 의존)가 전역 File을 참조하므로, Next 서버 번들에서 폴리필
+if (typeof globalThis.File === "undefined" && typeof globalThis.Blob !== "undefined") {
+  (globalThis as any).File = class File extends (globalThis as any).Blob {
+    name: string;
+    lastModified: number;
+    constructor(
+      bits: BlobPart[] | Blob,
+      name: string,
+      options?: { type?: string; lastModified?: number }
+    ) {
+      super(bits, options);
+      this.name = name ?? "";
+      this.lastModified = options?.lastModified ?? Date.now();
+    }
+  };
+}
+
 import { NextResponse } from "next/server";
 import { MovieSchedule } from "@/types";
 

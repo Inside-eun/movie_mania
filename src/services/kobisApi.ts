@@ -54,7 +54,7 @@ export async function getMovieInfoFromKOBIS(movieCode: string): Promise<Partial<
         key: apiKey,
         movieCd: movieCode,
       },
-      timeout: 5000, // 타임아웃을 5초로 단축
+      timeout: 5000,
       headers: {
         'Accept': 'application/json',
         'Accept-Encoding': 'gzip, deflate',
@@ -62,17 +62,39 @@ export async function getMovieInfoFromKOBIS(movieCode: string): Promise<Partial<
       },
     });
 
-    let result: Partial<KOBISMovieInfo> | null = null;
-    if (response.data.movieInfoResult?.movieInfo) {
-      result = response.data.movieInfoResult.movieInfo;
+    const body = response.data;
+    // KOBIS 에러 응답: message 또는 faultInfo 존재 시
+    if (body?.faultInfo) {
+      console.warn("KOBIS API faultInfo:", body.faultInfo);
+      movieInfoCache.set(movieCode, { data: null, timestamp: Date.now() });
+      return null;
     }
-    
-    // 캐시에 저장
+    if (body?.message) {
+      console.warn("KOBIS API message:", body.message);
+      movieInfoCache.set(movieCode, { data: null, timestamp: Date.now() });
+      return null;
+    }
+
+    let result: Partial<KOBISMovieInfo> | null = null;
+    const movieInfo = body?.movieInfoResult?.movieInfo;
+    if (movieInfo) {
+      result = movieInfo;
+    } else {
+      // 데이터 없을 때 원인 확인용 로그 (영화코드 미등록 등)
+      console.warn(
+        "KOBIS API movieInfo 없음: movieCd=%s, 응답키=%s",
+        movieCode,
+        Object.keys(body?.movieInfoResult ?? body ?? {}).join(", ")
+      );
+    }
+
     movieInfoCache.set(movieCode, { data: result, timestamp: Date.now() });
-    
     return result;
   } catch (error) {
     console.error("KOBIS API 호출 실패:", error);
+    if (axios.isAxiosError(error) && error.response?.data) {
+      console.error("KOBIS API 응답 본문:", JSON.stringify(error.response.data, null, 2));
+    }
     // 실패한 경우에도 캐시에 null 저장 (짧은 시간 동안 재시도 방지)
     movieInfoCache.set(movieCode, { data: null, timestamp: Date.now() });
     return null;

@@ -9,6 +9,7 @@ const withPWA = withPWAInit({
 
 /** @type {import('next').NextConfig} */
 const nextConfig = {
+  serverExternalPackages: ['cheerio'],
   typescript: {
     // 빌드 시 TypeScript 오류 무시
     ignoreBuildErrors: true,

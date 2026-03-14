@@ -40,8 +40,11 @@ interface KMDBApiData {
   cCodeSubName2?: string;
 }
 
-
-export default function MovieModal({ isOpen, onClose, movie }: MovieModalProps) {
+export default function MovieModal({
+  isOpen,
+  onClose,
+  movie,
+}: MovieModalProps) {
   const [kobisData, setKobisData] = useState<KOBISMovieInfo | null>(null);
   const [kmdbData, setKmdbData] = useState<KMDBApiData | null>(null);
   const [loading, setLoading] = useState(false);
@@ -50,52 +53,47 @@ export default function MovieModal({ isOpen, onClose, movie }: MovieModalProps) 
   useEffect(() => {
     if (isOpen && movie && movie.movieCode) {
       setLoading(true);
-      
+
       // 즉시 기본 정보 표시를 위해 로딩 상태를 짧게 유지
       const loadingTimer = setTimeout(() => {
         setLoading(false);
       }, 1000); // 최대 1초 로딩
-      
+
       // 새로운 API 라우트를 통해 영화 정보 가져오기
       const fetchMovieInfo = async () => {
         try {
-          const apiUrl = `/api/movie-info?movieCode=${movie.movieCode}&source=${movie.source || 'KOBIS'}`;
+          const apiUrl = `/api/movie-info?movieCode=${movie.movieCode}&source=${movie.source || "KOBIS"}`;
           console.log(`모달에서 API 호출: ${apiUrl}`);
-          
+
           const response = await fetch(apiUrl);
           const result = await response.json();
-          
+
           console.log(`모달 API 응답:`, result);
-          
+
           if (result.success && result.data) {
-            if (movie.source === 'KMDB_API') {
-              console.log(`KMDB 데이터 설정:`, result.data);
+            const source = result.dataSource ?? movie.source;
+            if (source === "KMDB_API") {
               setKmdbData(result.data);
+              setKobisData(null);
             } else {
-              console.log(`KOBIS 데이터 설정:`, result.data);
               setKobisData(result.data);
+              setKmdbData(null);
             }
           } else {
-            console.error('영화 정보 API 호출 실패:', result.error);
-            if (movie.source === 'KMDB_API') {
-              setKmdbData(null);
-            } else {
-              setKobisData(null);
-            }
+            setKmdbData(null);
+            setKobisData(null);
+            if (!result.success) console.error("영화 정보 API 호출 실패:", result.error);
           }
         } catch (error) {
-          console.error('영화 정보 API 호출 중 오류:', error);
-          if (movie.source === 'KMDB_API') {
-            setKmdbData(null);
-          } else {
-            setKobisData(null);
-          }
+          console.error("영화 정보 API 호출 중 오류:", error);
+          setKmdbData(null);
+          setKobisData(null);
         } finally {
           clearTimeout(loadingTimer);
           setLoading(false);
         }
       };
-      
+
       fetchMovieInfo();
     } else {
       setKobisData(null);
@@ -107,20 +105,20 @@ export default function MovieModal({ isOpen, onClose, movie }: MovieModalProps) 
   // ESC 키로 모달 닫기
   useEffect(() => {
     const handleEscape = (event: KeyboardEvent) => {
-      if (event.key === 'Escape') {
+      if (event.key === "Escape") {
         onClose();
       }
     };
 
     if (isOpen) {
-      document.addEventListener('keydown', handleEscape);
+      document.addEventListener("keydown", handleEscape);
       // 모달이 열릴 때 body 스크롤 방지
-      document.body.style.overflow = 'hidden';
+      document.body.style.overflow = "hidden";
     }
 
     return () => {
-      document.removeEventListener('keydown', handleEscape);
-      document.body.style.overflow = 'unset';
+      document.removeEventListener("keydown", handleEscape);
+      document.body.style.overflow = "unset";
     };
   }, [isOpen, onClose]);
 
@@ -129,11 +127,11 @@ export default function MovieModal({ isOpen, onClose, movie }: MovieModalProps) 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center">
       {/* 배경 오버레이 */}
-      <div 
+      <div
         className="absolute inset-0 bg-black bg-opacity-50 transition-opacity"
         onClick={onClose}
       />
-      
+
       {/* 모달 콘텐츠 */}
       <div className="relative bg-white dark:bg-gray-800 rounded-lg shadow-xl max-w-md w-full mx-4 max-h-[90vh] overflow-y-auto">
         {/* 모달 헤더 */}
@@ -145,8 +143,18 @@ export default function MovieModal({ isOpen, onClose, movie }: MovieModalProps) 
             onClick={onClose}
             className="p-2 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-full transition-colors"
           >
-            <svg className="w-6 h-6 text-gray-500 dark:text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+            <svg
+              className="w-6 h-6 text-gray-500 dark:text-gray-400"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M6 18L18 6M6 6l12 12"
+              />
             </svg>
           </button>
         </div>
@@ -185,53 +193,72 @@ export default function MovieModal({ isOpen, onClose, movie }: MovieModalProps) 
                 <div className="space-y-3">
                   {kobisData.directors && kobisData.directors.length > 0 && (
                     <div className="flex justify-between items-center">
-                      <span className="text-sm font-medium text-blue-800 dark:text-blue-200">감독</span>
+                      <span className="text-sm font-medium text-blue-800 dark:text-blue-200">
+                        감독
+                      </span>
                       <span className="text-sm text-blue-700 dark:text-blue-300">
-                        {kobisData.directors.map(d => d.peopleNm).join(', ')}
+                        {kobisData.directors.map((d) => d.peopleNm).join(", ")}
                       </span>
                     </div>
                   )}
-                  
+
                   {kobisData.actors && kobisData.actors.length > 0 && (
                     <div className="flex justify-between items-start">
-                      <span className="text-sm font-medium text-blue-800 dark:text-blue-200">주요 배우</span>
+                      <span className="text-sm font-medium text-blue-800 dark:text-blue-200">
+                        주요 배우
+                      </span>
                       <span className="text-sm text-blue-700 dark:text-blue-300 text-right max-w-[200px]">
-                        {kobisData.actors.slice(0, 3).map(actor => actor.peopleNm).join(', ')}
-                        {kobisData.actors.length > 3 && ` 외 ${kobisData.actors.length - 3}명`}
+                        {kobisData.actors
+                          .slice(0, 3)
+                          .map((actor) => actor.peopleNm)
+                          .join(", ")}
+                        {kobisData.actors.length > 3 &&
+                          ` 외 ${kobisData.actors.length - 3}명`}
                       </span>
                     </div>
                   )}
-                  
+
                   {kobisData.openDt && (
                     <div className="flex justify-between items-center">
-                      <span className="text-sm font-medium text-blue-800 dark:text-blue-200">개봉일</span>
+                      <span className="text-sm font-medium text-blue-800 dark:text-blue-200">
+                        개봉일
+                      </span>
                       <span className="text-sm text-blue-700 dark:text-blue-300">
-                        {kobisData.openDt.replace(/(\d{4})(\d{2})(\d{2})/, '$1-$2-$3')}
+                        {kobisData.openDt.replace(
+                          /(\d{4})(\d{2})(\d{2})/,
+                          "$1-$2-$3",
+                        )}
                       </span>
                     </div>
                   )}
-                  
+
                   {kobisData.showTm && (
                     <div className="flex justify-between items-center">
-                      <span className="text-sm font-medium text-blue-800 dark:text-blue-200">러닝타임</span>
+                      <span className="text-sm font-medium text-blue-800 dark:text-blue-200">
+                        러닝타임
+                      </span>
                       <span className="text-sm text-blue-700 dark:text-blue-300">
                         {kobisData.showTm}분
                       </span>
                     </div>
                   )}
-                  
+
                   {kobisData.genres && kobisData.genres.length > 0 && (
                     <div className="flex justify-between items-center">
-                      <span className="text-sm font-medium text-blue-800 dark:text-blue-200">장르</span>
+                      <span className="text-sm font-medium text-blue-800 dark:text-blue-200">
+                        장르
+                      </span>
                       <span className="text-sm text-blue-700 dark:text-blue-300">
-                        {kobisData.genres.map(g => g.genreNm).join(', ')}
+                        {kobisData.genres.map((g) => g.genreNm).join(", ")}
                       </span>
                     </div>
                   )}
-                  
+
                   {kobisData.audits && kobisData.audits.length > 0 && (
                     <div className="flex justify-between items-center">
-                      <span className="text-sm font-medium text-blue-800 dark:text-blue-200">관람등급</span>
+                      <span className="text-sm font-medium text-blue-800 dark:text-blue-200">
+                        관람등급
+                      </span>
                       <span className="text-sm text-blue-700 dark:text-blue-300">
                         {kobisData.audits[0].watchGradeNm}
                       </span>
@@ -242,44 +269,63 @@ export default function MovieModal({ isOpen, onClose, movie }: MovieModalProps) 
             )}
 
             {/* 영상자료원 영화 정보 (KMDB_API인 경우) */}
-            {movie.source === 'KMDB_API' && (
+            {movie.source === "KMDB_API" && (
               <div className="bg-blue-50 dark:bg-blue-900 p-4 rounded-lg">
                 <div className="space-y-3">
                   {movie.director && (
                     <div className="flex justify-between items-center">
-                      <span className="text-sm font-medium text-blue-800 dark:text-blue-200">감독</span>
-                      <span className="text-sm text-blue-700 dark:text-blue-300">{movie.director}</span>
-                    </div>
-                  )}
-                  
-                  {kmdbData?.cActors && (
-                    <div className="flex justify-between items-start">
-                      <span className="text-sm font-medium text-blue-800 dark:text-blue-200">주요 배우</span>
-                      <span className="text-sm text-blue-700 dark:text-blue-300 text-right max-w-[200px]">
-                        {kmdbData.cActors.split(',').slice(0, 3).join(', ')}
-                        {kmdbData.cActors.split(',').length > 3 && ` 외 ${kmdbData.cActors.split(',').length - 3}명`}
+                      <span className="text-sm font-medium text-blue-800 dark:text-blue-200">
+                        감독
+                      </span>
+                      <span className="text-sm text-blue-700 dark:text-blue-300">
+                        {movie.director}
                       </span>
                     </div>
                   )}
-                  
+
+                  {kmdbData?.cActors && (
+                    <div className="flex justify-between items-start">
+                      <span className="text-sm font-medium text-blue-800 dark:text-blue-200">
+                        주요 배우
+                      </span>
+                      <span className="text-sm text-blue-700 dark:text-blue-300 text-right max-w-[200px]">
+                        {kmdbData.cActors.split(",").slice(0, 3).join(", ")}
+                        {kmdbData.cActors.split(",").length > 3 &&
+                          ` 외 ${kmdbData.cActors.split(",").length - 3}명`}
+                      </span>
+                    </div>
+                  )}
+
                   {movie.prodYear && (
                     <div className="flex justify-between items-center">
-                      <span className="text-sm font-medium text-blue-800 dark:text-blue-200">제작년도</span>
-                      <span className="text-sm text-blue-700 dark:text-blue-300">{movie.prodYear}년</span>
+                      <span className="text-sm font-medium text-blue-800 dark:text-blue-200">
+                        제작년도
+                      </span>
+                      <span className="text-sm text-blue-700 dark:text-blue-300">
+                        {movie.prodYear}년
+                      </span>
                     </div>
                   )}
-                  
+
                   {movie.runtime && (
                     <div className="flex justify-between items-center">
-                      <span className="text-sm font-medium text-blue-800 dark:text-blue-200">러닝타임</span>
-                      <span className="text-sm text-blue-700 dark:text-blue-300">{movie.runtime}분</span>
+                      <span className="text-sm font-medium text-blue-800 dark:text-blue-200">
+                        러닝타임
+                      </span>
+                      <span className="text-sm text-blue-700 dark:text-blue-300">
+                        {movie.runtime}분
+                      </span>
                     </div>
                   )}
-                  
+
                   {kmdbData?.cCodeSubName2 && (
                     <div className="flex justify-between items-center">
-                      <span className="text-sm font-medium text-blue-800 dark:text-blue-200">관람등급</span>
-                      <span className="text-sm text-blue-700 dark:text-blue-300">{kmdbData.cCodeSubName2}</span>
+                      <span className="text-sm font-medium text-blue-800 dark:text-blue-200">
+                        관람등급
+                      </span>
+                      <span className="text-sm text-blue-700 dark:text-blue-300">
+                        {kmdbData.cCodeSubName2}
+                      </span>
                     </div>
                   )}
                 </div>
@@ -297,27 +343,38 @@ export default function MovieModal({ isOpen, onClose, movie }: MovieModalProps) 
                     const runtimeMinutes = parseInt(runtime);
                     if (!isNaN(runtimeMinutes)) {
                       // 씨네큐, CGV는 10분 추가
-                      const isCineQ = movie.theater?.toLowerCase().includes('씨네큐') || movie.theater?.toLowerCase().includes('cineq');
-                      const isCGV = movie.theater?.toLowerCase().includes('cgv');
-                      const additionalMinutes = (isCineQ || isCGV) ? 10 : 0;
-                      
+                      const isCineQ =
+                        movie.theater?.toLowerCase().includes("씨네큐") ||
+                        movie.theater?.toLowerCase().includes("cineq");
+                      const isCGV = movie.theater
+                        ?.toLowerCase()
+                        .includes("cgv");
+                      const additionalMinutes = isCineQ || isCGV ? 10 : 0;
+
                       const totalMinutes = runtimeMinutes + additionalMinutes;
-                      
+
                       // 시작 시간 파싱
-                      const [startHours, startMinutes] = movie.time.split(':').map(Number);
+                      const [startHours, startMinutes] = movie.time
+                        .split(":")
+                        .map(Number);
                       const startTime = new Date();
                       startTime.setHours(startHours, startMinutes, 0, 0);
-                      
+
                       // 끝나는 시간 계산
-                      const endTime = new Date(startTime.getTime() + totalMinutes * 60 * 1000);
-                      const endTimeStr = `${String(endTime.getHours()).padStart(2, '0')}:${String(endTime.getMinutes()).padStart(2, '0')}`;
-                      
+                      const endTime = new Date(
+                        startTime.getTime() + totalMinutes * 60 * 1000,
+                      );
+                      const endTimeStr = `${String(endTime.getHours()).padStart(2, "0")}:${String(endTime.getMinutes()).padStart(2, "0")}`;
+
                       return ` - ${endTimeStr}`;
                     }
                   }
-                  return '';
+                  return "";
                 })()}
-                <span className="text-gray-500 dark:text-gray-500"> / {movie.theater}</span>
+                <span className="text-gray-500 dark:text-gray-500">
+                  {" "}
+                  / {movie.theater}
+                </span>
               </div>
             </div>
           </div>

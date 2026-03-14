@@ -1,3 +1,14 @@
+// Next 서버 번들에서 undici(cheerio 의존)가 전역 File을 참조하므로 폴리필
+if (typeof globalThis.File === "undefined" && typeof globalThis.Blob !== "undefined") {
+  globalThis.File = class File extends globalThis.Blob {
+    constructor(bits, name, options) {
+      super(bits, options);
+      this.name = name ?? "";
+      this.lastModified = options?.lastModified ?? Date.now();
+    }
+  };
+}
+
 import axios from "axios";
 import * as cheerio from "cheerio";
 import { artCinemas } from "../data/artCinemas";

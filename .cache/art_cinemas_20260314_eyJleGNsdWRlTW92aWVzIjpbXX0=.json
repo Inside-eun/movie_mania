@@ -1,0 +1,2274 @@
+{
+  "data": [
+    {
+      "title": "남과 여",
+      "theater": "픽처하우스",
+      "area": "강남구",
+      "screen": "01관",
+      "movieCode": "19790108",
+      "time": "11:00",
+      "showtime": "2026-03-14T02:00:00.000Z"
+    },
+    {
+      "title": "오만과 편견",
+      "theater": "픽처하우스",
+      "area": "강남구",
+      "screen": "01관",
+      "movieCode": "20060033",
+      "time": "19:35",
+      "showtime": "2026-03-14T10:35:00.000Z"
+    },
+    {
+      "title": "비긴 어게인",
+      "theater": "픽처하우스",
+      "area": "강남구",
+      "screen": "01관",
+      "movieCode": "20149629",
+      "time": "22:05",
+      "showtime": "2026-03-14T13:05:00.000Z"
+    },
+    {
+      "title": "세계의 주인",
+      "theater": "픽처하우스",
+      "area": "강남구",
+      "screen": "01관",
+      "movieCode": "20247429",
+      "time": "17:15",
+      "showtime": "2026-03-14T08:15:00.000Z"
+    },
+    {
+      "title": "영원",
+      "theater": "픽처하우스",
+      "area": "강남구",
+      "screen": "01관",
+      "movieCode": "20250839",
+      "time": "15:00",
+      "showtime": "2026-03-14T06:00:00.000Z"
+    },
+    {
+      "title": "페루지노. 영원한 르네상스",
+      "theater": "픽처하우스",
+      "area": "강남구",
+      "screen": "01관",
+      "movieCode": "20261679",
+      "time": "13:05",
+      "showtime": "2026-03-14T04:05:00.000Z"
+    },
+    {
+      "title": "왕과 사는 남자",
+      "theater": "KU시네마테크",
+      "area": "광진구",
+      "screen": "01관",
+      "movieCode": "20242837",
+      "time": "14:20",
+      "showtime": "2026-03-14T05:20:00.000Z"
+    },
+    {
+      "title": "센티멘탈 밸류",
+      "theater": "KU시네마테크",
+      "area": "광진구",
+      "screen": "01관",
+      "movieCode": "20250428",
+      "time": "19:30",
+      "showtime": "2026-03-14T10:30:00.000Z"
+    },
+    {
+      "title": "원 배틀 애프터 어나더",
+      "theater": "KU시네마테크",
+      "area": "광진구",
+      "screen": "01관",
+      "movieCode": "20256397",
+      "time": "16:30",
+      "showtime": "2026-03-14T07:30:00.000Z"
+    },
+    {
+      "title": "시라트",
+      "theater": "KU시네마테크",
+      "area": "광진구",
+      "screen": "01관",
+      "movieCode": "20259552",
+      "time": "10:50",
+      "showtime": "2026-03-14T01:50:00.000Z"
+    },
+    {
+      "title": "슬라이드 스트럼 뮤트",
+      "theater": "KU시네마테크",
+      "area": "광진구",
+      "screen": "01관",
+      "movieCode": "20261450",
+      "time": "13:00",
+      "showtime": "2026-03-14T04:00:00.000Z"
+    },
+    {
+      "title": "왕과 사는 남자",
+      "theater": "씨네큐 신도림",
+      "area": "구로구",
+      "screen": "01관",
+      "movieCode": "20242837",
+      "time": "09:40",
+      "showtime": "2026-03-14T00:40:00.000Z"
+    },
+    {
+      "title": "왕과 사는 남자",
+      "theater": "씨네큐 신도림",
+      "area": "구로구",
+      "screen": "01관",
+      "movieCode": "20242837",
+      "time": "12:05",
+      "showtime": "2026-03-14T03:05:00.000Z"
+    },
+    {
+      "title": "왕과 사는 남자",
+      "theater": "씨네큐 신도림",
+      "area": "구로구",
+      "screen": "01관",
+      "movieCode": "20242837",
+      "time": "14:25",
+      "showtime": "2026-03-14T05:25:00.000Z"
+    },
+    {
+      "title": "왕과 사는 남자",
+      "theater": "씨네큐 신도림",
+      "area": "구로구",
+      "screen": "01관",
+      "movieCode": "20242837",
+      "time": "16:50",
+      "showtime": "2026-03-14T07:50:00.000Z"
+    },
+    {
+      "title": "왕과 사는 남자",
+      "theater": "씨네큐 신도림",
+      "area": "구로구",
+      "screen": "01관",
+      "movieCode": "20242837",
+      "time": "19:15",
+      "showtime": "2026-03-14T10:15:00.000Z"
+    },
+    {
+      "title": "왕과 사는 남자",
+      "theater": "씨네큐 신도림",
+      "area": "구로구",
+      "screen": "01관",
+      "movieCode": "20242837",
+      "time": "21:35",
+      "showtime": "2026-03-14T12:35:00.000Z"
+    },
+    {
+      "title": "왕과 사는 남자",
+      "theater": "씨네큐 신도림",
+      "area": "구로구",
+      "screen": "02관",
+      "movieCode": "20242837",
+      "time": "10:40",
+      "showtime": "2026-03-14T01:40:00.000Z"
+    },
+    {
+      "title": "왕과 사는 남자",
+      "theater": "씨네큐 신도림",
+      "area": "구로구",
+      "screen": "02관",
+      "movieCode": "20242837",
+      "time": "13:05",
+      "showtime": "2026-03-14T04:05:00.000Z"
+    },
+    {
+      "title": "왕과 사는 남자",
+      "theater": "씨네큐 신도림",
+      "area": "구로구",
+      "screen": "02관",
+      "movieCode": "20242837",
+      "time": "15:25",
+      "showtime": "2026-03-14T06:25:00.000Z"
+    },
+    {
+      "title": "왕과 사는 남자",
+      "theater": "씨네큐 신도림",
+      "area": "구로구",
+      "screen": "02관",
+      "movieCode": "20242837",
+      "time": "17:50",
+      "showtime": "2026-03-14T08:50:00.000Z"
+    },
+    {
+      "title": "왕과 사는 남자",
+      "theater": "씨네큐 신도림",
+      "area": "구로구",
+      "screen": "02관",
+      "movieCode": "20242837",
+      "time": "20:15",
+      "showtime": "2026-03-14T11:15:00.000Z"
+    },
+    {
+      "title": "왕과 사는 남자",
+      "theater": "씨네큐 신도림",
+      "area": "구로구",
+      "screen": "03관(Reserve)",
+      "movieCode": "20242837",
+      "time": "10:10",
+      "showtime": "2026-03-14T01:10:00.000Z"
+    },
+    {
+      "title": "왕과 사는 남자",
+      "theater": "씨네큐 신도림",
+      "area": "구로구",
+      "screen": "03관(Reserve)",
+      "movieCode": "20242837",
+      "time": "12:35",
+      "showtime": "2026-03-14T03:35:00.000Z"
+    },
+    {
+      "title": "왕과 사는 남자",
+      "theater": "씨네큐 신도림",
+      "area": "구로구",
+      "screen": "03관(Reserve)",
+      "movieCode": "20242837",
+      "time": "14:55",
+      "showtime": "2026-03-14T05:55:00.000Z"
+    },
+    {
+      "title": "왕과 사는 남자",
+      "theater": "씨네큐 신도림",
+      "area": "구로구",
+      "screen": "03관(Reserve)",
+      "movieCode": "20242837",
+      "time": "17:20",
+      "showtime": "2026-03-14T08:20:00.000Z"
+    },
+    {
+      "title": "왕과 사는 남자",
+      "theater": "씨네큐 신도림",
+      "area": "구로구",
+      "screen": "03관(Reserve)",
+      "movieCode": "20242837",
+      "time": "19:45",
+      "showtime": "2026-03-14T10:45:00.000Z"
+    },
+    {
+      "title": "호퍼스",
+      "theater": "씨네큐 신도림",
+      "area": "구로구",
+      "screen": "04관",
+      "movieCode": "20256283",
+      "time": "17:00",
+      "showtime": "2026-03-14T08:00:00.000Z"
+    },
+    {
+      "title": "호퍼스",
+      "theater": "씨네큐 신도림",
+      "area": "구로구",
+      "screen": "04관",
+      "movieCode": "20256283",
+      "time": "19:15",
+      "showtime": "2026-03-14T10:15:00.000Z"
+    },
+    {
+      "title": "호퍼스",
+      "theater": "씨네큐 신도림",
+      "area": "구로구",
+      "screen": "04관",
+      "movieCode": "20256283",
+      "time": "21:30",
+      "showtime": "2026-03-14T12:30:00.000Z"
+    },
+    {
+      "title": "호퍼스",
+      "theater": "씨네큐 신도림",
+      "area": "구로구",
+      "screen": "04관",
+      "movieCode": "20256283",
+      "time": "12:30",
+      "showtime": "2026-03-14T03:30:00.000Z"
+    },
+    {
+      "title": "호퍼스",
+      "theater": "씨네큐 신도림",
+      "area": "구로구",
+      "screen": "04관",
+      "movieCode": "20256283",
+      "time": "14:45",
+      "showtime": "2026-03-14T05:45:00.000Z"
+    },
+    {
+      "title": "브라이드!",
+      "theater": "씨네큐 신도림",
+      "area": "구로구",
+      "screen": "04관",
+      "movieCode": "20258444",
+      "time": "10:00",
+      "showtime": "2026-03-14T01:00:00.000Z"
+    },
+    {
+      "title": "왕과 사는 남자",
+      "theater": "씨네큐 신도림",
+      "area": "구로구",
+      "screen": "05관(Reserve)",
+      "movieCode": "20242837",
+      "time": "14:05",
+      "showtime": "2026-03-14T05:05:00.000Z"
+    },
+    {
+      "title": "왕과 사는 남자",
+      "theater": "씨네큐 신도림",
+      "area": "구로구",
+      "screen": "05관(Reserve)",
+      "movieCode": "20242837",
+      "time": "16:30",
+      "showtime": "2026-03-14T07:30:00.000Z"
+    },
+    {
+      "title": "왕과 사는 남자",
+      "theater": "씨네큐 신도림",
+      "area": "구로구",
+      "screen": "05관(Reserve)",
+      "movieCode": "20242837",
+      "time": "18:55",
+      "showtime": "2026-03-14T09:55:00.000Z"
+    },
+    {
+      "title": "왕과 사는 남자",
+      "theater": "씨네큐 신도림",
+      "area": "구로구",
+      "screen": "05관(Reserve)",
+      "movieCode": "20242837",
+      "time": "21:15",
+      "showtime": "2026-03-14T12:15:00.000Z"
+    },
+    {
+      "title": "호퍼스",
+      "theater": "씨네큐 신도림",
+      "area": "구로구",
+      "screen": "05관(Reserve)",
+      "movieCode": "20256283",
+      "time": "09:45",
+      "showtime": "2026-03-14T00:45:00.000Z"
+    },
+    {
+      "title": "호퍼스",
+      "theater": "씨네큐 신도림",
+      "area": "구로구",
+      "screen": "05관(Reserve)",
+      "movieCode": "20256283",
+      "time": "11:55",
+      "showtime": "2026-03-14T02:55:00.000Z"
+    },
+    {
+      "title": "왕과 사는 남자",
+      "theater": "씨네큐 신도림",
+      "area": "구로구",
+      "screen": "06관",
+      "movieCode": "20242837",
+      "time": "11:15",
+      "showtime": "2026-03-14T02:15:00.000Z"
+    },
+    {
+      "title": "왕과 사는 남자",
+      "theater": "씨네큐 신도림",
+      "area": "구로구",
+      "screen": "06관",
+      "movieCode": "20242837",
+      "time": "13:35",
+      "showtime": "2026-03-14T04:35:00.000Z"
+    },
+    {
+      "title": "왕과 사는 남자",
+      "theater": "씨네큐 신도림",
+      "area": "구로구",
+      "screen": "06관",
+      "movieCode": "20242837",
+      "time": "16:00",
+      "showtime": "2026-03-14T07:00:00.000Z"
+    },
+    {
+      "title": "왕과 사는 남자",
+      "theater": "씨네큐 신도림",
+      "area": "구로구",
+      "screen": "06관",
+      "movieCode": "20242837",
+      "time": "18:25",
+      "showtime": "2026-03-14T09:25:00.000Z"
+    },
+    {
+      "title": "왕과 사는 남자",
+      "theater": "씨네큐 신도림",
+      "area": "구로구",
+      "screen": "06관",
+      "movieCode": "20242837",
+      "time": "20:50",
+      "showtime": "2026-03-14T11:50:00.000Z"
+    },
+    {
+      "title": "슬라이드 스트럼 뮤트",
+      "theater": "씨네큐 신도림",
+      "area": "구로구",
+      "screen": "06관",
+      "movieCode": "20261450",
+      "time": "09:50",
+      "showtime": "2026-03-14T00:50:00.000Z"
+    },
+    {
+      "title": "왕과 사는 남자",
+      "theater": "씨네큐 신도림",
+      "area": "구로구",
+      "screen": "07관(Suite)",
+      "movieCode": "20242837",
+      "time": "09:55",
+      "showtime": "2026-03-14T00:55:00.000Z"
+    },
+    {
+      "title": "왕과 사는 남자",
+      "theater": "씨네큐 신도림",
+      "area": "구로구",
+      "screen": "07관(Suite)",
+      "movieCode": "20242837",
+      "time": "12:20",
+      "showtime": "2026-03-14T03:20:00.000Z"
+    },
+    {
+      "title": "왕과 사는 남자",
+      "theater": "씨네큐 신도림",
+      "area": "구로구",
+      "screen": "07관(Suite)",
+      "movieCode": "20242837",
+      "time": "14:40",
+      "showtime": "2026-03-14T05:40:00.000Z"
+    },
+    {
+      "title": "왕과 사는 남자",
+      "theater": "씨네큐 신도림",
+      "area": "구로구",
+      "screen": "07관(Suite)",
+      "movieCode": "20242837",
+      "time": "17:05",
+      "showtime": "2026-03-14T08:05:00.000Z"
+    },
+    {
+      "title": "왕과 사는 남자",
+      "theater": "씨네큐 신도림",
+      "area": "구로구",
+      "screen": "07관(Suite)",
+      "movieCode": "20242837",
+      "time": "19:30",
+      "showtime": "2026-03-14T10:30:00.000Z"
+    },
+    {
+      "title": "왕과 사는 남자",
+      "theater": "씨네큐 신도림",
+      "area": "구로구",
+      "screen": "07관(Suite)",
+      "movieCode": "20242837",
+      "time": "21:50",
+      "showtime": "2026-03-14T12:50:00.000Z"
+    },
+    {
+      "title": "우리에게는 아직 내일이 있다",
+      "theater": "씨네큐 신도림",
+      "area": "구로구",
+      "screen": "08관",
+      "movieCode": "20249843",
+      "time": "09:40",
+      "showtime": "2026-03-14T00:40:00.000Z"
+    },
+    {
+      "title": "우리에게는 아직 내일이 있다",
+      "theater": "씨네큐 신도림",
+      "area": "구로구",
+      "screen": "08관",
+      "movieCode": "20249843",
+      "time": "19:15",
+      "showtime": "2026-03-14T10:15:00.000Z"
+    },
+    {
+      "title": "28년 후: 뼈의 사원",
+      "theater": "씨네큐 신도림",
+      "area": "구로구",
+      "screen": "08관",
+      "movieCode": "20257744",
+      "time": "12:05",
+      "showtime": "2026-03-14T03:05:00.000Z"
+    },
+    {
+      "title": "브라이드!",
+      "theater": "씨네큐 신도림",
+      "area": "구로구",
+      "screen": "08관",
+      "movieCode": "20258444",
+      "time": "14:20",
+      "showtime": "2026-03-14T05:20:00.000Z"
+    },
+    {
+      "title": "초속 5센티미터",
+      "theater": "씨네큐 신도림",
+      "area": "구로구",
+      "screen": "08관",
+      "movieCode": "20259583",
+      "time": "16:50",
+      "showtime": "2026-03-14T07:50:00.000Z"
+    },
+    {
+      "title": "스페셜즈",
+      "theater": "씨네큐 신도림",
+      "area": "구로구",
+      "screen": "08관",
+      "movieCode": "20261927",
+      "time": "21:40",
+      "showtime": "2026-03-14T12:40:00.000Z"
+    },
+    {
+      "title": "파리, 텍사스",
+      "theater": "씨네큐 신도림",
+      "area": "구로구",
+      "screen": "09관",
+      "movieCode": "20080356",
+      "time": "21:10",
+      "showtime": "2026-03-14T12:10:00.000Z"
+    },
+    {
+      "title": "센티멘탈 밸류",
+      "theater": "씨네큐 신도림",
+      "area": "구로구",
+      "screen": "09관",
+      "movieCode": "20250428",
+      "time": "16:00",
+      "showtime": "2026-03-14T07:00:00.000Z"
+    },
+    {
+      "title": "아르코",
+      "theater": "씨네큐 신도림",
+      "area": "구로구",
+      "screen": "09관",
+      "movieCode": "20258074",
+      "time": "12:10",
+      "showtime": "2026-03-14T03:10:00.000Z"
+    },
+    {
+      "title": "아르코",
+      "theater": "씨네큐 신도림",
+      "area": "구로구",
+      "screen": "09관",
+      "movieCode": "20258074",
+      "time": "14:05",
+      "showtime": "2026-03-14T05:05:00.000Z"
+    },
+    {
+      "title": "좀비 랜드 사가: 유메긴가 파라다이스",
+      "theater": "씨네큐 신도림",
+      "area": "구로구",
+      "screen": "09관",
+      "movieCode": "20258709",
+      "time": "09:45",
+      "showtime": "2026-03-14T00:45:00.000Z"
+    },
+    {
+      "title": "좀비 랜드 사가: 유메긴가 파라다이스",
+      "theater": "씨네큐 신도림",
+      "area": "구로구",
+      "screen": "09관",
+      "movieCode": "20258709",
+      "time": "18:40",
+      "showtime": "2026-03-14T09:40:00.000Z"
+    },
+    {
+      "title": "휴민트",
+      "theater": "씨네큐 신도림",
+      "area": "구로구",
+      "screen": "10관",
+      "movieCode": "20241266",
+      "time": "14:45",
+      "showtime": "2026-03-14T05:45:00.000Z"
+    },
+    {
+      "title": "휴민트",
+      "theater": "씨네큐 신도림",
+      "area": "구로구",
+      "screen": "10관",
+      "movieCode": "20241266",
+      "time": "21:50",
+      "showtime": "2026-03-14T12:50:00.000Z"
+    },
+    {
+      "title": "매드 댄스 오피스",
+      "theater": "씨네큐 신도림",
+      "area": "구로구",
+      "screen": "10관",
+      "movieCode": "20241501",
+      "time": "10:10",
+      "showtime": "2026-03-14T01:10:00.000Z"
+    },
+    {
+      "title": "매드 댄스 오피스",
+      "theater": "씨네큐 신도림",
+      "area": "구로구",
+      "screen": "10관",
+      "movieCode": "20241501",
+      "time": "17:15",
+      "showtime": "2026-03-14T08:15:00.000Z"
+    },
+    {
+      "title": "신의악단",
+      "theater": "씨네큐 신도림",
+      "area": "구로구",
+      "screen": "10관",
+      "movieCode": "20247457",
+      "time": "12:25",
+      "showtime": "2026-03-14T03:25:00.000Z"
+    },
+    {
+      "title": "신의악단",
+      "theater": "씨네큐 신도림",
+      "area": "구로구",
+      "screen": "10관",
+      "movieCode": "20247457",
+      "time": "19:30",
+      "showtime": "2026-03-14T10:30:00.000Z"
+    },
+    {
+      "title": "남과 여",
+      "theater": "더숲 아트시네마",
+      "area": "노원구",
+      "screen": "01관",
+      "movieCode": "19790108",
+      "time": "20:20",
+      "showtime": "2026-03-14T11:20:00.000Z"
+    },
+    {
+      "title": "햄넷",
+      "theater": "더숲 아트시네마",
+      "area": "노원구",
+      "screen": "01관",
+      "movieCode": "20250365",
+      "time": "10:10",
+      "showtime": "2026-03-14T01:10:00.000Z"
+    },
+    {
+      "title": "센티멘탈 밸류",
+      "theater": "더숲 아트시네마",
+      "area": "노원구",
+      "screen": "01관",
+      "movieCode": "20250428",
+      "time": "16:00",
+      "showtime": "2026-03-14T07:00:00.000Z"
+    },
+    {
+      "title": "아르코",
+      "theater": "더숲 아트시네마",
+      "area": "노원구",
+      "screen": "01관",
+      "movieCode": "20258074",
+      "time": "18:30",
+      "showtime": "2026-03-14T09:30:00.000Z"
+    },
+    {
+      "title": "몬테크리스토 백작",
+      "theater": "더숲 아트시네마",
+      "area": "노원구",
+      "screen": "01관",
+      "movieCode": "20261053",
+      "time": "12:40",
+      "showtime": "2026-03-14T03:40:00.000Z"
+    },
+    {
+      "title": "오만과 편견",
+      "theater": "더숲 아트시네마",
+      "area": "노원구",
+      "screen": "02관",
+      "movieCode": "20060033",
+      "time": "12:40",
+      "showtime": "2026-03-14T03:40:00.000Z"
+    },
+    {
+      "title": "파리, 텍사스",
+      "theater": "더숲 아트시네마",
+      "area": "노원구",
+      "screen": "02관",
+      "movieCode": "20080356",
+      "time": "17:40",
+      "showtime": "2026-03-14T08:40:00.000Z"
+    },
+    {
+      "title": "차임",
+      "theater": "더숲 아트시네마",
+      "area": "노원구",
+      "screen": "02관",
+      "movieCode": "20250087",
+      "time": "20:20",
+      "showtime": "2026-03-14T11:20:00.000Z"
+    },
+    {
+      "title": "햄넷",
+      "theater": "더숲 아트시네마",
+      "area": "노원구",
+      "screen": "02관",
+      "movieCode": "20250365",
+      "time": "15:10",
+      "showtime": "2026-03-14T06:10:00.000Z"
+    },
+    {
+      "title": "폭풍의 언덕",
+      "theater": "더숲 아트시네마",
+      "area": "노원구",
+      "screen": "02관",
+      "movieCode": "20257823",
+      "time": "10:10",
+      "showtime": "2026-03-14T01:10:00.000Z"
+    },
+    {
+      "title": "아이다호",
+      "theater": "아트나인",
+      "area": "동작구",
+      "screen": "0관",
+      "movieCode": "19918207",
+      "time": "12:30",
+      "showtime": "2026-03-14T03:30:00.000Z"
+    },
+    {
+      "title": "파리, 텍사스",
+      "theater": "아트나인",
+      "area": "동작구",
+      "screen": "0관",
+      "movieCode": "20080356",
+      "time": "14:30",
+      "showtime": "2026-03-14T05:30:00.000Z"
+    },
+    {
+      "title": "파리, 텍사스",
+      "theater": "아트나인",
+      "area": "동작구",
+      "screen": "0관",
+      "movieCode": "20080356",
+      "time": "20:00",
+      "showtime": "2026-03-14T11:00:00.000Z"
+    },
+    {
+      "title": "햄넷",
+      "theater": "아트나인",
+      "area": "동작구",
+      "screen": "0관",
+      "movieCode": "20250365",
+      "time": "10:00",
+      "showtime": "2026-03-14T01:00:00.000Z"
+    },
+    {
+      "title": "센티멘탈 밸류",
+      "theater": "아트나인",
+      "area": "동작구",
+      "screen": "0관",
+      "movieCode": "20250428",
+      "time": "17:20",
+      "showtime": "2026-03-14T08:20:00.000Z"
+    },
+    {
+      "title": "차임",
+      "theater": "아트나인",
+      "area": "동작구",
+      "screen": "9관",
+      "movieCode": "20250087",
+      "time": "21:40",
+      "showtime": "2026-03-14T12:40:00.000Z"
+    },
+    {
+      "title": "햄넷",
+      "theater": "아트나인",
+      "area": "동작구",
+      "screen": "9관",
+      "movieCode": "20250365",
+      "time": "19:10",
+      "showtime": "2026-03-14T10:10:00.000Z"
+    },
+    {
+      "title": "다이 마이 러브",
+      "theater": "아트나인",
+      "area": "동작구",
+      "screen": "9관",
+      "movieCode": "20250413",
+      "time": "16:50",
+      "showtime": "2026-03-14T07:50:00.000Z"
+    },
+    {
+      "title": "센티멘탈 밸류",
+      "theater": "아트나인",
+      "area": "동작구",
+      "screen": "9관",
+      "movieCode": "20250428",
+      "time": "12:00",
+      "showtime": "2026-03-14T03:00:00.000Z"
+    },
+    {
+      "title": "아르코",
+      "theater": "아트나인",
+      "area": "동작구",
+      "screen": "9관",
+      "movieCode": "20258074",
+      "time": "10:10",
+      "showtime": "2026-03-14T01:10:00.000Z"
+    },
+    {
+      "title": "시라트",
+      "theater": "아트나인",
+      "area": "동작구",
+      "screen": "9관",
+      "movieCode": "20259552",
+      "time": "14:40",
+      "showtime": "2026-03-14T05:40:00.000Z"
+    },
+    {
+      "title": "파리, 텍사스",
+      "theater": "KT&G 상상마당 Cinema",
+      "area": "마포구",
+      "screen": "01관",
+      "movieCode": "20080356",
+      "time": "19:35",
+      "showtime": "2026-03-14T10:35:00.000Z"
+    },
+    {
+      "title": "햄넷",
+      "theater": "KT&G 상상마당 Cinema",
+      "area": "마포구",
+      "screen": "01관",
+      "movieCode": "20250365",
+      "time": "10:00",
+      "showtime": "2026-03-14T01:00:00.000Z"
+    },
+    {
+      "title": "센티멘탈 밸류",
+      "theater": "KT&G 상상마당 Cinema",
+      "area": "마포구",
+      "screen": "01관",
+      "movieCode": "20250428",
+      "time": "14:05",
+      "showtime": "2026-03-14T05:05:00.000Z"
+    },
+    {
+      "title": "여행과 나날",
+      "theater": "KT&G 상상마당 Cinema",
+      "area": "마포구",
+      "screen": "01관",
+      "movieCode": "20254054",
+      "time": "16:35",
+      "showtime": "2026-03-14T07:35:00.000Z"
+    },
+    {
+      "title": "아르코",
+      "theater": "KT&G 상상마당 Cinema",
+      "area": "마포구",
+      "screen": "01관",
+      "movieCode": "20258074",
+      "time": "12:20",
+      "showtime": "2026-03-14T03:20:00.000Z"
+    },
+    {
+      "title": "슬라이드 스트럼 뮤트",
+      "theater": "KT&G 상상마당 Cinema",
+      "area": "마포구",
+      "screen": "01관",
+      "movieCode": "20261450",
+      "time": "18:20",
+      "showtime": "2026-03-14T09:20:00.000Z"
+    },
+    {
+      "title": "매드 댄스 오피스",
+      "theater": "모노플렉스앳라이즈",
+      "area": "마포구",
+      "screen": "01관",
+      "movieCode": "20241501",
+      "time": "11:00",
+      "showtime": "2026-03-14T02:00:00.000Z"
+    },
+    {
+      "title": "왕과 사는 남자",
+      "theater": "모노플렉스앳라이즈",
+      "area": "마포구",
+      "screen": "01관",
+      "movieCode": "20242837",
+      "time": "13:35",
+      "showtime": "2026-03-14T04:35:00.000Z"
+    },
+    {
+      "title": "왕과 사는 남자",
+      "theater": "모노플렉스앳라이즈",
+      "area": "마포구",
+      "screen": "01관",
+      "movieCode": "20242837",
+      "time": "16:20",
+      "showtime": "2026-03-14T07:20:00.000Z"
+    },
+    {
+      "title": "차임",
+      "theater": "인디스페이스",
+      "area": "마포구",
+      "screen": "01관",
+      "movieCode": "20250087",
+      "time": "17:50",
+      "showtime": "2026-03-14T08:50:00.000Z"
+    },
+    {
+      "title": "노 어더 랜드",
+      "theater": "인디스페이스",
+      "area": "마포구",
+      "screen": "01관",
+      "movieCode": "20256787",
+      "time": "11:00",
+      "showtime": "2026-03-14T02:00:00.000Z"
+    },
+    {
+      "title": "아르코",
+      "theater": "인디스페이스",
+      "area": "마포구",
+      "screen": "01관",
+      "movieCode": "20258074",
+      "time": "16:00",
+      "showtime": "2026-03-14T07:00:00.000Z"
+    },
+    {
+      "title": "슬라이드 스트럼 뮤트",
+      "theater": "인디스페이스",
+      "area": "마포구",
+      "screen": "01관",
+      "movieCode": "20261450",
+      "time": "19:35",
+      "showtime": "2026-03-14T10:35:00.000Z"
+    },
+    {
+      "title": "오, 발렌타인",
+      "theater": "인디스페이스",
+      "area": "마포구",
+      "screen": "01관",
+      "movieCode": "20261642",
+      "time": "13:00",
+      "showtime": "2026-03-14T04:00:00.000Z"
+    },
+    {
+      "title": "사랑도 통역이 되나요?",
+      "theater": "라이카시네마",
+      "area": "서대문구",
+      "screen": "S관",
+      "movieCode": "20040476",
+      "time": "14:05",
+      "showtime": "2026-03-14T05:05:00.000Z"
+    },
+    {
+      "title": "퐁네프의 연인들",
+      "theater": "라이카시네마",
+      "area": "서대문구",
+      "screen": "S관",
+      "movieCode": "20090796",
+      "time": "16:05",
+      "showtime": "2026-03-14T07:05:00.000Z"
+    },
+    {
+      "title": "톰보이",
+      "theater": "라이카시네마",
+      "area": "서대문구",
+      "screen": "S관",
+      "movieCode": "20113252",
+      "time": "12:25",
+      "showtime": "2026-03-14T03:25:00.000Z"
+    },
+    {
+      "title": "노이즈가 말하기를",
+      "theater": "라이카시네마",
+      "area": "서대문구",
+      "screen": "S관",
+      "movieCode": "20246035",
+      "time": "20:10",
+      "showtime": "2026-03-14T11:10:00.000Z"
+    },
+    {
+      "title": "햄넷",
+      "theater": "라이카시네마",
+      "area": "서대문구",
+      "screen": "S관",
+      "movieCode": "20250365",
+      "time": "10:00",
+      "showtime": "2026-03-14T01:00:00.000Z"
+    },
+    {
+      "title": "센티멘탈 밸류",
+      "theater": "라이카시네마",
+      "area": "서대문구",
+      "screen": "S관",
+      "movieCode": "20250428",
+      "time": "21:05",
+      "showtime": "2026-03-14T12:05:00.000Z"
+    },
+    {
+      "title": "언더그라운드",
+      "theater": "라이카시네마",
+      "area": "서대문구",
+      "screen": "S관",
+      "movieCode": "20253995",
+      "time": "18:30",
+      "showtime": "2026-03-14T09:30:00.000Z"
+    },
+    {
+      "title": "남과 여",
+      "theater": "라이카시네마",
+      "area": "서대문구",
+      "screen": "2관",
+      "movieCode": "19790108",
+      "time": "14:45",
+      "showtime": "2026-03-14T05:45:00.000Z"
+    },
+    {
+      "title": "하나 그리고 둘",
+      "theater": "라이카시네마",
+      "area": "서대문구",
+      "screen": "2관",
+      "movieCode": "20000059",
+      "time": "11:35",
+      "showtime": "2026-03-14T02:35:00.000Z"
+    },
+    {
+      "title": "오만과 편견",
+      "theater": "라이카시네마",
+      "area": "서대문구",
+      "screen": "2관",
+      "movieCode": "20060033",
+      "time": "21:20",
+      "showtime": "2026-03-14T12:20:00.000Z"
+    },
+    {
+      "title": "센티멘탈 밸류",
+      "theater": "라이카시네마",
+      "area": "서대문구",
+      "screen": "2관",
+      "movieCode": "20250428",
+      "time": "18:50",
+      "showtime": "2026-03-14T09:50:00.000Z"
+    },
+    {
+      "title": "아르코",
+      "theater": "라이카시네마",
+      "area": "서대문구",
+      "screen": "2관",
+      "movieCode": "20258074",
+      "time": "09:50",
+      "showtime": "2026-03-14T00:50:00.000Z"
+    },
+    {
+      "title": "화양연화 특별판",
+      "theater": "라이카시네마",
+      "area": "서대문구",
+      "screen": "2관",
+      "movieCode": "20259893",
+      "time": "16:45",
+      "showtime": "2026-03-14T07:45:00.000Z"
+    },
+    {
+      "title": "토니 에드만",
+      "theater": "아트하우스모모",
+      "area": "서대문구",
+      "screen": "01관",
+      "movieCode": "20164927",
+      "time": "12:30",
+      "showtime": "2026-03-14T03:30:00.000Z"
+    },
+    {
+      "title": "더 웨일",
+      "theater": "아트하우스모모",
+      "area": "서대문구",
+      "screen": "01관",
+      "movieCode": "20230523",
+      "time": "20:00",
+      "showtime": "2026-03-14T11:00:00.000Z"
+    },
+    {
+      "title": "애프터썬",
+      "theater": "아트하우스모모",
+      "area": "서대문구",
+      "screen": "01관",
+      "movieCode": "20239877",
+      "time": "15:30",
+      "showtime": "2026-03-14T06:30:00.000Z"
+    },
+    {
+      "title": "센티멘탈 밸류",
+      "theater": "아트하우스모모",
+      "area": "서대문구",
+      "screen": "01관",
+      "movieCode": "20250428",
+      "time": "10:00",
+      "showtime": "2026-03-14T01:00:00.000Z"
+    },
+    {
+      "title": "센티멘탈 밸류",
+      "theater": "아트하우스모모",
+      "area": "서대문구",
+      "screen": "01관",
+      "movieCode": "20250428",
+      "time": "17:30",
+      "showtime": "2026-03-14T08:30:00.000Z"
+    },
+    {
+      "title": "파리, 텍사스",
+      "theater": "아트하우스모모",
+      "area": "서대문구",
+      "screen": "02관",
+      "movieCode": "20080356",
+      "time": "13:00",
+      "showtime": "2026-03-14T04:00:00.000Z"
+    },
+    {
+      "title": "햄넷",
+      "theater": "아트하우스모모",
+      "area": "서대문구",
+      "screen": "02관",
+      "movieCode": "20250365",
+      "time": "10:20",
+      "showtime": "2026-03-14T01:20:00.000Z"
+    },
+    {
+      "title": "햄넷",
+      "theater": "아트하우스모모",
+      "area": "서대문구",
+      "screen": "02관",
+      "movieCode": "20250365",
+      "time": "19:30",
+      "showtime": "2026-03-14T10:30:00.000Z"
+    },
+    {
+      "title": "렌탈 패밀리: 가족을 빌려드립니다",
+      "theater": "아트하우스모모",
+      "area": "서대문구",
+      "screen": "02관",
+      "movieCode": "20261308",
+      "time": "17:00",
+      "showtime": "2026-03-14T08:00:00.000Z"
+    },
+    {
+      "title": "천국보다 낯선",
+      "theater": "필름포럼",
+      "area": "서대문구",
+      "screen": "01관",
+      "movieCode": "19950325",
+      "time": "18:10",
+      "showtime": "2026-03-14T09:10:00.000Z"
+    },
+    {
+      "title": "오만과 편견",
+      "theater": "필름포럼",
+      "area": "서대문구",
+      "screen": "01관",
+      "movieCode": "20060033",
+      "time": "12:10",
+      "showtime": "2026-03-14T03:10:00.000Z"
+    },
+    {
+      "title": "파리, 텍사스",
+      "theater": "필름포럼",
+      "area": "서대문구",
+      "screen": "01관",
+      "movieCode": "20080356",
+      "time": "14:30",
+      "showtime": "2026-03-14T05:30:00.000Z"
+    },
+    {
+      "title": "언어의 정원",
+      "theater": "필름포럼",
+      "area": "서대문구",
+      "screen": "01관",
+      "movieCode": "20139083",
+      "time": "17:10",
+      "showtime": "2026-03-14T08:10:00.000Z"
+    },
+    {
+      "title": "세계의 주인",
+      "theater": "필름포럼",
+      "area": "서대문구",
+      "screen": "01관",
+      "movieCode": "20247429",
+      "time": "19:50",
+      "showtime": "2026-03-14T10:50:00.000Z"
+    },
+    {
+      "title": "신의악단",
+      "theater": "필름포럼",
+      "area": "서대문구",
+      "screen": "01관",
+      "movieCode": "20247457",
+      "time": "10:10",
+      "showtime": "2026-03-14T01:10:00.000Z"
+    },
+    {
+      "title": "아메리칸 셰프",
+      "theater": "필름포럼",
+      "area": "서대문구",
+      "screen": "02관",
+      "movieCode": "20140609",
+      "time": "12:30",
+      "showtime": "2026-03-14T03:30:00.000Z"
+    },
+    {
+      "title": "햄넷",
+      "theater": "필름포럼",
+      "area": "서대문구",
+      "screen": "02관",
+      "movieCode": "20250365",
+      "time": "10:10",
+      "showtime": "2026-03-14T01:10:00.000Z"
+    },
+    {
+      "title": "센티멘탈 밸류",
+      "theater": "필름포럼",
+      "area": "서대문구",
+      "screen": "02관",
+      "movieCode": "20250428",
+      "time": "16:10",
+      "showtime": "2026-03-14T07:10:00.000Z"
+    },
+    {
+      "title": "여행과 나날",
+      "theater": "필름포럼",
+      "area": "서대문구",
+      "screen": "02관",
+      "movieCode": "20254054",
+      "time": "18:30",
+      "showtime": "2026-03-14T09:30:00.000Z"
+    },
+    {
+      "title": "아르코",
+      "theater": "필름포럼",
+      "area": "서대문구",
+      "screen": "02관",
+      "movieCode": "20258074",
+      "time": "14:30",
+      "showtime": "2026-03-14T05:30:00.000Z"
+    },
+    {
+      "title": "화양연화 특별판",
+      "theater": "필름포럼",
+      "area": "서대문구",
+      "screen": "02관",
+      "movieCode": "20259893",
+      "time": "20:10",
+      "showtime": "2026-03-14T11:10:00.000Z"
+    },
+    {
+      "title": "휴민트",
+      "theater": "아리랑시네센터(서울)",
+      "area": "성북구",
+      "screen": "01관",
+      "movieCode": "20241266",
+      "time": "19:40",
+      "showtime": "2026-03-14T10:40:00.000Z"
+    },
+    {
+      "title": "왕과 사는 남자",
+      "theater": "아리랑시네센터(서울)",
+      "area": "성북구",
+      "screen": "01관",
+      "movieCode": "20242837",
+      "time": "09:15",
+      "showtime": "2026-03-14T00:15:00.000Z"
+    },
+    {
+      "title": "호퍼스",
+      "theater": "아리랑시네센터(서울)",
+      "area": "성북구",
+      "screen": "01관",
+      "movieCode": "20256283",
+      "time": "11:35",
+      "showtime": "2026-03-14T02:35:00.000Z"
+    },
+    {
+      "title": "호퍼스",
+      "theater": "아리랑시네센터(서울)",
+      "area": "성북구",
+      "screen": "01관",
+      "movieCode": "20256283",
+      "time": "13:40",
+      "showtime": "2026-03-14T04:40:00.000Z"
+    },
+    {
+      "title": "호퍼스",
+      "theater": "아리랑시네센터(서울)",
+      "area": "성북구",
+      "screen": "01관",
+      "movieCode": "20256283",
+      "time": "15:45",
+      "showtime": "2026-03-14T06:45:00.000Z"
+    },
+    {
+      "title": "아르코",
+      "theater": "아리랑시네센터(서울)",
+      "area": "성북구",
+      "screen": "01관",
+      "movieCode": "20258074",
+      "time": "17:50",
+      "showtime": "2026-03-14T08:50:00.000Z"
+    },
+    {
+      "title": "왕과 사는 남자",
+      "theater": "아리랑시네센터(서울)",
+      "area": "성북구",
+      "screen": "02관",
+      "movieCode": "20242837",
+      "time": "10:00",
+      "showtime": "2026-03-14T01:00:00.000Z"
+    },
+    {
+      "title": "왕과 사는 남자",
+      "theater": "아리랑시네센터(서울)",
+      "area": "성북구",
+      "screen": "02관",
+      "movieCode": "20242837",
+      "time": "12:15",
+      "showtime": "2026-03-14T03:15:00.000Z"
+    },
+    {
+      "title": "왕과 사는 남자",
+      "theater": "아리랑시네센터(서울)",
+      "area": "성북구",
+      "screen": "02관",
+      "movieCode": "20242837",
+      "time": "14:30",
+      "showtime": "2026-03-14T05:30:00.000Z"
+    },
+    {
+      "title": "왕과 사는 남자",
+      "theater": "아리랑시네센터(서울)",
+      "area": "성북구",
+      "screen": "02관",
+      "movieCode": "20242837",
+      "time": "16:45",
+      "showtime": "2026-03-14T07:45:00.000Z"
+    },
+    {
+      "title": "왕과 사는 남자",
+      "theater": "아리랑시네센터(서울)",
+      "area": "성북구",
+      "screen": "02관",
+      "movieCode": "20242837",
+      "time": "19:00",
+      "showtime": "2026-03-14T10:00:00.000Z"
+    },
+    {
+      "title": "매드 댄스 오피스",
+      "theater": "아리랑시네센터(서울)",
+      "area": "성북구",
+      "screen": "아리랑인디웨이브",
+      "movieCode": "20241501",
+      "time": "15:25",
+      "showtime": "2026-03-14T06:25:00.000Z"
+    },
+    {
+      "title": "햄넷",
+      "theater": "아리랑시네센터(서울)",
+      "area": "성북구",
+      "screen": "아리랑인디웨이브",
+      "movieCode": "20250365",
+      "time": "10:30",
+      "showtime": "2026-03-14T01:30:00.000Z"
+    },
+    {
+      "title": "센티멘탈 밸류",
+      "theater": "아리랑시네센터(서울)",
+      "area": "성북구",
+      "screen": "아리랑인디웨이브",
+      "movieCode": "20250428",
+      "time": "12:50",
+      "showtime": "2026-03-14T03:50:00.000Z"
+    },
+    {
+      "title": "렌탈 패밀리: 가족을 빌려드립니다",
+      "theater": "아리랑시네센터(서울)",
+      "area": "성북구",
+      "screen": "아리랑인디웨이브",
+      "movieCode": "20261308",
+      "time": "18:20",
+      "showtime": "2026-03-14T09:20:00.000Z"
+    },
+    {
+      "title": "말 없는 사나이",
+      "theater": "낭만극장",
+      "area": "종로구",
+      "screen": "01관",
+      "movieCode": "19528008",
+      "time": "10:20",
+      "showtime": "2026-03-14T01:20:00.000Z"
+    },
+    {
+      "title": "말 없는 사나이",
+      "theater": "낭만극장",
+      "area": "종로구",
+      "screen": "01관",
+      "movieCode": "19528008",
+      "time": "12:45",
+      "showtime": "2026-03-14T03:45:00.000Z"
+    },
+    {
+      "title": "차임",
+      "theater": "씨네큐브광화문(서울)",
+      "area": "종로구",
+      "screen": "01관",
+      "movieCode": "20250087",
+      "time": "19:05",
+      "showtime": "2026-03-14T10:05:00.000Z"
+    },
+    {
+      "title": "햄넷",
+      "theater": "씨네큐브광화문(서울)",
+      "area": "종로구",
+      "screen": "01관",
+      "movieCode": "20250365",
+      "time": "09:30",
+      "showtime": "2026-03-14T00:30:00.000Z"
+    },
+    {
+      "title": "햄넷",
+      "theater": "씨네큐브광화문(서울)",
+      "area": "종로구",
+      "screen": "01관",
+      "movieCode": "20250365",
+      "time": "14:20",
+      "showtime": "2026-03-14T05:20:00.000Z"
+    },
+    {
+      "title": "센티멘탈 밸류",
+      "theater": "씨네큐브광화문(서울)",
+      "area": "종로구",
+      "screen": "01관",
+      "movieCode": "20250428",
+      "time": "11:50",
+      "showtime": "2026-03-14T02:50:00.000Z"
+    },
+    {
+      "title": "센티멘탈 밸류",
+      "theater": "씨네큐브광화문(서울)",
+      "area": "종로구",
+      "screen": "01관",
+      "movieCode": "20250428",
+      "time": "16:40",
+      "showtime": "2026-03-14T07:40:00.000Z"
+    },
+    {
+      "title": "노 어더 랜드",
+      "theater": "씨네큐브광화문(서울)",
+      "area": "종로구",
+      "screen": "01관",
+      "movieCode": "20256787",
+      "time": "20:40",
+      "showtime": "2026-03-14T11:40:00.000Z"
+    },
+    {
+      "title": "두 번째 계절",
+      "theater": "씨네큐브광화문(서울)",
+      "area": "종로구",
+      "screen": "02관",
+      "movieCode": "20246329",
+      "time": "11:30",
+      "showtime": "2026-03-14T02:30:00.000Z"
+    },
+    {
+      "title": "우리에게는 아직 내일이 있다",
+      "theater": "씨네큐브광화문(서울)",
+      "area": "종로구",
+      "screen": "02관",
+      "movieCode": "20249843",
+      "time": "13:40",
+      "showtime": "2026-03-14T04:40:00.000Z"
+    },
+    {
+      "title": "다이 마이 러브",
+      "theater": "씨네큐브광화문(서울)",
+      "area": "종로구",
+      "screen": "02관",
+      "movieCode": "20250413",
+      "time": "15:50",
+      "showtime": "2026-03-14T06:50:00.000Z"
+    },
+    {
+      "title": "원 배틀 애프터 어나더",
+      "theater": "씨네큐브광화문(서울)",
+      "area": "종로구",
+      "screen": "02관",
+      "movieCode": "20256397",
+      "time": "19:50",
+      "showtime": "2026-03-14T10:50:00.000Z"
+    },
+    {
+      "title": "아르코",
+      "theater": "씨네큐브광화문(서울)",
+      "area": "종로구",
+      "screen": "02관",
+      "movieCode": "20258074",
+      "time": "09:50",
+      "showtime": "2026-03-14T00:50:00.000Z"
+    },
+    {
+      "title": "오, 발렌타인",
+      "theater": "씨네큐브광화문(서울)",
+      "area": "종로구",
+      "screen": "02관",
+      "movieCode": "20261642",
+      "time": "18:05",
+      "showtime": "2026-03-14T09:05:00.000Z"
+    },
+    {
+      "title": "파리, 텍사스",
+      "theater": "에무 시네마 앤 카페",
+      "area": "종로구",
+      "screen": "01관",
+      "movieCode": "20080356",
+      "time": "20:30",
+      "showtime": "2026-03-14T11:30:00.000Z"
+    },
+    {
+      "title": "햄넷",
+      "theater": "에무 시네마 앤 카페",
+      "area": "종로구",
+      "screen": "01관",
+      "movieCode": "20250365",
+      "time": "18:10",
+      "showtime": "2026-03-14T09:10:00.000Z"
+    },
+    {
+      "title": "다이 마이 러브",
+      "theater": "에무 시네마 앤 카페",
+      "area": "종로구",
+      "screen": "01관",
+      "movieCode": "20250413",
+      "time": "16:00",
+      "showtime": "2026-03-14T07:00:00.000Z"
+    },
+    {
+      "title": "센티멘탈 밸류",
+      "theater": "에무 시네마 앤 카페",
+      "area": "종로구",
+      "screen": "01관",
+      "movieCode": "20250428",
+      "time": "13:30",
+      "showtime": "2026-03-14T04:30:00.000Z"
+    },
+    {
+      "title": "아르코",
+      "theater": "에무 시네마 앤 카페",
+      "area": "종로구",
+      "screen": "01관",
+      "movieCode": "20258074",
+      "time": "09:50",
+      "showtime": "2026-03-14T00:50:00.000Z"
+    },
+    {
+      "title": "시라트",
+      "theater": "에무 시네마 앤 카페",
+      "area": "종로구",
+      "screen": "01관",
+      "movieCode": "20259552",
+      "time": "11:25",
+      "showtime": "2026-03-14T02:25:00.000Z"
+    },
+    {
+      "title": "남과 여",
+      "theater": "에무 시네마 앤 카페",
+      "area": "종로구",
+      "screen": "02관",
+      "movieCode": "19790108",
+      "time": "11:00",
+      "showtime": "2026-03-14T02:00:00.000Z"
+    },
+    {
+      "title": "하나 그리고 둘",
+      "theater": "에무 시네마 앤 카페",
+      "area": "종로구",
+      "screen": "02관",
+      "movieCode": "20000059",
+      "time": "20:10",
+      "showtime": "2026-03-14T11:10:00.000Z"
+    },
+    {
+      "title": "오만과 편견",
+      "theater": "에무 시네마 앤 카페",
+      "area": "종로구",
+      "screen": "02관",
+      "movieCode": "20060033",
+      "time": "15:25",
+      "showtime": "2026-03-14T06:25:00.000Z"
+    },
+    {
+      "title": "파리, 텍사스",
+      "theater": "에무 시네마 앤 카페",
+      "area": "종로구",
+      "screen": "02관",
+      "movieCode": "20080356",
+      "time": "12:50",
+      "showtime": "2026-03-14T03:50:00.000Z"
+    },
+    {
+      "title": "센티멘탈 밸류",
+      "theater": "에무 시네마 앤 카페",
+      "area": "종로구",
+      "screen": "02관",
+      "movieCode": "20250428",
+      "time": "17:45",
+      "showtime": "2026-03-14T08:45:00.000Z"
+    },
+    {
+      "title": "슬라이드 스트럼 뮤트",
+      "theater": "에무 시네마 앤 카페",
+      "area": "종로구",
+      "screen": "02관",
+      "movieCode": "20261450",
+      "time": "09:50",
+      "showtime": "2026-03-14T00:50:00.000Z"
+    },
+    {
+      "title": "요조숙녀",
+      "theater": "허리우드클래식",
+      "area": "종로구",
+      "screen": "01관",
+      "movieCode": "20185401",
+      "time": "10:30",
+      "showtime": "2026-03-14T01:30:00.000Z"
+    },
+    {
+      "title": "요조숙녀",
+      "theater": "허리우드클래식",
+      "area": "종로구",
+      "screen": "01관",
+      "movieCode": "20185401",
+      "time": "12:15",
+      "showtime": "2026-03-14T03:15:00.000Z"
+    },
+    {
+      "title": "요조숙녀",
+      "theater": "허리우드클래식",
+      "area": "종로구",
+      "screen": "01관",
+      "movieCode": "20185401",
+      "time": "14:00",
+      "showtime": "2026-03-14T05:00:00.000Z"
+    },
+    {
+      "title": "요조숙녀",
+      "theater": "허리우드클래식",
+      "area": "종로구",
+      "screen": "01관",
+      "movieCode": "20185401",
+      "time": "15:45",
+      "showtime": "2026-03-14T06:45:00.000Z"
+    },
+    {
+      "title": "요조숙녀",
+      "theater": "허리우드클래식",
+      "area": "종로구",
+      "screen": "01관",
+      "movieCode": "20185401",
+      "time": "17:30",
+      "showtime": "2026-03-14T08:30:00.000Z"
+    },
+    {
+      "title": "발레",
+      "theater": "서울아트시네마",
+      "area": "중구",
+      "screen": "01관",
+      "movieCode": "20262221",
+      "time": "13:00",
+      "showtime": "2026-03-14T04:00:00.000Z"
+    },
+    {
+      "title": "파리, 텍사스",
+      "theater": "CGV 용산아이파크몰",
+      "area": "용산구",
+      "screen": "19관(아트하우스)",
+      "movieCode": "20080356",
+      "time": "12:15",
+      "showtime": "2026-03-14T03:15:00.000Z"
+    },
+    {
+      "title": "햄넷",
+      "theater": "CGV 용산아이파크몰",
+      "area": "용산구",
+      "screen": "19관(아트하우스)",
+      "movieCode": "20250365",
+      "time": "22:45",
+      "showtime": "2026-03-14T13:45:00.000Z"
+    },
+    {
+      "title": "씨너스: 죄인들",
+      "theater": "CGV 용산아이파크몰",
+      "area": "용산구",
+      "screen": "19관(아트하우스)",
+      "movieCode": "20254602",
+      "time": "25:25",
+      "showtime": "2026-03-14T16:25:00.000Z"
+    },
+    {
+      "title": "이 세상 끝까지 - 디렉터스 컷",
+      "theater": "CGV 용산아이파크몰",
+      "area": "용산구",
+      "screen": "19관(아트하우스)",
+      "movieCode": "20256325",
+      "time": "17:10",
+      "showtime": "2026-03-14T08:10:00.000Z"
+    },
+    {
+      "title": "아르코",
+      "theater": "CGV 용산아이파크몰",
+      "area": "용산구",
+      "screen": "19관(아트하우스)",
+      "movieCode": "20258074",
+      "time": "10:15",
+      "showtime": "2026-03-14T01:15:00.000Z"
+    },
+    {
+      "title": "아르코",
+      "theater": "CGV 용산아이파크몰",
+      "area": "용산구",
+      "screen": "19관(아트하우스)",
+      "movieCode": "20258074",
+      "time": "15:10",
+      "showtime": "2026-03-14T06:10:00.000Z"
+    },
+    {
+      "title": "오, 발렌타인",
+      "theater": "CGV 용산아이파크몰",
+      "area": "용산구",
+      "screen": "19관(아트하우스)",
+      "movieCode": "20261642",
+      "time": "08:05",
+      "showtime": "2026-03-13T23:05:00.000Z"
+    },
+    {
+      "title": "F1 더 무비",
+      "theater": "CGV 압구정",
+      "area": "강남구",
+      "screen": "IMAX관",
+      "movieCode": "20254501",
+      "time": "09:30",
+      "showtime": "2026-03-14T00:30:00.000Z"
+    },
+    {
+      "title": "F1 더 무비",
+      "theater": "CGV 압구정",
+      "area": "강남구",
+      "screen": "IMAX관",
+      "movieCode": "20254501",
+      "time": "19:10",
+      "showtime": "2026-03-14T10:10:00.000Z"
+    },
+    {
+      "title": "F1 더 무비",
+      "theater": "CGV 압구정",
+      "area": "강남구",
+      "screen": "IMAX관",
+      "movieCode": "20254501",
+      "time": "22:30",
+      "showtime": "2026-03-14T13:30:00.000Z"
+    },
+    {
+      "title": "브라이드!",
+      "theater": "CGV 압구정",
+      "area": "강남구",
+      "screen": "IMAX관",
+      "movieCode": "20258444",
+      "time": "13:00",
+      "showtime": "2026-03-14T04:00:00.000Z"
+    },
+    {
+      "title": "브라이드!",
+      "theater": "CGV 압구정",
+      "area": "강남구",
+      "screen": "IMAX관",
+      "movieCode": "20258444",
+      "time": "16:20",
+      "showtime": "2026-03-14T07:20:00.000Z"
+    },
+    {
+      "title": "왕과 사는 남자",
+      "theater": "CGV 압구정",
+      "area": "강남구",
+      "screen": "02관",
+      "movieCode": "20242837",
+      "time": "11:00",
+      "showtime": "2026-03-14T02:00:00.000Z"
+    },
+    {
+      "title": "왕과 사는 남자",
+      "theater": "CGV 압구정",
+      "area": "강남구",
+      "screen": "02관",
+      "movieCode": "20242837",
+      "time": "16:40",
+      "showtime": "2026-03-14T07:40:00.000Z"
+    },
+    {
+      "title": "왕과 사는 남자",
+      "theater": "CGV 압구정",
+      "area": "강남구",
+      "screen": "02관",
+      "movieCode": "20242837",
+      "time": "19:30",
+      "showtime": "2026-03-14T10:30:00.000Z"
+    },
+    {
+      "title": "왕과 사는 남자",
+      "theater": "CGV 압구정",
+      "area": "강남구",
+      "screen": "02관",
+      "movieCode": "20242837",
+      "time": "22:00",
+      "showtime": "2026-03-14T13:00:00.000Z"
+    },
+    {
+      "title": "햄넷",
+      "theater": "CGV 압구정",
+      "area": "강남구",
+      "screen": "02관",
+      "movieCode": "20250365",
+      "time": "13:40",
+      "showtime": "2026-03-14T04:40:00.000Z"
+    },
+    {
+      "title": "왕과 사는 남자",
+      "theater": "CGV 압구정",
+      "area": "강남구",
+      "screen": "03관",
+      "movieCode": "20242837",
+      "time": "10:30",
+      "showtime": "2026-03-14T01:30:00.000Z"
+    },
+    {
+      "title": "왕과 사는 남자",
+      "theater": "CGV 압구정",
+      "area": "강남구",
+      "screen": "03관",
+      "movieCode": "20242837",
+      "time": "13:20",
+      "showtime": "2026-03-14T04:20:00.000Z"
+    },
+    {
+      "title": "왕과 사는 남자",
+      "theater": "CGV 압구정",
+      "area": "강남구",
+      "screen": "03관",
+      "movieCode": "20242837",
+      "time": "15:50",
+      "showtime": "2026-03-14T06:50:00.000Z"
+    },
+    {
+      "title": "왕과 사는 남자",
+      "theater": "CGV 압구정",
+      "area": "강남구",
+      "screen": "03관",
+      "movieCode": "20242837",
+      "time": "18:20",
+      "showtime": "2026-03-14T09:20:00.000Z"
+    },
+    {
+      "title": "왕과 사는 남자",
+      "theater": "CGV 압구정",
+      "area": "강남구",
+      "screen": "03관",
+      "movieCode": "20242837",
+      "time": "20:50",
+      "showtime": "2026-03-14T11:50:00.000Z"
+    },
+    {
+      "title": "햄넷",
+      "theater": "CGV 압구정",
+      "area": "강남구",
+      "screen": "아트하우스 ART1관",
+      "movieCode": "20250365",
+      "time": "12:30",
+      "showtime": "2026-03-14T03:30:00.000Z"
+    },
+    {
+      "title": "이 세상 끝까지 - 디렉터스 컷",
+      "theater": "CGV 압구정",
+      "area": "강남구",
+      "screen": "아트하우스 ART1관",
+      "movieCode": "20256325",
+      "time": "15:10",
+      "showtime": "2026-03-14T06:10:00.000Z"
+    },
+    {
+      "title": "아르코",
+      "theater": "CGV 압구정",
+      "area": "강남구",
+      "screen": "아트하우스 ART1관",
+      "movieCode": "20258074",
+      "time": "10:00",
+      "showtime": "2026-03-14T01:00:00.000Z"
+    },
+    {
+      "title": "오, 발렌타인",
+      "theater": "CGV 압구정",
+      "area": "강남구",
+      "screen": "아트하우스 ART1관",
+      "movieCode": "20261642",
+      "time": "21:20",
+      "showtime": "2026-03-14T12:20:00.000Z"
+    },
+    {
+      "title": "파리, 텍사스",
+      "theater": "CGV 압구정",
+      "area": "강남구",
+      "screen": "아트하우스 ART2관",
+      "movieCode": "20080356",
+      "time": "11:50",
+      "showtime": "2026-03-14T02:50:00.000Z"
+    },
+    {
+      "title": "페널티킥 앞에 선 골키퍼의 불안",
+      "theater": "CGV 압구정",
+      "area": "강남구",
+      "screen": "아트하우스 ART2관",
+      "movieCode": "20161523",
+      "time": "20:20",
+      "showtime": "2026-03-14T11:20:00.000Z"
+    },
+    {
+      "title": "차임",
+      "theater": "CGV 압구정",
+      "area": "강남구",
+      "screen": "아트하우스 ART2관",
+      "movieCode": "20250087",
+      "time": "10:00",
+      "showtime": "2026-03-14T01:00:00.000Z"
+    },
+    {
+      "title": "센티멘탈 밸류",
+      "theater": "CGV 압구정",
+      "area": "강남구",
+      "screen": "아트하우스 ART2관",
+      "movieCode": "20250428",
+      "time": "17:30",
+      "showtime": "2026-03-14T08:30:00.000Z"
+    },
+    {
+      "title": "렌탈 패밀리: 가족을 빌려드립니다",
+      "theater": "CGV 압구정",
+      "area": "강남구",
+      "screen": "아트하우스 ART2관",
+      "movieCode": "20261308",
+      "time": "15:00",
+      "showtime": "2026-03-14T06:00:00.000Z"
+    },
+    {
+      "title": "왕과 사는 남자",
+      "theater": "CGV 압구정",
+      "area": "강남구",
+      "screen": "04관",
+      "movieCode": "20242837",
+      "time": "12:30",
+      "showtime": "2026-03-14T03:30:00.000Z"
+    },
+    {
+      "title": "왕과 사는 남자",
+      "theater": "CGV 압구정",
+      "area": "강남구",
+      "screen": "04관",
+      "movieCode": "20242837",
+      "time": "15:00",
+      "showtime": "2026-03-14T06:00:00.000Z"
+    },
+    {
+      "title": "왕과 사는 남자",
+      "theater": "CGV 압구정",
+      "area": "강남구",
+      "screen": "04관",
+      "movieCode": "20242837",
+      "time": "17:30",
+      "showtime": "2026-03-14T08:30:00.000Z"
+    },
+    {
+      "title": "왕과 사는 남자",
+      "theater": "CGV 압구정",
+      "area": "강남구",
+      "screen": "04관",
+      "movieCode": "20242837",
+      "time": "20:00",
+      "showtime": "2026-03-14T11:00:00.000Z"
+    },
+    {
+      "title": "다이 마이 러브",
+      "theater": "CGV 압구정",
+      "area": "강남구",
+      "screen": "04관",
+      "movieCode": "20250413",
+      "time": "10:00",
+      "showtime": "2026-03-14T01:00:00.000Z"
+    },
+    {
+      "title": "파리, 텍사스",
+      "theater": "CGV 신촌아트레온",
+      "area": "서대문구",
+      "screen": "10관 [아트하우스]",
+      "movieCode": "20080356",
+      "time": "10:20",
+      "showtime": "2026-03-14T01:20:00.000Z"
+    },
+    {
+      "title": "미국인 친구",
+      "theater": "CGV 신촌아트레온",
+      "area": "서대문구",
+      "screen": "10관 [아트하우스]",
+      "movieCode": "20206201",
+      "time": "19:00",
+      "showtime": "2026-03-14T10:00:00.000Z"
+    },
+    {
+      "title": "이 세상 끝까지 - 디렉터스 컷",
+      "theater": "CGV 신촌아트레온",
+      "area": "서대문구",
+      "screen": "10관 [아트하우스]",
+      "movieCode": "20256325",
+      "time": "13:20",
+      "showtime": "2026-03-14T04:20:00.000Z"
+    },
+    {
+      "title": "힌드의 목소리",
+      "theater": "CGV 신촌아트레온",
+      "area": "서대문구",
+      "screen": "10관 [아트하우스]",
+      "movieCode": "20259339",
+      "time": "21:50",
+      "showtime": "2026-03-14T12:50:00.000Z"
+    },
+    {
+      "title": "파리, 텍사스",
+      "theater": "CGV 대학로",
+      "area": "종로구",
+      "screen": "05관",
+      "movieCode": "20080356",
+      "time": "19:40",
+      "showtime": "2026-03-14T10:40:00.000Z"
+    },
+    {
+      "title": "이 세상 끝까지 - 디렉터스 컷",
+      "theater": "CGV 대학로",
+      "area": "종로구",
+      "screen": "05관",
+      "movieCode": "20256325",
+      "time": "13:45",
+      "showtime": "2026-03-14T04:45:00.000Z"
+    },
+    {
+      "title": "아르코",
+      "theater": "CGV 대학로",
+      "area": "종로구",
+      "screen": "05관",
+      "movieCode": "20258074",
+      "time": "11:15",
+      "showtime": "2026-03-14T02:15:00.000Z"
+    },
+    {
+      "title": "햄넷",
+      "theater": "CGV 강변",
+      "area": "광진구",
+      "screen": "04관(아트하우스)",
+      "movieCode": "20250365",
+      "time": "10:40",
+      "showtime": "2026-03-14T01:40:00.000Z"
+    },
+    {
+      "title": "아르코",
+      "theater": "CGV 강변",
+      "area": "광진구",
+      "screen": "04관(아트하우스)",
+      "movieCode": "20258074",
+      "time": "16:00",
+      "showtime": "2026-03-14T07:00:00.000Z"
+    },
+    {
+      "title": "프랑켄슈타인",
+      "theater": "CGV 강변",
+      "area": "광진구",
+      "screen": "04관(아트하우스)",
+      "movieCode": "20258285",
+      "time": "21:10",
+      "showtime": "2026-03-14T12:10:00.000Z"
+    },
+    {
+      "title": "힌드의 목소리",
+      "theater": "CGV 강변",
+      "area": "광진구",
+      "screen": "04관(아트하우스)",
+      "movieCode": "20259339",
+      "time": "13:50",
+      "showtime": "2026-03-14T04:50:00.000Z"
+    },
+    {
+      "title": "렌탈 패밀리: 가족을 빌려드립니다",
+      "theater": "CGV 강변",
+      "area": "광진구",
+      "screen": "04관(아트하우스)",
+      "movieCode": "20261308",
+      "time": "18:30",
+      "showtime": "2026-03-14T09:30:00.000Z"
+    },
+    {
+      "title": "파리, 텍사스",
+      "theater": "CGV 여의도",
+      "area": "영등포구",
+      "screen": "05관 [아트하우스/Sonictier]",
+      "movieCode": "20080356",
+      "time": "19:20",
+      "showtime": "2026-03-14T10:20:00.000Z"
+    },
+    {
+      "title": "페널티킥 앞에 선 골키퍼의 불안",
+      "theater": "CGV 여의도",
+      "area": "영등포구",
+      "screen": "05관 [아트하우스/Sonictier]",
+      "movieCode": "20161523",
+      "time": "22:30",
+      "showtime": "2026-03-14T13:30:00.000Z"
+    },
+    {
+      "title": "차임",
+      "theater": "CGV 여의도",
+      "area": "영등포구",
+      "screen": "05관 [아트하우스/Sonictier]",
+      "movieCode": "20250087",
+      "time": "10:00",
+      "showtime": "2026-03-14T01:00:00.000Z"
+    },
+    {
+      "title": "햄넷",
+      "theater": "CGV 여의도",
+      "area": "영등포구",
+      "screen": "05관 [아트하우스/Sonictier]",
+      "movieCode": "20250365",
+      "time": "12:00",
+      "showtime": "2026-03-14T03:00:00.000Z"
+    },
+    {
+      "title": "다이 마이 러브",
+      "theater": "CGV 여의도",
+      "area": "영등포구",
+      "screen": "05관 [아트하우스/Sonictier]",
+      "movieCode": "20250413",
+      "time": "14:40",
+      "showtime": "2026-03-14T05:40:00.000Z"
+    },
+    {
+      "title": "아르코",
+      "theater": "CGV 여의도",
+      "area": "영등포구",
+      "screen": "05관 [아트하우스/Sonictier]",
+      "movieCode": "20258074",
+      "time": "17:10",
+      "showtime": "2026-03-14T08:10:00.000Z"
+    },
+    {
+      "title": "오만과 편견",
+      "theater": "롯데시네마 노원",
+      "area": "노원구",
+      "screen": "06관(아르떼)",
+      "movieCode": "20060033",
+      "time": "23:55",
+      "showtime": "2026-03-14T14:55:00.000Z"
+    },
+    {
+      "title": "왕과 사는 남자",
+      "theater": "롯데시네마 노원",
+      "area": "노원구",
+      "screen": "06관(아르떼)",
+      "movieCode": "20242837",
+      "time": "11:30",
+      "showtime": "2026-03-14T02:30:00.000Z"
+    },
+    {
+      "title": "왕과 사는 남자",
+      "theater": "롯데시네마 노원",
+      "area": "노원구",
+      "screen": "06관(아르떼)",
+      "movieCode": "20242837",
+      "time": "14:00",
+      "showtime": "2026-03-14T05:00:00.000Z"
+    },
+    {
+      "title": "왕과 사는 남자",
+      "theater": "롯데시네마 노원",
+      "area": "노원구",
+      "screen": "06관(아르떼)",
+      "movieCode": "20242837",
+      "time": "16:30",
+      "showtime": "2026-03-14T07:30:00.000Z"
+    },
+    {
+      "title": "왕과 사는 남자",
+      "theater": "롯데시네마 노원",
+      "area": "노원구",
+      "screen": "06관(아르떼)",
+      "movieCode": "20242837",
+      "time": "19:00",
+      "showtime": "2026-03-14T10:00:00.000Z"
+    },
+    {
+      "title": "왕과 사는 남자",
+      "theater": "롯데시네마 노원",
+      "area": "노원구",
+      "screen": "06관(아르떼)",
+      "movieCode": "20242837",
+      "time": "21:30",
+      "showtime": "2026-03-14T12:30:00.000Z"
+    },
+    {
+      "title": "호퍼스",
+      "theater": "롯데시네마 노원",
+      "area": "노원구",
+      "screen": "06관(아르떼)",
+      "movieCode": "20256283",
+      "time": "09:10",
+      "showtime": "2026-03-14T00:10:00.000Z"
+    },
+    {
+      "title": "오만과 편견",
+      "theater": "롯데시네마 신도림",
+      "area": "구로구",
+      "screen": "04관",
+      "movieCode": "20060033",
+      "time": "14:20",
+      "showtime": "2026-03-14T05:20:00.000Z"
+    },
+    {
+      "title": "오만과 편견",
+      "theater": "롯데시네마 신도림",
+      "area": "구로구",
+      "screen": "04관",
+      "movieCode": "20060033",
+      "time": "21:55",
+      "showtime": "2026-03-14T12:55:00.000Z"
+    },
+    {
+      "title": "센티멘탈 밸류",
+      "theater": "롯데시네마 신도림",
+      "area": "구로구",
+      "screen": "04관",
+      "movieCode": "20250428",
+      "time": "19:10",
+      "showtime": "2026-03-14T10:10:00.000Z"
+    },
+    {
+      "title": "오, 발렌타인",
+      "theater": "롯데시네마 신도림",
+      "area": "구로구",
+      "screen": "04관",
+      "movieCode": "20261642",
+      "time": "17:05",
+      "showtime": "2026-03-14T08:05:00.000Z"
+    },
+    {
+      "title": "우주 수호대: 하하하 행성의 대모험",
+      "theater": "롯데시네마 신도림",
+      "area": "구로구",
+      "screen": "04관",
+      "movieCode": "20261905",
+      "time": "10:00",
+      "showtime": "2026-03-14T01:00:00.000Z"
+    },
+    {
+      "title": "우주 수호대: 하하하 행성의 대모험",
+      "theater": "롯데시네마 신도림",
+      "area": "구로구",
+      "screen": "04관",
+      "movieCode": "20261905",
+      "time": "12:10",
+      "showtime": "2026-03-14T03:10:00.000Z"
+    }
+  ],
+  "timestamp": 1773458621215,
+  "expiresAt": 1773480221215
+}
