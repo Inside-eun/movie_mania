@@ -17,10 +17,26 @@ async function handlePrefetch(request: Request) {
   const { searchParams } = new URL(request.url);
   const authToken = searchParams.get("token");
   
+  // 디버깅 로그
+  console.log("=== 토큰 인증 디버깅 ===");
+  console.log("받은 토큰:", authToken);
+  console.log("환경변수 토큰:", process.env.PREFETCH_TOKEN);
+  console.log("토큰 일치 여부:", authToken === process.env.PREFETCH_TOKEN);
+  console.log("받은 토큰 길이:", authToken?.length);
+  console.log("환경변수 토큰 길이:", process.env.PREFETCH_TOKEN?.length);
+  
   // 간단한 인증 (환경변수로 토큰 설정)
   if (authToken !== process.env.PREFETCH_TOKEN) {
     return NextResponse.json(
-      { success: false, error: "Unauthorized" },
+      { 
+        success: false, 
+        error: "Unauthorized",
+        debug: {
+          receivedToken: authToken,
+          expectedToken: process.env.PREFETCH_TOKEN ? "설정됨" : "설정 안됨",
+          match: authToken === process.env.PREFETCH_TOKEN
+        }
+      },
       { status: 401 }
     );
   }
