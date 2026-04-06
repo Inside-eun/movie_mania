@@ -41,6 +41,48 @@ async function delay(ms = 1000) {
 }
 
 export class ScheduleService {
+  constructor() {
+    this.csrfToken = null;
+    this.csrfTokenExpiry = null;
+  }
+
+  async getCachedCSRFToken() {
+    const now = Date.now();
+    if (this.csrfToken && this.csrfTokenExpiry && now < this.csrfTokenExpiry) {
+      return this.csrfToken;
+    }
+
+    const headers = {
+      Accept: "application/json, text/javascript, */*; q=0.01",
+      "Accept-Language": "ko-KR,ko;q=0.9,en-US;q=0.8,en;q=0.7",
+      "Content-Type": "application/x-www-form-urlencoded; charset=UTF-8",
+      Origin: "https://www.kobis.or.kr",
+      Referer:
+        "https://www.kobis.or.kr/kobis/business/mast/thea/findTheaterSchedule.do",
+      "User-Agent":
+        "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/139.0.0.0 Safari/537.36",
+      "X-Requested-With": "XMLHttpRequest",
+    };
+
+    const mainPageResponse = await retryRequest(async () => {
+      return await axios.get(
+        "https://www.kobis.or.kr/kobis/business/mast/thea/findTheaterSchedule.do",
+        {
+          headers,
+          timeout: DEFAULT_TIMEOUT,
+        }
+      );
+    });
+
+    const $ = cheerio.load(mainPageResponse.data);
+    this.csrfToken =
+      $('input[name="CSRFToken"]').val() ||
+      mainPageResponse.data.match(/CSRFToken=([^"&]+)/)?.[1];
+    
+    this.csrfTokenExpiry = now + 10 * 60 * 1000; // 10분간 유효
+
+    return this.csrfToken;
+  }
 
   async getBoxOfficeTop5() {
     try {
@@ -225,7 +267,7 @@ export class ScheduleService {
     }
   }
 
-  async getSchedule(theaterCode, date) {
+  async getSchedule(theaterCode, date, csrfToken = null) {
     try {
       const headers = {
         Accept: "application/json, text/javascript, */*; q=0.01",
@@ -239,29 +281,16 @@ export class ScheduleService {
         "X-Requested-With": "XMLHttpRequest",
       };
 
-      // CSRF 토큰 가져오기
-      const mainPageResponse = await retryRequest(async () => {
-        return await axios.get(
-          "https://www.kobis.or.kr/kobis/business/mast/thea/findTheaterSchedule.do",
-          {
-            headers,
-            timeout: DEFAULT_TIMEOUT,
-          }
-        );
-      });
-
-      const $ = cheerio.load(mainPageResponse.data);
-      let csrfToken =
-        $('input[name="CSRFToken"]').val() ||
-        mainPageResponse.data.match(/CSRFToken=([^"&]+)/)?.[1];
+      // CSRF 토큰이 없으면 캐시된 토큰 사용
+      if (!csrfToken) {
+        csrfToken = await this.getCachedCSRFToken();
+      }
 
       // 상영 스케줄 요청
       const formData = new URLSearchParams({
         theaCd: theaterCode,
         showDt: date,
       });
-
-      await delay(isVercel ? 100 : 300); // Vercel에서는 딜레이 단축
 
       const response = await retryRequest(async () => {
         return await axios.post(
@@ -627,15 +656,19 @@ export class ScheduleService {
     console.log("\n예술영화관 상영시간표 조회 중...");
     console.log(`총 ${artCinemas.length}개 예술영화관 조회`);
 
+    // CSRF 토큰 미리 획득 (한 번만)
+    const csrfToken = await this.getCachedCSRFToken();
+    console.log("CSRF 토큰 획득 완료");
+
     // 병렬 배치 처리로 극장 스케줄 조회
     const allMovies = [];
-    const BATCH_SIZE = isVercel ? 8 : 4; // Vercel에서 더 많은 병렬 처리
+    const BATCH_SIZE = isVercel ? 12 : 8; // 병렬 처리 증가
 
     const processBatch = async (batch) => {
       const promises = batch.map(async (theater) => {
         try {
           console.log(`${theater.cdNm} (${theater.area}) 조회 중...`);
-          const schedule = await this.getSchedule(theater.cd, showDt);
+          const schedule = await this.getSchedule(theater.cd, showDt, csrfToken);
 
           const movies = [];
           if (schedule.schedule) {
@@ -693,7 +726,7 @@ export class ScheduleService {
           return movies;
         } catch (error) {
           console.error(`${theater.cdNm} 조회 실패:`, error.message);
-          return []; // 실패시 빈 배열 반환
+          return [];
         }
       });
 
@@ -714,9 +747,9 @@ export class ScheduleService {
       const batchMovies = await processBatch(batch);
       allMovies.push(...batchMovies);
 
-      // Vercel에서는 배치 간 딜레이 최소화
+      // 배치 간 딜레이 제거 (CSRF 토큰 재사용으로 안전)
       if (i + BATCH_SIZE < artCinemas.length) {
-        await delay(isVercel ? 100 : 500);
+        await delay(isVercel ? 50 : 200);
       }
     }
 

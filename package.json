@@ -14,7 +14,9 @@
     "find:art": "node src/scripts/find-art-cinemas.js",
     "cache:stats": "curl -s http://localhost:3000/api/cache?action=stats | jq .",
     "cache:cleanup": "curl -s http://localhost:3000/api/cache?action=cleanup",
-    "cache:clear": "curl -X DELETE -s http://localhost:3000/api/cache"
+    "cache:clear": "curl -X DELETE -s http://localhost:3000/api/cache",
+    "prefetch:local": "./scripts/prefetch-local.sh",
+    "prefetch:prod": "./scripts/prefetch-production.sh"
   },
   "dependencies": {
     "@ducanh2912/next-pwa": "^10.2.9",

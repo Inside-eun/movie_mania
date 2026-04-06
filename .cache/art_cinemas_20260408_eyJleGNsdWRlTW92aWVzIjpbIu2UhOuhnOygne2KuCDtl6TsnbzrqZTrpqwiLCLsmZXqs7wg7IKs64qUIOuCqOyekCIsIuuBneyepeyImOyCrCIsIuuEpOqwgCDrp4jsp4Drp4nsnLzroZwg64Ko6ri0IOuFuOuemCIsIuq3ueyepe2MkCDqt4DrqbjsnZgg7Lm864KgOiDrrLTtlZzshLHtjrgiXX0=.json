@@ -1,0 +1,1491 @@
+{
+  "data": [
+    {
+      "title": "연지구 디 오리지널 4K",
+      "theater": "픽처하우스",
+      "area": "강남구",
+      "screen": "01관",
+      "movieCode": "19868242",
+      "time": "13:05",
+      "showtime": "2026-04-08T04:05:00.000Z"
+    },
+    {
+      "title": "패왕별희 디 오리지널",
+      "theater": "픽처하우스",
+      "area": "강남구",
+      "screen": "01관",
+      "movieCode": "20173226",
+      "time": "09:50",
+      "showtime": "2026-04-08T00:50:00.000Z"
+    },
+    {
+      "title": "우리에게는 아직 내일이 있다",
+      "theater": "픽처하우스",
+      "area": "강남구",
+      "screen": "01관",
+      "movieCode": "20249843",
+      "time": "19:30",
+      "showtime": "2026-04-08T10:30:00.000Z"
+    },
+    {
+      "title": "햄넷",
+      "theater": "픽처하우스",
+      "area": "강남구",
+      "screen": "01관",
+      "movieCode": "20250365",
+      "time": "17:00",
+      "showtime": "2026-04-08T08:00:00.000Z"
+    },
+    {
+      "title": "영원",
+      "theater": "픽처하우스",
+      "area": "강남구",
+      "screen": "01관",
+      "movieCode": "20250839",
+      "time": "21:50",
+      "showtime": "2026-04-08T12:50:00.000Z"
+    },
+    {
+      "title": "노 어더 랜드",
+      "theater": "픽처하우스",
+      "area": "강남구",
+      "screen": "01관",
+      "movieCode": "20256787",
+      "time": "15:05",
+      "showtime": "2026-04-08T06:05:00.000Z"
+    },
+    {
+      "title": "연지구 디 오리지널 4K",
+      "theater": "KU시네마테크",
+      "area": "광진구",
+      "screen": "01관",
+      "movieCode": "19868242",
+      "time": "10:20",
+      "showtime": "2026-04-08T01:20:00.000Z"
+    },
+    {
+      "title": "올란도",
+      "theater": "KU시네마테크",
+      "area": "광진구",
+      "screen": "01관",
+      "movieCode": "19940120",
+      "time": "16:40",
+      "showtime": "2026-04-08T07:40:00.000Z"
+    },
+    {
+      "title": "파리, 텍사스",
+      "theater": "KU시네마테크",
+      "area": "광진구",
+      "screen": "01관",
+      "movieCode": "20080356",
+      "time": "12:10",
+      "showtime": "2026-04-08T03:10:00.000Z"
+    },
+    {
+      "title": "류이치 사카모토: 다이어리",
+      "theater": "KU시네마테크",
+      "area": "광진구",
+      "screen": "01관",
+      "movieCode": "20261731",
+      "time": "14:50",
+      "showtime": "2026-04-08T05:50:00.000Z"
+    },
+    {
+      "title": "킬 빌: 더 홀 블러디 어페어",
+      "theater": "KU시네마테크",
+      "area": "광진구",
+      "screen": "01관",
+      "movieCode": "20262101",
+      "time": "18:30",
+      "showtime": "2026-04-08T09:30:00.000Z"
+    },
+    {
+      "title": "살목지",
+      "theater": "씨네큐 신도림",
+      "area": "구로구",
+      "screen": "04관",
+      "movieCode": "20254121",
+      "time": "10:10",
+      "showtime": "2026-04-08T01:10:00.000Z"
+    },
+    {
+      "title": "살목지",
+      "theater": "씨네큐 신도림",
+      "area": "구로구",
+      "screen": "04관",
+      "movieCode": "20254121",
+      "time": "12:15",
+      "showtime": "2026-04-08T03:15:00.000Z"
+    },
+    {
+      "title": "살목지",
+      "theater": "씨네큐 신도림",
+      "area": "구로구",
+      "screen": "04관",
+      "movieCode": "20254121",
+      "time": "14:20",
+      "showtime": "2026-04-08T05:20:00.000Z"
+    },
+    {
+      "title": "살목지",
+      "theater": "씨네큐 신도림",
+      "area": "구로구",
+      "screen": "04관",
+      "movieCode": "20254121",
+      "time": "16:25",
+      "showtime": "2026-04-08T07:25:00.000Z"
+    },
+    {
+      "title": "살목지",
+      "theater": "씨네큐 신도림",
+      "area": "구로구",
+      "screen": "04관",
+      "movieCode": "20254121",
+      "time": "18:30",
+      "showtime": "2026-04-08T09:30:00.000Z"
+    },
+    {
+      "title": "살목지",
+      "theater": "씨네큐 신도림",
+      "area": "구로구",
+      "screen": "04관",
+      "movieCode": "20254121",
+      "time": "20:35",
+      "showtime": "2026-04-08T11:35:00.000Z"
+    },
+    {
+      "title": "살목지",
+      "theater": "씨네큐 신도림",
+      "area": "구로구",
+      "screen": "07관(Suite)",
+      "movieCode": "20254121",
+      "time": "17:30",
+      "showtime": "2026-04-08T08:30:00.000Z"
+    },
+    {
+      "title": "살목지",
+      "theater": "씨네큐 신도림",
+      "area": "구로구",
+      "screen": "07관(Suite)",
+      "movieCode": "20254121",
+      "time": "19:30",
+      "showtime": "2026-04-08T10:30:00.000Z"
+    },
+    {
+      "title": "살목지",
+      "theater": "씨네큐 신도림",
+      "area": "구로구",
+      "screen": "07관(Suite)",
+      "movieCode": "20254121",
+      "time": "21:30",
+      "showtime": "2026-04-08T12:30:00.000Z"
+    },
+    {
+      "title": "케이온",
+      "theater": "씨네큐 신도림",
+      "area": "구로구",
+      "screen": "08관",
+      "movieCode": "20138661",
+      "time": "16:40",
+      "showtime": "2026-04-08T07:40:00.000Z"
+    },
+    {
+      "title": "위 리브 인 타임",
+      "theater": "씨네큐 신도림",
+      "area": "구로구",
+      "screen": "08관",
+      "movieCode": "20261622",
+      "time": "12:10",
+      "showtime": "2026-04-08T03:10:00.000Z"
+    },
+    {
+      "title": "위 리브 인 타임",
+      "theater": "씨네큐 신도림",
+      "area": "구로구",
+      "screen": "08관",
+      "movieCode": "20261622",
+      "time": "18:55",
+      "showtime": "2026-04-08T09:55:00.000Z"
+    },
+    {
+      "title": "류이치 사카모토: 다이어리",
+      "theater": "씨네큐 신도림",
+      "area": "구로구",
+      "screen": "08관",
+      "movieCode": "20261731",
+      "time": "10:10",
+      "showtime": "2026-04-08T01:10:00.000Z"
+    },
+    {
+      "title": "살목지",
+      "theater": "씨네큐 신도림",
+      "area": "구로구",
+      "screen": "09관",
+      "movieCode": "20254121",
+      "time": "15:50",
+      "showtime": "2026-04-08T06:50:00.000Z"
+    },
+    {
+      "title": "파리, 텍사스",
+      "theater": "더숲 아트시네마",
+      "area": "노원구",
+      "screen": "01관",
+      "movieCode": "20080356",
+      "time": "13:30",
+      "showtime": "2026-04-08T04:30:00.000Z"
+    },
+    {
+      "title": "지구 최후의 밤",
+      "theater": "더숲 아트시네마",
+      "area": "노원구",
+      "screen": "01관",
+      "movieCode": "20193265",
+      "time": "19:50",
+      "showtime": "2026-04-08T10:50:00.000Z"
+    },
+    {
+      "title": "바빌론",
+      "theater": "더숲 아트시네마",
+      "area": "노원구",
+      "screen": "01관",
+      "movieCode": "20227374",
+      "time": "10:00",
+      "showtime": "2026-04-08T01:00:00.000Z"
+    },
+    {
+      "title": "사랑, 우유, 그리고 치즈",
+      "theater": "더숲 아트시네마",
+      "area": "노원구",
+      "screen": "01관",
+      "movieCode": "20253247",
+      "time": "16:10",
+      "showtime": "2026-04-08T07:10:00.000Z"
+    },
+    {
+      "title": "류이치 사카모토: 다이어리",
+      "theater": "더숲 아트시네마",
+      "area": "노원구",
+      "screen": "01관",
+      "movieCode": "20261731",
+      "time": "18:00",
+      "showtime": "2026-04-08T09:00:00.000Z"
+    },
+    {
+      "title": "올란도",
+      "theater": "더숲 아트시네마",
+      "area": "노원구",
+      "screen": "02관",
+      "movieCode": "19940120",
+      "time": "14:30",
+      "showtime": "2026-04-08T05:30:00.000Z"
+    },
+    {
+      "title": "페인 앤 글로리",
+      "theater": "더숲 아트시네마",
+      "area": "노원구",
+      "screen": "02관",
+      "movieCode": "20191109",
+      "time": "18:00",
+      "showtime": "2026-04-08T09:00:00.000Z"
+    },
+    {
+      "title": "술타나의 꿈",
+      "theater": "더숲 아트시네마",
+      "area": "노원구",
+      "screen": "02관",
+      "movieCode": "20243842",
+      "time": "16:20",
+      "showtime": "2026-04-08T07:20:00.000Z"
+    },
+    {
+      "title": "센티멘탈 밸류",
+      "theater": "더숲 아트시네마",
+      "area": "노원구",
+      "screen": "02관",
+      "movieCode": "20250428",
+      "time": "10:10",
+      "showtime": "2026-04-08T01:10:00.000Z"
+    },
+    {
+      "title": "노 어더 랜드",
+      "theater": "더숲 아트시네마",
+      "area": "노원구",
+      "screen": "02관",
+      "movieCode": "20256787",
+      "time": "12:40",
+      "showtime": "2026-04-08T03:40:00.000Z"
+    },
+    {
+      "title": "위 리브 인 타임",
+      "theater": "더숲 아트시네마",
+      "area": "노원구",
+      "screen": "02관",
+      "movieCode": "20261622",
+      "time": "20:10",
+      "showtime": "2026-04-08T11:10:00.000Z"
+    },
+    {
+      "title": "패왕별희 디 오리지널",
+      "theater": "아트나인",
+      "area": "동작구",
+      "screen": "0관",
+      "movieCode": "20173226",
+      "time": "17:00",
+      "showtime": "2026-04-08T08:00:00.000Z"
+    },
+    {
+      "title": "센티멘탈 밸류",
+      "theater": "아트나인",
+      "area": "동작구",
+      "screen": "0관",
+      "movieCode": "20250428",
+      "time": "12:00",
+      "showtime": "2026-04-08T03:00:00.000Z"
+    },
+    {
+      "title": "센티멘탈 밸류",
+      "theater": "아트나인",
+      "area": "동작구",
+      "screen": "0관",
+      "movieCode": "20250428",
+      "time": "20:10",
+      "showtime": "2026-04-08T11:10:00.000Z"
+    },
+    {
+      "title": "두 검사",
+      "theater": "아트나인",
+      "area": "동작구",
+      "screen": "0관",
+      "movieCode": "20259598",
+      "time": "14:40",
+      "showtime": "2026-04-08T05:40:00.000Z"
+    },
+    {
+      "title": "위 리브 인 타임",
+      "theater": "아트나인",
+      "area": "동작구",
+      "screen": "0관",
+      "movieCode": "20261622",
+      "time": "09:50",
+      "showtime": "2026-04-08T00:50:00.000Z"
+    },
+    {
+      "title": "올란도",
+      "theater": "아트나인",
+      "area": "동작구",
+      "screen": "9관",
+      "movieCode": "19940120",
+      "time": "12:30",
+      "showtime": "2026-04-08T03:30:00.000Z"
+    },
+    {
+      "title": "올란도",
+      "theater": "아트나인",
+      "area": "동작구",
+      "screen": "9관",
+      "movieCode": "19940120",
+      "time": "18:30",
+      "showtime": "2026-04-08T09:30:00.000Z"
+    },
+    {
+      "title": "위대한 유산",
+      "theater": "아트나인",
+      "area": "동작구",
+      "screen": "9관",
+      "movieCode": "19980157",
+      "time": "14:20",
+      "showtime": "2026-04-08T05:20:00.000Z"
+    },
+    {
+      "title": "햄넷",
+      "theater": "아트나인",
+      "area": "동작구",
+      "screen": "9관",
+      "movieCode": "20250365",
+      "time": "10:00",
+      "showtime": "2026-04-08T01:00:00.000Z"
+    },
+    {
+      "title": "위 리브 인 타임",
+      "theater": "아트나인",
+      "area": "동작구",
+      "screen": "9관",
+      "movieCode": "20261622",
+      "time": "20:20",
+      "showtime": "2026-04-08T11:20:00.000Z"
+    },
+    {
+      "title": "류이치 사카모토: 다이어리",
+      "theater": "아트나인",
+      "area": "동작구",
+      "screen": "9관",
+      "movieCode": "20261731",
+      "time": "16:30",
+      "showtime": "2026-04-08T07:30:00.000Z"
+    },
+    {
+      "title": "파란만장",
+      "theater": "KT&G 상상마당 Cinema",
+      "area": "마포구",
+      "screen": "01관",
+      "movieCode": "20119502",
+      "time": "14:20",
+      "showtime": "2026-04-08T05:20:00.000Z"
+    },
+    {
+      "title": "범죄소년",
+      "theater": "KT&G 상상마당 Cinema",
+      "area": "마포구",
+      "screen": "01관",
+      "movieCode": "20124060",
+      "time": "12:15",
+      "showtime": "2026-04-08T03:15:00.000Z"
+    },
+    {
+      "title": "성실한 나라의 앨리스",
+      "theater": "KT&G 상상마당 Cinema",
+      "area": "마포구",
+      "screen": "01관",
+      "movieCode": "20156281",
+      "time": "10:30",
+      "showtime": "2026-04-08T01:30:00.000Z"
+    },
+    {
+      "title": "반도",
+      "theater": "KT&G 상상마당 Cinema",
+      "area": "마포구",
+      "screen": "01관",
+      "movieCode": "20193450",
+      "time": "15:10",
+      "showtime": "2026-04-08T06:10:00.000Z"
+    },
+    {
+      "title": "극장의 시간들",
+      "theater": "KT&G 상상마당 Cinema",
+      "area": "마포구",
+      "screen": "01관",
+      "movieCode": "20258158",
+      "time": "17:25",
+      "showtime": "2026-04-08T08:25:00.000Z"
+    },
+    {
+      "title": "인생은 아름다워",
+      "theater": "모노플렉스앳라이즈",
+      "area": "마포구",
+      "screen": "01관",
+      "movieCode": "19990140",
+      "time": "11:00",
+      "showtime": "2026-04-08T02:00:00.000Z"
+    },
+    {
+      "title": "살목지",
+      "theater": "모노플렉스앳라이즈",
+      "area": "마포구",
+      "screen": "01관",
+      "movieCode": "20254121",
+      "time": "19:50",
+      "showtime": "2026-04-08T10:50:00.000Z"
+    },
+    {
+      "title": "열여덟 청춘",
+      "theater": "인디스페이스",
+      "area": "마포구",
+      "screen": "01관",
+      "movieCode": "20233613",
+      "time": "16:50",
+      "showtime": "2026-04-08T07:50:00.000Z"
+    },
+    {
+      "title": "술타나의 꿈",
+      "theater": "인디스페이스",
+      "area": "마포구",
+      "screen": "01관",
+      "movieCode": "20243842",
+      "time": "13:10",
+      "showtime": "2026-04-08T04:10:00.000Z"
+    },
+    {
+      "title": "3학년 2학기",
+      "theater": "인디스페이스",
+      "area": "마포구",
+      "screen": "01관",
+      "movieCode": "20249072",
+      "time": "11:00",
+      "showtime": "2026-04-08T02:00:00.000Z"
+    },
+    {
+      "title": "차임",
+      "theater": "인디스페이스",
+      "area": "마포구",
+      "screen": "01관",
+      "movieCode": "20250087",
+      "time": "15:05",
+      "showtime": "2026-04-08T06:05:00.000Z"
+    },
+    {
+      "title": "여행과 나날",
+      "theater": "인디스페이스",
+      "area": "마포구",
+      "screen": "01관",
+      "movieCode": "20254054",
+      "time": "19:00",
+      "showtime": "2026-04-08T10:00:00.000Z"
+    },
+    {
+      "title": "차임",
+      "theater": "라이카시네마",
+      "area": "서대문구",
+      "screen": "S관",
+      "movieCode": "20250087",
+      "time": "14:40",
+      "showtime": "2026-04-08T05:40:00.000Z"
+    },
+    {
+      "title": "센티멘탈 밸류",
+      "theater": "라이카시네마",
+      "area": "서대문구",
+      "screen": "S관",
+      "movieCode": "20250428",
+      "time": "16:15",
+      "showtime": "2026-04-08T07:15:00.000Z"
+    },
+    {
+      "title": "씨너스: 죄인들",
+      "theater": "라이카시네마",
+      "area": "서대문구",
+      "screen": "S관",
+      "movieCode": "20254602",
+      "time": "10:10",
+      "showtime": "2026-04-08T01:10:00.000Z"
+    },
+    {
+      "title": "위 리브 인 타임",
+      "theater": "라이카시네마",
+      "area": "서대문구",
+      "screen": "S관",
+      "movieCode": "20261622",
+      "time": "18:45",
+      "showtime": "2026-04-08T09:45:00.000Z"
+    },
+    {
+      "title": "류이치 사카모토: 다이어리",
+      "theater": "라이카시네마",
+      "area": "서대문구",
+      "screen": "S관",
+      "movieCode": "20261731",
+      "time": "12:45",
+      "showtime": "2026-04-08T03:45:00.000Z"
+    },
+    {
+      "title": "올란도",
+      "theater": "라이카시네마",
+      "area": "서대문구",
+      "screen": "2관",
+      "movieCode": "19940120",
+      "time": "19:25",
+      "showtime": "2026-04-08T10:25:00.000Z"
+    },
+    {
+      "title": "오만과 편견",
+      "theater": "라이카시네마",
+      "area": "서대문구",
+      "screen": "2관",
+      "movieCode": "20060033",
+      "time": "17:00",
+      "showtime": "2026-04-08T08:00:00.000Z"
+    },
+    {
+      "title": "패왕별희 디 오리지널",
+      "theater": "라이카시네마",
+      "area": "서대문구",
+      "screen": "2관",
+      "movieCode": "20173226",
+      "time": "10:00",
+      "showtime": "2026-04-08T01:00:00.000Z"
+    },
+    {
+      "title": "센티멘탈 밸류",
+      "theater": "라이카시네마",
+      "area": "서대문구",
+      "screen": "2관",
+      "movieCode": "20250428",
+      "time": "21:15",
+      "showtime": "2026-04-08T12:15:00.000Z"
+    },
+    {
+      "title": "사랑, 우유, 그리고 치즈",
+      "theater": "라이카시네마",
+      "area": "서대문구",
+      "screen": "2관",
+      "movieCode": "20253247",
+      "time": "15:10",
+      "showtime": "2026-04-08T06:10:00.000Z"
+    },
+    {
+      "title": "그저 사고였을 뿐",
+      "theater": "라이카시네마",
+      "area": "서대문구",
+      "screen": "2관",
+      "movieCode": "20257321",
+      "time": "13:10",
+      "showtime": "2026-04-08T04:10:00.000Z"
+    },
+    {
+      "title": "갓랜드",
+      "theater": "아트하우스모모",
+      "area": "서대문구",
+      "screen": "01관",
+      "movieCode": "20234731",
+      "time": "19:00",
+      "showtime": "2026-04-08T10:00:00.000Z"
+    },
+    {
+      "title": "센티멘탈 밸류",
+      "theater": "아트하우스모모",
+      "area": "서대문구",
+      "screen": "01관",
+      "movieCode": "20250428",
+      "time": "10:50",
+      "showtime": "2026-04-08T01:50:00.000Z"
+    },
+    {
+      "title": "센티멘탈 밸류",
+      "theater": "아트하우스모모",
+      "area": "서대문구",
+      "screen": "01관",
+      "movieCode": "20250428",
+      "time": "15:40",
+      "showtime": "2026-04-08T06:40:00.000Z"
+    },
+    {
+      "title": "두 검사",
+      "theater": "아트하우스모모",
+      "area": "서대문구",
+      "screen": "01관",
+      "movieCode": "20259598",
+      "time": "13:20",
+      "showtime": "2026-04-08T04:20:00.000Z"
+    },
+    {
+      "title": "네스트",
+      "theater": "아트하우스모모",
+      "area": "서대문구",
+      "screen": "01관",
+      "movieCode": "20262623",
+      "time": "18:20",
+      "showtime": "2026-04-08T09:20:00.000Z"
+    },
+    {
+      "title": "올란도",
+      "theater": "아트하우스모모",
+      "area": "서대문구",
+      "screen": "02관",
+      "movieCode": "19940120",
+      "time": "13:00",
+      "showtime": "2026-04-08T04:00:00.000Z"
+    },
+    {
+      "title": "파리, 텍사스",
+      "theater": "아트하우스모모",
+      "area": "서대문구",
+      "screen": "02관",
+      "movieCode": "20080356",
+      "time": "19:30",
+      "showtime": "2026-04-08T10:30:00.000Z"
+    },
+    {
+      "title": "햄넷",
+      "theater": "아트하우스모모",
+      "area": "서대문구",
+      "screen": "02관",
+      "movieCode": "20250365",
+      "time": "10:30",
+      "showtime": "2026-04-08T01:30:00.000Z"
+    },
+    {
+      "title": "햄넷",
+      "theater": "아트하우스모모",
+      "area": "서대문구",
+      "screen": "02관",
+      "movieCode": "20250365",
+      "time": "15:00",
+      "showtime": "2026-04-08T06:00:00.000Z"
+    },
+    {
+      "title": "류이치 사카모토: 다이어리",
+      "theater": "아트하우스모모",
+      "area": "서대문구",
+      "screen": "02관",
+      "movieCode": "20261731",
+      "time": "17:30",
+      "showtime": "2026-04-08T08:30:00.000Z"
+    },
+    {
+      "title": "햄넷",
+      "theater": "필름포럼",
+      "area": "서대문구",
+      "screen": "01관",
+      "movieCode": "20250365",
+      "time": "13:20",
+      "showtime": "2026-04-08T04:20:00.000Z"
+    },
+    {
+      "title": "원 배틀 애프터 어나더",
+      "theater": "필름포럼",
+      "area": "서대문구",
+      "screen": "01관",
+      "movieCode": "20256397",
+      "time": "10:30",
+      "showtime": "2026-04-08T01:30:00.000Z"
+    },
+    {
+      "title": "아르코",
+      "theater": "필름포럼",
+      "area": "서대문구",
+      "screen": "01관",
+      "movieCode": "20258074",
+      "time": "15:40",
+      "showtime": "2026-04-08T06:40:00.000Z"
+    },
+    {
+      "title": "드림스",
+      "theater": "필름포럼",
+      "area": "서대문구",
+      "screen": "01관",
+      "movieCode": "20259553",
+      "time": "17:20",
+      "showtime": "2026-04-08T08:20:00.000Z"
+    },
+    {
+      "title": "두 검사",
+      "theater": "필름포럼",
+      "area": "서대문구",
+      "screen": "01관",
+      "movieCode": "20259598",
+      "time": "19:10",
+      "showtime": "2026-04-08T10:10:00.000Z"
+    },
+    {
+      "title": "연지구 디 오리지널 4K",
+      "theater": "필름포럼",
+      "area": "서대문구",
+      "screen": "02관",
+      "movieCode": "19868242",
+      "time": "13:50",
+      "showtime": "2026-04-08T04:50:00.000Z"
+    },
+    {
+      "title": "천국보다 낯선",
+      "theater": "필름포럼",
+      "area": "서대문구",
+      "screen": "02관",
+      "movieCode": "19950325",
+      "time": "12:10",
+      "showtime": "2026-04-08T03:10:00.000Z"
+    },
+    {
+      "title": "아비정전",
+      "theater": "필름포럼",
+      "area": "서대문구",
+      "screen": "02관",
+      "movieCode": "20080314",
+      "time": "19:00",
+      "showtime": "2026-04-08T10:00:00.000Z"
+    },
+    {
+      "title": "패왕별희 디 오리지널",
+      "theater": "필름포럼",
+      "area": "서대문구",
+      "screen": "02관",
+      "movieCode": "20173226",
+      "time": "15:50",
+      "showtime": "2026-04-08T06:50:00.000Z"
+    },
+    {
+      "title": "술타나의 꿈",
+      "theater": "필름포럼",
+      "area": "서대문구",
+      "screen": "02관",
+      "movieCode": "20243842",
+      "time": "10:30",
+      "showtime": "2026-04-08T01:30:00.000Z"
+    },
+    {
+      "title": "한란",
+      "theater": "낭만극장",
+      "area": "종로구",
+      "screen": "01관",
+      "movieCode": "20242374",
+      "time": "10:20",
+      "showtime": "2026-04-08T01:20:00.000Z"
+    },
+    {
+      "title": "한란",
+      "theater": "낭만극장",
+      "area": "종로구",
+      "screen": "01관",
+      "movieCode": "20242374",
+      "time": "12:30",
+      "showtime": "2026-04-08T03:30:00.000Z"
+    },
+    {
+      "title": "한란",
+      "theater": "낭만극장",
+      "area": "종로구",
+      "screen": "01관",
+      "movieCode": "20242374",
+      "time": "14:40",
+      "showtime": "2026-04-08T05:40:00.000Z"
+    },
+    {
+      "title": "한란",
+      "theater": "낭만극장",
+      "area": "종로구",
+      "screen": "01관",
+      "movieCode": "20242374",
+      "time": "16:50",
+      "showtime": "2026-04-08T07:50:00.000Z"
+    },
+    {
+      "title": "올란도",
+      "theater": "씨네큐브광화문(서울)",
+      "area": "종로구",
+      "screen": "01관",
+      "movieCode": "19940120",
+      "time": "10:00",
+      "showtime": "2026-04-08T01:00:00.000Z"
+    },
+    {
+      "title": "햄넷",
+      "theater": "씨네큐브광화문(서울)",
+      "area": "종로구",
+      "screen": "01관",
+      "movieCode": "20250365",
+      "time": "11:50",
+      "showtime": "2026-04-08T02:50:00.000Z"
+    },
+    {
+      "title": "센티멘탈 밸류",
+      "theater": "씨네큐브광화문(서울)",
+      "area": "종로구",
+      "screen": "01관",
+      "movieCode": "20250428",
+      "time": "20:20",
+      "showtime": "2026-04-08T11:20:00.000Z"
+    },
+    {
+      "title": "두 검사",
+      "theater": "씨네큐브광화문(서울)",
+      "area": "종로구",
+      "screen": "01관",
+      "movieCode": "20259598",
+      "time": "18:05",
+      "showtime": "2026-04-08T09:05:00.000Z"
+    },
+    {
+      "title": "위 리브 인 타임",
+      "theater": "씨네큐브광화문(서울)",
+      "area": "종로구",
+      "screen": "01관",
+      "movieCode": "20261622",
+      "time": "16:05",
+      "showtime": "2026-04-08T07:05:00.000Z"
+    },
+    {
+      "title": "류이치 사카모토: 다이어리",
+      "theater": "씨네큐브광화문(서울)",
+      "area": "종로구",
+      "screen": "01관",
+      "movieCode": "20261731",
+      "time": "14:15",
+      "showtime": "2026-04-08T05:15:00.000Z"
+    },
+    {
+      "title": "산양들",
+      "theater": "씨네큐브광화문(서울)",
+      "area": "종로구",
+      "screen": "02관",
+      "movieCode": "20257100",
+      "time": "19:30",
+      "showtime": "2026-04-08T10:30:00.000Z"
+    },
+    {
+      "title": "극장의 시간들",
+      "theater": "씨네큐브광화문(서울)",
+      "area": "종로구",
+      "screen": "02관",
+      "movieCode": "20258158",
+      "time": "10:20",
+      "showtime": "2026-04-08T01:20:00.000Z"
+    },
+    {
+      "title": "극장의 시간들",
+      "theater": "씨네큐브광화문(서울)",
+      "area": "종로구",
+      "screen": "02관",
+      "movieCode": "20258158",
+      "time": "13:55",
+      "showtime": "2026-04-08T04:55:00.000Z"
+    },
+    {
+      "title": "극장의 시간들",
+      "theater": "씨네큐브광화문(서울)",
+      "area": "종로구",
+      "screen": "02관",
+      "movieCode": "20258158",
+      "time": "17:35",
+      "showtime": "2026-04-08T08:35:00.000Z"
+    },
+    {
+      "title": "다른 이름으로",
+      "theater": "씨네큐브광화문(서울)",
+      "area": "종로구",
+      "screen": "02관",
+      "movieCode": "20258189",
+      "time": "15:45",
+      "showtime": "2026-04-08T06:45:00.000Z"
+    },
+    {
+      "title": "오, 발렌타인",
+      "theater": "씨네큐브광화문(서울)",
+      "area": "종로구",
+      "screen": "02관",
+      "movieCode": "20261642",
+      "time": "12:10",
+      "showtime": "2026-04-08T03:10:00.000Z"
+    },
+    {
+      "title": "올란도",
+      "theater": "에무 시네마 앤 카페",
+      "area": "종로구",
+      "screen": "01관",
+      "movieCode": "19940120",
+      "time": "16:55",
+      "showtime": "2026-04-08T07:55:00.000Z"
+    },
+    {
+      "title": "파리, 텍사스",
+      "theater": "에무 시네마 앤 카페",
+      "area": "종로구",
+      "screen": "01관",
+      "movieCode": "20080356",
+      "time": "12:05",
+      "showtime": "2026-04-08T03:05:00.000Z"
+    },
+    {
+      "title": "파리, 텍사스",
+      "theater": "에무 시네마 앤 카페",
+      "area": "종로구",
+      "screen": "01관",
+      "movieCode": "20080356",
+      "time": "20:40",
+      "showtime": "2026-04-08T11:40:00.000Z"
+    },
+    {
+      "title": "사랑할 땐 누구나 최악이 된다",
+      "theater": "에무 시네마 앤 카페",
+      "area": "종로구",
+      "screen": "01관",
+      "movieCode": "20225556",
+      "time": "14:40",
+      "showtime": "2026-04-08T05:40:00.000Z"
+    },
+    {
+      "title": "햄넷",
+      "theater": "에무 시네마 앤 카페",
+      "area": "종로구",
+      "screen": "01관",
+      "movieCode": "20250365",
+      "time": "09:50",
+      "showtime": "2026-04-08T00:50:00.000Z"
+    },
+    {
+      "title": "위 리브 인 타임",
+      "theater": "에무 시네마 앤 카페",
+      "area": "종로구",
+      "screen": "01관",
+      "movieCode": "20261622",
+      "time": "18:40",
+      "showtime": "2026-04-08T09:40:00.000Z"
+    },
+    {
+      "title": "햄넷",
+      "theater": "에무 시네마 앤 카페",
+      "area": "종로구",
+      "screen": "02관",
+      "movieCode": "20250365",
+      "time": "13:50",
+      "showtime": "2026-04-08T04:50:00.000Z"
+    },
+    {
+      "title": "센티멘탈 밸류",
+      "theater": "에무 시네마 앤 카페",
+      "area": "종로구",
+      "screen": "02관",
+      "movieCode": "20250428",
+      "time": "16:05",
+      "showtime": "2026-04-08T07:05:00.000Z"
+    },
+    {
+      "title": "두 검사",
+      "theater": "에무 시네마 앤 카페",
+      "area": "종로구",
+      "screen": "02관",
+      "movieCode": "20259598",
+      "time": "09:50",
+      "showtime": "2026-04-08T00:50:00.000Z"
+    },
+    {
+      "title": "류이치 사카모토: 다이어리",
+      "theater": "에무 시네마 앤 카페",
+      "area": "종로구",
+      "screen": "02관",
+      "movieCode": "20261731",
+      "time": "12:00",
+      "showtime": "2026-04-08T03:00:00.000Z"
+    },
+    {
+      "title": "킬 빌: 더 홀 블러디 어페어",
+      "theater": "에무 시네마 앤 카페",
+      "area": "종로구",
+      "screen": "02관",
+      "movieCode": "20262101",
+      "time": "18:30",
+      "showtime": "2026-04-08T09:30:00.000Z"
+    },
+    {
+      "title": "피렌체",
+      "theater": "허리우드클래식",
+      "area": "종로구",
+      "screen": "01관",
+      "movieCode": "20259250",
+      "time": "10:30",
+      "showtime": "2026-04-08T01:30:00.000Z"
+    },
+    {
+      "title": "피렌체",
+      "theater": "허리우드클래식",
+      "area": "종로구",
+      "screen": "01관",
+      "movieCode": "20259250",
+      "time": "12:25",
+      "showtime": "2026-04-08T03:25:00.000Z"
+    },
+    {
+      "title": "피렌체",
+      "theater": "허리우드클래식",
+      "area": "종로구",
+      "screen": "01관",
+      "movieCode": "20259250",
+      "time": "14:20",
+      "showtime": "2026-04-08T05:20:00.000Z"
+    },
+    {
+      "title": "피렌체",
+      "theater": "허리우드클래식",
+      "area": "종로구",
+      "screen": "01관",
+      "movieCode": "20259250",
+      "time": "16:15",
+      "showtime": "2026-04-08T07:15:00.000Z"
+    },
+    {
+      "title": "피렌체",
+      "theater": "허리우드클래식",
+      "area": "종로구",
+      "screen": "01관",
+      "movieCode": "20259250",
+      "time": "18:10",
+      "showtime": "2026-04-08T09:10:00.000Z"
+    },
+    {
+      "title": "사형수 탈옥하다",
+      "theater": "서울아트시네마",
+      "area": "중구",
+      "screen": "01관",
+      "movieCode": "20135630",
+      "time": "15:30",
+      "showtime": "2026-04-08T06:30:00.000Z"
+    },
+    {
+      "title": "몽상가의 나흘 밤",
+      "theater": "서울아트시네마",
+      "area": "중구",
+      "screen": "01관",
+      "movieCode": "20182546",
+      "time": "18:00",
+      "showtime": "2026-04-08T09:00:00.000Z"
+    },
+    {
+      "title": "연지구 디 오리지널 4K",
+      "theater": "CGV 용산아이파크몰",
+      "area": "용산구",
+      "screen": "19관(아트하우스)",
+      "movieCode": "19868242",
+      "time": "14:35",
+      "showtime": "2026-04-08T05:35:00.000Z"
+    },
+    {
+      "title": "올란도",
+      "theater": "CGV 용산아이파크몰",
+      "area": "용산구",
+      "screen": "19관(아트하우스)",
+      "movieCode": "19940120",
+      "time": "19:05",
+      "showtime": "2026-04-08T10:05:00.000Z"
+    },
+    {
+      "title": "파리, 텍사스",
+      "theater": "CGV 용산아이파크몰",
+      "area": "용산구",
+      "screen": "19관(아트하우스)",
+      "movieCode": "20080356",
+      "time": "09:25",
+      "showtime": "2026-04-08T00:25:00.000Z"
+    },
+    {
+      "title": "모래그릇",
+      "theater": "CGV 용산아이파크몰",
+      "area": "용산구",
+      "screen": "19관(아트하우스)",
+      "movieCode": "20256103",
+      "time": "23:40",
+      "showtime": "2026-04-08T14:40:00.000Z"
+    },
+    {
+      "title": "두 검사",
+      "theater": "CGV 용산아이파크몰",
+      "area": "용산구",
+      "screen": "19관(아트하우스)",
+      "movieCode": "20259598",
+      "time": "21:10",
+      "showtime": "2026-04-08T12:10:00.000Z"
+    },
+    {
+      "title": "위 리브 인 타임",
+      "theater": "CGV 용산아이파크몰",
+      "area": "용산구",
+      "screen": "19관(아트하우스)",
+      "movieCode": "20261622",
+      "time": "16:45",
+      "showtime": "2026-04-08T07:45:00.000Z"
+    },
+    {
+      "title": "류이치 사카모토: 다이어리",
+      "theater": "CGV 용산아이파크몰",
+      "area": "용산구",
+      "screen": "19관(아트하우스)",
+      "movieCode": "20261731",
+      "time": "12:25",
+      "showtime": "2026-04-08T03:25:00.000Z"
+    },
+    {
+      "title": "마녀배달부 키키",
+      "theater": "CGV 압구정",
+      "area": "강남구",
+      "screen": "IMAX관",
+      "movieCode": "20070602",
+      "time": "13:50",
+      "showtime": "2026-04-08T04:50:00.000Z"
+    },
+    {
+      "title": "마녀배달부 키키",
+      "theater": "CGV 압구정",
+      "area": "강남구",
+      "screen": "IMAX관",
+      "movieCode": "20070602",
+      "time": "16:15",
+      "showtime": "2026-04-08T07:15:00.000Z"
+    },
+    {
+      "title": "인정사정 볼 것 없다",
+      "theater": "CGV 압구정",
+      "area": "강남구",
+      "screen": "아트하우스 ART1관",
+      "movieCode": "19990070",
+      "time": "15:40",
+      "showtime": "2026-04-08T06:40:00.000Z"
+    },
+    {
+      "title": "라디오 스타",
+      "theater": "CGV 압구정",
+      "area": "강남구",
+      "screen": "아트하우스 ART1관",
+      "movieCode": "20060284",
+      "time": "13:00",
+      "showtime": "2026-04-08T04:00:00.000Z"
+    },
+    {
+      "title": "파리, 텍사스",
+      "theater": "CGV 압구정",
+      "area": "강남구",
+      "screen": "아트하우스 ART1관",
+      "movieCode": "20080356",
+      "time": "10:00",
+      "showtime": "2026-04-08T01:00:00.000Z"
+    },
+    {
+      "title": "하녀",
+      "theater": "CGV 압구정",
+      "area": "강남구",
+      "screen": "아트하우스 ART1관",
+      "movieCode": "19600018",
+      "time": "19:10",
+      "showtime": "2026-04-08T10:10:00.000Z"
+    },
+    {
+      "title": "두 검사",
+      "theater": "CGV 압구정",
+      "area": "강남구",
+      "screen": "아트하우스 ART1관",
+      "movieCode": "20259598",
+      "time": "21:30",
+      "showtime": "2026-04-08T12:30:00.000Z"
+    },
+    {
+      "title": "연지구 디 오리지널 4K",
+      "theater": "CGV 압구정",
+      "area": "강남구",
+      "screen": "아트하우스 ART2관",
+      "movieCode": "19868242",
+      "time": "12:30",
+      "showtime": "2026-04-08T03:30:00.000Z"
+    },
+    {
+      "title": "올란도",
+      "theater": "CGV 압구정",
+      "area": "강남구",
+      "screen": "아트하우스 ART2관",
+      "movieCode": "19940120",
+      "time": "10:00",
+      "showtime": "2026-04-08T01:00:00.000Z"
+    },
+    {
+      "title": "올란도",
+      "theater": "CGV 압구정",
+      "area": "강남구",
+      "screen": "아트하우스 ART2관",
+      "movieCode": "19940120",
+      "time": "20:30",
+      "showtime": "2026-04-08T11:30:00.000Z"
+    },
+    {
+      "title": "모래그릇",
+      "theater": "CGV 압구정",
+      "area": "강남구",
+      "screen": "아트하우스 ART2관",
+      "movieCode": "20256103",
+      "time": "17:30",
+      "showtime": "2026-04-08T08:30:00.000Z"
+    },
+    {
+      "title": "류이치 사카모토: 다이어리",
+      "theater": "CGV 압구정",
+      "area": "강남구",
+      "screen": "아트하우스 ART2관",
+      "movieCode": "20261731",
+      "time": "15:10",
+      "showtime": "2026-04-08T06:10:00.000Z"
+    },
+    {
+      "title": "위 리브 인 타임",
+      "theater": "CGV 압구정",
+      "area": "강남구",
+      "screen": "04관",
+      "movieCode": "20261622",
+      "time": "12:30",
+      "showtime": "2026-04-08T03:30:00.000Z"
+    },
+    {
+      "title": "위 리브 인 타임",
+      "theater": "CGV 압구정",
+      "area": "강남구",
+      "screen": "04관",
+      "movieCode": "20261622",
+      "time": "15:10",
+      "showtime": "2026-04-08T06:10:00.000Z"
+    },
+    {
+      "title": "위 리브 인 타임",
+      "theater": "CGV 압구정",
+      "area": "강남구",
+      "screen": "04관",
+      "movieCode": "20261622",
+      "time": "17:30",
+      "showtime": "2026-04-08T08:30:00.000Z"
+    },
+    {
+      "title": "연지구 디 오리지널 4K",
+      "theater": "CGV 신촌아트레온",
+      "area": "서대문구",
+      "screen": "10관 [아트하우스]",
+      "movieCode": "19868242",
+      "time": "11:00",
+      "showtime": "2026-04-08T02:00:00.000Z"
+    },
+    {
+      "title": "올란도",
+      "theater": "CGV 신촌아트레온",
+      "area": "서대문구",
+      "screen": "10관 [아트하우스]",
+      "movieCode": "19940120",
+      "time": "20:35",
+      "showtime": "2026-04-08T11:35:00.000Z"
+    },
+    {
+      "title": "파리, 텍사스",
+      "theater": "CGV 신촌아트레온",
+      "area": "서대문구",
+      "screen": "10관 [아트하우스]",
+      "movieCode": "20080356",
+      "time": "15:20",
+      "showtime": "2026-04-08T06:20:00.000Z"
+    },
+    {
+      "title": "위 리브 인 타임",
+      "theater": "CGV 신촌아트레온",
+      "area": "서대문구",
+      "screen": "10관 [아트하우스]",
+      "movieCode": "20261622",
+      "time": "18:15",
+      "showtime": "2026-04-08T09:15:00.000Z"
+    },
+    {
+      "title": "류이치 사카모토: 다이어리",
+      "theater": "CGV 신촌아트레온",
+      "area": "서대문구",
+      "screen": "10관 [아트하우스]",
+      "movieCode": "20261731",
+      "time": "13:10",
+      "showtime": "2026-04-08T04:10:00.000Z"
+    },
+    {
+      "title": "올란도",
+      "theater": "CGV 대학로",
+      "area": "종로구",
+      "screen": "05관",
+      "movieCode": "19940120",
+      "time": "13:40",
+      "showtime": "2026-04-08T04:40:00.000Z"
+    },
+    {
+      "title": "센티멘탈 밸류",
+      "theater": "CGV 대학로",
+      "area": "종로구",
+      "screen": "05관",
+      "movieCode": "20250428",
+      "time": "18:20",
+      "showtime": "2026-04-08T09:20:00.000Z"
+    },
+    {
+      "title": "두 검사",
+      "theater": "CGV 대학로",
+      "area": "종로구",
+      "screen": "05관",
+      "movieCode": "20259598",
+      "time": "15:50",
+      "showtime": "2026-04-08T06:50:00.000Z"
+    },
+    {
+      "title": "위 리브 인 타임",
+      "theater": "CGV 대학로",
+      "area": "종로구",
+      "screen": "05관",
+      "movieCode": "20261622",
+      "time": "21:00",
+      "showtime": "2026-04-08T12:00:00.000Z"
+    },
+    {
+      "title": "연지구 디 오리지널 4K",
+      "theater": "CGV 여의도",
+      "area": "영등포구",
+      "screen": "05관 [아트하우스/Sonictier]",
+      "movieCode": "19868242",
+      "time": "09:10",
+      "showtime": "2026-04-08T00:10:00.000Z"
+    },
+    {
+      "title": "올란도",
+      "theater": "CGV 여의도",
+      "area": "영등포구",
+      "screen": "05관 [아트하우스/Sonictier]",
+      "movieCode": "19940120",
+      "time": "18:20",
+      "showtime": "2026-04-08T09:20:00.000Z"
+    },
+    {
+      "title": "두 검사",
+      "theater": "CGV 여의도",
+      "area": "영등포구",
+      "screen": "05관 [아트하우스/Sonictier]",
+      "movieCode": "20259598",
+      "time": "15:50",
+      "showtime": "2026-04-08T06:50:00.000Z"
+    },
+    {
+      "title": "위 리브 인 타임",
+      "theater": "CGV 여의도",
+      "area": "영등포구",
+      "screen": "05관 [아트하우스/Sonictier]",
+      "movieCode": "20261622",
+      "time": "11:20",
+      "showtime": "2026-04-08T02:20:00.000Z"
+    },
+    {
+      "title": "위 리브 인 타임",
+      "theater": "CGV 여의도",
+      "area": "영등포구",
+      "screen": "05관 [아트하우스/Sonictier]",
+      "movieCode": "20261622",
+      "time": "20:25",
+      "showtime": "2026-04-08T11:25:00.000Z"
+    },
+    {
+      "title": "류이치 사카모토: 다이어리",
+      "theater": "CGV 여의도",
+      "area": "영등포구",
+      "screen": "05관 [아트하우스/Sonictier]",
+      "movieCode": "20261731",
+      "time": "13:40",
+      "showtime": "2026-04-08T04:40:00.000Z"
+    },
+    {
+      "title": "로마의 휴일",
+      "theater": "롯데시네마 신도림",
+      "area": "구로구",
+      "screen": "04관",
+      "movieCode": "20110026",
+      "time": "16:50",
+      "showtime": "2026-04-08T07:50:00.000Z"
+    },
+    {
+      "title": "티파니에서 아침을",
+      "theater": "롯데시네마 신도림",
+      "area": "구로구",
+      "screen": "04관",
+      "movieCode": "19618009",
+      "time": "14:20",
+      "showtime": "2026-04-08T05:20:00.000Z"
+    },
+    {
+      "title": "패왕별희 디 오리지널",
+      "theater": "롯데시네마 신도림",
+      "area": "구로구",
+      "screen": "04관",
+      "movieCode": "20173226",
+      "time": "10:50",
+      "showtime": "2026-04-08T01:50:00.000Z"
+    },
+    {
+      "title": "패왕별희 디 오리지널",
+      "theater": "롯데시네마 신도림",
+      "area": "구로구",
+      "screen": "04관",
+      "movieCode": "20173226",
+      "time": "19:25",
+      "showtime": "2026-04-08T10:25:00.000Z"
+    }
+  ],
+  "timestamp": 1775439983115,
+  "expiresAt": 1775461583115
+}

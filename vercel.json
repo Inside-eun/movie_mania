@@ -1,12 +1,8 @@
 {
-  "functions": {
-    "src/app/api/**": {
-      "maxDuration": 60
+  "crons": [
+    {
+      "path": "/api/schedules/prefetch?token=$PREFETCH_TOKEN",
+      "schedule": "0 6,12,18 * * *"
     }
-  },
-  "build": {
-    "env": {
-      "VERCEL": "1"
-    }
-  }
+  ]
 }
