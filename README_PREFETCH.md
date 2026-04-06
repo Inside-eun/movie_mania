@@ -94,9 +94,9 @@ curl -X POST "https://your-domain.vercel.app/api/schedules/prefetch?token=iaDFUu
 
 ## ⏰ 자동 스케줄링 (Vercel Cron)
 
-### Vercel Pro 플랜
+### Vercel Pro/Enterprise 플랜
 
-`vercel.json` 설정으로 자동 실행:
+`vercel.json` 설정으로 자동 실행 (분 단위 가능):
 - **매일 06:00** (오전 6시)
 - **매일 12:00** (낮 12시)  
 - **매일 18:00** (오후 6시)
@@ -104,6 +104,24 @@ curl -X POST "https://your-domain.vercel.app/api/schedules/prefetch?token=iaDFUu
 배포 후 자동으로 활성화됩니다.
 
 ### Vercel Hobby 플랜 (무료)
+
+**옵션 1: Vercel Cron (하루 1회)**
+
+`vercel.json`을 다음과 같이 수정:
+```json
+{
+  "crons": [
+    {
+      "path": "/api/schedules/prefetch?token=$PREFETCH_TOKEN",
+      "schedule": "0 6 * * *"
+    }
+  ]
+}
+```
+
+또는 `vercel-hobby.json` 파일을 `vercel.json`으로 복사.
+
+**옵션 2: GitHub Actions (하루 여러 번)**
 
 GitHub Actions로 무료 Cron 구현:
 

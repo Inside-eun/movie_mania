@@ -7,7 +7,7 @@ echo ""
 
 # .env.local에서 토큰 읽기
 if [ -f .env.local ]; then
-  PREFETCH_TOKEN=$(grep PREFETCH_TOKEN .env.local | cut -d '=' -f2)
+  PREFETCH_TOKEN=$(grep PREFETCH_TOKEN .env.local | cut -d '=' -f2-)
 else
   echo "❌ .env.local 파일을 찾을 수 없습니다."
   exit 1
@@ -18,9 +18,12 @@ if [ -z "$PREFETCH_TOKEN" ]; then
   exit 1
 fi
 
+# URL 인코딩
+ENCODED_TOKEN=$(echo -n "$PREFETCH_TOKEN" | jq -sRr @uri)
+
 # 프리페치 실행
 echo "📡 API 호출 중... (최대 5분 소요)"
-response=$(curl -X POST "http://localhost:3000/api/schedules/prefetch?token=$PREFETCH_TOKEN" \
+response=$(curl -X POST "http://localhost:3000/api/schedules/prefetch?token=$ENCODED_TOKEN" \
   -H "Content-Type: application/json" \
   --max-time 300 \
   -w "\nHTTP_CODE:%{http_code}" \

@@ -125,8 +125,8 @@ npm run cache:clear
    - 오래된 캐시는 자동 정리됨
 
 3. **Vercel 제한사항**:
-   - Hobby 플랜: Cron Job 사용 불가 (수동 프리페치만 가능)
-   - Pro 플랜: Cron Job 사용 가능
+   - Hobby 플랜: Cron Job 하루 1회만 가능 (6시, 12시, 18시 설정은 배포 실패)
+   - Pro/Enterprise 플랜: Cron Job 분 단위 실행 가능
    - 함수 실행 시간: 최대 5분 (maxDuration 설정됨)
 
 4. **프리페치 실패 시**:
