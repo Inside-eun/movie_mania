@@ -1,8 +1,10 @@
 {
   "crons": [
     {
-      "path": "/api/schedules/prefetch?token=$PREFETCH_TOKEN",
+      "path": "/api/schedules/prefetch?token=iaDFUuG43dOzkb6mXQazntv6NfU2QFw0Hk2i/hHFpWI=",
       "schedule": "0 6 * * *"
     }
   ]
 }
+1aDfUu6d3d0zkb6mXQazntv6NfU20Fw9Hk2i/hHFpWI=
+iaDFUuG43dOzkb6mXQazntv6NfU2QFw0Hk2i/hHFpWI=
