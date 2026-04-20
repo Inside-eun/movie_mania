@@ -117,24 +117,6 @@ export default function Home() {
             </div>
           )}
 
-          {!showWishlistView && !showInfoView && isToday && schedules.pastSchedulesCount > 0 && (
-            <button
-              onClick={() => filter.setShowPastSchedules(!filter.showPastSchedules)}
-              className="flex items-center justify-center gap-1.5 px-3 py-1.5 bg-gray-50 dark:bg-gray-800 rounded-lg text-xs text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700 transition-all"
-            >
-              <svg
-                className={`w-3 h-3 transition-transform ${filter.showPastSchedules ? "rotate-90" : "rotate-0"}`}
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
-              >
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-              </svg>
-              <span>
-                지난 상영 {filter.showPastSchedules ? "접기" : "보기"} ({schedules.pastSchedulesCount})
-              </span>
-            </button>
-          )}
         </div>
 
         {schedules.error && (
@@ -160,6 +142,10 @@ export default function Home() {
             onMovieClick={openModal}
             onToggleWishlist={wishlist.toggleWishlist}
             isInWishlist={wishlist.isInWishlist}
+            sortType={filter.sortType}
+            userLocation={filter.userLocation}
+            locationError={filter.locationError}
+            onSortTypeChange={filter.handleSortTypeChange}
           />
         )}
 

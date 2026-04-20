@@ -31,6 +31,8 @@ export interface MovieSchedule {
   runtime?: string;
   cActors?: string;
   cCodeSubName2?: string;
+  latitude?: number;
+  longitude?: number;
 }
 
 // API 응답 타입

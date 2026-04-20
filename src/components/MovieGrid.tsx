@@ -1,6 +1,8 @@
 "use client";
 
 import { MovieSchedule } from "@/types";
+import { SortType, UserLocation } from "@/hooks/useMovieFilter";
+import { calculateDistance } from "@/utils/date";
 
 interface MovieGridProps {
   movies: MovieSchedule[];
@@ -10,6 +12,10 @@ interface MovieGridProps {
   onMovieClick: (movie: MovieSchedule) => void;
   onToggleWishlist: (movie: MovieSchedule) => void;
   isInWishlist: (movie: MovieSchedule) => boolean;
+  sortType?: SortType;
+  userLocation?: UserLocation | null;
+  locationError?: string | null;
+  onSortTypeChange?: (type: SortType) => void;
 }
 
 export default function MovieGrid({
@@ -20,6 +26,10 @@ export default function MovieGrid({
   onMovieClick,
   onToggleWishlist,
   isInWishlist,
+  sortType = "time",
+  userLocation = null,
+  locationError = null,
+  onSortTypeChange,
 }: MovieGridProps) {
   const getLocalDateString = (date: Date): string => {
     const seoulDate = new Date(date.toLocaleString('en-US', { timeZone: 'Asia/Seoul' }));
@@ -36,38 +46,97 @@ export default function MovieGrid({
     return movieDate;
   };
 
+  const now = new Date();
+  const isToday = selectedDate === getLocalDateString(new Date());
+  
+  const futureMovies = movies.filter((movie) => {
+    if (!isToday) return true;
+    const movieTime = parseMovieTime(movie.time, selectedDate);
+    return movieTime > now;
+  });
+
+  const sortedMovies = [...futureMovies].sort((a, b) => {
+    if (sortType === "time") {
+      const timeA = parseMovieTime(a.time, selectedDate).getTime();
+      const timeB = parseMovieTime(b.time, selectedDate).getTime();
+      return timeA - timeB;
+    } else if (sortType === "distance" && userLocation) {
+      const distanceA = a.latitude && a.longitude 
+        ? calculateDistance(
+            userLocation.latitude,
+            userLocation.longitude,
+            a.latitude,
+            a.longitude
+          )
+        : Infinity;
+      const distanceB = b.latitude && b.longitude
+        ? calculateDistance(
+            userLocation.latitude,
+            userLocation.longitude,
+            b.latitude,
+            b.longitude
+          )
+        : Infinity;
+      return distanceA - distanceB;
+    }
+    return 0;
+  });
+
   return (
     <div>
-      <div className="mb-3 flex items-center justify-between">
+      <div className="mb-3 flex items-center justify-between gap-2">
         <span className="text-xs font-medium text-gray-600 dark:text-gray-400">
-          {movies.length}개 상영
+          {futureMovies.length}개 상영
         </span>
-        {(selectedMovies.length > 0 || selectedTheaters.length > 0) && (
-          <span className="text-xs text-blue-600 dark:text-blue-400 px-2 py-0.5 bg-blue-50 dark:bg-blue-900/30 rounded">
-            필터 중
-          </span>
-        )}
+        
+        <div className="flex items-center gap-1">
+          {sortType === "distance" && locationError && (
+            <span className="text-xs text-red-500 dark:text-red-400 mr-2">
+              {locationError}
+            </span>
+          )}
+          
+          {onSortTypeChange && (
+            <div className="flex gap-1">
+              <button
+                onClick={() => onSortTypeChange("time")}
+                className={`px-2 py-1 text-xs font-medium rounded transition-all ${
+                  sortType === "time"
+                    ? 'bg-green-500 dark:bg-green-600 text-white'
+                    : 'bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-600'
+                }`}
+                title="빠른 상영 시간순으로 정렬"
+              >
+                시간순
+              </button>
+              <button
+                onClick={() => onSortTypeChange("distance")}
+                className={`px-2 py-1 text-xs font-medium rounded transition-all ${
+                  sortType === "distance"
+                    ? 'bg-green-500 dark:bg-green-600 text-white'
+                    : 'bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-600'
+                }`}
+                title="가까운 영화관순으로 정렬"
+              >
+                거리순
+              </button>
+            </div>
+          )}
+        </div>
       </div>
 
       <div className="grid grid-cols-2 lg:grid-cols-3 gap-3">
-        {movies.map((movie, index) => {
+        {sortedMovies.map((movie, index) => {
           const movieTime = parseMovieTime(movie.time, selectedDate);
-          const now = new Date();
-          const isToday = selectedDate === getLocalDateString(new Date());
-          const isPast = isToday && movieTime <= now;
           
           return (
             <div
               key={index}
               onClick={() => onMovieClick(movie)}
-              className={`p-4 rounded-xl shadow-md hover:shadow-lg transition-all duration-200 cursor-pointer active:scale-[0.98] ${
-                isPast ? 'bg-gray-50 dark:bg-gray-800/50 opacity-75' : 'bg-white dark:bg-gray-800'
-              } border border-gray-100 dark:border-gray-700 hover:border-blue-400 dark:hover:border-blue-500`}
+              className="p-4 rounded-xl shadow-md hover:shadow-lg transition-all duration-200 cursor-pointer active:scale-[0.98] bg-white dark:bg-gray-800 border border-gray-100 dark:border-gray-700 hover:border-blue-400 dark:hover:border-blue-500"
             >
               <div className="flex justify-between items-start mb-3">
-                <time className={`text-sm font-bold px-3 py-1.5 rounded-lg ${
-                  isPast ? 'text-gray-500 dark:text-gray-400 bg-gray-200 dark:bg-gray-700' : 'text-blue-600 dark:text-blue-400 bg-blue-50 dark:bg-blue-900/50'
-                }`}>
+                <time className="text-sm font-bold px-3 py-1.5 rounded-lg text-blue-600 dark:text-blue-400 bg-blue-50 dark:bg-blue-900/50">
                   {movie.time}
                 </time>
                 <button
@@ -111,7 +180,17 @@ export default function MovieGrid({
                 <span className="font-medium truncate">
                   {movie.theater}
                 </span>
-                {movie.area && (
+                {sortType === "distance" && userLocation && movie.latitude && movie.longitude && (
+                  <span className="text-gray-500 dark:text-gray-500 ml-2 flex-shrink-0 text-xs">
+                    {calculateDistance(
+                      userLocation.latitude,
+                      userLocation.longitude,
+                      movie.latitude,
+                      movie.longitude
+                    ).toFixed(1)}km
+                  </span>
+                )}
+                {(sortType === "time" || !userLocation) && movie.area && (
                   <span className="text-gray-500 dark:text-gray-500 ml-2 flex-shrink-0 text-xs">
                     {movie.area}
                   </span>

@@ -3,6 +3,7 @@
 import { useState, useMemo, useCallback } from "react";
 import { MovieSchedule, ScheduleResponse } from "@/types";
 import { getLocalDateString, parseMovieTime } from "@/utils/date";
+import { getTheaterCoordinates } from "@/utils/theaterCoordinates";
 
 export function useMovieSchedules(
   selectedDate: string,
@@ -27,7 +28,16 @@ export function useMovieSchedules(
       const data: ScheduleResponse = await response.json();
 
       if (data.success) {
-        setAllMovies(data.data);
+        // 극장 좌표 정보 추가
+        const moviesWithCoordinates = data.data.map((movie) => {
+          const coords = getTheaterCoordinates(movie.theater);
+          return {
+            ...movie,
+            latitude: coords?.latitude,
+            longitude: coords?.longitude,
+          };
+        });
+        setAllMovies(moviesWithCoordinates);
         setLastUpdate(
           new Date(data.timestamp).toLocaleTimeString("ko-KR", {
             timeZone: "Asia/Seoul",
