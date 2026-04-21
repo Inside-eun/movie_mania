@@ -62,6 +62,9 @@ export async function getMovieInfoFromKOBIS(movieCode: string): Promise<Partial<
       },
     });
 
+    // 가공 전 원본 응답 확인용 (서버 터미널에서 확인)
+    console.log("[KOBIS 원본 응답]", JSON.stringify(response.data, null, 2));
+
     const body = response.data;
     // KOBIS 에러 응답: message 또는 faultInfo 존재 시
     if (body?.faultInfo) {
