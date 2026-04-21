@@ -8,13 +8,16 @@ import MovieGrid from "../components/MovieGrid";
 import WishlistView from "../components/WishlistView";
 import InfoView from "../components/InfoView";
 import MovieModal from "../components/MovieModal";
+import TMDBPosterList from "../components/TMDBPosterList";
 import { MovieSchedule } from "@/types";
 import { useWishlist, useMovieSchedules, useMovieFilter } from "@/hooks";
 import { getLocalDateString } from "@/utils/date";
 
 export default function Home() {
   // 날짜 상태
-  const [selectedDate, setSelectedDate] = useState(getLocalDateString(new Date()));
+  const [selectedDate, setSelectedDate] = useState(
+    getLocalDateString(new Date()),
+  );
 
   // 뷰 상태
   const [showWishlistView, setShowWishlistView] = useState(false);
@@ -22,7 +25,8 @@ export default function Home() {
 
   // 모달 상태
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [selectedMovieForModal, setSelectedMovieForModal] = useState<MovieSchedule | null>(null);
+  const [selectedMovieForModal, setSelectedMovieForModal] =
+    useState<MovieSchedule | null>(null);
 
   // 커스텀 훅 사용
   const filter = useMovieFilter();
@@ -30,16 +34,19 @@ export default function Home() {
     selectedDate,
     filter.selectedMovies,
     filter.selectedTheaters,
-    filter.showPastSchedules
+    filter.showPastSchedules,
   );
   const wishlist = useWishlist(selectedDate);
 
   // 날짜 변경 핸들러
-  const handleDateChange = useCallback((date: string) => {
-    setSelectedDate(date);
-    schedules.resetMovies();
-    filter.resetAllFilters();
-  }, [schedules, filter]);
+  const handleDateChange = useCallback(
+    (date: string) => {
+      setSelectedDate(date);
+      schedules.resetMovies();
+      filter.resetAllFilters();
+    },
+    [schedules, filter],
+  );
 
   // 검색 핸들러
   const handleSearch = useCallback(() => {
@@ -107,8 +114,14 @@ export default function Home() {
                     allMovies={schedules.allMovies}
                     isDropdownOpen={filter.isDropdownOpen}
                     setIsDropdownOpen={filter.setIsDropdownOpen}
-                    getSelectedMovieText={() => filter.getSelectedMovieText(schedules.uniqueMovies.length)}
-                    getSelectedTheaterText={() => filter.getSelectedTheaterText(schedules.uniqueTheaters.length)}
+                    getSelectedMovieText={() =>
+                      filter.getSelectedMovieText(schedules.uniqueMovies.length)
+                    }
+                    getSelectedTheaterText={() =>
+                      filter.getSelectedTheaterText(
+                        schedules.uniqueTheaters.length,
+                      )
+                    }
                     getUniqueMovies={() => schedules.uniqueMovies}
                     getUniqueTheaters={() => schedules.uniqueTheaters}
                   />
@@ -117,6 +130,35 @@ export default function Home() {
             </div>
           )}
 
+          {!showWishlistView &&
+            !showInfoView &&
+            isToday &&
+            schedules.pastSchedulesCount > 0 && (
+              <button
+                onClick={() =>
+                  filter.setShowPastSchedules(!filter.showPastSchedules)
+                }
+                className="flex items-center justify-center gap-1.5 px-3 py-1.5 bg-gray-50 dark:bg-gray-800 rounded-lg text-xs text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700 transition-all"
+              >
+                <svg
+                  className={`w-3 h-3 transition-transform ${filter.showPastSchedules ? "rotate-90" : "rotate-0"}`}
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M9 5l7 7-7 7"
+                  />
+                </svg>
+                <span>
+                  지난 상영 {filter.showPastSchedules ? "접기" : "보기"} (
+                  {schedules.pastSchedulesCount})
+                </span>
+              </button>
+            )}
         </div>
 
         {schedules.error && (
@@ -128,49 +170,67 @@ export default function Home() {
         {schedules.loading && (
           <div className="text-center py-8">
             <div className="inline-block animate-spin rounded-full h-8 w-8 border-b-2 border-blue-500"></div>
-            <p className="mt-2 text-gray-600 dark:text-gray-400">상영시간표를 불러오는 중...</p>
-            <p className="mt-2 text-gray-600 dark:text-gray-400">최대 1분정도 걸릴 수 있습니다</p>
+            <p className="mt-2 text-gray-600 dark:text-gray-400">
+              상영시간표를 불러오는 중...
+            </p>
+            <p className="mt-2 text-gray-600 dark:text-gray-400">
+              최대 1분정도 걸릴 수 있습니다
+            </p>
           </div>
         )}
 
-        {!schedules.loading && !showWishlistView && !showInfoView && schedules.filteredMovies.length > 0 && (
-          <MovieGrid
-            movies={schedules.filteredMovies}
-            selectedDate={selectedDate}
-            selectedMovies={filter.selectedMovies}
-            selectedTheaters={filter.selectedTheaters}
-            onMovieClick={openModal}
-            onToggleWishlist={wishlist.toggleWishlist}
-            isInWishlist={wishlist.isInWishlist}
-            sortType={filter.sortType}
-            userLocation={filter.userLocation}
-            locationError={filter.locationError}
-            onSortTypeChange={filter.handleSortTypeChange}
-          />
-        )}
+        {!schedules.loading &&
+          !showWishlistView &&
+          !showInfoView &&
+          schedules.filteredMovies.length > 0 && (
+            <>
+              <MovieGrid
+                movies={schedules.filteredMovies}
+                selectedDate={selectedDate}
+                selectedMovies={filter.selectedMovies}
+                selectedTheaters={filter.selectedTheaters}
+                onMovieClick={openModal}
+                onToggleWishlist={wishlist.toggleWishlist}
+                isInWishlist={wishlist.isInWishlist}
+                sortType={filter.sortType}
+                userLocation={filter.userLocation}
+                locationError={filter.locationError}
+                onSortTypeChange={filter.handleSortTypeChange}
+              />
+              <TMDBPosterList date={selectedDate} />
+            </>
+          )}
 
-        {!schedules.loading && !showWishlistView && !showInfoView && schedules.allMovies.length === 0 && !schedules.error && (
-          <div className="text-center py-8 text-gray-500 dark:text-gray-400">
-            <div className="mb-2 mt-4 text-sm sm:text-base">
-              {new Date(selectedDate).toLocaleDateString("ko-KR", {
-                year: "numeric",
-                month: "long",
-                day: "numeric",
-                weekday: "long",
-              })}
-              <br className="sm:hidden" /> 상영시간표를 조회해주세요.
+        {!schedules.loading &&
+          !showWishlistView &&
+          !showInfoView &&
+          schedules.allMovies.length === 0 &&
+          !schedules.error && (
+            <div className="text-center py-8 text-gray-500 dark:text-gray-400">
+              <div className="mb-2 mt-4 text-sm sm:text-base">
+                {new Date(selectedDate).toLocaleDateString("ko-KR", {
+                  year: "numeric",
+                  month: "long",
+                  day: "numeric",
+                  weekday: "long",
+                })}
+                <br className="sm:hidden" /> 상영시간표를 조회해주세요.
+              </div>
+              <div>영화를 위해 도시를 떠도는 여행자를 위한 사이트</div>
             </div>
-            <div>영화를 위해 도시를 떠도는 여행자를 위한 사이트</div>
-          </div>
-        )}
+          )}
 
-        {!schedules.loading && !showWishlistView && !showInfoView && schedules.allMovies.length > 0 && schedules.filteredMovies.length === 0 && (
-          <div className="text-center py-8 text-gray-500 dark:text-gray-400">
-            {isToday && !filter.showPastSchedules
-              ? "현재 시간 이후의 상영시간이 없습니다. 지난 상영시간을 보시려면 위의 체크박스를 선택해주세요."
-              : "선택한 영화의 상영시간이 없습니다."}
-          </div>
-        )}
+        {!schedules.loading &&
+          !showWishlistView &&
+          !showInfoView &&
+          schedules.allMovies.length > 0 &&
+          schedules.filteredMovies.length === 0 && (
+            <div className="text-center py-8 text-gray-500 dark:text-gray-400">
+              {isToday && !filter.showPastSchedules
+                ? "현재 시간 이후의 상영시간이 없습니다. 지난 상영시간을 보시려면 위의 버튼을 눌러주세요."
+                : "선택한 영화의 상영시간이 없습니다."}
+            </div>
+          )}
 
         {showWishlistView && (
           <WishlistView
@@ -185,7 +245,11 @@ export default function Home() {
 
         {showInfoView && <InfoView />}
 
-        <MovieModal isOpen={isModalOpen} onClose={closeModal} movie={selectedMovieForModal} />
+        <MovieModal
+          isOpen={isModalOpen}
+          onClose={closeModal}
+          movie={selectedMovieForModal}
+        />
 
         {/* 하단 네비게이션 바 */}
         <nav className="fixed bottom-0 left-0 right-0 bg-white dark:bg-gray-900 border-t border-gray-200 dark:border-gray-800 shadow-lg z-40 sm:hidden">
@@ -198,7 +262,12 @@ export default function Home() {
                   : "text-gray-500 dark:text-gray-400"
               }`}
             >
-              <svg className="w-6 h-6 mb-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <svg
+                className="w-6 h-6 mb-1"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
                 <path
                   strokeLinecap="round"
                   strokeLinejoin="round"
@@ -212,7 +281,9 @@ export default function Home() {
             <button
               onClick={goToWishlist}
               className={`flex flex-col items-center justify-center flex-1 h-full transition-colors relative ${
-                showWishlistView ? "text-red-600 dark:text-red-400" : "text-gray-500 dark:text-gray-400"
+                showWishlistView
+                  ? "text-red-600 dark:text-red-400"
+                  : "text-gray-500 dark:text-gray-400"
               }`}
             >
               <svg
@@ -239,10 +310,17 @@ export default function Home() {
             <button
               onClick={goToInfo}
               className={`flex flex-col items-center justify-center flex-1 h-full transition-colors ${
-                showInfoView ? "text-blue-600 dark:text-blue-400" : "text-gray-500 dark:text-gray-400"
+                showInfoView
+                  ? "text-blue-600 dark:text-blue-400"
+                  : "text-gray-500 dark:text-gray-400"
               }`}
             >
-              <svg className="w-6 h-6 mb-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <svg
+                className="w-6 h-6 mb-1"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
                 <path
                   strokeLinecap="round"
                   strokeLinejoin="round"
