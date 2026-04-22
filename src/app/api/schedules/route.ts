@@ -15,8 +15,53 @@ if (typeof globalThis.File === "undefined" && typeof globalThis.Blob !== "undefi
   };
 }
 
+import fs from "fs";
+import path from "path";
 import { NextResponse } from "next/server";
 import { MovieSchedule } from "@/types";
+
+interface TMDBMovieSummary {
+  title: string;
+  tmdbId: number;
+  originalTitle: string;
+  overview: string;
+  posterUrl: string | null;
+  releaseDate: string | null;
+  voteAverage: number;
+}
+
+function loadTMDBDb(): Record<string, TMDBMovieSummary> {
+  const isVercel = process.env.VERCEL === "1";
+  const dir = isVercel ? "/tmp/cache" : path.join(process.cwd(), ".cache");
+  const filePath = path.join(dir, "tmdb_db.json");
+  try {
+    if (fs.existsSync(filePath)) {
+      const raw = fs.readFileSync(filePath, "utf-8");
+      const data = JSON.parse(raw);
+      return typeof data === "object" && data !== null ? data : {};
+    }
+  } catch (e) {
+    console.warn("TMDB DB 로드 실패:", e);
+  }
+  return {};
+}
+
+function mergeTMDBData(movies: MovieSchedule[]): MovieSchedule[] {
+  const db = loadTMDBDb();
+  return movies.map((movie) => {
+    const key = (movie.title ?? "").trim().replace(/\s+/g, " ");
+    const tmdb = db[key];
+    if (tmdb) {
+      return {
+        ...movie,
+        tmdbPosterUrl: tmdb.posterUrl ?? undefined,
+        tmdbReleaseDate: tmdb.releaseDate ?? undefined,
+        tmdbOverview: tmdb.overview ?? undefined,
+      };
+    }
+    return movie;
+  });
+}
 
 // 동적 렌더링 강제
 export const dynamic = "force-dynamic";
@@ -80,7 +125,9 @@ export async function GET(request: Request) {
       movies = await (scheduleService as any).crawlArtCinemasWithKMDBByDate(targetDate);
     }
 
-    
+    // TMDB DB에서 포스터/상세정보 머지
+    movies = mergeTMDBData(movies);
+
     // 전체 영화 목록을 시간순으로 정렬
     movies.sort((a, b) => {
       const timeA = a.time;

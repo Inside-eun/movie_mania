@@ -33,6 +33,9 @@ export interface MovieSchedule {
   cCodeSubName2?: string;
   latitude?: number;
   longitude?: number;
+  tmdbPosterUrl?: string;
+  tmdbReleaseDate?: string;
+  tmdbOverview?: string;
 }
 
 // API 응답 타입

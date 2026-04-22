@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useMemo, useCallback } from "react";
+import { useState, useMemo, useCallback, useEffect } from "react";
 import { MovieSchedule, ScheduleResponse } from "@/types";
 import { getLocalDateString, parseMovieTime } from "@/utils/date";
 import { getTheaterCoordinates } from "@/utils/theaterCoordinates";
@@ -56,6 +56,13 @@ export function useMovieSchedules(
       setLoading(false);
     }
   }, [selectedDate]);
+
+  // 날짜 변경 시 자동으로 데이터 조회
+  useEffect(() => {
+    setAllMovies([]);
+    setLastUpdate(null);
+    fetchMovies();
+  }, [selectedDate]); // eslint-disable-line react-hooks/exhaustive-deps
 
   // 데이터 초기화
   const resetMovies = useCallback(() => {

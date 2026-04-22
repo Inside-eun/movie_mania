@@ -28,7 +28,6 @@ export default function DateSelector({
         className="flex-1 px-3 py-2 border rounded-lg text-sm bg-white dark:bg-gray-800 border-gray-300 dark:border-gray-600 text-gray-900 dark:text-gray-100"
         value={selectedDate}
         onChange={(e) => onDateChange(e.target.value)}
-        min={getLocalDateString(new Date())}
         max={getLocalDateString(new Date(Date.now() + 7 * 24 * 60 * 60 * 1000))}
         disabled={false}
       />

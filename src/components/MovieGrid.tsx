@@ -127,29 +127,53 @@ export default function MovieGrid({
 
       <div className="grid grid-cols-2 lg:grid-cols-3 gap-3">
         {sortedMovies.map((movie, index) => {
-          const movieTime = parseMovieTime(movie.time, selectedDate);
-          
+          const posterUrl = movie.tmdbPosterUrl || movie.posterUrl || null;
+          const year = movie.tmdbReleaseDate
+            ? movie.tmdbReleaseDate.slice(0, 4)
+            : movie.prodYear || null;
+
           return (
             <div
               key={index}
               onClick={() => onMovieClick(movie)}
-              className="p-4 rounded-xl shadow-md hover:shadow-lg transition-all duration-200 cursor-pointer active:scale-[0.98] bg-white dark:bg-gray-800 border border-gray-100 dark:border-gray-700 hover:border-blue-400 dark:hover:border-blue-500"
+              className="rounded-xl shadow-md hover:shadow-lg transition-all duration-200 cursor-pointer active:scale-[0.98] bg-white dark:bg-gray-800 border border-gray-100 dark:border-gray-700 hover:border-blue-400 dark:hover:border-blue-500 overflow-hidden flex flex-col"
             >
-              <div className="flex justify-between items-start mb-3">
-                <time className="text-sm font-bold px-3 py-1.5 rounded-lg text-blue-600 dark:text-blue-400 bg-blue-50 dark:bg-blue-900/50">
-                  {movie.time}
-                </time>
+              {/* 포스터 영역 */}
+              <div className="relative w-full aspect-[2/3] bg-gray-100 dark:bg-gray-700 flex-shrink-0">
+                {posterUrl ? (
+                  <img
+                    src={posterUrl}
+                    alt={movie.title}
+                    className="w-full h-full object-cover"
+                    loading="lazy"
+                  />
+                ) : (
+                  <div className="w-full h-full flex items-center justify-center text-gray-400 dark:text-gray-500">
+                    <svg className="w-10 h-10 opacity-40" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M7 4v16M17 4v16M3 8h4m10 0h4M3 12h18M3 16h4m10 0h4M4 20h16a1 1 0 001-1V5a1 1 0 00-1-1H4a1 1 0 00-1 1v14a1 1 0 001 1z" />
+                    </svg>
+                  </div>
+                )}
+
+                {/* 상영 시간 뱃지 (포스터 위 좌측 하단) */}
+                <div className="absolute bottom-2 left-2">
+                  <time className="text-xs font-bold px-2 py-1 rounded-md bg-black/70 text-white backdrop-blur-sm">
+                    {movie.time}
+                  </time>
+                </div>
+
+                {/* 위시리스트 버튼 (포스터 위 우측 상단) */}
                 <button
                   onClick={(e) => {
                     e.stopPropagation();
                     onToggleWishlist(movie);
                   }}
-                  className="p-2 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-full transition-all active:scale-90 z-10 relative"
+                  className="absolute top-2 right-2 p-1.5 bg-black/50 hover:bg-black/70 rounded-full transition-all active:scale-90 backdrop-blur-sm"
                   title={isInWishlist(movie) ? "위시리스트에서 제거" : "위시리스트에 추가"}
                 >
                   <svg
-                    className={`w-6 h-6 ${
-                      isInWishlist(movie) ? 'text-red-500 dark:text-red-400 fill-current' : 'text-gray-400 dark:text-gray-500'
+                    className={`w-4 h-4 ${
+                      isInWishlist(movie) ? 'text-red-400 fill-current' : 'text-white'
                     }`}
                     fill={isInWishlist(movie) ? 'currentColor' : 'none'}
                     stroke="currentColor"
@@ -165,43 +189,53 @@ export default function MovieGrid({
                 </button>
               </div>
 
-              <h2 className="text-base font-bold mb-2 leading-snug text-gray-900 dark:text-gray-100" style={{
-                overflow: 'hidden',
-                textOverflow: 'ellipsis',
-                display: '-webkit-box',
-                WebkitLineClamp: 2,
-                WebkitBoxOrient: 'vertical',
-                wordBreak: 'keep-all'
-              }}>
-                {movie.title}
-              </h2>
+              {/* 영화 정보 영역 */}
+              <div className="p-3 flex flex-col gap-1 flex-1">
+                <h2
+                  className="text-sm font-bold leading-snug text-gray-900 dark:text-gray-100"
+                  style={{
+                    overflow: 'hidden',
+                    textOverflow: 'ellipsis',
+                    display: '-webkit-box',
+                    WebkitLineClamp: 2,
+                    WebkitBoxOrient: 'vertical',
+                    wordBreak: 'keep-all',
+                  }}
+                >
+                  {movie.title}
+                </h2>
 
-              <div className="flex justify-between items-center text-sm text-gray-600 dark:text-gray-400 mb-1">
-                <span className="font-medium truncate">
-                  {movie.theater}
-                </span>
-                {sortType === "distance" && userLocation && movie.latitude && movie.longitude && (
-                  <span className="text-gray-500 dark:text-gray-500 ml-2 flex-shrink-0 text-xs">
-                    {calculateDistance(
-                      userLocation.latitude,
-                      userLocation.longitude,
-                      movie.latitude,
-                      movie.longitude
-                    ).toFixed(1)}km
-                  </span>
+                {(movie.director || year) && (
+                  <p className="text-xs text-gray-500 dark:text-gray-400 truncate">
+                    {[movie.director, year].filter(Boolean).join(' · ')}
+                  </p>
                 )}
-                {(sortType === "time" || !userLocation) && movie.area && (
-                  <span className="text-gray-500 dark:text-gray-500 ml-2 flex-shrink-0 text-xs">
-                    {movie.area}
-                  </span>
+
+                <div className="flex items-center justify-between text-xs text-gray-600 dark:text-gray-400 mt-auto pt-1">
+                  <span className="font-medium truncate">{movie.theater}</span>
+                  {sortType === "distance" && userLocation && movie.latitude && movie.longitude && (
+                    <span className="text-gray-500 dark:text-gray-500 ml-1 flex-shrink-0">
+                      {calculateDistance(
+                        userLocation.latitude,
+                        userLocation.longitude,
+                        movie.latitude,
+                        movie.longitude
+                      ).toFixed(1)}km
+                    </span>
+                  )}
+                  {(sortType === "time" || !userLocation) && movie.area && (
+                    <span className="text-gray-500 dark:text-gray-500 ml-1 flex-shrink-0">
+                      {movie.area}
+                    </span>
+                  )}
+                </div>
+
+                {movie.screen && (
+                  <p className="text-gray-400 dark:text-gray-500 text-xs truncate">
+                    {movie.screen}
+                  </p>
                 )}
               </div>
-
-              {movie.screen && (
-                <p className="text-gray-500 dark:text-gray-500 text-xs truncate">
-                  {movie.screen}
-                </p>
-              )}
             </div>
           );
         })}
@@ -209,4 +243,3 @@ export default function MovieGrid({
     </div>
   );
 }
-

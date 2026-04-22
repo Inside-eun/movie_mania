@@ -1,4 +1,7 @@
+import fs from "fs";
+import path from "path";
 import { NextResponse } from "next/server";
+import { MovieSchedule } from "@/types";
 
 export const dynamic = "force-dynamic";
 export const maxDuration = 300; // Vercel Pro: 최대 5분
@@ -11,6 +14,98 @@ async function getScheduleService() {
 async function getCacheService() {
   const { cacheService } = await import("@/services/cacheService");
   return cacheService;
+}
+
+interface TMDBMovieSummary {
+  title: string;
+  tmdbId: number;
+  originalTitle: string;
+  overview: string;
+  posterUrl: string | null;
+  releaseDate: string | null;
+  voteAverage: number;
+}
+
+function getTMDBDbPath(): string {
+  const isVercel = process.env.VERCEL === "1";
+  const dir = isVercel ? "/tmp/cache" : path.join(process.cwd(), ".cache");
+  return path.join(dir, "tmdb_db.json");
+}
+
+function loadTMDBDb(): Record<string, TMDBMovieSummary> {
+  try {
+    const filePath = getTMDBDbPath();
+    if (fs.existsSync(filePath)) {
+      const raw = fs.readFileSync(filePath, "utf-8");
+      const data = JSON.parse(raw);
+      return typeof data === "object" && data !== null ? data : {};
+    }
+  } catch (e) {
+    console.warn("TMDB DB 로드 실패:", e);
+  }
+  return {};
+}
+
+function saveTMDBDb(db: Record<string, TMDBMovieSummary>): void {
+  try {
+    const filePath = getTMDBDbPath();
+    const dir = path.dirname(filePath);
+    if (!fs.existsSync(dir)) fs.mkdirSync(dir, { recursive: true });
+    fs.writeFileSync(filePath, JSON.stringify(db, null, 2), "utf-8");
+  } catch (e) {
+    console.warn("TMDB DB 저장 실패:", e);
+  }
+}
+
+async function prefetchTMDBForMovies(movies: MovieSchedule[]): Promise<number> {
+  const apiKey = process.env.TMDB_API_KEY;
+  if (!apiKey) {
+    console.log("TMDB_API_KEY 없음, TMDB 프리페치 건너뜀");
+    return 0;
+  }
+
+  const { searchMovieByTitle, getTMDBImageUrl } = await import("@/services/tmdbApi");
+  const db = loadTMDBDb();
+
+  const titles = Array.from(
+    new Set(
+      movies
+        .map((m) => (m.title ?? "").trim().replace(/\s+/g, " "))
+        .filter((t) => t.length > 0)
+    )
+  );
+
+  let newCount = 0;
+  for (const title of titles) {
+    if (db[title]) continue;
+
+    try {
+      const result = await searchMovieByTitle(title);
+      if (!result) continue;
+
+      db[title] = {
+        title,
+        tmdbId: result.id,
+        originalTitle: result.original_title,
+        overview: result.overview,
+        posterUrl: getTMDBImageUrl(result.poster_path, "w342"),
+        releaseDate: result.release_date ?? null,
+        voteAverage: result.vote_average,
+      };
+      newCount++;
+
+      // API 과부하 방지
+      await new Promise((r) => setTimeout(r, 200));
+    } catch (e) {
+      console.warn(`TMDB 검색 실패 (${title}):`, e);
+    }
+  }
+
+  if (newCount > 0) {
+    saveTMDBDb(db);
+    console.log(`TMDB DB 업데이트: ${newCount}개 신규 저장`);
+  }
+  return newCount;
 }
 
 async function handlePrefetch(request: Request) {
@@ -58,14 +153,18 @@ async function handlePrefetch(request: Request) {
     
     try {
       const movies = await (scheduleService as any).crawlArtCinemasWithKMDBByDate(targetDate);
-      
+
+      // TMDB 포스터/정보 미리 수집
+      const tmdbNewCount = await prefetchTMDBForMovies(movies);
+
       results.push({
         date: dateStr,
         count: movies.length,
+        tmdbNew: tmdbNewCount,
         success: true,
       });
 
-      console.log(`${dateStr}: ${movies.length}개 스케줄 수집 완료`);
+      console.log(`${dateStr}: ${movies.length}개 스케줄, TMDB ${tmdbNewCount}개 신규 수집 완료`);
     } catch (error) {
       console.error(`${dateStr} 수집 실패:`, error);
       results.push({
