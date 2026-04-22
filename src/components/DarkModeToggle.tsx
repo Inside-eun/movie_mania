@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect } from 'react';
+import { trackDarkModeToggle } from '@/utils/gtm';
 
 export default function DarkModeToggle() {
   const [isDark, setIsDark] = useState(false);
@@ -64,6 +65,9 @@ export default function DarkModeToggle() {
     } else {
       document.documentElement.classList.remove('dark');
     }
+    
+    // 다크모드 토글 이벤트 추적
+    trackDarkModeToggle(newDarkMode);
   };
 
   return (

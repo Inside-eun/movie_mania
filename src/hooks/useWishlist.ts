@@ -3,6 +3,7 @@
 import { useState, useEffect, useCallback } from "react";
 import { MovieSchedule } from "@/types";
 import { getLocalDateString } from "@/utils/date";
+import { trackWishlistAdd, trackWishlistRemove, trackWishlistClear } from "@/utils/gtm";
 
 const STORAGE_KEY_WISHLIST = "movieWishlist";
 const STORAGE_KEY_MOVIES = "movieWishlistMovies";
@@ -55,6 +56,8 @@ export function useWishlist(selectedDate: string) {
         if (movieIndex > -1) {
           newWishlistMovies.splice(movieIndex, 1);
         }
+        // 찜 제거 이벤트 추적
+        trackWishlistRemove(movie.title, movie.theater, movie.time);
       } else {
         newWishlist.add(movieKey);
         const [hours, minutes] = movie.time.split(":").map(Number);
@@ -65,6 +68,8 @@ export function useWishlist(selectedDate: string) {
           ...movie,
           showtime: correctShowtime.toISOString(),
         });
+        // 찜 추가 이벤트 추적
+        trackWishlistAdd(movie.title, movie.theater, movie.time);
       }
 
       setWishlist(newWishlist);
@@ -77,11 +82,14 @@ export function useWishlist(selectedDate: string) {
 
   // 전체 삭제
   const clearAll = useCallback(() => {
+    const previousCount = wishlist.size;
     setWishlist(new Set());
     setWishlistMovies([]);
     localStorage.removeItem(STORAGE_KEY_WISHLIST);
     localStorage.removeItem(STORAGE_KEY_MOVIES);
-  }, []);
+    // 전체 삭제 이벤트 추적
+    trackWishlistClear(previousCount);
+  }, [wishlist]);
 
   // 개수
   const count = wishlist.size;

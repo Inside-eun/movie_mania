@@ -1,5 +1,7 @@
 "use client";
 
+import { trackDateChange, trackSearchClick } from "@/utils/gtm";
+
 interface DateSelectorProps {
   selectedDate: string;
   onDateChange: (date: string) => void;
@@ -13,6 +15,15 @@ export default function DateSelector({
   loading,
   onSearch,
 }: DateSelectorProps) {
+  const handleDateChange = (newDate: string) => {
+    trackDateChange(newDate);
+    onDateChange(newDate);
+  };
+
+  const handleSearch = () => {
+    trackSearchClick(selectedDate);
+    onSearch();
+  };
   const getLocalDateString = (date: Date): string => {
     const seoulDate = new Date(date.toLocaleString('en-US', { timeZone: 'Asia/Seoul' }));
     const year = seoulDate.getFullYear();
@@ -27,13 +38,13 @@ export default function DateSelector({
         type="date"
         className="flex-1 px-3 py-2 border rounded-lg text-sm bg-white dark:bg-gray-800 border-gray-300 dark:border-gray-600 text-gray-900 dark:text-gray-100"
         value={selectedDate}
-        onChange={(e) => onDateChange(e.target.value)}
+        onChange={(e) => handleDateChange(e.target.value)}
         min={getLocalDateString(new Date())}
         max={getLocalDateString(new Date(Date.now() + 7 * 24 * 60 * 60 * 1000))}
         disabled={false}
       />
       <button
-        onClick={onSearch}
+        onClick={handleSearch}
         disabled={loading}
         className="px-4 py-2 bg-blue-500 dark:bg-blue-600 text-white rounded-lg hover:bg-blue-600 dark:hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center whitespace-nowrap text-sm font-medium active:scale-95 transition-all"
       >
