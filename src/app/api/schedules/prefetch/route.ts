@@ -124,10 +124,15 @@ async function handlePrefetch(request: Request) {
       // TMDB 포스터/정보 미리 수집
       const tmdbNewCount = await prefetchTMDBForMovies(movies, cache);
 
+      // Redis 캐시에 schedules 데이터 저장
+      await cache.set("art_cinema_kfcc", dateStr, movies);
+      console.log(`${dateStr}: Redis 캐시에 schedules 데이터 저장 완료`);
+
       results.push({
         date: dateStr,
         count: movies.length,
         tmdbNew: tmdbNewCount,
+        cached: true,
         success: true,
       });
 
