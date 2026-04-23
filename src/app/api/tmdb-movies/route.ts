@@ -1,17 +1,7 @@
-import fs from "fs";
-import path from "path";
 import { NextResponse } from "next/server";
 import { MovieSchedule } from "@/types";
 
 export const dynamic = "force-dynamic";
-
-const TMDB_DB_FILENAME = "tmdb_db.json";
-
-function getTMDBDbPath(): string {
-  const isVercel = process.env.VERCEL === "1";
-  const dir = isVercel ? "/tmp/cache" : path.join(process.cwd(), ".cache");
-  return path.join(dir, TMDB_DB_FILENAME);
-}
 
 function normalizeTitle(title: string): string {
   return title.trim().replace(/\s+/g, " ");
@@ -25,33 +15,6 @@ interface TMDBMovieSummary {
   posterUrl: string | null;
   releaseDate: string | null;
   voteAverage: number;
-}
-
-function loadTMDBDb(): Record<string, TMDBMovieSummary> {
-  const filePath = getTMDBDbPath();
-  try {
-    if (fs.existsSync(filePath)) {
-      const raw = fs.readFileSync(filePath, "utf-8");
-      const data = JSON.parse(raw);
-      return typeof data === "object" && data !== null ? data : {};
-    }
-  } catch (e) {
-    console.warn("TMDB DB 로드 실패:", e);
-  }
-  return {};
-}
-
-function saveTMDBDb(db: Record<string, TMDBMovieSummary>): void {
-  const filePath = getTMDBDbPath();
-  try {
-    const dir = path.dirname(filePath);
-    if (!fs.existsSync(dir)) {
-      fs.mkdirSync(dir, { recursive: true });
-    }
-    fs.writeFileSync(filePath, JSON.stringify(db, null, 2), "utf-8");
-  } catch (e) {
-    console.warn("TMDB DB 저장 실패:", e);
-  }
 }
 
 async function getScheduleService() {
@@ -89,7 +52,7 @@ export async function GET(request: Request) {
     const scheduleService = await getScheduleService();
 
     let movies: MovieSchedule[] = [];
-    const cachedSchedules = cache.get<MovieSchedule[]>("integrated", dateStr);
+    const cachedSchedules = await cache.get<MovieSchedule[]>("integrated", dateStr);
     if (cachedSchedules) {
       movies = cachedSchedules;
     } else {
@@ -106,7 +69,7 @@ export async function GET(request: Request) {
       ),
     );
 
-    const db = loadTMDBDb();
+    const db = await cache.getTmdbDb() as Record<string, TMDBMovieSummary>;
     const { searchMovieByTitle, getTMDBImageUrl } = await getTMDBService();
     const results: TMDBMovieSummary[] = [];
     let changed = false;
@@ -136,7 +99,7 @@ export async function GET(request: Request) {
     }
 
     if (changed) {
-      saveTMDBDb(db);
+      await cache.saveTmdbDb(db);
     }
 
     return NextResponse.json({

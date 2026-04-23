@@ -1,5 +1,3 @@
-import fs from "fs";
-import path from "path";
 import { NextResponse } from "next/server";
 import { MovieSchedule } from "@/types";
 
@@ -26,38 +24,7 @@ interface TMDBMovieSummary {
   voteAverage: number;
 }
 
-function getTMDBDbPath(): string {
-  const isVercel = process.env.VERCEL === "1";
-  const dir = isVercel ? "/tmp/cache" : path.join(process.cwd(), ".cache");
-  return path.join(dir, "tmdb_db.json");
-}
-
-function loadTMDBDb(): Record<string, TMDBMovieSummary> {
-  try {
-    const filePath = getTMDBDbPath();
-    if (fs.existsSync(filePath)) {
-      const raw = fs.readFileSync(filePath, "utf-8");
-      const data = JSON.parse(raw);
-      return typeof data === "object" && data !== null ? data : {};
-    }
-  } catch (e) {
-    console.warn("TMDB DB 로드 실패:", e);
-  }
-  return {};
-}
-
-function saveTMDBDb(db: Record<string, TMDBMovieSummary>): void {
-  try {
-    const filePath = getTMDBDbPath();
-    const dir = path.dirname(filePath);
-    if (!fs.existsSync(dir)) fs.mkdirSync(dir, { recursive: true });
-    fs.writeFileSync(filePath, JSON.stringify(db, null, 2), "utf-8");
-  } catch (e) {
-    console.warn("TMDB DB 저장 실패:", e);
-  }
-}
-
-async function prefetchTMDBForMovies(movies: MovieSchedule[]): Promise<number> {
+async function prefetchTMDBForMovies(movies: MovieSchedule[], cache: any): Promise<number> {
   const apiKey = process.env.TMDB_API_KEY;
   if (!apiKey) {
     console.log("TMDB_API_KEY 없음, TMDB 프리페치 건너뜀");
@@ -65,7 +32,7 @@ async function prefetchTMDBForMovies(movies: MovieSchedule[]): Promise<number> {
   }
 
   const { searchMovieByTitle, getTMDBImageUrl } = await import("@/services/tmdbApi");
-  const db = loadTMDBDb();
+  const db = await cache.getTmdbDb() as Record<string, TMDBMovieSummary>;
 
   const titles = Array.from(
     new Set(
@@ -102,7 +69,7 @@ async function prefetchTMDBForMovies(movies: MovieSchedule[]): Promise<number> {
   }
 
   if (newCount > 0) {
-    saveTMDBDb(db);
+    await cache.saveTmdbDb(db);
     console.log(`TMDB DB 업데이트: ${newCount}개 신규 저장`);
   }
   return newCount;
@@ -155,7 +122,7 @@ async function handlePrefetch(request: Request) {
       const movies = await (scheduleService as any).crawlArtCinemasWithKMDBByDate(targetDate);
 
       // TMDB 포스터/정보 미리 수집
-      const tmdbNewCount = await prefetchTMDBForMovies(movies);
+      const tmdbNewCount = await prefetchTMDBForMovies(movies, cache);
 
       results.push({
         date: dateStr,

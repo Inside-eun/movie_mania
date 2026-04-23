@@ -108,7 +108,7 @@ export class ScheduleService {
       const dateStr = yesterday.toISOString().split("T")[0]; // YYYY-MM-DD 형식
 
       // 캐시에서 먼저 확인
-      const cachedData = cacheService.get("boxoffice", dateStr);
+      const cachedData = await cacheService.get("boxoffice", dateStr);
       if (cachedData) {
         console.log("박스오피스: 캐시된 데이터 사용");
         return cachedData;
@@ -141,7 +141,7 @@ export class ScheduleService {
         console.log("박스오피스 1~5위 영화:", top5Movies);
 
         // 캐시에 저장
-        cacheService.set("boxoffice", dateStr, top5Movies);
+        await cacheService.set("boxoffice", dateStr, top5Movies);
 
         return top5Movies;
       } else {
@@ -337,7 +337,7 @@ export class ScheduleService {
       const dateYYYYMMDD = dateStr.replace(/-/g, ''); // YYYYMMDD 형식으로 변환
 
       // 캐시에서 먼저 확인
-      const cachedData = cacheService.get("kofa_api", dateStr);
+      const cachedData = await cacheService.get("kofa_api", dateStr);
       if (cachedData) {
         console.log("한국영상자료원 KMDB API: 캐시된 데이터 사용");
         // 캐시된 데이터의 showtime을 Date 객체로 복원
@@ -426,7 +426,7 @@ export class ScheduleService {
       console.log(`한국영상자료원 KMDB API: ${schedules.length}개 상영 스케줄 발견`);
 
       // 캐시에 저장
-      cacheService.set("kofa_api", dateStr, schedules);
+      await cacheService.set("kofa_api", dateStr, schedules);
 
       return schedules;
     } catch (error) {
@@ -573,7 +573,7 @@ export class ScheduleService {
       const dateStr = targetDate.toISOString().split("T")[0]; // YYYY-MM-DD 형식
 
       // 통합 캐시 확인
-      const cachedData = cacheService.get("integrated", dateStr);
+      const cachedData = await cacheService.get("integrated", dateStr);
       if (cachedData) {
         console.log("통합 예술영화 데이터: 캐시된 데이터 사용");
         // 캐시된 데이터의 showtime을 Date 객체로 복원
@@ -634,7 +634,7 @@ export class ScheduleService {
       );
 
       // 통합 결과를 캐시에 저장
-      cacheService.set("integrated", dateStr, normalizedMovies);
+      await cacheService.set("integrated", dateStr, normalizedMovies);
 
       return normalizedMovies;
     } catch (error) {
@@ -652,7 +652,7 @@ export class ScheduleService {
     const cacheParams = { excludeMovies: top5Movies }; // 제외할 영화 목록을 캐시 키에 포함
 
     // 캐시에서 먼저 확인
-    const cachedData = cacheService.get("art_cinemas", dateStr, cacheParams);
+    const cachedData = await cacheService.get("art_cinemas", dateStr, cacheParams);
     if (cachedData) {
       console.log("예술영화관: 캐시된 데이터 사용");
       return cachedData;
@@ -765,7 +765,7 @@ export class ScheduleService {
     }
 
     // 캐시에 저장
-    cacheService.set("art_cinemas", dateStr, allMovies, cacheParams);
+    await cacheService.set("art_cinemas", dateStr, allMovies, cacheParams);
 
     return allMovies;
   }

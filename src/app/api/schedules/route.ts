@@ -15,8 +15,6 @@ if (typeof globalThis.File === "undefined" && typeof globalThis.Blob !== "undefi
   };
 }
 
-import fs from "fs";
-import path from "path";
 import { NextResponse } from "next/server";
 import { MovieSchedule } from "@/types";
 
@@ -30,25 +28,9 @@ interface TMDBMovieSummary {
   voteAverage: number;
 }
 
-function loadTMDBDb(): Record<string, TMDBMovieSummary> {
-  const isVercel = process.env.VERCEL === "1";
-  const dir = isVercel ? "/tmp/cache" : path.join(process.cwd(), ".cache");
-  const filePath = path.join(dir, "tmdb_db.json");
-  try {
-    if (fs.existsSync(filePath)) {
-      const raw = fs.readFileSync(filePath, "utf-8");
-      const data = JSON.parse(raw);
-      return typeof data === "object" && data !== null ? data : {};
-    }
-  } catch (e) {
-    console.warn("TMDB DB 로드 실패:", e);
-  }
-  return {};
-}
-
-function mergeTMDBData(movies: MovieSchedule[]): MovieSchedule[] {
-  const db = loadTMDBDb();
-  return movies.map((movie) => {
+async function mergeTMDBData(movies: MovieSchedule[], cache: any): Promise<MovieSchedule[]> {
+  const db = await cache.getTmdbDb();
+  return movies.map((movie: MovieSchedule) => {
     const key = (movie.title ?? "").trim().replace(/\s+/g, " ");
     const tmdb = db[key];
     if (tmdb) {
@@ -104,7 +86,7 @@ export async function GET(request: Request) {
 
     // 강제 새로고침이 아닌 경우 캐시 먼저 확인
     if (!forceFresh) {
-      const cachedData = cache.get(type, dateStr) as MovieSchedule[] | null;
+      const cachedData = await cache.get(type, dateStr) as MovieSchedule[] | null;
       if (cachedData) {
         console.log(`캐시에서 ${type} 데이터 반환`);
         // 캐시된 데이터의 showtime을 Date 객체로 복원
@@ -126,7 +108,7 @@ export async function GET(request: Request) {
     }
 
     // TMDB DB에서 포스터/상세정보 머지
-    movies = mergeTMDBData(movies);
+    movies = await mergeTMDBData(movies, cache);
 
     // 전체 영화 목록을 시간순으로 정렬
     movies.sort((a, b) => {
