@@ -189,6 +189,21 @@ export class CacheService {
     return { memoryCount: 0, fileCount, cacheHits: 0 };
   }
 
+  async ping(): Promise<{ backend: "redis" | "file"; ok: boolean; latencyMs?: number; error?: string }> {
+    if (this.redis) {
+      const start = Date.now();
+      try {
+        await this.redis.set("__ping__", "pong", { ex: 10 });
+        const val = await this.redis.get("__ping__");
+        return { backend: "redis", ok: val === "pong", latencyMs: Date.now() - start };
+      } catch (e) {
+        return { backend: "redis", ok: false, error: e instanceof Error ? e.message : String(e) };
+      }
+    }
+    const ok = fs.existsSync(this.cacheDir);
+    return { backend: "file", ok };
+  }
+
   private getFromFile<T>(key: string): T | null {
     const filePath = path.join(this.cacheDir, `${key}.json`);
     if (!fs.existsSync(filePath)) return null;
