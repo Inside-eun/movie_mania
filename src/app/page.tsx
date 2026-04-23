@@ -46,13 +46,6 @@ export default function Home() {
     [filter],
   );
 
-  // 수동 새로고침 핸들러
-  const handleSearch = useCallback(() => {
-    if (showWishlistView) {
-      setShowWishlistView(false);
-    }
-    schedules.fetchMovies();
-  }, [showWishlistView, schedules]);
 
   // 모달 핸들러
   const openModal = useCallback((movie: MovieSchedule) => {
@@ -95,8 +88,6 @@ export default function Home() {
                 <DateSelector
                   selectedDate={selectedDate}
                   onDateChange={handleDateChange}
-                  loading={schedules.loading}
-                  onSearch={handleSearch}
                 />
               </div>
               {schedules.allMovies.length > 0 && (

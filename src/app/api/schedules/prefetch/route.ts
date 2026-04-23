@@ -119,14 +119,11 @@ async function handlePrefetch(request: Request) {
     console.log(`\n${dateStr} 데이터 수집 중...`);
     
     try {
+      // crawlArtCinemasWithKMDBByDate 내부에서 "integrated" 키로 캐시 저장됨
       const movies = await (scheduleService as any).crawlArtCinemasWithKMDBByDate(targetDate);
 
-      // TMDB 포스터/정보 미리 수집
+      // TMDB 포스터/정보 미리 수집 → tmdb_db에 저장
       const tmdbNewCount = await prefetchTMDBForMovies(movies, cache);
-
-      // Redis 캐시에 schedules 데이터 저장
-      await cache.set("art_cinema_kfcc", dateStr, movies);
-      console.log(`${dateStr}: Redis 캐시에 schedules 데이터 저장 완료`);
 
       results.push({
         date: dateStr,
