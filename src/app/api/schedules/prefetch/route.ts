@@ -24,11 +24,14 @@ interface TMDBMovieSummary {
   voteAverage: number;
 }
 
-async function prefetchTMDBForMovies(movies: MovieSchedule[], cache: any): Promise<number> {
+async function prefetchTMDBForMovies(
+  movies: MovieSchedule[],
+  cache: any,
+): Promise<{ newCount: number; enrichedMovies: MovieSchedule[] }> {
   const apiKey = process.env.TMDB_API_KEY;
   if (!apiKey) {
     console.log("TMDB_API_KEY 없음, TMDB 프리페치 건너뜀");
-    return 0;
+    return { newCount: 0, enrichedMovies: movies };
   }
 
   const { searchMovieByTitle, getTMDBImageUrl } = await import("@/services/tmdbApi");
@@ -61,7 +64,6 @@ async function prefetchTMDBForMovies(movies: MovieSchedule[], cache: any): Promi
       };
       newCount++;
 
-      // API 과부하 방지
       await new Promise((r) => setTimeout(r, 200));
     } catch (e) {
       console.warn(`TMDB 검색 실패 (${title}):`, e);
@@ -72,7 +74,18 @@ async function prefetchTMDBForMovies(movies: MovieSchedule[], cache: any): Promi
     await cache.saveTmdbDb(db);
     console.log(`TMDB DB 업데이트: ${newCount}개 신규 저장`);
   }
-  return newCount;
+
+  // movie 객체에 tmdbPosterUrl 주입
+  const enrichedMovies = movies.map((movie) => {
+    const normalizedTitle = (movie.title ?? "").trim().replace(/\s+/g, " ");
+    const tmdbData = db[normalizedTitle];
+    return {
+      ...movie,
+      tmdbPosterUrl: tmdbData?.posterUrl ?? movie.tmdbPosterUrl,
+    };
+  });
+
+  return { newCount, enrichedMovies };
 }
 
 async function handlePrefetch(request: Request) {
@@ -119,21 +132,22 @@ async function handlePrefetch(request: Request) {
     console.log(`\n${dateStr} 데이터 수집 중...`);
     
     try {
-      // crawlArtCinemasWithKMDBByDate 내부에서 "integrated" 키로 캐시 저장됨
       const movies = await (scheduleService as any).crawlArtCinemasWithKMDBByDate(targetDate);
 
-      // TMDB 포스터/정보 미리 수집 → tmdb_db에 저장
-      const tmdbNewCount = await prefetchTMDBForMovies(movies, cache);
+      // TMDB 검색 후 movie 객체에 tmdbPosterUrl 주입
+      const { newCount: tmdbNewCount, enrichedMovies } = await prefetchTMDBForMovies(movies, cache);
+
+      // tmdbPosterUrl이 주입된 버전으로 "integrated" 캐시 덮어쓰기
+      await cache.set("integrated", dateStr, enrichedMovies);
 
       results.push({
         date: dateStr,
-        count: movies.length,
+        count: enrichedMovies.length,
         tmdbNew: tmdbNewCount,
-        cached: true,
         success: true,
       });
 
-      console.log(`${dateStr}: ${movies.length}개 스케줄, TMDB ${tmdbNewCount}개 신규 수집 완료`);
+      console.log(`${dateStr}: ${enrichedMovies.length}개 스케줄, TMDB ${tmdbNewCount}개 신규 수집 완료`);
     } catch (error) {
       console.error(`${dateStr} 수집 실패:`, error);
       results.push({
