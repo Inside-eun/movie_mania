@@ -29,31 +29,29 @@ async function handlePrefetch(request: Request) {
   console.log("=== [Cron 1] 크롤링 프리페치 시작 ===");
   const startTime = Date.now();
 
-  // 오늘부터 7일치 크롤링만 수행 (TMDB는 Cron 2에서 별도 처리)
+  // 오늘 하루치만 크롤링 (Hobby 플랜 10초 제한)
+  // 나머지 날짜는 사용자 요청 시 on-demand 캐싱
+  const today = new Date();
+  const dateStr = today.toISOString().split("T")[0];
+
+  console.log(`\n${dateStr} 크롤링 중...`);
+
   const results = [];
-  for (let i = 0; i < 7; i++) {
-    const targetDate = new Date();
-    targetDate.setDate(targetDate.getDate() + i);
-    const dateStr = targetDate.toISOString().split("T")[0];
+  try {
+    // 캐시 강제 갱신: 기존 캐시 삭제 후 재크롤링
+    await cache.delete("integrated", dateStr);
+    const movies = await (scheduleService as any).crawlArtCinemasWithKMDBByDate(today);
 
-    console.log(`\n${dateStr} 크롤링 중...`);
-
-    try {
-      // 캐시 강제 갱신: 기존 캐시 삭제 후 재크롤링
-      await cache.delete("integrated", dateStr);
-      const movies = await (scheduleService as any).crawlArtCinemasWithKMDBByDate(targetDate);
-
-      results.push({ date: dateStr, count: movies.length, success: true });
-      console.log(`${dateStr}: ${movies.length}개 스케줄 저장 완료`);
-    } catch (error) {
-      console.error(`${dateStr} 수집 실패:`, error);
-      results.push({
-        date: dateStr,
-        count: 0,
-        success: false,
-        error: error instanceof Error ? error.message : "Unknown error",
-      });
-    }
+    results.push({ date: dateStr, count: movies.length, success: true });
+    console.log(`${dateStr}: ${movies.length}개 스케줄 저장 완료`);
+  } catch (error) {
+    console.error(`${dateStr} 수집 실패:`, error);
+    results.push({
+      date: dateStr,
+      count: 0,
+      success: false,
+      error: error instanceof Error ? error.message : "Unknown error",
+    });
   }
 
   const elapsedTime = Date.now() - startTime;

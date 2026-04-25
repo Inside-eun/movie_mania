@@ -40,17 +40,14 @@ async function handlePrefetchTMDB(request: Request) {
   console.log("=== [Cron 2] TMDB 프리페치 시작 ===");
   const startTime = Date.now();
 
-  // 7일치 "integrated" 캐시에서 영화 목록 수집
+  // 오늘 하루치만 처리 (Hobby 플랜 10초 제한)
+  const today = new Date();
+  const dateStr = today.toISOString().split("T")[0];
   const dayMovies: Array<{ dateStr: string; movies: MovieSchedule[] }> = [];
-  for (let i = 0; i < 7; i++) {
-    const targetDate = new Date();
-    targetDate.setDate(targetDate.getDate() + i);
-    const dateStr = targetDate.toISOString().split("T")[0];
 
-    const movies = await cache.get<MovieSchedule[]>("integrated", dateStr);
-    if (movies && movies.length > 0) {
-      dayMovies.push({ dateStr, movies });
-    }
+  const movies = await cache.get<MovieSchedule[]>("integrated", dateStr);
+  if (movies && movies.length > 0) {
+    dayMovies.push({ dateStr, movies });
   }
 
   if (dayMovies.length === 0) {
