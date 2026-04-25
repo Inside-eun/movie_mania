@@ -28,8 +28,9 @@ export function useMovieSchedules(
       const data: ScheduleResponse = await response.json();
 
       if (data.success) {
-        // 극장 좌표 정보 추가
+        // 극장 좌표: API 데이터 우선, 없으면 theaterCoordinates fallback
         const moviesWithCoordinates = data.data.map((movie) => {
+          if (movie.latitude && movie.longitude) return movie;
           const coords = getTheaterCoordinates(movie.theater);
           return {
             ...movie,
