@@ -3,6 +3,10 @@
     {
       "path": "/api/schedules/prefetch?token=iaDFUuG43dOzkb6mXQazntv6NfU2QFw0Hk2i/hHFpWI=",
       "schedule": "0 6 * * *"
+    },
+    {
+      "path": "/api/schedules/prefetch-tmdb?token=iaDFUuG43dOzkb6mXQazntv6NfU2QFw0Hk2i/hHFpWI=",
+      "schedule": "5 6 * * *"
     }
   ],
   "git": {

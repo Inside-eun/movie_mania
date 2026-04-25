@@ -1,8 +1,7 @@
 import { NextResponse } from "next/server";
-import { MovieSchedule } from "@/types";
 
 export const dynamic = "force-dynamic";
-export const maxDuration = 300; // Vercel Pro: 최대 5분
+export const maxDuration = 10; // Vercel Hobby 플랜 제한
 
 async function getScheduleService() {
   const { ScheduleService } = await import("@/services/scheduleService");
@@ -14,140 +13,38 @@ async function getCacheService() {
   return cacheService;
 }
 
-interface TMDBMovieSummary {
-  title: string;
-  tmdbId: number;
-  originalTitle: string;
-  overview: string;
-  posterUrl: string | null;
-  releaseDate: string | null;
-  voteAverage: number;
-}
-
-async function prefetchTMDBForMovies(
-  movies: MovieSchedule[],
-  cache: any,
-): Promise<{ newCount: number; enrichedMovies: MovieSchedule[] }> {
-  const apiKey = process.env.TMDB_API_KEY;
-  if (!apiKey) {
-    console.log("TMDB_API_KEY 없음, TMDB 프리페치 건너뜀");
-    return { newCount: 0, enrichedMovies: movies };
-  }
-
-  const { searchMovieByTitle, getTMDBImageUrl } = await import("@/services/tmdbApi");
-  const db = await cache.getTmdbDb() as Record<string, TMDBMovieSummary>;
-
-  const titles = Array.from(
-    new Set(
-      movies
-        .map((m) => (m.title ?? "").trim().replace(/\s+/g, " "))
-        .filter((t) => t.length > 0)
-    )
-  );
-
-  let newCount = 0;
-  for (const title of titles) {
-    if (db[title]) continue;
-
-    try {
-      const result = await searchMovieByTitle(title);
-      if (!result) continue;
-
-      db[title] = {
-        title,
-        tmdbId: result.id,
-        originalTitle: result.original_title,
-        overview: result.overview,
-        posterUrl: getTMDBImageUrl(result.poster_path, "w342"),
-        releaseDate: result.release_date ?? null,
-        voteAverage: result.vote_average,
-      };
-      newCount++;
-
-      await new Promise((r) => setTimeout(r, 200));
-    } catch (e) {
-      console.warn(`TMDB 검색 실패 (${title}):`, e);
-    }
-  }
-
-  if (newCount > 0) {
-    await cache.saveTmdbDb(db);
-    console.log(`TMDB DB 업데이트: ${newCount}개 신규 저장`);
-  }
-
-  // movie 객체에 tmdbPosterUrl 주입
-  const enrichedMovies = movies.map((movie) => {
-    const normalizedTitle = (movie.title ?? "").trim().replace(/\s+/g, " ");
-    const tmdbData = db[normalizedTitle];
-    return {
-      ...movie,
-      tmdbPosterUrl: tmdbData?.posterUrl ?? movie.tmdbPosterUrl,
-    };
-  });
-
-  return { newCount, enrichedMovies };
+function verifyToken(request: Request): boolean {
+  const { searchParams } = new URL(request.url);
+  return searchParams.get("token") === process.env.PREFETCH_TOKEN;
 }
 
 async function handlePrefetch(request: Request) {
-  const { searchParams } = new URL(request.url);
-  const authToken = searchParams.get("token");
-  
-  // 디버깅 로그
-  console.log("=== 토큰 인증 디버깅 ===");
-  console.log("받은 토큰:", authToken);
-  console.log("환경변수 토큰:", process.env.PREFETCH_TOKEN);
-  console.log("토큰 일치 여부:", authToken === process.env.PREFETCH_TOKEN);
-  console.log("받은 토큰 길이:", authToken?.length);
-  console.log("환경변수 토큰 길이:", process.env.PREFETCH_TOKEN?.length);
-  
-  // 간단한 인증 (환경변수로 토큰 설정)
-  if (authToken !== process.env.PREFETCH_TOKEN) {
-    return NextResponse.json(
-      { 
-        success: false, 
-        error: "Unauthorized",
-        debug: {
-          receivedToken: authToken,
-          expectedToken: process.env.PREFETCH_TOKEN ? "설정됨" : "설정 안됨",
-          match: authToken === process.env.PREFETCH_TOKEN
-        }
-      },
-      { status: 401 }
-    );
+  if (!verifyToken(request)) {
+    return NextResponse.json({ success: false, error: "Unauthorized" }, { status: 401 });
   }
 
   const scheduleService = await getScheduleService();
   const cache = await getCacheService();
 
-  console.log("=== 스케줄 프리페치 시작 ===");
+  console.log("=== [Cron 1] 크롤링 프리페치 시작 ===");
   const startTime = Date.now();
 
-  // 오늘부터 7일치 데이터 미리 수집
+  // 오늘부터 7일치 크롤링만 수행 (TMDB는 Cron 2에서 별도 처리)
   const results = [];
   for (let i = 0; i < 7; i++) {
     const targetDate = new Date();
     targetDate.setDate(targetDate.getDate() + i);
     const dateStr = targetDate.toISOString().split("T")[0];
 
-    console.log(`\n${dateStr} 데이터 수집 중...`);
-    
+    console.log(`\n${dateStr} 크롤링 중...`);
+
     try {
+      // 캐시 강제 갱신: 기존 캐시 삭제 후 재크롤링
+      await cache.delete("integrated", dateStr);
       const movies = await (scheduleService as any).crawlArtCinemasWithKMDBByDate(targetDate);
 
-      // TMDB 검색 후 movie 객체에 tmdbPosterUrl 주입
-      const { newCount: tmdbNewCount, enrichedMovies } = await prefetchTMDBForMovies(movies, cache);
-
-      // tmdbPosterUrl이 주입된 버전으로 "integrated" 캐시 덮어쓰기
-      await cache.set("integrated", dateStr, enrichedMovies);
-
-      results.push({
-        date: dateStr,
-        count: enrichedMovies.length,
-        tmdbNew: tmdbNewCount,
-        success: true,
-      });
-
-      console.log(`${dateStr}: ${enrichedMovies.length}개 스케줄, TMDB ${tmdbNewCount}개 신규 수집 완료`);
+      results.push({ date: dateStr, count: movies.length, success: true });
+      console.log(`${dateStr}: ${movies.length}개 스케줄 저장 완료`);
     } catch (error) {
       console.error(`${dateStr} 수집 실패:`, error);
       results.push({
@@ -157,23 +54,15 @@ async function handlePrefetch(request: Request) {
         error: error instanceof Error ? error.message : "Unknown error",
       });
     }
-
-    // 날짜 간 딜레이
-    if (i < 6) {
-      await new Promise((resolve) => setTimeout(resolve, 1000));
-    }
   }
 
   const elapsedTime = Date.now() - startTime;
-  const cacheStats = cache.getStats();
-
-  console.log(`\n=== 프리페치 완료 (${elapsedTime}ms) ===`);
+  console.log(`\n=== [Cron 1] 크롤링 완료 (${elapsedTime}ms) ===`);
 
   return NextResponse.json({
     success: true,
     results,
     elapsedTime,
-    cacheStats,
     timestamp: new Date().toISOString(),
   });
 }
