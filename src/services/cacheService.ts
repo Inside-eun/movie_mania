@@ -93,6 +93,35 @@ export class CacheService {
     }
   }
 
+  // params 여부와 무관하게 type+date 로 시작하는 키 전체 삭제
+  async deleteAllByTypeDate(type: string, date: string): Promise<void> {
+    const dateStr = date.replace(/[^\d]/g, "");
+    const pattern = `${type}_${dateStr}_*`;
+
+    if (this.redis) {
+      let cursor = 0;
+      do {
+        const [next, keys] = await this.redis.scan(cursor, { match: pattern, count: 100 });
+        cursor = next as number;
+        if (keys.length > 0) {
+          await Promise.all(keys.map((k) => this.redis!.del(k).catch(() => {})));
+        }
+      } while (cursor !== 0);
+      return;
+    }
+
+    try {
+      const files = fs.readdirSync(this.cacheDir);
+      for (const file of files) {
+        if (file.startsWith(`${type}_${dateStr}_`) && file.endsWith(".json")) {
+          fs.unlinkSync(path.join(this.cacheDir, file));
+        }
+      }
+    } catch (e) {
+      console.warn("패턴 캐시 삭제 실패:", e);
+    }
+  }
+
   // TMDB DB 전용 (Redis key: "tmdb_db")
   async getTmdbDb(): Promise<Record<string, any>> {
     if (this.redis) {

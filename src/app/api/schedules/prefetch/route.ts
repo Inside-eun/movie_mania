@@ -38,8 +38,12 @@ async function handlePrefetch(request: Request) {
 
   const results = [];
   try {
-    // 캐시 강제 갱신: 기존 캐시 삭제 후 재크롤링
-    await cache.delete("integrated", dateStr);
+    // 캐시 강제 갱신: 서브 캐시(art_cinemas, kofa_api)까지 포함 전체 삭제
+    await Promise.all([
+      cache.deleteAllByTypeDate("integrated", dateStr),
+      cache.deleteAllByTypeDate("art_cinemas", dateStr),
+      cache.deleteAllByTypeDate("kofa_api", dateStr),
+    ]);
     const movies = await (scheduleService as any).crawlArtCinemasWithKMDBByDate(today);
 
     results.push({ date: dateStr, count: movies.length, success: true });
