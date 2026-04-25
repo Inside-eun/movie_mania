@@ -21,26 +21,26 @@ export function useMovieFilter() {
 
   // 사용자 위치 가져오기
   useEffect(() => {
-    if (sortType === "distance" && !userLocation) {
-      if ("geolocation" in navigator) {
-        navigator.geolocation.getCurrentPosition(
-          (position) => {
-            setUserLocation({
-              latitude: position.coords.latitude,
-              longitude: position.coords.longitude,
-            });
-            setLocationError(null);
-          },
-          (error) => {
-            setLocationError("위치 정보를 가져올 수 없습니다");
-            console.error("Geolocation error:", error);
-          }
-        );
-      } else {
-        setLocationError("브라우저에서 위치 정보를 지원하지 않습니다");
-      }
+    if ("geolocation" in navigator) {
+      navigator.geolocation.getCurrentPosition(
+        (position) => {
+          const location = {
+            latitude: position.coords.latitude,
+            longitude: position.coords.longitude,
+          };
+          console.log("[위치 수신 성공]", location);
+          setUserLocation(location);
+          setLocationError(null);
+        },
+        (error) => {
+          setLocationError("위치 정보를 가져올 수 없습니다");
+          console.error("[위치 수신 실패]", error);
+        }
+      );
+    } else {
+      setLocationError("브라우저에서 위치 정보를 지원하지 않습니다");
     }
-  }, [sortType, userLocation]);
+  }, []);
 
   // 영화 필터 토글
   const handleMovieFilter = useCallback((movieTitle: string) => {

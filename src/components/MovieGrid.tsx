@@ -55,6 +55,34 @@ export default function MovieGrid({
     return movieTime > now;
   });
 
+  if (userLocation) {
+    const theaterDistances = Array.from(
+      new Map(
+        futureMovies
+          .filter((m) => m.latitude && m.longitude)
+          .map((m) => [
+            m.theater,
+            {
+              theater: m.theater,
+              lat: m.latitude,
+              lng: m.longitude,
+              distance: calculateDistance(
+                userLocation.latitude,
+                userLocation.longitude,
+                m.latitude!,
+                m.longitude!
+              ).toFixed(2) + "km",
+            },
+          ])
+      ).values()
+    );
+    console.log("[영화관 거리 계산]", theaterDistances);
+    console.log(
+      "[좌표 없는 영화관]",
+      Array.from(new Set(futureMovies.filter((m) => !m.latitude || !m.longitude).map((m) => m.theater)))
+    );
+  }
+
   const sortedMovies = [...futureMovies].sort((a, b) => {
     if (sortType === "time") {
       const timeA = parseMovieTime(a.time, selectedDate).getTime();
@@ -213,21 +241,20 @@ export default function MovieGrid({
 
                 <div className="flex items-center justify-between text-xs text-gray-600 dark:text-gray-400 mt-auto pt-1">
                   <span className="font-medium truncate">{movie.theater}</span>
-                  {sortType === "distance" && userLocation && movie.latitude && movie.longitude && (
+                  {userLocation && movie.latitude && movie.longitude ? (
                     <span className="text-gray-500 dark:text-gray-500 ml-1 flex-shrink-0">
                       {calculateDistance(
                         userLocation.latitude,
                         userLocation.longitude,
                         movie.latitude,
                         movie.longitude
-                      ).toFixed(1)}km
+                      ).toFixed(2)}km
                     </span>
-                  )}
-                  {(sortType === "time" || !userLocation) && movie.area && (
+                  ) : movie.area ? (
                     <span className="text-gray-500 dark:text-gray-500 ml-1 flex-shrink-0">
                       {movie.area}
                     </span>
-                  )}
+                  ) : null}
                 </div>
 
                 {movie.screen && (

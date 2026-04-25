@@ -508,6 +508,8 @@ export class ScheduleService {
                       hours,
                       minutes
                     ),
+                    latitude: theater.lat,
+                    longitude: theater.lng,
                   });
                 }
               }
@@ -730,6 +732,8 @@ export class ScheduleService {
                     hours,
                     minutes
                   ),
+                  latitude: theater.lat,
+                  longitude: theater.lng,
                 });
               }
             }
@@ -837,6 +841,8 @@ export class ScheduleService {
                     hours,
                     minutes
                   ),
+                  latitude: theater.lat,
+                  longitude: theater.lng,
                 });
               });
             });
