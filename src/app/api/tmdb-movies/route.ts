@@ -74,28 +74,38 @@ export async function GET(request: Request) {
     const results: TMDBMovieSummary[] = [];
     let changed = false;
 
-    for (const title of titles) {
-      const existing = db[title];
-      if (existing) {
-        results.push(existing);
-        continue;
+    const cachedTitles = titles.filter((t) => db[t]);
+    const newTitles = titles.filter((t) => !db[t]);
+
+    for (const title of cachedTitles) {
+      results.push(db[title]);
+    }
+
+    const BATCH_SIZE = 10;
+    for (let i = 0; i < newTitles.length; i += BATCH_SIZE) {
+      const batch = newTitles.slice(i, i + BATCH_SIZE);
+      const batchResults = await Promise.allSettled(
+        batch.map((title) => searchMovieByTitle(title))
+      );
+      for (let j = 0; j < batch.length; j++) {
+        const title = batch[j];
+        const settled = batchResults[j];
+        if (settled.status === "fulfilled" && settled.value) {
+          const result = settled.value;
+          const summary: TMDBMovieSummary = {
+            title,
+            tmdbId: result.id,
+            originalTitle: result.original_title,
+            overview: result.overview,
+            posterUrl: getTMDBImageUrl(result.poster_path, "w342"),
+            releaseDate: result.release_date ?? null,
+            voteAverage: result.vote_average,
+          };
+          db[title] = summary;
+          results.push(summary);
+          changed = true;
+        }
       }
-
-      const result = await searchMovieByTitle(title);
-      if (!result) continue;
-
-      const summary: TMDBMovieSummary = {
-        title,
-        tmdbId: result.id,
-        originalTitle: result.original_title,
-        overview: result.overview,
-        posterUrl: getTMDBImageUrl(result.poster_path, "w342"),
-        releaseDate: result.release_date ?? null,
-        voteAverage: result.vote_average,
-      };
-      db[title] = summary;
-      results.push(summary);
-      changed = true;
     }
 
     if (changed) {

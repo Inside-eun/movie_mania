@@ -44,6 +44,29 @@ export function useMovieSchedules(
             timeZone: "Asia/Seoul",
           })
         );
+
+        // tmdbPosterUrl이 없는 영화가 있으면 백그라운드에서 보완
+        const hasMissingPosters = moviesWithCoordinates.some((m) => !m.tmdbPosterUrl);
+        if (hasMissingPosters) {
+          fetch(`/api/tmdb-movies?date=${selectedDate}`)
+            .then((res) => (res.ok ? res.json() : null))
+            .then((json) => {
+              if (!json?.success || !Array.isArray(json.data)) return;
+              const tmdbMap = new Map<string, string>(
+                json.data
+                  .filter((m: { posterUrl: string | null }) => m.posterUrl)
+                  .map((m: { title: string; posterUrl: string }) => [m.title, m.posterUrl])
+              );
+              setAllMovies((prev) =>
+                prev.map((movie) => ({
+                  ...movie,
+                  tmdbPosterUrl: movie.tmdbPosterUrl || tmdbMap.get(movie.title) || undefined,
+                }))
+              );
+            })
+            .catch(() => {});
+        }
+
         return true;
       } else {
         setError(data.error || "조회 실패");

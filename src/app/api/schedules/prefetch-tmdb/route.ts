@@ -73,10 +73,17 @@ async function handlePrefetchTMDB(request: Request) {
   console.log(`총 ${allTitles.size}개 고유 영화, ${newTitles.length}개 신규 TMDB 검색 필요`);
 
   let newCount = 0;
-  for (const title of newTitles) {
-    try {
-      const result = await searchMovieByTitle(title);
-      if (result) {
+  const BATCH_SIZE = 10;
+  for (let i = 0; i < newTitles.length; i += BATCH_SIZE) {
+    const batch = newTitles.slice(i, i + BATCH_SIZE);
+    const batchResults = await Promise.allSettled(
+      batch.map((title) => searchMovieByTitle(title))
+    );
+    for (let j = 0; j < batch.length; j++) {
+      const title = batch[j];
+      const settled = batchResults[j];
+      if (settled.status === "fulfilled" && settled.value) {
+        const result = settled.value;
         db[title] = {
           title,
           tmdbId: result.id,
@@ -87,10 +94,9 @@ async function handlePrefetchTMDB(request: Request) {
           voteAverage: result.vote_average,
         };
         newCount++;
+      } else if (settled.status === "rejected") {
+        console.warn(`TMDB 검색 실패 (${title}):`, settled.reason);
       }
-      await new Promise((r) => setTimeout(r, 200));
-    } catch (e) {
-      console.warn(`TMDB 검색 실패 (${title}):`, e);
     }
   }
 
