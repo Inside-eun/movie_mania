@@ -66,6 +66,11 @@ export function useMovieFilter() {
     setIsDropdownOpen(false);
   }, []);
 
+  // 여러 극장 한꺼번에 선택 (즐겨찾기 일괄 선택용)
+  const handleBulkTheaterSelect = useCallback((theaterNames: string[]) => {
+    setSelectedTheaters(theaterNames);
+  }, []);
+
   // 현재 필터 초기화
   const handleClearFilters = useCallback(() => {
     if (filterType === "movie") {
@@ -123,6 +128,7 @@ export function useMovieFilter() {
     setShowPastSchedules,
     handleMovieFilter,
     handleTheaterFilter,
+    handleBulkTheaterSelect,
     handleFilterTypeChange,
     handleClearFilters,
     resetAllFilters,

@@ -62,7 +62,9 @@ export default function MovieModal({
       // 새로운 API 라우트를 통해 영화 정보 가져오기
       const fetchMovieInfo = async () => {
         try {
-          const apiUrl = `/api/movie-info?movieCode=${movie.movieCode}&source=${movie.source || "KOBIS"}`;
+          const apiUrl = `/api/movie-info?movieCode=${movie.movieCode}&source=${
+            movie.source || "KOBIS"
+          }`;
           console.log(`모달에서 API 호출: ${apiUrl}`);
 
           const response = await fetch(apiUrl);
@@ -82,7 +84,8 @@ export default function MovieModal({
           } else {
             setKmdbData(null);
             setKobisData(null);
-            if (!result.success) console.error("영화 정보 API 호출 실패:", result.error);
+            if (!result.success)
+              console.error("영화 정보 API 호출 실패:", result.error);
           }
         } catch (error) {
           console.error("영화 정보 API 호출 중 오류:", error);
@@ -133,18 +136,16 @@ export default function MovieModal({
       />
 
       {/* 모달 콘텐츠 */}
-      <div className="relative bg-white dark:bg-gray-800 rounded-lg shadow-xl max-w-md w-full mx-4 max-h-[90vh] overflow-y-auto">
+      <div className="relative bg-[#0d0d0d] border border-gray-800 shadow-xl max-w-md w-full mx-4 max-h-[90vh] overflow-y-auto">
         {/* 모달 헤더 */}
-        <div className="flex items-center justify-between p-6 border-b border-gray-200 dark:border-gray-700">
-          <h2 className="text-xl font-bold text-gray-900 dark:text-gray-100">
-            영화 상세 정보
-          </h2>
+        <div className="flex items-center justify-between p-6 border-b border-gray-800">
+          <h2 className="text-xl font-bold text-gray-100">영화 상세 정보</h2>
           <button
             onClick={onClose}
-            className="p-2 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-full transition-colors"
+            className="p-2 hover:bg-gray-800 rounded-full transition-colors"
           >
             <svg
-              className="w-6 h-6 text-gray-500 dark:text-gray-400"
+              className="w-6 h-6 text-gray-400"
               fill="none"
               stroke="currentColor"
               viewBox="0 0 24 24"
@@ -164,24 +165,22 @@ export default function MovieModal({
           <div className="space-y-4">
             {/* 영화 제목 */}
             <div className="text-center mb-6">
-              <h2 className="text-xl font-bold text-gray-900 dark:text-gray-100 mb-1">
+              <h2 className="text-xl font-bold text-gray-100 mb-1">
                 {movie.title}
               </h2>
               {kobisData?.movieNmEn && (
-                <p className="text-sm text-gray-600 dark:text-gray-400">
-                  {kobisData.movieNmEn}
-                </p>
+                <p className="text-sm text-gray-400">{kobisData.movieNmEn}</p>
               )}
             </div>
 
             {/* 로딩 상태 */}
             {loading && (
               <div className="flex flex-col items-center justify-center py-6">
-                <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-500 mb-3"></div>
-                <span className="text-sm text-gray-600 dark:text-gray-400 text-center">
+                <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-orange-500 mb-3"></div>
+                <span className="text-sm text-gray-400 text-center">
                   영화 상세 정보를 불러오는 중...
                 </span>
-                <span className="text-xs text-gray-500 dark:text-gray-500 mt-1">
+                <span className="text-xs text-gray-500 mt-1">
                   잠시만 기다려주세요
                 </span>
               </div>
@@ -189,14 +188,14 @@ export default function MovieModal({
 
             {/* KOBIS API 데이터 */}
             {kobisData && !loading && (
-              <div className="bg-blue-50 dark:bg-blue-900 p-4 rounded-lg">
+              <div className="bg-orange-50 dark:bg-orange-900/20 p-4">
                 <div className="space-y-3">
                   {kobisData.directors && kobisData.directors.length > 0 && (
                     <div className="flex justify-between items-center">
-                      <span className="text-sm font-medium text-blue-800 dark:text-blue-200">
+                      <span className="text-sm font-medium text-orange-800 dark:text-orange-200">
                         감독
                       </span>
-                      <span className="text-sm text-blue-700 dark:text-blue-300">
+                      <span className="text-sm text-ring-orange-700 dark:text-orange-300">
                         {kobisData.directors.map((d) => d.peopleNm).join(", ")}
                       </span>
                     </div>
@@ -204,10 +203,10 @@ export default function MovieModal({
 
                   {kobisData.actors && kobisData.actors.length > 0 && (
                     <div className="flex justify-between items-start">
-                      <span className="text-sm font-medium text-blue-800 dark:text-blue-200">
+                      <span className="text-sm font-medium text-orange-800 dark:text-orange-200">
                         주요 배우
                       </span>
-                      <span className="text-sm text-blue-700 dark:text-blue-300 text-right max-w-[200px]">
+                      <span className="text-sm text-orange-700 dark:text-orange-300 text-right max-w-[200px]">
                         {kobisData.actors
                           .slice(0, 3)
                           .map((actor) => actor.peopleNm)
@@ -220,13 +219,13 @@ export default function MovieModal({
 
                   {kobisData.openDt && (
                     <div className="flex justify-between items-center">
-                      <span className="text-sm font-medium text-blue-800 dark:text-blue-200">
+                      <span className="text-sm font-medium text-orange-800 dark:text-orange-200">
                         개봉일
                       </span>
-                      <span className="text-sm text-blue-700 dark:text-blue-300">
+                      <span className="text-sm text-orange-700 dark:text-orange-300">
                         {kobisData.openDt.replace(
                           /(\d{4})(\d{2})(\d{2})/,
-                          "$1-$2-$3",
+                          "$1-$2-$3"
                         )}
                       </span>
                     </div>
@@ -234,10 +233,10 @@ export default function MovieModal({
 
                   {kobisData.showTm && (
                     <div className="flex justify-between items-center">
-                      <span className="text-sm font-medium text-blue-800 dark:text-blue-200">
+                      <span className="text-sm font-medium text-orange-800 dark:text-orange-200">
                         러닝타임
                       </span>
-                      <span className="text-sm text-blue-700 dark:text-blue-300">
+                      <span className="text-sm text-orange-700 dark:text-orange-300">
                         {kobisData.showTm}분
                       </span>
                     </div>
@@ -245,10 +244,10 @@ export default function MovieModal({
 
                   {kobisData.genres && kobisData.genres.length > 0 && (
                     <div className="flex justify-between items-center">
-                      <span className="text-sm font-medium text-blue-800 dark:text-blue-200">
+                      <span className="text-sm font-medium text-orange-800 dark:text-orange-200">
                         장르
                       </span>
-                      <span className="text-sm text-blue-700 dark:text-blue-300">
+                      <span className="text-sm text-orange-700 dark:text-orange-300">
                         {kobisData.genres.map((g) => g.genreNm).join(", ")}
                       </span>
                     </div>
@@ -256,10 +255,10 @@ export default function MovieModal({
 
                   {kobisData.audits && kobisData.audits.length > 0 && (
                     <div className="flex justify-between items-center">
-                      <span className="text-sm font-medium text-blue-800 dark:text-blue-200">
+                      <span className="text-sm font-medium text-orange-800 dark:text-orange-200">
                         관람등급
                       </span>
-                      <span className="text-sm text-blue-700 dark:text-blue-300">
+                      <span className="text-sm text-orange-700 dark:text-orange-300">
                         {kobisData.audits[0].watchGradeNm}
                       </span>
                     </div>
@@ -270,14 +269,14 @@ export default function MovieModal({
 
             {/* 영상자료원 영화 정보 (KMDB_API인 경우) */}
             {movie.source === "KMDB_API" && (
-              <div className="bg-blue-50 dark:bg-blue-900 p-4 rounded-lg">
+              <div className="bg-orange-50 dark:bg-orange-900/20 p-4">
                 <div className="space-y-3">
                   {movie.director && (
                     <div className="flex justify-between items-center">
-                      <span className="text-sm font-medium text-blue-800 dark:text-blue-200">
+                      <span className="text-sm font-medium text-orange-800 dark:text-orange-200">
                         감독
                       </span>
-                      <span className="text-sm text-blue-700 dark:text-blue-300">
+                      <span className="text-sm text-orange-700 dark:text-orange-300">
                         {movie.director}
                       </span>
                     </div>
@@ -285,10 +284,10 @@ export default function MovieModal({
 
                   {kmdbData?.cActors && (
                     <div className="flex justify-between items-start">
-                      <span className="text-sm font-medium text-blue-800 dark:text-blue-200">
+                      <span className="text-sm font-medium text-orange-800 dark:text-orange-200">
                         주요 배우
                       </span>
-                      <span className="text-sm text-blue-700 dark:text-blue-300 text-right max-w-[200px]">
+                      <span className="text-sm text-orange-700 dark:text-orange-300 text-right max-w-[200px]">
                         {kmdbData.cActors.split(",").slice(0, 3).join(", ")}
                         {kmdbData.cActors.split(",").length > 3 &&
                           ` 외 ${kmdbData.cActors.split(",").length - 3}명`}
@@ -298,10 +297,10 @@ export default function MovieModal({
 
                   {movie.prodYear && (
                     <div className="flex justify-between items-center">
-                      <span className="text-sm font-medium text-blue-800 dark:text-blue-200">
+                      <span className="text-sm font-medium text-orange-800 dark:text-orange-200">
                         제작년도
                       </span>
-                      <span className="text-sm text-blue-700 dark:text-blue-300">
+                      <span className="text-sm text-orange-700 dark:text-orange-300">
                         {movie.prodYear}년
                       </span>
                     </div>
@@ -309,10 +308,10 @@ export default function MovieModal({
 
                   {movie.runtime && (
                     <div className="flex justify-between items-center">
-                      <span className="text-sm font-medium text-blue-800 dark:text-blue-200">
+                      <span className="text-sm font-medium text-orange-800 dark:text-orange-200">
                         러닝타임
                       </span>
-                      <span className="text-sm text-blue-700 dark:text-blue-300">
+                      <span className="text-sm text-orange-700 dark:text-orange-300">
                         {movie.runtime}분
                       </span>
                     </div>
@@ -320,10 +319,10 @@ export default function MovieModal({
 
                   {kmdbData?.cCodeSubName2 && (
                     <div className="flex justify-between items-center">
-                      <span className="text-sm font-medium text-blue-800 dark:text-blue-200">
+                      <span className="text-sm font-medium text-orange-800 dark:text-orange-200">
                         관람등급
                       </span>
-                      <span className="text-sm text-blue-700 dark:text-blue-300">
+                      <span className="text-sm text-orange-700 dark:text-orange-300">
                         {kmdbData.cCodeSubName2}
                       </span>
                     </div>
@@ -334,7 +333,7 @@ export default function MovieModal({
 
             {/* 상영 정보 - 간단하게 표시 */}
             <div className="text-center">
-              <div className="text-sm text-gray-600 dark:text-gray-400">
+              <div className="text-sm text-gray-400">
                 {movie.time}
                 {/* 러닝타임이 있으면 끝나는 시간 계산해서 표시 */}
                 {(() => {
@@ -362,9 +361,12 @@ export default function MovieModal({
 
                       // 끝나는 시간 계산
                       const endTime = new Date(
-                        startTime.getTime() + totalMinutes * 60 * 1000,
+                        startTime.getTime() + totalMinutes * 60 * 1000
                       );
-                      const endTimeStr = `${String(endTime.getHours()).padStart(2, "0")}:${String(endTime.getMinutes()).padStart(2, "0")}`;
+                      const endTimeStr = `${String(endTime.getHours()).padStart(
+                        2,
+                        "0"
+                      )}:${String(endTime.getMinutes()).padStart(2, "0")}`;
 
                       return ` - ${endTimeStr}`;
                     }
@@ -381,10 +383,10 @@ export default function MovieModal({
         </div>
 
         {/* 모달 푸터 */}
-        <div className="flex justify-end gap-3 p-6 border-t border-gray-200 dark:border-gray-700">
+        <div className="flex justify-end gap-3 p-6 border-t border-gray-800">
           <button
             onClick={onClose}
-            className="px-4 py-2 text-sm font-medium text-gray-700 dark:text-gray-300 bg-gray-100 dark:bg-gray-700 hover:bg-gray-200 dark:hover:bg-gray-600 rounded-lg transition-colors"
+            className="px-4 py-2 text-sm font-medium text-gray-300 border border-orange-500 hover:bg-orange-500/10 transition-colors"
           >
             닫기
           </button>
