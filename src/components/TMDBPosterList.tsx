@@ -89,18 +89,15 @@ export default function TMDBPosterList({ date }: Props) {
             key={movie.tmdbId}
             className="flex flex-col items-center text-center text-xs"
           >
-            {movie.posterUrl ? (
-              <img
-                src={movie.posterUrl}
-                alt={movie.title}
-                className="w-full rounded-lg shadow-sm mb-2 aspect-[2/3] object-cover bg-gray-200 dark:bg-gray-800"
-                loading="lazy"
-              />
-            ) : (
-              <div className="w-full rounded-lg mb-2 aspect-[2/3] flex items-center justify-center bg-gray-200 dark:bg-gray-800 text-[10px] text-gray-500 dark:text-gray-400">
-                포스터 없음
-              </div>
-            )}
+            <img
+              src={movie.posterUrl || "/NoPoster.png"}
+              alt={movie.title}
+              className="w-full rounded-lg shadow-sm mb-2 aspect-[2/3] object-cover bg-gray-200 dark:bg-gray-800"
+              loading="lazy"
+              onError={(e) => {
+                (e.currentTarget as HTMLImageElement).src = "/NoPoster.png";
+              }}
+            />
             <div className="font-medium line-clamp-2 text-gray-900 dark:text-gray-100">
               {movie.title}
             </div>

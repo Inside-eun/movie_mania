@@ -145,7 +145,7 @@ export default function CalendarView({
       <div className="flex items-center justify-between mb-6 px-4 sm:px-0">
         <button
           onClick={prevMonth}
-          className="p-2 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
+          className="p-2 hover:bg-gray-800 transition-colors"
         >
           <svg
             className="w-6 h-6"
@@ -162,13 +162,13 @@ export default function CalendarView({
           </svg>
         </button>
 
-        <h3 className="text-xl font-bold text-gray-100 dark:text-gray-200">
+        <h3 className="text-xl font-bold text-gray-100">
           {currentMonth.getFullYear()}년 {currentMonth.getMonth() + 1}월
         </h3>
 
         <button
           onClick={nextMonth}
-          className="p-2 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
+          className="p-2 hover:bg-gray-800 transition-colors"
         >
           <svg
             className="w-6 h-6"
@@ -193,10 +193,10 @@ export default function CalendarView({
             key={day}
             className={`text-center text-sm font-semibold py-2 ${
               index === 0
-                ? "text-red-500 dark:text-red-400"
+                ? "text-red-400"
                 : index === 6
-                ? "text-orange-500 dark:text-orange-400"
-                : "text-gray-600 dark:text-gray-400"
+                ? "text-orange-500"
+                : "text-gray-400"
             }`}
           >
             {day}
@@ -220,10 +220,10 @@ export default function CalendarView({
               className={`min-h-[80px] sm:min-h-[120px] border p-2 relative ${
                 currentMonthDay
                   ? movies.length > 0
-                    ? "bg-orange-50 dark:bg-orange-950 border-orange-200 dark:border-orange-800"
-                    : "bg-white dark:bg-gray-800 border-gray-200 dark:border-gray-700"
-                  : "bg-gray-50 dark:bg-gray-900 border-gray-100 dark:border-gray-800"
-              } ${today ? "ring-2 ring-orange-500 dark:ring-orange-400" : ""} ${
+                    ? "bg-orange-950 border-orange-800"
+                    : "bg-gray-900 border-gray-700"
+                  : "bg-black border-gray-800"
+              } ${today ? "ring-2 ring-orange-500" : ""} ${
                 movies.length > 0
                   ? "cursor-pointer hover:shadow-md transition-all"
                   : ""
@@ -232,14 +232,14 @@ export default function CalendarView({
               <div
                 className={`text-right text-sm font-medium mb-1 ${
                   !currentMonthDay
-                    ? "text-gray-400 dark:text-gray-600"
+                    ? "text-gray-400"
                     : index % 7 === 0
-                    ? "text-red-500 dark:text-red-400"
+                    ? "text-red-400"
                     : index % 7 === 6
-                    ? "text-orange-500 dark:text-orange-400"
+                    ? "text-orange-500"
                     : movies.length > 0
-                    ? "text-orange-600 dark:text-orange-400 font-bold"
-                    : "text-gray-700 dark:text-gray-300"
+                    ? "text-orange-400 font-bold"
+                    : "text-gray-300"
                 }`}
               >
                 {date.getDate()}
@@ -249,12 +249,12 @@ export default function CalendarView({
               {movies.length > 0 && (
                 <div className="sm:hidden flex items-center justify-center gap-1 flex-1 min-h-[40px]">
                   <svg
-                    className="w-5 h-5 text-orange-500 dark:text-white fill-current"
+                    className="w-5 h-5 text-orange-500 fill-current"
                     viewBox="0 0 24 24"
                   >
                     <path d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
                   </svg>
-                  <span className="text-sm font-bold text-orange-500 dark:text-white">
+                  <span className="text-sm font-bold text-orange-500">
                     {movies.length}
                   </span>
                 </div>
@@ -274,8 +274,8 @@ export default function CalendarView({
                         key={idx}
                         className={`text-xs p-1.5 pointer-events-none ${
                           isPast
-                            ? "bg-gray-100 dark:bg-gray-700 text-gray-500 dark:text-gray-400 opacity-75"
-                            : "bg-orange-50 dark:bg-orange-900/20 text-orange-700 dark:text-orange-300"
+                            ? "bg-gray-700 text-gray-400 opacity-75"
+                            : "bg-orange-900/20 text-orange-300"
                         }`}
                       >
                         <div className="font-semibold truncate text-[10px] mb-0.5">
@@ -292,7 +292,7 @@ export default function CalendarView({
                   })}
 
                   {movies.length > 2 && (
-                    <div className="text-[10px] text-center text-gray-500 dark:text-gray-400 mt-1 py-1">
+                    <div className="text-[10px] text-center text-gray-400 mt-1 py-1">
                       +{movies.length - 2}개
                     </div>
                   )}
@@ -304,17 +304,17 @@ export default function CalendarView({
       </div>
 
       {/* 범례 */}
-      <div className="flex items-center gap-4 text-xs text-gray-600 dark:text-gray-400 mt-4 pt-4 border-t border-gray-200 dark:border-gray-700 px-4 sm:px-0">
+      <div className="flex items-center gap-4 text-xs text-gray-400 mt-4 pt-4 border-t border-gray-700 px-4 sm:px-0">
         <div className="flex items-center gap-2">
           <div className="w-4 h-4 border-2 border-orange-500"></div>
           <span>오늘</span>
         </div>
         <div className="flex items-center gap-2">
-          <div className="w-4 h-4 bg-orange-50 dark:bg-orange-900/20 border border-orange-200 dark:border-orange-800"></div>
+          <div className="w-4 h-4 bg-orange-900/20 border border-orange-800"></div>
           <span>예정된 상영</span>
         </div>
         <div className="flex items-center gap-2">
-          <div className="w-4 h-4 bg-gray-100 dark:bg-gray-700 border border-gray-300 dark:border-gray-600"></div>
+          <div className="w-4 h-4 bg-gray-700 border border-gray-600"></div>
           <span>지난 상영</span>
         </div>
       </div>
@@ -328,28 +328,28 @@ export default function CalendarView({
             onClick={closeDateModal}
           >
             <div
-              className="bg-white dark:bg-gray-800 max-w-2xl w-full max-h-[80vh] overflow-hidden flex flex-col"
+              className="bg-gray-900 max-w-2xl w-full max-h-[80vh] overflow-hidden flex flex-col"
               onClick={(e) => e.stopPropagation()}
             >
               {/* 모달 헤더 */}
-              <div className="flex items-center justify-between p-6 border-b border-gray-200 dark:border-gray-700">
-                <h2 className="text-xl font-bold text-gray-900 dark:text-white">
+              <div className="flex items-center justify-between p-6 border-b border-gray-700">
+                <h2 className="text-xl font-bold text-white">
                   {new Date(selectedDateForModal).toLocaleDateString("ko-KR", {
                     year: "numeric",
                     month: "long",
                     day: "numeric",
                     weekday: "long",
                   })}
-                  <span className="ml-3 text-sm font-normal text-gray-500 dark:text-gray-400">
+                  <span className="ml-3 text-sm font-normal text-gray-400">
                     ({moviesByDate[selectedDateForModal].length}개)
                   </span>
                 </h2>
                 <button
                   onClick={closeDateModal}
-                  className="p-2 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-full transition-colors"
+                  className="p-2 hover:bg-gray-800 rounded-full transition-colors"
                 >
                   <svg
-                    className="w-6 h-6 text-gray-500 dark:text-gray-400"
+                    className="w-6 h-6 text-gray-400"
                     fill="none"
                     stroke="currentColor"
                     viewBox="0 0 24 24"
@@ -365,96 +365,113 @@ export default function CalendarView({
               </div>
 
               {/* 모달 콘텐츠 */}
-              <div className="overflow-y-auto p-6">
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  {moviesByDate[selectedDateForModal].map((movie, idx) => {
-                    const now = new Date();
-                    const movieDateTime = new Date(
-                      movie.showtime ||
-                        `${selectedDateForModal}T${movie.time}:00`
-                    );
-                    const isPast = movieDateTime < now;
+              <div className="overflow-y-auto p-4 space-y-3">
+                {moviesByDate[selectedDateForModal].map((movie, idx) => {
+                  const now = new Date();
+                  const movieDateTime = new Date(
+                    movie.showtime ||
+                      `${selectedDateForModal}T${movie.time}:00`
+                  );
+                  const isPast = movieDateTime < now;
+                  const posterUrl =
+                    movie.tmdbPosterUrl || movie.posterUrl || "/NoPoster.png";
 
-                    return (
+                  return (
+                    <div
+                      key={idx}
+                      onClick={() => handleMovieClickFromModal(movie)}
+                      className={`relative overflow-hidden cursor-pointer border transition-all ${
+                        isPast
+                          ? "border-gray-700 opacity-60"
+                          : "border-gray-700 hover:border-orange-500"
+                      }`}
+                    >
+                      {/* 블러 배경 */}
                       <div
-                        key={idx}
-                        onClick={() => handleMovieClickFromModal(movie)}
-                        className={`p-4 border cursor-pointer hover:shadow-md transition-all ${
-                          isPast
-                            ? "bg-gray-50 dark:bg-gray-800 opacity-75 border-gray-200 dark:border-gray-700"
-                            : "bg-white dark:bg-gray-700 border-gray-200 dark:border-gray-600 hover:border-orange-400 dark:hover:border-orange-500"
-                        }`}
-                      >
-                        <div className="flex justify-between items-start mb-2">
-                          <time
-                            className={`text-sm font-bold px-2 py-1 ${
-                              isPast
-                                ? "text-gray-500 dark:text-gray-400 bg-gray-200 dark:bg-gray-700"
-                                : "text-orange-600 dark:text-orange-400 bg-orange-50 dark:bg-orange-900/20"
-                            }`}
-                          >
-                            {movie.time}
-                          </time>
-                          <button
-                            onClick={(e) => {
-                              e.stopPropagation();
-                              onRemoveFromWishlist(movie);
+                        className="absolute inset-0 scale-110"
+                        style={{
+                          backgroundImage: `url(${posterUrl})`,
+                          backgroundSize: "cover",
+                          backgroundPosition: "center",
+                          filter: "blur(16px)",
+                          opacity: 0.2,
+                        }}
+                      />
+                      <div className="absolute inset-0 bg-gradient-to-r from-black/85 via-black/60 to-black/75" />
+
+                      {/* 카드 콘텐츠 */}
+                      <div className="relative flex items-center gap-4 p-3">
+                        {/* 포스터 */}
+                        <div className="flex-shrink-0 h-24 aspect-[2/3] overflow-hidden shadow-lg ring-1 ring-orange-500/30">
+                          <img
+                            src={posterUrl}
+                            alt={movie.title}
+                            className="w-full h-full object-cover"
+                            onError={(e) => {
+                              (e.target as HTMLImageElement).src = "/NoPoster.png";
                             }}
-                            className="p-2 hover:bg-gray-100 dark:hover:bg-gray-600 rounded-full transition-colors"
-                            title="찜 목록에서 제거"
+                          />
+                        </div>
+
+                        {/* 영화 정보 */}
+                        <div className="flex-1 min-w-0">
+                          <h3
+                            className={`text-sm font-bold leading-snug mb-2 ${
+                              isPast ? "text-gray-400" : "text-white"
+                            }`}
+                            style={{
+                              display: "-webkit-box",
+                              WebkitLineClamp: 2,
+                              WebkitBoxOrient: "vertical",
+                              overflow: "hidden",
+                            }}
                           >
-                            <svg
-                              className="w-5 h-5 text-red-500 dark:text-red-400 fill-current"
-                              viewBox="0 0 24 24"
-                            >
-                              <path d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
-                            </svg>
-                          </button>
-                        </div>
-
-                        <h3
-                          className={`text-base font-semibold mb-2 leading-tight ${
-                            isPast
-                              ? "text-gray-600 dark:text-gray-400"
-                              : "text-gray-900 dark:text-gray-100"
-                          }`}
-                          style={{
-                            overflow: "hidden",
-                            textOverflow: "ellipsis",
-                            display: "-webkit-box",
-                            WebkitLineClamp: 2,
-                            WebkitBoxOrient: "vertical",
-                            wordBreak: "keep-all",
-                          }}
-                        >
-                          {movie.title}
-                        </h3>
-
-                        <div className="space-y-1 text-sm text-gray-600 dark:text-gray-400">
-                          <p className="font-medium truncate">
-                            {movie.theater}
-                          </p>
-                          {movie.area && (
-                            <p className="text-gray-500 dark:text-gray-500">
-                              {movie.area}
-                            </p>
-                          )}
-                          {movie.screen && (
-                            <p className="text-gray-500 dark:text-gray-500 truncate">
-                              {movie.screen}
-                            </p>
-                          )}
-                        </div>
-
-                        {isPast && (
-                          <div className="mt-2 text-xs text-gray-500 dark:text-gray-400 italic">
-                            이미 상영이 시작되었습니다
+                            {movie.title}
+                          </h3>
+                          <div className="flex flex-col gap-1">
+                            <div className="flex items-center gap-1.5">
+                              <svg className="w-3 h-3 text-orange-500 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                              </svg>
+                              <span className={`text-xs font-semibold ${isPast ? "text-gray-500" : "text-orange-400"}`}>
+                                {movie.time}
+                              </span>
+                            </div>
+                            <div className="flex items-center gap-1.5">
+                              <svg className="w-3 h-3 text-orange-500 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17.657 16.657L13.414 20.9a2 2 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
+                              </svg>
+                              <span className="text-xs text-gray-300 truncate">{movie.theater}</span>
+                            </div>
+                            {movie.screen && (
+                              <span className="text-xs text-gray-500 truncate pl-4">{movie.screen}</span>
+                            )}
                           </div>
-                        )}
+                          {isPast && (
+                            <span className="mt-1.5 inline-block text-[10px] text-gray-500 italic">
+                              이미 상영이 시작되었습니다
+                            </span>
+                          )}
+                        </div>
+
+                        {/* 찜 제거 버튼 */}
+                        <button
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            onRemoveFromWishlist(movie);
+                          }}
+                          className="flex-shrink-0 p-1.5 bg-black/40 hover:bg-black/70 rounded-full transition-colors"
+                          title="찜 목록에서 제거"
+                        >
+                          <svg className="w-4 h-4 text-red-400 fill-current" viewBox="0 0 24 24">
+                            <path d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
+                          </svg>
+                        </button>
                       </div>
-                    );
-                  })}
-                </div>
+                    </div>
+                  );
+                })}
               </div>
             </div>
           </div>

@@ -209,7 +209,7 @@ export default function Home() {
             <button
               onClick={goToHome}
               className={`flex flex-col items-center justify-center flex-1 h-full transition-colors ${
-                isHomeView ? "text-orange-500" : "text-gray-600"
+                isHomeView ? "text-orange-500" : "text-gray-400"
               }`}
             >
               <svg
@@ -231,7 +231,7 @@ export default function Home() {
             <button
               onClick={goToWishlist}
               className={`flex flex-col items-center justify-center flex-1 h-full transition-colors relative ${
-                showWishlistView ? "text-orange-500" : "text-gray-600"
+                showWishlistView ? "text-orange-500" : "text-gray-400"
               }`}
             >
               <svg
@@ -258,7 +258,7 @@ export default function Home() {
             <button
               onClick={goToInfo}
               className={`flex flex-col items-center justify-center flex-1 h-full transition-colors ${
-                showInfoView ? "text-orange-500" : "text-gray-600"
+                showInfoView ? "text-orange-500" : "text-gray-400"
               }`}
             >
               <svg

@@ -76,7 +76,7 @@ export default function MovieGrid({
     <div>
       {/* 정렬 컨트롤 */}
       <div className="mb-3 flex items-center justify-between">
-        <span className="text-xs text-gray-600">{futureMovies.length}개 상영</span>
+        <span className="text-xs text-gray-400">{futureMovies.length}개 상영</span>
         <div className="flex items-center gap-1">
           {sortType === "distance" && locationError && (
             <span className="text-xs text-red-500 mr-2">{locationError}</span>
@@ -130,20 +130,15 @@ export default function MovieGrid({
             >
               {/* 포스터 */}
               <div className="relative w-full aspect-[2/3] bg-gray-800 flex-shrink-0">
-                {posterUrl ? (
-                  <img
-                    src={posterUrl}
-                    alt={movie.title}
-                    className="w-full h-full object-cover"
-                    loading="lazy"
-                  />
-                ) : (
-                  <div className="w-full h-full flex items-center justify-center text-gray-600">
-                    <svg className="w-10 h-10 opacity-40" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M7 4v16M17 4v16M3 8h4m10 0h4M3 12h18M3 16h4m10 0h4M4 20h16a1 1 0 001-1V5a1 1 0 00-1-1H4a1 1 0 00-1 1v14a1 1 0 001 1z" />
-                    </svg>
-                  </div>
-                )}
+                <img
+                  src={posterUrl || "/NoPoster.png"}
+                  alt={movie.title}
+                  className="w-full h-full object-cover"
+                  loading="lazy"
+                  onError={(e) => {
+                    (e.currentTarget as HTMLImageElement).src = "/NoPoster.png";
+                  }}
+                />
 
                 {/* 상영 시간 뱃지 */}
                 <div className="absolute bottom-2 left-2">

@@ -1,45 +1,19 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import { artCinemas } from "@/data/artCinemas";
 
-const SEOUL_THEATERS = [
-  { name: "서울아트시네마", area: "종로구" },
-  { name: "아트나인", area: "종로구" },
-  { name: "인디스페이스", area: "서대문구" },
-  { name: "시네마테크KOFA", area: "마포구" },
-  { name: "미디어극장 아이공", area: "종로구" },
-  { name: "스폰지하우스", area: "종로구" },
-  { name: "씨네큐브", area: "광화문" },
-  { name: "CGV 아트하우스 압구정", area: "강남구" },
-  { name: "에무시네마", area: "용산구" },
-  { name: "광화문씨네큐브", area: "종로구" },
-];
+const SEOUL_THEATERS = artCinemas.map((c) => ({ name: c.cdNm, area: c.area }));
 
 export default function SettingsView() {
-  const [isDark, setIsDark] = useState(false);
   const [favoriteTheaters, setFavoriteTheaters] = useState<string[]>([]);
   const [expandedSection, setExpandedSection] = useState<string | null>(null);
   const [savedMsg, setSavedMsg] = useState(false);
 
   useEffect(() => {
-    const saved = localStorage.getItem("darkMode");
-    const systemDark = window.matchMedia("(prefers-color-scheme: dark)").matches;
-    setIsDark(saved !== null ? saved === "true" : systemDark);
-
     const savedTheaters = localStorage.getItem("favoriteTheaters");
     if (savedTheaters) setFavoriteTheaters(JSON.parse(savedTheaters));
   }, []);
-
-  const toggleDark = () => {
-    const next = !isDark;
-    setIsDark(next);
-    localStorage.setItem("darkMode", String(next));
-    if (next) {
-      document.documentElement.classList.add("dark");
-    } else {
-      document.documentElement.classList.remove("dark");
-    }
-  };
 
   const toggleTheater = (name: string) => {
     setFavoriteTheaters((prev) =>
@@ -63,78 +37,75 @@ export default function SettingsView() {
         <p className="text-xs text-gray-500 mt-0.5">앱 환경설정과 서비스 정보</p>
       </div>
 
-      {/* ─── 화면 ─── */}
-      <section>
-        <p className="text-[10px] font-bold text-orange-500 uppercase tracking-widest mb-2">화면</p>
-        <div className="bg-gray-900 border border-gray-800 divide-y divide-gray-800">
-          <div className="flex items-center justify-between px-4 py-3">
-            <div className="flex items-center gap-2.5">
-              <svg className="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z" />
-              </svg>
-              <span className="text-sm text-gray-200">다크 모드</span>
-            </div>
-            <button
-              onClick={toggleDark}
-              className={`relative w-11 h-6 rounded-full transition-colors duration-300 ${
-                isDark ? "bg-orange-500" : "bg-gray-700"
-              }`}
-            >
-              <span
-                className={`absolute top-0.5 left-0.5 w-5 h-5 bg-white rounded-full shadow transition-transform duration-300 ${
-                  isDark ? "translate-x-5" : "translate-x-0"
-                }`}
-              />
-            </button>
-          </div>
-        </div>
-      </section>
-
       {/* ─── 즐겨찾는 영화관 ─── */}
       <section>
         <p className="text-[10px] font-bold text-orange-500 uppercase tracking-widest mb-2">즐겨찾는 영화관</p>
-        <div className="bg-gray-900 border border-gray-800 p-4">
-          <p className="text-xs text-gray-500 mb-3">
-            자주 가는 영화관을 선택하면 거리 정렬 시 우선 표시됩니다.
-          </p>
-          <div className="grid grid-cols-2 gap-2">
-            {SEOUL_THEATERS.map((theater) => {
-              const selected = favoriteTheaters.includes(theater.name);
-              return (
-                <button
-                  key={theater.name}
-                  onClick={() => toggleTheater(theater.name)}
-                  className={`flex items-center gap-2 px-3 py-2 border text-left transition-all ${
-                    selected
-                      ? "border-orange-500 bg-orange-500/10 text-orange-400"
-                      : "border-gray-700 bg-gray-800 text-gray-400 hover:border-gray-600"
-                  }`}
-                >
-                  <span
-                    className={`w-3.5 h-3.5 border flex-shrink-0 flex items-center justify-center ${
-                      selected ? "border-orange-500 bg-orange-500" : "border-gray-600"
-                    }`}
-                  >
-                    {selected && (
-                      <svg className="w-2.5 h-2.5 text-black" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M5 13l4 4L19 7" />
-                      </svg>
-                    )}
-                  </span>
-                  <div>
-                    <p className="text-xs font-medium leading-tight">{theater.name}</p>
-                    <p className="text-[10px] text-gray-500">{theater.area}</p>
-                  </div>
-                </button>
-              );
-            })}
-          </div>
+        <div className="bg-gray-900 border border-gray-800 overflow-hidden">
           <button
-            onClick={saveTheaters}
-            className="mt-3 w-full py-2 bg-orange-500 text-black text-xs font-bold transition-all hover:bg-orange-400 active:scale-[0.98]"
+            onClick={() => toggle("theaters")}
+            className="w-full px-4 py-3 flex items-center justify-between hover:bg-gray-800 transition-colors"
           >
-            {savedMsg ? "저장되었습니다 ✓" : "저장"}
+            <span className="flex items-center gap-2.5 text-sm text-gray-200">
+              <svg className="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 4v16M17 4v16M3 8h4m10 0h4M3 16h4m10 0h4M4 20h16a1 1 0 001-1V5a1 1 0 00-1-1H4a1 1 0 00-1 1v14a1 1 0 001 1z" />
+              </svg>
+              즐겨찾는 영화관
+              {favoriteTheaters.length > 0 && (
+                <span className="text-[10px] text-orange-400 font-bold">{favoriteTheaters.length}개 선택됨</span>
+              )}
+            </span>
+            <svg
+              className={`w-4 h-4 text-gray-400 transition-transform ${expandedSection === "theaters" ? "rotate-180" : ""}`}
+              fill="none" stroke="currentColor" viewBox="0 0 24 24"
+            >
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+            </svg>
           </button>
+          {expandedSection === "theaters" && (
+            <div className="px-4 pb-4 pt-3 border-t border-gray-800">
+              <p className="text-xs text-gray-500 mb-3">
+                자주 가는 영화관을 선택하면 거리 정렬 시 우선 표시됩니다.
+              </p>
+              <div className="grid grid-cols-2 gap-2">
+                {SEOUL_THEATERS.map((theater) => {
+                  const selected = favoriteTheaters.includes(theater.name);
+                  return (
+                    <button
+                      key={theater.name}
+                      onClick={() => toggleTheater(theater.name)}
+                      className={`flex items-center gap-2 px-3 py-2 border text-left transition-all ${
+                        selected
+                          ? "border-orange-500 bg-orange-500/10 text-orange-400"
+                          : "border-gray-700 bg-gray-800 text-gray-400 hover:border-gray-600"
+                      }`}
+                    >
+                      <span
+                        className={`w-3.5 h-3.5 border flex-shrink-0 flex items-center justify-center ${
+                          selected ? "border-orange-500 bg-orange-500" : "border-gray-600"
+                        }`}
+                      >
+                        {selected && (
+                          <svg className="w-2.5 h-2.5 text-black" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M5 13l4 4L19 7" />
+                          </svg>
+                        )}
+                      </span>
+                      <div>
+                        <p className="text-xs font-medium leading-tight">{theater.name}</p>
+                        <p className="text-[10px] text-gray-500">{theater.area}</p>
+                      </div>
+                    </button>
+                  );
+                })}
+              </div>
+              <button
+                onClick={saveTheaters}
+                className="mt-3 w-full py-2 bg-orange-500 text-black text-xs font-bold transition-all hover:bg-orange-400 active:scale-[0.98]"
+              >
+                {savedMsg ? "저장되었습니다 ✓" : "저장"}
+              </button>
+            </div>
+          )}
         </div>
       </section>
 
@@ -154,7 +125,7 @@ export default function SettingsView() {
               위치 정보 이용 약관
             </span>
             <svg
-              className={`w-4 h-4 text-gray-600 transition-transform ${expandedSection === "location" ? "rotate-180" : ""}`}
+              className={`w-4 h-4 text-gray-400 transition-transform ${expandedSection === "location" ? "rotate-180" : ""}`}
               fill="none" stroke="currentColor" viewBox="0 0 24 24"
             >
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
@@ -191,7 +162,7 @@ export default function SettingsView() {
               업데이트 노트
             </span>
             <svg
-              className={`w-4 h-4 text-gray-600 transition-transform ${expandedSection === "updates" ? "rotate-180" : ""}`}
+              className={`w-4 h-4 text-gray-400 transition-transform ${expandedSection === "updates" ? "rotate-180" : ""}`}
               fill="none" stroke="currentColor" viewBox="0 0 24 24"
             >
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
@@ -237,7 +208,7 @@ export default function SettingsView() {
               문의 및 제안
             </span>
             <svg
-              className={`w-4 h-4 text-gray-600 transition-transform ${expandedSection === "contact" ? "rotate-180" : ""}`}
+              className={`w-4 h-4 text-gray-400 transition-transform ${expandedSection === "contact" ? "rotate-180" : ""}`}
               fill="none" stroke="currentColor" viewBox="0 0 24 24"
             >
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
@@ -273,7 +244,7 @@ export default function SettingsView() {
               이용 안내
             </span>
             <svg
-              className={`w-4 h-4 text-gray-600 transition-transform ${expandedSection === "notice" ? "rotate-180" : ""}`}
+              className={`w-4 h-4 text-gray-400 transition-transform ${expandedSection === "notice" ? "rotate-180" : ""}`}
               fill="none" stroke="currentColor" viewBox="0 0 24 24"
             >
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
@@ -294,8 +265,8 @@ export default function SettingsView() {
 
       {/* 푸터 */}
       <div className="text-center pt-4 pb-2">
-        <p className="text-xs text-gray-600">만든 사람: 제육볶음 달달볶아</p>
-        <p className="text-[10px] text-gray-700 mt-1">© 2025 영화방랑자. All rights reserved.</p>
+        <p className="text-xs text-gray-500">만든 사람: 제육볶음 달달볶아</p>
+        <p className="text-[10px] text-gray-500 mt-1">© 2025 영화방랑자. All rights reserved.</p>
       </div>
     </div>
   );
