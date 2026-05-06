@@ -201,6 +201,7 @@ export default function Home() {
           isOpen={isModalOpen}
           onClose={closeModal}
           movie={selectedMovieForModal}
+          selectedDate={selectedDate}
         />
 
         {/* 하단 네비게이션 (모바일) */}

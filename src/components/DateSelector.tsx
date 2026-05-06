@@ -31,7 +31,13 @@ export default function DateSelector({
     <div className="flex-1 relative">
       <button
         type="button"
-        onClick={() => inputRef.current?.showPicker()}
+        onClick={() => {
+          try {
+            inputRef.current?.showPicker();
+          } catch {
+            inputRef.current?.click();
+          }
+        }}
         className="w-full px-3 py-2 border text-sm bg-[#0d0d0d] border-orange-500 text-gray-100 text-left cursor-pointer"
       >
         {formatDisplayDate(selectedDate)}

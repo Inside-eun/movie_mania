@@ -5,6 +5,7 @@ import { useEffect, useState } from "react";
 interface MovieModalProps {
   isOpen: boolean;
   onClose: () => void;
+  selectedDate?: string;
   movie: {
     title: string;
     theater: string;
@@ -44,10 +45,14 @@ export default function MovieModal({
   isOpen,
   onClose,
   movie,
+  selectedDate,
 }: MovieModalProps) {
   const [kobisData, setKobisData] = useState<KOBISMovieInfo | null>(null);
   const [kmdbData, setKmdbData] = useState<KMDBApiData | null>(null);
   const [loading, setLoading] = useState(false);
+  const [bookingUrl, setBookingUrl] = useState<string | null>(null);
+  const [bookingIsFallback, setBookingIsFallback] = useState(false);
+  const [bookingLoading, setBookingLoading] = useState(false);
 
   useEffect(() => {
     if (isOpen && movie && movie.movieCode) {
@@ -91,6 +96,34 @@ export default function MovieModal({
       setLoading(false);
     }
   }, [isOpen, movie]);
+
+  useEffect(() => {
+    setBookingUrl(null);
+    setBookingIsFallback(false);
+
+    if (!isOpen || !movie || !selectedDate) return;
+
+    const date = selectedDate;
+    setBookingLoading(true);
+
+    const params = new URLSearchParams({
+      theater: movie.theater,
+      title: movie.title,
+      time: movie.time,
+      date,
+    });
+
+    fetch(`/api/booking-url?${params}`)
+      .then((r) => r.json())
+      .then((data) => {
+        if (data.url) {
+          setBookingUrl(data.url);
+          setBookingIsFallback(data.isFallback ?? false);
+        }
+      })
+      .catch(() => {})
+      .finally(() => setBookingLoading(false));
+  }, [isOpen, movie, selectedDate]);
 
   useEffect(() => {
     const handleEscape = (e: KeyboardEvent) => {
@@ -267,8 +300,25 @@ export default function MovieModal({
               </div>
             )}
 
-            <div className="mt-3 pt-3 border-t border-white/10">
-              <span className="text-gray-400 text-xs">{movie.theater}</span>
+            <div className="mt-3 pt-3 border-t border-white/10 flex items-center justify-between gap-2">
+              <span className="text-gray-400 text-xs truncate">{movie.theater}</span>
+              {bookingLoading && (
+                <div className="flex-shrink-0 w-4 h-4 rounded-full border-2 border-orange-500 border-t-transparent animate-spin" />
+              )}
+              {!bookingLoading && bookingUrl && (
+                <a
+                  href={bookingUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  onClick={(e) => e.stopPropagation()}
+                  className="flex-shrink-0 flex items-center gap-1 px-2.5 py-1 text-xs font-semibold bg-orange-500 text-black hover:bg-orange-400 transition-colors"
+                >
+                  {bookingIsFallback ? "극장 바로가기" : "예매하기"}
+                  <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
+                  </svg>
+                </a>
+              )}
             </div>
           </div>
         </div>

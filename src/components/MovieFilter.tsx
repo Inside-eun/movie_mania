@@ -1,7 +1,11 @@
 "use client";
 
-import { useRef, useEffect, useState } from "react";
-import { MovieSchedule } from "@/types";
+import {
+  useEffect,
+  useState,
+} from 'react';
+
+import { MovieSchedule } from '@/types';
 
 interface MovieFilterProps {
   filterType: "movie" | "theater";
@@ -38,8 +42,8 @@ export default function MovieFilter({
   getUniqueMovies,
   getUniqueTheaters,
 }: MovieFilterProps) {
-  const dropdownRef = useRef<HTMLDivElement>(null);
   const [isFilterExpanded, setIsFilterExpanded] = useState(false);
+  const [isVisible, setIsVisible] = useState(false);
   const [favoriteTheaters, setFavoriteTheaters] = useState<string[]>([]);
 
   useEffect(() => {
@@ -48,30 +52,29 @@ export default function MovieFilter({
   }, [isFilterExpanded]);
 
   useEffect(() => {
-    const handleClickOutside = (event: MouseEvent) => {
-      if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
-        setIsFilterExpanded(false);
-      }
-    };
-
     if (isFilterExpanded) {
-      document.addEventListener("mousedown", handleClickOutside);
+      document.body.style.overflow = "hidden";
+      requestAnimationFrame(() => setIsVisible(true));
+    } else {
+      document.body.style.overflow = "";
     }
-
     return () => {
-      document.removeEventListener("mousedown", handleClickOutside);
+      document.body.style.overflow = "";
     };
   }, [isFilterExpanded]);
 
+  const handleClose = () => {
+    setIsVisible(false);
+    setTimeout(() => setIsFilterExpanded(false), 300);
+  };
+
   const isFiltered = selectedMovies.length > 0 || selectedTheaters.length > 0;
 
-  // 오늘 상영 중인 영화관 중 즐겨찾기에 포함된 것들
   const favoritesInCurrentShowings = getUniqueTheaters().filter((t) =>
     favoriteTheaters.includes(t)
   );
   const hasFavoritesInShowings = favoritesInCurrentShowings.length > 0;
 
-  // 즐겨찾기 항목이 모두 선택된 상태인지
   const isFavoriteGroupActive =
     hasFavoritesInShowings &&
     favoritesInCurrentShowings.every((t) => selectedTheaters.includes(t));
@@ -86,36 +89,56 @@ export default function MovieFilter({
 
   return (
     <>
+      {/* 필터 아이콘 버튼 */}
+      <button
+        onClick={() => setIsFilterExpanded(true)}
+        className="relative p-2 bg-[#0d0d0d] border border-orange-500 text-gray-300 hover:bg-gray-900 transition-all z-50"
+      >
+        <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.293A1 1 0 013 6.586V4z" />
+        </svg>
+        {isFiltered && (
+          <span className="absolute -top-1 -right-1 w-2.5 h-2.5 bg-orange-500 dark:bg-orange-600 rounded-full" />
+        )}
+      </button>
+
+      {/* 바텀시트 */}
       {isFilterExpanded && (
-        <div
-          className="fixed inset-0 bg-black/20 dark:bg-black/40 z-40"
-          onClick={() => setIsFilterExpanded(false)}
-        />
-      )}
+        <>
+          {/* 백드롭 */}
+          <div
+            className={`fixed inset-0 bg-black/60 z-40 transition-opacity duration-300 ${isVisible ? "opacity-100" : "opacity-0"}`}
+            onClick={handleClose}
+          />
 
-      <div className="relative" ref={dropdownRef}>
-        {/* 필터 아이콘 버튼 */}
-        <button
-          onClick={() => setIsFilterExpanded(!isFilterExpanded)}
-          className="relative p-2 bg-[#0d0d0d] border border-orange-500 text-gray-300 hover:bg-gray-900 transition-all z-50"
-        >
-          <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.293A1 1 0 013 6.586V4z" />
-          </svg>
-          {isFiltered && (
-            <span className="absolute -top-1 -right-1 w-2.5 h-2.5 bg-orange-500 dark:bg-orange-600 rounded-full" />
-          )}
-        </button>
+          {/* 시트 본체 */}
+          <div
+            className={`fixed bottom-0 left-0 right-0 z-50 bg-gray-900 border-t border-orange-500 rounded-t-2xl shadow-2xl transition-transform duration-300 ease-out ${isVisible ? "translate-y-0" : "translate-y-full"}`}
+          >
+            {/* 핸들 바 */}
+            <div className="flex justify-center pt-3 pb-1">
+              <div className="w-10 h-1 bg-gray-600 rounded-full" />
+            </div>
 
-        {/* 필터 드롭다운 */}
-        {isFilterExpanded && (
-          <div className="absolute right-0 mt-2 w-[90vw] max-w-md bg-gray-900 border border-orange-500 shadow-2xl z-50">
-            <div className="p-3 space-y-2">
+            {/* 헤더 */}
+            <div className="flex items-center justify-between px-4 py-2 border-b border-gray-800">
+              <span className="text-sm font-semibold text-gray-200">필터</span>
+              <button
+                onClick={handleClose}
+                className="p-1 text-gray-400 hover:text-gray-200 transition-colors"
+              >
+                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                </svg>
+              </button>
+            </div>
+
+            <div className="p-4 space-y-3">
               {/* 필터 탭과 초기화 버튼 */}
               <div className="flex gap-2">
                 <button
                   onClick={() => onFilterTypeChange("movie")}
-                  className={`flex-1 py-1.5 px-3 text-xs font-medium transition-all ${
+                  className={`flex-1 py-2 px-3 text-xs font-medium transition-all rounded-sm ${
                     filterType === "movie"
                       ? "bg-orange-500 text-black"
                       : "bg-gray-800 text-gray-400"
@@ -125,7 +148,7 @@ export default function MovieFilter({
                 </button>
                 <button
                   onClick={() => onFilterTypeChange("theater")}
-                  className={`flex-1 py-1.5 px-3 text-xs font-medium transition-all ${
+                  className={`flex-1 py-2 px-3 text-xs font-medium transition-all rounded-sm ${
                     filterType === "theater"
                       ? "bg-orange-500 text-black"
                       : "bg-gray-800 text-gray-400"
@@ -136,7 +159,7 @@ export default function MovieFilter({
                 {isFiltered && (
                   <button
                     onClick={onClearFilters}
-                    className="px-3 py-1.5 border border-orange-500 text-gray-300 text-xs hover:bg-orange-500/10 transition-all"
+                    className="px-3 py-2 border border-orange-500 text-gray-300 text-xs hover:bg-orange-500/10 transition-all rounded-sm"
                   >
                     초기화
                   </button>
@@ -144,7 +167,7 @@ export default function MovieFilter({
               </div>
 
               {/* 필터 리스트 */}
-              <div className="max-h-96 overflow-y-auto border border-gray-800">
+              <div className="max-h-64 overflow-y-auto border border-gray-800 rounded-sm">
                 {filterType === "movie" ? (
                   <>
                     {getUniqueMovies().map((movieTitle) => {
@@ -153,7 +176,7 @@ export default function MovieFilter({
                       return (
                         <label
                           key={movieTitle}
-                          className={`flex items-center gap-2 px-3 py-2 cursor-pointer hover:bg-orange-900/20 transition-colors border-t border-gray-800 text-xs ${
+                          className={`flex items-center gap-2 px-3 py-2.5 cursor-pointer hover:bg-orange-900/20 transition-colors border-t border-gray-800 text-xs ${
                             isSelected ? "bg-orange-900/20" : ""
                           }`}
                         >
@@ -172,10 +195,9 @@ export default function MovieFilter({
                   </>
                 ) : (
                   <>
-                    {/* 즐겨찾기 영화관 일괄 선택 항목 */}
                     {hasFavoritesInShowings && (
                       <label
-                        className={`flex items-center gap-2 px-3 py-2 cursor-pointer hover:bg-orange-900/20 transition-colors text-xs border-b border-orange-800/50 ${
+                        className={`flex items-center gap-2 px-3 py-2.5 cursor-pointer hover:bg-orange-900/20 transition-colors text-xs border-b border-orange-800/50 ${
                           isFavoriteGroupActive ? "bg-orange-900/20" : ""
                         }`}
                         onClick={handleFavoriteGroupClick}
@@ -198,7 +220,6 @@ export default function MovieFilter({
                         </span>
                       </label>
                     )}
-                    {/* 개별 영화관 목록 */}
                     {getUniqueTheaters().map((theaterName) => {
                       const count = allMovies.filter((m) => m.theater === theaterName).length;
                       const isSelected = selectedTheaters.includes(theaterName);
@@ -206,7 +227,7 @@ export default function MovieFilter({
                       return (
                         <label
                           key={theaterName}
-                          className={`flex items-center gap-2 px-3 py-2 cursor-pointer hover:bg-orange-900/20 transition-colors border-t border-gray-800 text-xs ${
+                          className={`flex items-center gap-2 px-3 py-2.5 cursor-pointer hover:bg-orange-900/20 transition-colors border-t border-gray-800 text-xs ${
                             isSelected ? "bg-orange-900/20" : ""
                           }`}
                         >
@@ -227,9 +248,12 @@ export default function MovieFilter({
                 )}
               </div>
             </div>
+
+            {/* 하단 안전 영역 여백 */}
+            <div className="pb-safe h-4" />
           </div>
-        )}
-      </div>
+        </>
+      )}
     </>
   );
 }
