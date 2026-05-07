@@ -31,13 +31,6 @@ export default function DateSelector({
     <div className="flex-1 relative">
       <button
         type="button"
-        onClick={() => {
-          try {
-            inputRef.current?.showPicker();
-          } catch {
-            inputRef.current?.click();
-          }
-        }}
         className="w-full px-3 py-2 border text-sm bg-[#0d0d0d] border-orange-500 text-gray-100 text-left cursor-pointer"
       >
         {formatDisplayDate(selectedDate)}
@@ -45,9 +38,12 @@ export default function DateSelector({
       <input
         ref={inputRef}
         type="date"
-        className="absolute inset-0 opacity-0 pointer-events-none w-full"
+        className="absolute inset-0 opacity-0 w-full cursor-pointer"
         value={selectedDate}
-        onChange={(e) => onDateChange(e.target.value)}
+        onChange={(e) => {
+          onDateChange(e.target.value);
+          inputRef.current?.blur();
+        }}
         max={getLocalDateString(new Date(Date.now() + 7 * 24 * 60 * 60 * 1000))}
       />
     </div>

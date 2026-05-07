@@ -4,6 +4,11 @@ import {
   getDtryxFallbackUrl,
   isSupportedDtryxTheater,
 } from '@/lib/dtryxBooking';
+import {
+  buildMovieeBookingUrl,
+  getMovieeFallbackUrl,
+  isSupportedMovieeTheater,
+} from '@/lib/movieeBooking';
 
 export const dynamic = 'force-dynamic';
 
@@ -18,20 +23,23 @@ export async function GET(request: Request) {
     return NextResponse.json({ success: false, url: null });
   }
 
-  if (!isSupportedDtryxTheater(theater)) {
-    return NextResponse.json({ success: false, url: null, reason: 'unsupported' });
+  if (isSupportedDtryxTheater(theater)) {
+    const result = await buildDtryxBookingUrl(theater, title, time, date);
+    if (!result) {
+      const fallback = getDtryxFallbackUrl(theater);
+      return NextResponse.json({ success: false, url: fallback, isFallback: true });
+    }
+    return NextResponse.json({ success: true, url: result.url, isFallback: result.isFallback });
   }
 
-  const result = await buildDtryxBookingUrl(theater, title, time, date);
-
-  if (!result) {
-    const fallback = getDtryxFallbackUrl(theater);
-    return NextResponse.json({ success: false, url: fallback, isFallback: true });
+  if (isSupportedMovieeTheater(theater)) {
+    const result = await buildMovieeBookingUrl(theater, title, time, date);
+    if (!result) {
+      const fallback = getMovieeFallbackUrl(theater);
+      return NextResponse.json({ success: false, url: fallback, isFallback: true });
+    }
+    return NextResponse.json({ success: true, url: result.url, isFallback: result.isFallback });
   }
 
-  return NextResponse.json({
-    success: true,
-    url: result.url,
-    isFallback: result.isFallback,
-  });
+  return NextResponse.json({ success: false, url: null, reason: 'unsupported' });
 }
