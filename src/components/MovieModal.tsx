@@ -1,6 +1,7 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
+import { getBookingFallbackUrl } from "@/lib/bookingFallbacks";
 
 interface MovieModalProps {
   isOpen: boolean;
@@ -52,7 +53,7 @@ export default function MovieModal({
   const [loading, setLoading] = useState(false);
   const [bookingUrl, setBookingUrl] = useState<string | null>(null);
   const [bookingIsFallback, setBookingIsFallback] = useState(false);
-  const [bookingLoading, setBookingLoading] = useState(false);
+  const fetchAbortRef = useRef<AbortController | null>(null);
 
   useEffect(() => {
     if (isOpen && movie && movie.movieCode) {
@@ -98,31 +99,52 @@ export default function MovieModal({
   }, [isOpen, movie]);
 
   useEffect(() => {
-    setBookingUrl(null);
-    setBookingIsFallback(false);
+    // 이전 요청 취소
+    fetchAbortRef.current?.abort();
 
-    if (!isOpen || !movie || !selectedDate) return;
+    if (!isOpen || !movie || !selectedDate) {
+      setBookingUrl(null);
+      setBookingIsFallback(false);
+      return;
+    }
 
-    const date = selectedDate;
-    setBookingLoading(true);
+    // 폴백 URL 즉시 표시 — 사용자가 기다리지 않아도 바로 클릭 가능
+    const fallback = getBookingFallbackUrl(movie.theater);
+    if (fallback) {
+      setBookingUrl(fallback);
+      setBookingIsFallback(true);
+    } else {
+      setBookingUrl(null);
+      setBookingIsFallback(false);
+    }
+
+    // 정확한 상영 URL을 백그라운드에서 가져와 조용히 교체
+    const controller = new AbortController();
+    fetchAbortRef.current = controller;
+    const timeoutId = setTimeout(() => controller.abort(), 12000);
 
     const params = new URLSearchParams({
       theater: movie.theater,
       title: movie.title,
       time: movie.time,
-      date,
+      date: selectedDate,
     });
 
-    fetch(`/api/booking-url?${params}`)
+    fetch(`/api/booking-url?${params}`, { signal: controller.signal })
       .then((r) => r.json())
       .then((data) => {
-        if (data.url) {
+        if (data.url && !data.isFallback) {
           setBookingUrl(data.url);
-          setBookingIsFallback(data.isFallback ?? false);
+          setBookingIsFallback(false);
         }
       })
       .catch(() => {})
-      .finally(() => setBookingLoading(false));
+      .finally(() => clearTimeout(timeoutId));
+
+    return () => {
+      controller.abort();
+      clearTimeout(timeoutId);
+    };
   }, [isOpen, movie, selectedDate]);
 
   useEffect(() => {
@@ -302,10 +324,7 @@ export default function MovieModal({
 
             <div className="mt-3 pt-3 border-t border-white/10 flex items-center justify-between gap-2">
               <span className="text-gray-400 text-xs truncate">{movie.theater}</span>
-              {bookingLoading && (
-                <div className="flex-shrink-0 w-4 h-4 rounded-full border-2 border-orange-500 border-t-transparent animate-spin" />
-              )}
-              {!bookingLoading && bookingUrl && (
+              {bookingUrl && (
                 <a
                   href={bookingUrl}
                   target="_blank"
