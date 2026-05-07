@@ -1,3 +1,5 @@
+import { unstable_cache } from 'next/cache';
+
 interface DtryxCinemaConfig {
   cgid: string;
   brandCd: string;
@@ -89,8 +91,10 @@ interface DtryxShowEntry {
 }
 
 // 실제 dtryx 브라우저 Ajax 엔드포인트: POST /cinema/showseq_list.do
-async function fetchDtryxShowseqList(
-  config: DtryxCinemaConfig,
+async function _fetchDtryxShowseqList(
+  cgid: string,
+  brandCd: string,
+  cinemaCd: string,
   date: string,
 ): Promise<DtryxShowEntry[]> {
   // API는 YYYY-MM-DD 형식 사용
@@ -99,11 +103,11 @@ async function fetchDtryxShowseqList(
     : date;
 
   const body = new URLSearchParams({
-    cgid: config.cgid,
+    cgid,
     ssid: '',
     tokn: '',
-    BrandCd: config.brandCd,
-    CinemaCd: config.cinemaCd,
+    BrandCd: brandCd,
+    CinemaCd: cinemaCd,
     PlaySDT: playSDT,
   });
 
@@ -115,11 +119,10 @@ async function fetchDtryxShowseqList(
       'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
       Accept: 'application/json, text/javascript, */*; q=0.01',
       'X-Requested-With': 'XMLHttpRequest',
-      Referer: `https://www.dtryx.com/cinema/main.do?BrandCd=${config.brandCd}&CinemaCd=${config.cinemaCd}`,
+      Referer: `https://www.dtryx.com/cinema/main.do?BrandCd=${brandCd}&CinemaCd=${cinemaCd}`,
       Origin: 'https://www.dtryx.com',
     },
     body: body.toString(),
-    cache: 'no-store',
   });
 
   if (!res.ok) throw new Error(`showseq_list API 오류: ${res.status}`);
@@ -127,6 +130,13 @@ async function fetchDtryxShowseqList(
   const data = await res.json();
   return Array.isArray(data?.Showseqlist) ? data.Showseqlist : [];
 }
+
+// 극장+날짜 단위로 10분 캐싱 — 같은 극장의 여러 상영 모달이 외부 API를 공유
+const fetchDtryxShowseqList = unstable_cache(
+  _fetchDtryxShowseqList,
+  ['dtryx-showseq'],
+  { revalidate: 600 },
+);
 
 export async function buildDtryxBookingUrl(
   theaterName: string,
@@ -138,7 +148,7 @@ export async function buildDtryxBookingUrl(
   if (!config) return null;
 
   try {
-    const shows = await fetchDtryxShowseqList(config, date);
+    const shows = await fetchDtryxShowseqList(config.cgid, config.brandCd, config.cinemaCd, date);
 
     if (shows.length === 0) {
       return { url: config.fallbackUrl, isFallback: true };

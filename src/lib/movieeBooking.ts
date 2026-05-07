@@ -1,3 +1,5 @@
+import { unstable_cache } from 'next/cache';
+
 interface MovieeCinemaConfig {
   tId: string;
   fallbackUrl: string;
@@ -38,7 +40,7 @@ interface MovieePlayEntry {
   [key: string]: unknown;
 }
 
-async function fetchMovieePlayTimeList(
+async function _fetchMovieePlayTimeList(
   tId: string,
   date: string,
 ): Promise<MovieePlayEntry[]> {
@@ -63,7 +65,6 @@ async function fetchMovieePlayTimeList(
         Accept: 'application/json',
         Referer: `https://moviee.co.kr/Movie/Ticket?tId=${tId}`,
       },
-      cache: 'no-store',
     },
   );
 
@@ -74,6 +75,13 @@ async function fetchMovieePlayTimeList(
     ? data.ResData.Table
     : [];
 }
+
+// 극장+날짜 단위로 10분 캐싱
+const fetchMovieePlayTimeList = unstable_cache(
+  _fetchMovieePlayTimeList,
+  ['moviee-playtime'],
+  { revalidate: 600 },
+);
 
 function normalizeMovieTitle(title: string): string {
   return title
