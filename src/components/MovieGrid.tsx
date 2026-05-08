@@ -3,6 +3,7 @@
 import { MovieSchedule } from "@/types";
 import { SortType, UserLocation } from "@/hooks/useMovieFilter";
 import { calculateDistance } from "@/utils/date";
+import PosterImage from "./PosterImage";
 
 interface MovieGridProps {
   movies: MovieSchedule[];
@@ -130,14 +131,11 @@ export default function MovieGrid({
             >
               {/* 포스터 */}
               <div className="relative w-full aspect-[2/3] bg-gray-800 flex-shrink-0">
-                <img
-                  src={posterUrl || "/NoPoster.png"}
+                <PosterImage
+                  src={posterUrl}
                   alt={movie.title}
-                  className="w-full h-full object-cover"
-                  loading="lazy"
-                  onError={(e) => {
-                    (e.currentTarget as HTMLImageElement).src = "/NoPoster.png";
-                  }}
+                  priority={index < 4}
+                  sizes="(max-width: 1024px) 50vw, 33vw"
                 />
 
                 {/* 상영 시간 뱃지 */}

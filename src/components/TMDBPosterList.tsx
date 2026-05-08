@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import PosterImage from "./PosterImage";
 
 interface TMDBMovieSummary {
   title: string;
@@ -89,15 +90,13 @@ export default function TMDBPosterList({ date }: Props) {
             key={movie.tmdbId}
             className="flex flex-col items-center text-center text-xs"
           >
-            <img
-              src={movie.posterUrl || "/NoPoster.png"}
-              alt={movie.title}
-              className="w-full rounded-lg shadow-sm mb-2 aspect-[2/3] object-cover bg-gray-200 dark:bg-gray-800"
-              loading="lazy"
-              onError={(e) => {
-                (e.currentTarget as HTMLImageElement).src = "/NoPoster.png";
-              }}
-            />
+            <div className="relative w-full aspect-[2/3] mb-2 rounded-lg overflow-hidden shadow-sm bg-gray-200 dark:bg-gray-800">
+              <PosterImage
+                src={movie.posterUrl}
+                alt={movie.title}
+                sizes="(max-width: 640px) 33vw, 25vw"
+              />
+            </div>
             <div className="font-medium line-clamp-2 text-gray-900 dark:text-gray-100">
               {movie.title}
             </div>

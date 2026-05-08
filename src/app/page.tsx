@@ -1,14 +1,16 @@
 "use client";
 
 import { useState, useCallback } from "react";
+import dynamic from "next/dynamic";
 import Header from "../components/Header";
 import DateSelector from "../components/DateSelector";
 import MovieFilter from "../components/MovieFilter";
 import MovieGrid from "../components/MovieGrid";
 import MovieBanner from "../components/MovieBanner";
-import WishlistView from "../components/WishlistView";
-import SettingsView from "../components/SettingsView";
-import MovieModal from "../components/MovieModal";
+
+const WishlistView = dynamic(() => import("../components/WishlistView"), { loading: () => null });
+const SettingsView = dynamic(() => import("../components/SettingsView"), { loading: () => null });
+const MovieModal = dynamic(() => import("../components/MovieModal"), { loading: () => null });
 import { MovieSchedule } from "@/types";
 import { useWishlist, useMovieSchedules, useMovieFilter } from "@/hooks";
 import { getLocalDateString } from "@/utils/date";
@@ -74,9 +76,13 @@ export default function Home() {
     <>
       <Header />
 
-      {/* 히어로 배너 - ALL SCREENINGS 뷰에서만 */}
-      {isHomeView && schedules.allMovies.length > 0 && (
-        <MovieBanner movies={schedules.allMovies} />
+      {/* 히어로 배너 - ALL SCREENINGS 뷰에서만 (로딩 중 스켈레톤으로 CLS 방지) */}
+      {isHomeView && (
+        schedules.allMovies.length > 0
+          ? <MovieBanner movies={schedules.allMovies} />
+          : schedules.loading
+            ? <div className="w-full bg-gray-900/50 animate-pulse" style={{ height: "260px" }} />
+            : null
       )}
 
       <main className="container mx-auto px-4 pb-24 pt-4 max-w-4xl min-h-screen">

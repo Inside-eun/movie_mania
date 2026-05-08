@@ -11,12 +11,16 @@ const withPWA = withPWAInit({
 const nextConfig = {
   serverExternalPackages: ['cheerio'],
   typescript: {
-    // 빌드 시 TypeScript 오류 무시
     ignoreBuildErrors: true,
   },
   eslint: {
-    // 빌드 시 ESLint 오류 무시
     ignoreDuringBuilds: true,
+  },
+  images: {
+    remotePatterns: [
+      { protocol: 'https', hostname: 'image.tmdb.org' },
+      { protocol: 'https', hostname: 'www.kmdb.or.kr' },
+    ],
   },
 };
 

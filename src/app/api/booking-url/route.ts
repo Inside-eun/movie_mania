@@ -9,6 +9,16 @@ import {
   getMovieeFallbackUrl,
   isSupportedMovieeTheater,
 } from '@/lib/movieeBooking';
+import {
+  buildCineQBookingUrl,
+  getCineQFallbackUrl,
+  isSupportedCineQTheater,
+} from '@/lib/cineqBooking';
+import {
+  buildCGVBookingUrl,
+  getCGVFallbackUrl,
+  isSupportedCGVTheater,
+} from '@/lib/cgvBooking';
 
 export const dynamic = 'force-dynamic';
 
@@ -37,6 +47,22 @@ export async function GET(request: Request) {
     if (!result) {
       const fallback = getMovieeFallbackUrl(theater);
       return NextResponse.json({ success: false, url: fallback, isFallback: true });
+    }
+    return NextResponse.json({ success: true, url: result.url, isFallback: result.isFallback });
+  }
+
+  if (isSupportedCGVTheater(theater)) {
+    const result = await buildCGVBookingUrl(theater, title, time, date);
+    if (!result) {
+      return NextResponse.json({ success: false, url: getCGVFallbackUrl(theater), isFallback: true });
+    }
+    return NextResponse.json({ success: true, url: result.url, isFallback: result.isFallback });
+  }
+
+  if (isSupportedCineQTheater(theater)) {
+    const result = await buildCineQBookingUrl(theater, title, time, date);
+    if (!result) {
+      return NextResponse.json({ success: false, url: getCineQFallbackUrl(), isFallback: true });
     }
     return NextResponse.json({ success: true, url: result.url, isFallback: result.isFallback });
   }

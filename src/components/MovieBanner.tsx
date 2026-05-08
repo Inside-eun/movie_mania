@@ -2,6 +2,7 @@
 
 import { MovieSchedule } from "@/types";
 import { useState, useEffect, useCallback, useMemo } from "react";
+import PosterImage from "./PosterImage";
 
 interface MovieBannerProps {
   movies: MovieSchedule[];
@@ -75,11 +76,12 @@ export default function MovieBanner({ movies }: MovieBannerProps) {
         style={{ opacity: fading ? 0 : 1, transition: "opacity 0.25s" }}
       >
         {/* 포스터 */}
-        <div className="flex-shrink-0 h-52 aspect-[2/3] overflow-hidden shadow-2xl ring-1 ring-orange-500/40">
-          <img
+        <div className="relative flex-shrink-0 h-52 aspect-[2/3] overflow-hidden shadow-2xl ring-1 ring-orange-500/40">
+          <PosterImage
             src={posterUrl}
             alt={movie.title}
-            className="w-full h-full object-cover"
+            priority
+            sizes="140px"
           />
         </div>
 
