@@ -409,6 +409,7 @@ export default function CalendarView({
                           <img
                             src={posterUrl}
                             alt={movie.title}
+                            loading="lazy"
                             className="w-full h-full object-cover"
                             onError={(e) => {
                               (e.target as HTMLImageElement).src = "/NoPoster.png";
