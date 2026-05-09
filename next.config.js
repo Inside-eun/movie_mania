@@ -20,6 +20,7 @@ const nextConfig = {
     remotePatterns: [
       { protocol: 'https', hostname: 'image.tmdb.org' },
       { protocol: 'https', hostname: 'www.kmdb.or.kr' },
+      { protocol: 'https', hostname: 'www.koreafilm.or.kr' },
     ],
   },
 };
