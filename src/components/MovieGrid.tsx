@@ -1,9 +1,13 @@
 "use client";
 
-import { MovieSchedule } from "@/types";
-import { SortType, UserLocation } from "@/hooks/useMovieFilter";
-import { calculateDistance } from "@/utils/date";
-import PosterImage from "./PosterImage";
+import {
+  SortType,
+  UserLocation,
+} from '@/hooks/useMovieFilter';
+import { MovieSchedule } from '@/types';
+import { calculateDistance } from '@/utils/date';
+
+import PosterImage from './PosterImage';
 
 interface MovieGridProps {
   movies: MovieSchedule[];
@@ -127,7 +131,7 @@ export default function MovieGrid({
             <div
               key={index}
               onClick={() => onMovieClick(movie)}
-              className="overflow-hidden cursor-pointer active:scale-[0.98] transition-all duration-200 bg-gray-900 border border-orange-500 flex flex-col"
+              className="overflow-hidden cursor-pointer active:scale-[0.98] transition-all duration-200 bg-gray-900 flex flex-col"
             >
               {/* 포스터 */}
               <div className="relative w-full aspect-[2/3] bg-gray-800 flex-shrink-0">
@@ -137,13 +141,6 @@ export default function MovieGrid({
                   priority={index < 4}
                   sizes="(max-width: 1024px) 50vw, 33vw"
                 />
-
-                {/* 상영 시간 뱃지 */}
-                <div className="absolute bottom-2 left-2">
-                  <time className="text-xs font-bold px-1.5 py-0.5 bg-orange-500 text-black">
-                    {movie.time}
-                  </time>
-                </div>
 
                 {/* 위시리스트 버튼 */}
                 <button
@@ -167,19 +164,14 @@ export default function MovieGrid({
 
               {/* 정보 영역 - 제목, 영화관, 거리 */}
               <div className="p-2.5 flex flex-col gap-1">
-                <h2
-                  className="text-xs font-bold text-white leading-snug"
-                  style={{
-                    overflow: "hidden",
-                    textOverflow: "ellipsis",
-                    display: "-webkit-box",
-                    WebkitLineClamp: 2,
-                    WebkitBoxOrient: "vertical",
-                    wordBreak: "keep-all",
-                  }}
-                >
-                  {movie.title}
-                </h2>
+                <div className="flex items-start gap-1.5">
+                  <h2 className="text-xs font-bold text-white leading-snug flex-1 min-w-0 truncate">
+                    {movie.title}
+                  </h2>
+                  <time className="text-[14px] font-bold text-orange-500 flex-shrink-0 leading-snug">
+                    {movie.time}
+                  </time>
+                </div>
 
                 <div className="flex items-center justify-between">
                   <span className="text-[11px] text-gray-400 truncate">{movie.theater}</span>

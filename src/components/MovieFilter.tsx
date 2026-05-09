@@ -92,7 +92,6 @@ export default function MovieFilter({
       {/* 필터 아이콘 버튼 */}
       <button
         onClick={() => setIsFilterExpanded(true)}
-        aria-label="필터 열기"
         className="relative p-2 bg-[#0d0d0d] border border-orange-500 text-gray-300 hover:bg-gray-900 transition-all z-50"
       >
         <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -126,7 +125,6 @@ export default function MovieFilter({
               <span className="text-sm font-semibold text-gray-200">필터</span>
               <button
                 onClick={handleClose}
-                aria-label="필터 닫기"
                 className="p-1 text-gray-400 hover:text-gray-200 transition-colors"
               >
                 <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">

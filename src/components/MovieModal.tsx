@@ -1,8 +1,14 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
-import { getBookingFallbackUrl } from "@/lib/bookingFallbacks";
-import PosterImage from "./PosterImage";
+import {
+  useEffect,
+  useRef,
+  useState,
+} from 'react';
+
+import { getBookingFallbackUrl } from '@/lib/bookingFallbacks';
+
+import PosterImage from './PosterImage';
 
 interface MovieModalProps {
   isOpen: boolean;
@@ -233,7 +239,7 @@ export default function MovieModal({
         {/* 콘텐츠 */}
         <div className="relative flex items-center gap-5 px-5 py-6">
           {/* 포스터 */}
-          <div className="relative flex-shrink-0 h-52 aspect-[2/3] overflow-hidden shadow-2xl ring-1 ring-orange-500/40">
+          <div className="relative flex-shrink-0 h-52 aspect-[2/3] overflow-hidden shadow-2xl ">
             <PosterImage
               src={posterUrl}
               alt={movie.title}
@@ -244,15 +250,7 @@ export default function MovieModal({
 
           {/* 영화 정보 */}
           <div className="flex-1 min-w-0">
-            <h2
-              className="text-white font-bold text-lg leading-snug mb-3"
-              style={{
-                display: "-webkit-box",
-                WebkitLineClamp: 2,
-                WebkitBoxOrient: "vertical",
-                overflow: "hidden",
-              }}
-            >
+            <h2 className="text-white font-bold text-lg leading-snug mb-3">
               {movie.title}
             </h2>
 
