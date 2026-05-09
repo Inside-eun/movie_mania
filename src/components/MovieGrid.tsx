@@ -151,6 +151,7 @@ export default function MovieGrid({
                     e.stopPropagation();
                     onToggleWishlist(movie);
                   }}
+                  aria-label={isInWishlist(movie) ? "찜 목록에서 제거" : "찜 목록에 추가"}
                   className="absolute top-2 right-2 p-1.5 bg-black/60 hover:bg-black/80 rounded-full transition-all active:scale-90"
                 >
                   <svg

@@ -155,6 +155,7 @@ export default function MovieBanner({ movies }: MovieBannerProps) {
             <button
               key={i}
               onClick={() => goTo(i)}
+              aria-label={`${i + 1}번 영화로 이동`}
               className="rounded-full transition-all duration-300"
               style={{
                 width: i === currentIndex ? "16px" : "6px",

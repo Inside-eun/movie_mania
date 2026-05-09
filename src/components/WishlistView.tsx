@@ -236,6 +236,7 @@ export default function WishlistView({
                             e.stopPropagation();
                             onToggleWishlist(movie);
                           }}
+                          aria-label="찜 목록에서 제거"
                           className="flex-shrink-0 p-1.5 bg-black/40 hover:bg-black/70 rounded-full transition-colors z-10"
                           title="찜 목록에서 제거"
                         >

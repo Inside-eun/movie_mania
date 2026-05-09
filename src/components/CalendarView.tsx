@@ -145,6 +145,7 @@ export default function CalendarView({
       <div className="flex items-center justify-between mb-6 px-4 sm:px-0">
         <button
           onClick={prevMonth}
+          aria-label="이전 달"
           className="p-2 hover:bg-gray-800 transition-colors"
         >
           <svg
@@ -168,6 +169,7 @@ export default function CalendarView({
 
         <button
           onClick={nextMonth}
+          aria-label="다음 달"
           className="p-2 hover:bg-gray-800 transition-colors"
         >
           <svg
@@ -346,6 +348,7 @@ export default function CalendarView({
                 </h2>
                 <button
                   onClick={closeDateModal}
+                  aria-label="닫기"
                   className="p-2 hover:bg-gray-800 rounded-full transition-colors"
                 >
                   <svg
@@ -461,6 +464,7 @@ export default function CalendarView({
                             e.stopPropagation();
                             onRemoveFromWishlist(movie);
                           }}
+                          aria-label="찜 목록에서 제거"
                           className="flex-shrink-0 p-1.5 bg-black/40 hover:bg-black/70 rounded-full transition-colors"
                           title="찜 목록에서 제거"
                         >

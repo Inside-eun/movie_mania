@@ -212,6 +212,7 @@ export default function MovieModal({
         {/* 닫기 버튼 */}
         <button
           onClick={onClose}
+          aria-label="닫기"
           className="absolute top-3 right-3 z-10 p-1.5 rounded-full bg-black/40 hover:bg-black/70 transition-colors"
         >
           <svg

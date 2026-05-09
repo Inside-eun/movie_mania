@@ -69,6 +69,7 @@ export default function DarkModeToggle() {
   return (
     <button
       onClick={toggleDarkMode}
+      aria-label={isDark ? "라이트 모드로 전환" : "다크 모드로 전환"}
       className="p-2 rounded-lg bg-gray-100 dark:bg-gray-800 text-gray-800 dark:text-gray-200 hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors"
       title={isDark ? "라이트 모드로 전환" : "다크 모드로 전환"}
     >
