@@ -1,19 +1,29 @@
 "use client";
 
-import { useState, useCallback } from "react";
-import dynamic from "next/dynamic";
-import Header from "../components/Header";
-import DateSelector from "../components/DateSelector";
-import MovieFilter from "../components/MovieFilter";
-import MovieGrid from "../components/MovieGrid";
-import MovieBanner from "../components/MovieBanner";
+import {
+  useCallback,
+  useState,
+} from 'react';
+
+import dynamic from 'next/dynamic';
+
+import {
+  useMovieFilter,
+  useMovieSchedules,
+  useWishlist,
+} from '@/hooks';
+import { MovieSchedule } from '@/types';
+import { getLocalDateString } from '@/utils/date';
+
+import DateSelector from '../components/DateSelector';
+import Header from '../components/Header';
+import MovieBanner from '../components/MovieBanner';
+import MovieFilter from '../components/MovieFilter';
+import MovieGrid from '../components/MovieGrid';
 
 const WishlistView = dynamic(() => import("../components/WishlistView"), { loading: () => null });
 const SettingsView = dynamic(() => import("../components/SettingsView"), { loading: () => null });
 const MovieModal = dynamic(() => import("../components/MovieModal"), { loading: () => null });
-import { MovieSchedule } from "@/types";
-import { useWishlist, useMovieSchedules, useMovieFilter } from "@/hooks";
-import { getLocalDateString } from "@/utils/date";
 
 export default function Home() {
   const [selectedDate, setSelectedDate] = useState(
@@ -79,7 +89,7 @@ export default function Home() {
       {/* 히어로 배너 - ALL SCREENINGS 뷰에서만 (로딩 중 스켈레톤으로 CLS 방지) */}
       {isHomeView && (
         schedules.allMovies.length > 0
-          ? <MovieBanner movies={schedules.allMovies} />
+          ? <MovieBanner movies={schedules.allMovies} onMovieClick={openModal} />
           : schedules.loading
             ? <div className="w-full bg-gray-900/50 animate-pulse" style={{ height: "260px" }} />
             : null

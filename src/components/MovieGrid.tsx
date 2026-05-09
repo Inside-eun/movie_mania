@@ -165,7 +165,7 @@ export default function MovieGrid({
               {/* 정보 영역 - 제목, 영화관, 거리 */}
               <div className="p-2.5 flex flex-col gap-1">
                 <div className="flex items-start gap-1.5">
-                  <h2 className="text-xs font-bold text-white leading-snug flex-1 min-w-0 truncate">
+                  <h2 className="text-[14px] font-bold text-white leading-snug flex-1 min-w-0 truncate">
                     {movie.title}
                   </h2>
                   <time className="text-[14px] font-bold text-orange-500 flex-shrink-0 leading-snug">
