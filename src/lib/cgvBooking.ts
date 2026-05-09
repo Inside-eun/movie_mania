@@ -1,53 +1,52 @@
-// cgv.co.kr은 Cloudflare bot protection으로 서버사이드 API 호출 불가.
-// 예매 URL 생성은 불가하며 극장 시간표 폴백 URL만 제공한다.
+// CGV 예매 URL 생성
+// movNo는 영화별 전국 공통 고정값 → cgvMovNoCache.json에서 조회.
+// 캐시 미스 시 날짜+극장+상영관 필터된 예매 페이지로 fallback.
 //
-// URL 구조 참고:
-// https://cgv.co.kr/cnm/movieBook/movie?movNo={movNo}&scnYmd={date}&siteNo={siteNo}&siteNm={siteNm}&scnsNo={scnsNo}&scnSseq={scnSseq}
+// URL 구조:
+// https://cgv.co.kr/cnm/movieBook/movie?movNo={movNo}&scnYmd={date}&siteNo={siteNo}&siteNm={siteNm}&scnsNo={scnsNo}
+//
+// 새 영화 추가 방법:
+// DevTools Network 탭 → searchMovScnInfo 응답 → movNo 값 확인 → cgvMovNoCache.json에 추가
+
+import movNoCache from './cgvMovNoCache.json';
 
 interface CGVCinemaConfig {
   siteNo: string;
-  siteNm: string;
-  // 해당 극장에서 예술영화를 상영하는 특정 관 (null = 전관)
-  screenNo: string | null;
+  siteNm: string; // URL-encoded 극장 위치 단축명 (CGV 제외)
+  scnsNo: string; // 예술관 상영관 번호
   fallbackUrl: string;
 }
 
 export const CGV_CINEMAS: Record<string, CGVCinemaConfig> = {
   'CGV 용산아이파크몰': {
-    siteNo: '1088',
-    siteNm: 'CGV+%EC%9A%A9%EC%82%B0%EC%95%84%EC%9D%B4%ED%8C%8C%ED%81%AC%EB%AA%B0',
-    screenNo: '019', // 19관
-    fallbackUrl: 'https://cgv.co.kr/cnm/schedule/cgvSchedule?siteNo=1088',
+    siteNo: '0013',
+    siteNm: '%EC%9A%A9%EC%82%B0%EC%95%84%EC%9D%B4%ED%8C%8C%ED%81%AC%EB%AA%B0',
+    scnsNo: '017',
+    fallbackUrl: 'https://cgv.co.kr/cnm/movieBook/movie?siteNo=0013&siteNm=%EC%9A%A9%EC%82%B0%EC%95%84%EC%9D%B4%ED%8C%8C%ED%81%AC%EB%AA%B0&scnsNo=017',
   },
   'CGV 압구정': {
-    siteNo: '1111',
-    siteNm: 'CGV+%EC%95%95%EA%B5%AC%EC%A0%95',
-    screenNo: null, // 전관
-    fallbackUrl: 'https://cgv.co.kr/cnm/schedule/cgvSchedule?siteNo=1111',
+    siteNo: '0040',
+    siteNm: '%EC%95%95%EA%B5%AC%EC%A0%95',
+    scnsNo: '005',
+    fallbackUrl: 'https://cgv.co.kr/cnm/movieBook/movie?siteNo=0040&siteNm=%EC%95%95%EA%B5%AC%EC%A0%95&scnsNo=005',
   },
   'CGV 신촌아트레온': {
-    siteNo: '1205',
-    siteNm: 'CGV+%EC%8B%A0%EC%B4%8C%EC%95%84%ED%8A%B8%EB%A0%88%EC%98%A8',
-    screenNo: '010', // 10관
-    fallbackUrl: 'https://cgv.co.kr/cnm/schedule/cgvSchedule?siteNo=1205',
+    siteNo: '0150',
+    siteNm: '%EC%8B%A0%EC%B4%8C%EC%95%84%ED%8A%B8%EB%A0%88%EC%98%A8',
+    scnsNo: '016',
+    fallbackUrl: 'https://cgv.co.kr/cnm/movieBook/movie?siteNo=0150&siteNm=%EC%8B%A0%EC%B4%8C%EC%95%84%ED%8A%B8%EB%A0%88%EC%98%A8&scnsNo=016',
   },
   'CGV 대학로': {
-    siteNo: '1127',
-    siteNm: 'CGV+%EB%8C%80%ED%95%99%EB%A1%9C',
-    screenNo: '005', // 5관
-    fallbackUrl: 'https://cgv.co.kr/cnm/schedule/cgvSchedule?siteNo=1127',
+    siteNo: '0063',
+    siteNm: '%EB%8C%80%ED%95%99%EB%A1%9C',
+    scnsNo: '005',
+    fallbackUrl: 'https://cgv.co.kr/cnm/movieBook/movie?siteNo=0063&siteNm=%EB%8C%80%ED%95%99%EB%A1%9C&scnsNo=005',
   },
   'CGV 강변': {
-    siteNo: '1016',
-    siteNm: 'CGV+%EA%B0%95%EB%B3%80',
-    screenNo: '004', // 4관
-    fallbackUrl: 'https://cgv.co.kr/cnm/schedule/cgvSchedule?siteNo=1016',
-  },
-  'CGV 여의도': {
-    siteNo: '1034',
-    siteNm: 'CGV+%EC%97%AC%EC%9D%98%EB%8F%84',
-    screenNo: '005', // 5관
-    fallbackUrl: 'https://cgv.co.kr/cnm/schedule/cgvSchedule?siteNo=1034',
+    siteNo: '0001',
+    siteNm: '%EA%B0%95%EB%B3%80',
+    scnsNo: '005',
+    fallbackUrl: 'https://cgv.co.kr/cnm/movieBook/movie?siteNo=0001&siteNm=%EA%B0%95%EB%B3%80&scnsNo=005',
   },
 };
 
@@ -59,9 +58,17 @@ export function getCGVFallbackUrl(theaterName: string): string | null {
   return CGV_CINEMAS[theaterName]?.fallbackUrl ?? null;
 }
 
+function lookupMovNo(movieTitle: string): string | null {
+  const titleNorm = movieTitle.replace(/\s+/g, '');
+  for (const [key, movNo] of Object.entries(movNoCache)) {
+    if (key.replace(/\s+/g, '') === titleNorm) return movNo;
+  }
+  return null;
+}
+
 export async function buildCGVBookingUrl(
   theaterName: string,
-  _movieTitle: string,
+  movieTitle: string,
   _time: string,
   date: string,
 ): Promise<{ url: string; isFallback: boolean } | null> {
@@ -69,6 +76,14 @@ export async function buildCGVBookingUrl(
   if (!config) return null;
 
   const scnYmd = date.replace(/-/g, '');
-  const fallbackUrl = `${config.fallbackUrl}&scnYmd=${scnYmd}`;
-  return { url: fallbackUrl, isFallback: true };
+  const movNo = lookupMovNo(movieTitle);
+
+  if (movNo) {
+    const url = `https://cgv.co.kr/cnm/movieBook/movie?movNo=${movNo}&scnYmd=${scnYmd}&siteNo=${config.siteNo}&siteNm=${config.siteNm}&scnsNo=${config.scnsNo}`;
+    return { url, isFallback: false };
+  }
+
+  // 캐시 미스: 날짜+극장+상영관 필터된 예매 페이지
+  const url = `https://cgv.co.kr/cnm/movieBook/movie?scnYmd=${scnYmd}&siteNo=${config.siteNo}&siteNm=${config.siteNm}&scnsNo=${config.scnsNo}`;
+  return { url, isFallback: false };
 }
