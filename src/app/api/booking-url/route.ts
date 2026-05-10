@@ -24,6 +24,11 @@ import {
   getLotteFallbackUrl,
   isSupportedLotteTheater,
 } from '@/lib/lotteCinemaBooking';
+import {
+  buildMegaboxBookingUrl,
+  getMegaboxFallbackUrl,
+  isSupportedMegaboxTheater,
+} from '@/lib/megaboxBooking';
 
 export const dynamic = 'force-dynamic';
 
@@ -76,6 +81,14 @@ export async function GET(request: Request) {
     const result = await buildLotteBookingUrl(theater, title, time, date);
     if (!result) {
       return NextResponse.json({ success: false, url: getLotteFallbackUrl(theater), isFallback: true });
+    }
+    return NextResponse.json({ success: true, url: result.url, isFallback: result.isFallback });
+  }
+
+  if (isSupportedMegaboxTheater(theater)) {
+    const result = await buildMegaboxBookingUrl(theater, title, time, date);
+    if (!result) {
+      return NextResponse.json({ success: false, url: getMegaboxFallbackUrl(theater), isFallback: true });
     }
     return NextResponse.json({ success: true, url: result.url, isFallback: result.isFallback });
   }

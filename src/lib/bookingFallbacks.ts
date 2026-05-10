@@ -29,6 +29,8 @@ const BOOKING_FALLBACK_URLS: Record<string, string> = {
   '필름포럼': 'https://moviee.co.kr/Movie/Ticket?tId=130',
   // 롯데시네마
   '롯데시네마 신도림': 'https://www.lottecinema.co.kr/NLCHS/ticketing',
+  // 메가박스
+  '픽처하우스': 'https://www.megabox.co.kr/picturehouse',
 };
 
 export function getBookingFallbackUrl(theaterName: string): string | null {
