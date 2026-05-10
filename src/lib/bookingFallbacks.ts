@@ -27,6 +27,8 @@ const BOOKING_FALLBACK_URLS: Record<string, string> = {
   'KU시네마테크': 'https://moviee.co.kr/Movie/Ticket?tId=121',
   'KT&G 상상마당 Cinema': 'https://moviee.co.kr/Movie/Ticket?tId=123',
   '필름포럼': 'https://moviee.co.kr/Movie/Ticket?tId=130',
+  // 롯데시네마
+  '롯데시네마 신도림': 'https://www.lottecinema.co.kr/NLCHS/ticketing',
 };
 
 export function getBookingFallbackUrl(theaterName: string): string | null {

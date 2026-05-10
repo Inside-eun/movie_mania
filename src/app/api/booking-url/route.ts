@@ -19,6 +19,11 @@ import {
   getCGVFallbackUrl,
   isSupportedCGVTheater,
 } from '@/lib/cgvBooking';
+import {
+  buildLotteBookingUrl,
+  getLotteFallbackUrl,
+  isSupportedLotteTheater,
+} from '@/lib/lotteCinemaBooking';
 
 export const dynamic = 'force-dynamic';
 
@@ -63,6 +68,14 @@ export async function GET(request: Request) {
     const result = await buildCineQBookingUrl(theater, title, time, date);
     if (!result) {
       return NextResponse.json({ success: false, url: getCineQFallbackUrl(), isFallback: true });
+    }
+    return NextResponse.json({ success: true, url: result.url, isFallback: result.isFallback });
+  }
+
+  if (isSupportedLotteTheater(theater)) {
+    const result = await buildLotteBookingUrl(theater, title, time, date);
+    if (!result) {
+      return NextResponse.json({ success: false, url: getLotteFallbackUrl(theater), isFallback: true });
     }
     return NextResponse.json({ success: true, url: result.url, isFallback: result.isFallback });
   }
