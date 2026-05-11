@@ -12,14 +12,33 @@ export const GTM_EVENTS = {
   // 날짜 선택 관련
   DATE_CHANGED: 'date_changed',
   SEARCH_CLICKED: 'search_clicked',
-  
+
   // 찜 기능 관련
   WISHLIST_ADDED: 'wishlist_added',
   WISHLIST_REMOVED: 'wishlist_removed',
   WISHLIST_CLEARED: 'wishlist_cleared',
-  
+
   // 다크모드 관련
   DARK_MODE_TOGGLED: 'dark_mode_toggled',
+
+  // 정렬 관련
+  SORT_CHANGED: 'sort_changed',
+
+  // 영화 상세 관련
+  MOVIE_DETAIL_OPENED: 'movie_detail_opened',
+  MOVIE_DETAIL_LOAD_TIME: 'movie_detail_load_time',
+
+  // 예매 관련
+  BOOKING_CLICKED: 'booking_clicked',
+
+  // 배너 관련
+  QUIZ_BANNER_CLICKED: 'quiz_banner_clicked',
+
+  // 영화관 즐겨찾기 관련
+  FAVORITE_THEATER_SAVED: 'favorite_theater_saved',
+
+  // 체류 시간 관련
+  ENGAGEMENT_TIME: 'engagement_time',
 } as const;
 
 interface GTMEventParams {
@@ -116,5 +135,75 @@ export const trackWishlistClear = (count: number) => {
 export const trackDarkModeToggle = (isDarkMode: boolean) => {
   trackEvent(GTM_EVENTS.DARK_MODE_TOGGLED, {
     mode: isDarkMode ? 'dark' : 'light',
+  });
+};
+
+/**
+ * 정렬 변경 이벤트
+ */
+export const trackSortChanged = (sortType: 'time' | 'distance') => {
+  trackEvent(GTM_EVENTS.SORT_CHANGED, { sort_type: sortType });
+};
+
+/**
+ * 영화 상세 오픈 이벤트
+ */
+export const trackMovieDetailOpened = (movieTitle: string, theater: string) => {
+  trackEvent(GTM_EVENTS.MOVIE_DETAIL_OPENED, {
+    movie_title: movieTitle,
+    theater,
+  });
+};
+
+/**
+ * 영화 상세 API 로딩 완료 이벤트 (대기 시간 ms)
+ */
+export const trackMovieDetailLoadTime = (
+  movieTitle: string,
+  loadTimeMs: number
+) => {
+  trackEvent(GTM_EVENTS.MOVIE_DETAIL_LOAD_TIME, {
+    movie_title: movieTitle,
+    load_time_ms: loadTimeMs,
+  });
+};
+
+/**
+ * 예매/극장 바로가기 클릭 이벤트
+ */
+export const trackBookingClicked = (
+  movieTitle: string,
+  theater: string,
+  isFallback: boolean
+) => {
+  trackEvent(GTM_EVENTS.BOOKING_CLICKED, {
+    movie_title: movieTitle,
+    theater,
+    button_type: isFallback ? 'theater_link' : 'booking',
+  });
+};
+
+/**
+ * 퀴즈 배너 클릭 이벤트
+ */
+export const trackQuizBannerClicked = () => {
+  trackEvent(GTM_EVENTS.QUIZ_BANNER_CLICKED);
+};
+
+/**
+ * 영화관 즐겨찾기 저장 이벤트
+ */
+export const trackFavoriteTheaterSaved = (theaterCount: number) => {
+  trackEvent(GTM_EVENTS.FAVORITE_THEATER_SAVED, {
+    theater_count: theaterCount,
+  });
+};
+
+/**
+ * 체류 시간 이벤트 (초 단위)
+ */
+export const trackEngagementTime = (durationSec: number) => {
+  trackEvent(GTM_EVENTS.ENGAGEMENT_TIME, {
+    duration_sec: durationSec,
   });
 };

@@ -6,6 +6,7 @@ import {
 } from '@/hooks/useMovieFilter';
 import { MovieSchedule } from '@/types';
 import { calculateDistance } from '@/utils/date';
+import { trackSortChanged } from '@/utils/gtm';
 
 import PosterImage from './PosterImage';
 
@@ -89,7 +90,7 @@ export default function MovieGrid({
           {onSortTypeChange && (
             <div className="flex gap-1">
               <button
-                onClick={() => onSortTypeChange("time")}
+                onClick={() => { onSortTypeChange("time"); trackSortChanged("time"); }}
                 className={`px-2.5 py-1 text-xs font-medium transition-all ${
                   sortType === "time"
                     ? "bg-orange-500 text-black"
@@ -99,7 +100,7 @@ export default function MovieGrid({
                 시간순
               </button>
               <button
-                onClick={() => onSortTypeChange("distance")}
+                onClick={() => { onSortTypeChange("distance"); trackSortChanged("distance"); }}
                 className={`px-2.5 py-1 text-xs font-medium transition-all ${
                   sortType === "distance"
                     ? "bg-orange-500 text-black"

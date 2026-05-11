@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from "react";
 import { artCinemas } from "@/data/artCinemas";
+import { trackFavoriteTheaterSaved } from "@/utils/gtm";
 
 const SEOUL_THEATERS = artCinemas.map((c) => ({ name: c.cdNm, area: c.area }));
 
@@ -23,6 +24,7 @@ export default function SettingsView() {
 
   const saveTheaters = () => {
     localStorage.setItem("favoriteTheaters", JSON.stringify(favoriteTheaters));
+    trackFavoriteTheaterSaved(favoriteTheaters.length);
     setSavedMsg(true);
     setTimeout(() => setSavedMsg(false), 2000);
   };

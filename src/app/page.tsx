@@ -2,8 +2,12 @@
 
 import {
   useCallback,
+  useEffect,
+  useRef,
   useState,
 } from 'react';
+
+import { trackEngagementTime } from '@/utils/gtm';
 
 import dynamic from 'next/dynamic';
 
@@ -77,6 +81,31 @@ export default function Home() {
   const goToInfo = useCallback(() => {
     setShowWishlistView(false);
     setShowInfoView(true);
+  }, []);
+
+  // 실제로 화면에 보인 누적 시간 측정 (탭 전환, 백그라운드 제외)
+  const visibleSinceRef = useRef<number>(Date.now());
+  const totalVisibleMsRef = useRef<number>(0);
+
+  useEffect(() => {
+    const handleVisibility = () => {
+      if (document.visibilityState === 'hidden') {
+        totalVisibleMsRef.current += Date.now() - visibleSinceRef.current;
+      } else {
+        visibleSinceRef.current = Date.now();
+      }
+    };
+    const handleUnload = () => {
+      const total = totalVisibleMsRef.current + (Date.now() - visibleSinceRef.current);
+      trackEngagementTime(Math.round(total / 1000));
+    };
+
+    document.addEventListener('visibilitychange', handleVisibility);
+    window.addEventListener('pagehide', handleUnload);
+    return () => {
+      document.removeEventListener('visibilitychange', handleVisibility);
+      window.removeEventListener('pagehide', handleUnload);
+    };
   }, []);
 
   const isToday = selectedDate === getLocalDateString(new Date());

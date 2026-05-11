@@ -9,6 +9,7 @@ import {
 } from 'react';
 
 import { MovieSchedule } from '@/types';
+import { trackQuizBannerClicked } from '@/utils/gtm';
 
 import PosterImage from './PosterImage';
 
@@ -68,6 +69,7 @@ export default function MovieBanner({ movies, onMovieClick }: MovieBannerProps) 
 
   const handleClick = () => {
     if (isQuizSlide) {
+      trackQuizBannerClicked();
       window.open('https://cine21.com/event/quiz', '_blank', 'noopener,noreferrer');
     } else if (movie && onMovieClick) {
       onMovieClick(movie);

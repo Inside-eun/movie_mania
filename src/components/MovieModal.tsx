@@ -7,6 +7,7 @@ import {
 } from 'react';
 
 import { getBookingFallbackUrl } from '@/lib/bookingFallbacks';
+import { trackMovieDetailOpened, trackMovieDetailLoadTime, trackBookingClicked } from '@/utils/gtm';
 
 import PosterImage from './PosterImage';
 
@@ -61,6 +62,14 @@ export default function MovieModal({
   const [bookingUrl, setBookingUrl] = useState<string | null>(null);
   const [bookingIsFallback, setBookingIsFallback] = useState(false);
   const fetchAbortRef = useRef<AbortController | null>(null);
+  const openedAtRef = useRef<number | null>(null);
+
+  useEffect(() => {
+    if (isOpen && movie) {
+      openedAtRef.current = Date.now();
+      trackMovieDetailOpened(movie.title, movie.theater);
+    }
+  }, [isOpen, movie]);
 
   useEffect(() => {
     if (isOpen && movie && movie.movieCode) {
@@ -94,6 +103,9 @@ export default function MovieModal({
         } finally {
           clearTimeout(loadingTimer);
           setLoading(false);
+          if (openedAtRef.current) {
+            trackMovieDetailLoadTime(movie.title, Date.now() - openedAtRef.current);
+          }
         }
       };
 
@@ -327,7 +339,10 @@ export default function MovieModal({
                   href={bookingUrl}
                   target="_blank"
                   rel="noopener noreferrer"
-                  onClick={(e) => e.stopPropagation()}
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    trackBookingClicked(movie.title, movie.theater, bookingIsFallback);
+                  }}
                   className="flex-shrink-0 flex items-center gap-1 px-2.5 py-1 text-xs font-semibold bg-orange-500 text-black hover:bg-orange-400 transition-colors"
                 >
                   {bookingIsFallback ? "극장 바로가기" : "예매하기"}
