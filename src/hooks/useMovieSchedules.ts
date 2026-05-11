@@ -5,6 +5,39 @@ import { MovieSchedule, ScheduleResponse } from "@/types";
 import { getLocalDateString, parseMovieTime } from "@/utils/date";
 import { getTheaterCoordinates } from "@/utils/theaterCoordinates";
 
+const CACHE_KEY_PREFIX = "schedules_v1_";
+const CACHE_TTL_MS = 60 * 60 * 1000; // 1시간
+
+interface CacheEntry {
+  movies: MovieSchedule[];
+  timestamp: string;
+  savedAt: number;
+}
+
+function readCache(date: string): CacheEntry | null {
+  try {
+    const raw = localStorage.getItem(CACHE_KEY_PREFIX + date);
+    if (!raw) return null;
+    const entry: CacheEntry = JSON.parse(raw);
+    if (Date.now() - entry.savedAt > CACHE_TTL_MS) {
+      localStorage.removeItem(CACHE_KEY_PREFIX + date);
+      return null;
+    }
+    return entry;
+  } catch {
+    return null;
+  }
+}
+
+function writeCache(date: string, movies: MovieSchedule[], timestamp: string) {
+  try {
+    const entry: CacheEntry = { movies, timestamp, savedAt: Date.now() };
+    localStorage.setItem(CACHE_KEY_PREFIX + date, JSON.stringify(entry));
+  } catch {
+    // 저장 실패(용량 초과 등)는 무시
+  }
+}
+
 export function useMovieSchedules(
   selectedDate: string,
   selectedMovies: string[],
@@ -15,6 +48,13 @@ export function useMovieSchedules(
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [lastUpdate, setLastUpdate] = useState<string | null>(null);
+
+  const applyCoordinates = useCallback((movies: MovieSchedule[]) =>
+    movies.map((movie) => {
+      if (movie.latitude && movie.longitude) return movie;
+      const coords = getTheaterCoordinates(movie.theater);
+      return { ...movie, latitude: coords?.latitude, longitude: coords?.longitude };
+    }), []);
 
   // 스케줄 조회
   const fetchMovies = useCallback(async () => {
@@ -28,22 +68,13 @@ export function useMovieSchedules(
       const data: ScheduleResponse = await response.json();
 
       if (data.success) {
-        // 극장 좌표: API 데이터 우선, 없으면 theaterCoordinates fallback
-        const moviesWithCoordinates = data.data.map((movie) => {
-          if (movie.latitude && movie.longitude) return movie;
-          const coords = getTheaterCoordinates(movie.theater);
-          return {
-            ...movie,
-            latitude: coords?.latitude,
-            longitude: coords?.longitude,
-          };
+        const moviesWithCoordinates = applyCoordinates(data.data);
+        const timeLabel = new Date(data.timestamp).toLocaleTimeString("ko-KR", {
+          timeZone: "Asia/Seoul",
         });
         setAllMovies(moviesWithCoordinates);
-        setLastUpdate(
-          new Date(data.timestamp).toLocaleTimeString("ko-KR", {
-            timeZone: "Asia/Seoul",
-          })
-        );
+        setLastUpdate(timeLabel);
+        writeCache(selectedDate, moviesWithCoordinates, timeLabel);
 
         // tmdbPosterUrl이 없는 영화가 있으면 백그라운드에서 보완
         const hasMissingPosters = moviesWithCoordinates.some((m) => !m.tmdbPosterUrl);
@@ -57,12 +88,14 @@ export function useMovieSchedules(
                   .filter((m: { posterUrl: string | null }) => m.posterUrl)
                   .map((m: { title: string; posterUrl: string }) => [m.title, m.posterUrl])
               );
-              setAllMovies((prev) =>
-                prev.map((movie) => ({
+              setAllMovies((prev) => {
+                const updated = prev.map((movie) => ({
                   ...movie,
                   tmdbPosterUrl: movie.tmdbPosterUrl || tmdbMap.get(movie.title) || undefined,
-                }))
-              );
+                }));
+                writeCache(selectedDate, updated, timeLabel);
+                return updated;
+              });
             })
             .catch(() => {});
         }
@@ -79,13 +112,34 @@ export function useMovieSchedules(
     } finally {
       setLoading(false);
     }
-  }, [selectedDate]);
+  }, [selectedDate, applyCoordinates]);
 
-  // 날짜 변경 시 자동으로 데이터 조회
+  // 날짜 변경 시: 캐시가 있으면 즉시 표시 후 백그라운드에서 갱신
   useEffect(() => {
-    setAllMovies([]);
-    setLastUpdate(null);
-    fetchMovies();
+    const cached = readCache(selectedDate);
+    if (cached) {
+      setAllMovies(cached.movies);
+      setLastUpdate(cached.timestamp);
+      setLoading(false);
+      // 스피너 없이 백그라운드에서 최신 데이터로 갱신
+      fetch(`/api/schedules?type=integrated&date=${selectedDate}`)
+        .then((res) => res.json())
+        .then((data: ScheduleResponse) => {
+          if (!data.success) return;
+          const moviesWithCoords = applyCoordinates(data.data);
+          const timeLabel = new Date(data.timestamp).toLocaleTimeString("ko-KR", {
+            timeZone: "Asia/Seoul",
+          });
+          setAllMovies(moviesWithCoords);
+          setLastUpdate(timeLabel);
+          writeCache(selectedDate, moviesWithCoords, timeLabel);
+        })
+        .catch(() => {});
+    } else {
+      setAllMovies([]);
+      setLastUpdate(null);
+      fetchMovies();
+    }
   }, [selectedDate]); // eslint-disable-line react-hooks/exhaustive-deps
 
   // 데이터 초기화
