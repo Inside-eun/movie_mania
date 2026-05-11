@@ -1,3 +1,4 @@
+import { Redis } from "@upstash/redis";
 import fs from "fs";
 import path from "path";
 
@@ -7,17 +8,27 @@ interface CacheItem<T> {
   expiresAt: number;
 }
 
+function createRedisClient(): Redis | null {
+  if (!process.env.UPSTASH_REDIS_REST_URL || !process.env.UPSTASH_REDIS_REST_TOKEN) {
+    return null;
+  }
+  return new Redis({
+    url: process.env.UPSTASH_REDIS_REST_URL,
+    token: process.env.UPSTASH_REDIS_REST_TOKEN,
+  });
+}
+
 export class CacheService {
-  private memoryCache = new Map<string, CacheItem<any>>();
+  private redis: Redis | null = createRedisClient();
   private cacheDir: string;
 
   constructor() {
-    // Vercel 환경에서는 /tmp 디렉토리만 쓰기 가능
     const isVercel = process.env.VERCEL === "1";
-    this.cacheDir = isVercel
-      ? "/tmp/cache"
-      : path.join(process.cwd(), ".cache");
-    this.ensureCacheDir();
+    this.cacheDir = isVercel ? "/tmp/cache" : path.join(process.cwd(), ".cache");
+    if (!this.redis) {
+      console.warn("Upstash Redis 미설정 — 로컬 파일 캐시 사용");
+      this.ensureCacheDir();
+    }
   }
 
   private ensureCacheDir() {
@@ -26,254 +37,233 @@ export class CacheService {
         fs.mkdirSync(this.cacheDir, { recursive: true });
       }
     } catch (error) {
-      console.warn(
-        "캐시 디렉토리 생성 실패:",
-        error instanceof Error ? error.message : error
-      );
-      // Vercel 환경에서는 파일 캐시 비활성화, 메모리 캐시만 사용
+      console.warn("캐시 디렉토리 생성 실패:", error instanceof Error ? error.message : error);
     }
   }
 
   private generateCacheKey(type: string, date: string, params?: any): string {
-    const dateStr = date.replace(/[^\d]/g, ""); // YYYYMMDD 형식
+    const dateStr = date.replace(/[^\d]/g, "");
     const paramStr = params ? JSON.stringify(params) : "";
     return `${type}_${dateStr}_${Buffer.from(paramStr).toString("base64")}`;
   }
 
-  private getFilePath(key: string): string {
-    return path.join(this.cacheDir, `${key}.json`);
-  }
+  async get<T>(type: string, date: string, params?: any): Promise<T | null> {
+    const key = this.generateCacheKey(type, date, params);
 
-  private isExpired(item: CacheItem<any>): boolean {
-    return Date.now() > item.expiresAt;
-  }
-
-  // 메모리 캐시에서 조회
-  private getFromMemory<T>(key: string): T | null {
-    const item = this.memoryCache.get(key);
-    if (!item || this.isExpired(item)) {
-      if (item) this.memoryCache.delete(key);
+    if (this.redis) {
+      try {
+        const data = await this.redis.get<T>(key);
+        if (data !== null && data !== undefined) {
+          console.log(`Redis 캐시 히트: ${key}`);
+          return data;
+        }
+      } catch (e) {
+        console.warn("Redis 캐시 읽기 실패:", e);
+      }
+      console.log(`Redis 캐시 미스: ${key}`);
       return null;
     }
-    return item.data;
+
+    return this.getFromFile<T>(key);
   }
 
-  // 파일 캐시에서 조회
-  private getFromFile<T>(key: string): T | null {
-    const filePath = this.getFilePath(key);
-    if (!fs.existsSync(filePath)) return null;
+  async set<T>(type: string, date: string, data: T, params?: any): Promise<void> {
+    const key = this.generateCacheKey(type, date, params);
 
+    if (this.redis) {
+      try {
+        await this.redis.set(key, data, { ex: 24 * 60 * 60 });
+        console.log(`Redis 캐시 저장: ${key}`);
+      } catch (e) {
+        console.warn("Redis 캐시 저장 실패:", e);
+      }
+      return;
+    }
+
+    this.setToFile(key, data, 24 * 60 * 60 * 1000);
+  }
+
+  async delete(type: string, date: string, params?: any): Promise<void> {
+    const key = this.generateCacheKey(type, date, params);
+    if (this.redis) {
+      await this.redis.del(key).catch(() => {});
+    } else {
+      const filePath = path.join(this.cacheDir, `${key}.json`);
+      if (fs.existsSync(filePath)) fs.unlinkSync(filePath);
+    }
+  }
+
+  // params 여부와 무관하게 type+date 로 시작하는 키 전체 삭제
+  async deleteAllByTypeDate(type: string, date: string): Promise<void> {
+    const dateStr = date.replace(/[^\d]/g, "");
+    const pattern = `${type}_${dateStr}_*`;
+
+    if (this.redis) {
+      let cursor = 0;
+      do {
+        const [next, keys] = await this.redis.scan(cursor, { match: pattern, count: 100 });
+        cursor = next as number;
+        if (keys.length > 0) {
+          await Promise.all(keys.map((k) => this.redis!.del(k).catch(() => {})));
+        }
+      } while (cursor !== 0);
+      return;
+    }
+
+    try {
+      const files = fs.readdirSync(this.cacheDir);
+      for (const file of files) {
+        if (file.startsWith(`${type}_${dateStr}_`) && file.endsWith(".json")) {
+          fs.unlinkSync(path.join(this.cacheDir, file));
+        }
+      }
+    } catch (e) {
+      console.warn("패턴 캐시 삭제 실패:", e);
+    }
+  }
+
+  // TMDB DB 전용 (Redis key: "tmdb_db")
+  async getTmdbDb(): Promise<Record<string, any>> {
+    if (this.redis) {
+      try {
+        const data = await this.redis.get<Record<string, any>>("tmdb_db");
+        return data ?? {};
+      } catch (e) {
+        console.warn("TMDB DB Redis 읽기 실패:", e);
+        return {};
+      }
+    }
+    return this.loadTmdbDbFromFile();
+  }
+
+  async saveTmdbDb(db: Record<string, any>): Promise<void> {
+    if (this.redis) {
+      try {
+        await this.redis.set("tmdb_db", db, { ex: 7 * 24 * 60 * 60 });
+        console.log("TMDB DB Redis 저장 완료");
+      } catch (e) {
+        console.warn("TMDB DB Redis 저장 실패:", e);
+      }
+      return;
+    }
+    this.saveTmdbDbToFile(db);
+  }
+
+  private loadTmdbDbFromFile(): Record<string, any> {
+    const filePath = path.join(this.cacheDir, "tmdb_db.json");
+    try {
+      if (fs.existsSync(filePath)) {
+        const raw = fs.readFileSync(filePath, "utf-8");
+        const data = JSON.parse(raw);
+        return typeof data === "object" && data !== null ? data : {};
+      }
+    } catch (e) {
+      console.warn("TMDB DB 파일 로드 실패:", e);
+    }
+    return {};
+  }
+
+  private saveTmdbDbToFile(db: Record<string, any>): void {
+    const filePath = path.join(this.cacheDir, "tmdb_db.json");
+    try {
+      const dir = path.dirname(filePath);
+      if (!fs.existsSync(dir)) fs.mkdirSync(dir, { recursive: true });
+      fs.writeFileSync(filePath, JSON.stringify(db, null, 2), "utf-8");
+    } catch (e) {
+      console.warn("TMDB DB 파일 저장 실패:", e);
+    }
+  }
+
+  cleanup(): void {
+    if (this.redis) return; // Redis가 TTL 자동 관리
+    try {
+      const files = fs.readdirSync(this.cacheDir);
+      for (const file of files) {
+        if (!file.endsWith(".json") || file === "tmdb_db.json") continue;
+        const filePath = path.join(this.cacheDir, file);
+        const item: CacheItem<any> = JSON.parse(fs.readFileSync(filePath, "utf-8"));
+        if (Date.now() > item.expiresAt) {
+          fs.unlinkSync(filePath);
+          console.log(`만료된 캐시 파일 삭제: ${file}`);
+        }
+      }
+    } catch (e) {
+      console.error("캐시 정리 오류:", e);
+    }
+  }
+
+  clear(): void {
+    if (this.redis) {
+      console.warn("Redis 전체 삭제는 Upstash 대시보드에서 수행하세요.");
+      return;
+    }
+    try {
+      const files = fs.readdirSync(this.cacheDir);
+      for (const file of files) {
+        if (file.endsWith(".json")) fs.unlinkSync(path.join(this.cacheDir, file));
+      }
+      console.log("전체 캐시 삭제 완료");
+    } catch (e) {
+      console.error("캐시 삭제 오류:", e);
+    }
+  }
+
+  getStats(): { memoryCount: number; fileCount: number; cacheHits: number } {
+    let fileCount = 0;
+    if (!this.redis) {
+      try {
+        fileCount = fs.readdirSync(this.cacheDir).filter((f) => f.endsWith(".json")).length;
+      } catch {}
+    }
+    return { memoryCount: 0, fileCount, cacheHits: 0 };
+  }
+
+  async ping(): Promise<{ backend: "redis" | "file"; ok: boolean; latencyMs?: number; error?: string }> {
+    if (this.redis) {
+      const start = Date.now();
+      try {
+        await this.redis.set("__ping__", "pong", { ex: 10 });
+        const val = await this.redis.get("__ping__");
+        return { backend: "redis", ok: val === "pong", latencyMs: Date.now() - start };
+      } catch (e) {
+        return { backend: "redis", ok: false, error: e instanceof Error ? e.message : String(e) };
+      }
+    }
+    const ok = fs.existsSync(this.cacheDir);
+    return { backend: "file", ok };
+  }
+
+  private getFromFile<T>(key: string): T | null {
+    const filePath = path.join(this.cacheDir, `${key}.json`);
+    if (!fs.existsSync(filePath)) return null;
     try {
       const content = fs.readFileSync(filePath, "utf-8");
       const item: CacheItem<T> = JSON.parse(content);
-
-      if (this.isExpired(item)) {
-        try {
-          fs.unlinkSync(filePath);
-        } catch (unlinkError) {
-          console.warn(
-            "캐시 파일 삭제 실패:",
-            unlinkError instanceof Error ? unlinkError.message : unlinkError
-          );
-        }
+      if (Date.now() > item.expiresAt) {
+        fs.unlinkSync(filePath);
         return null;
       }
-
+      console.log(`파일 캐시 히트: ${key}`);
       return item.data;
-    } catch (error) {
-      console.warn(
-        "파일 캐시 읽기 실패 (메모리 캐시만 사용):",
-        error instanceof Error ? error.message : error
-      );
+    } catch {
       return null;
     }
   }
 
-  // 메모리 캐시에 저장
-  private setToMemory<T>(key: string, data: T, ttlMs: number): void {
-    const item: CacheItem<T> = {
-      data,
-      timestamp: Date.now(),
-      expiresAt: Date.now() + ttlMs,
-    };
-    this.memoryCache.set(key, item);
-  }
-
-  // 파일 캐시에 저장
   private setToFile<T>(key: string, data: T, ttlMs: number): void {
     const item: CacheItem<T> = {
       data,
       timestamp: Date.now(),
       expiresAt: Date.now() + ttlMs,
     };
-
     try {
-      const filePath = this.getFilePath(key);
+      const filePath = path.join(this.cacheDir, `${key}.json`);
       fs.writeFileSync(filePath, JSON.stringify(item, null, 2));
-    } catch (error) {
-      console.warn(
-        "파일 캐시 저장 실패 (메모리 캐시만 사용):",
-        error instanceof Error ? error.message : error
-      );
-      // Vercel 환경에서는 파일 시스템 접근이 제한적이므로 메모리 캐시만 사용
+      console.log(`파일 캐시 저장: ${key}`);
+    } catch (e) {
+      console.warn("파일 캐시 저장 실패:", e);
     }
-  }
-
-  /**
-   * 캐시에서 데이터 조회
-   * @param type 캐시 타입 ('movies', 'kofa', 'art' 등)
-   * @param date 날짜 (YYYY-MM-DD 형식)
-   * @param params 추가 파라미터
-   */
-  get<T>(type: string, date: string, params?: any): T | null {
-    const key = this.generateCacheKey(type, date, params);
-
-    // 1. 메모리 캐시에서 먼저 조회
-    const memoryData = this.getFromMemory<T>(key);
-    if (memoryData) {
-      console.log(`메모리 캐시 히트: ${key}`);
-      return memoryData;
-    }
-
-    // 2. 파일 캐시에서 조회
-    const fileData = this.getFromFile<T>(key);
-    if (fileData) {
-      console.log(`파일 캐시 히트: ${key}`);
-      // 파일에서 가져온 데이터를 메모리 캐시에도 저장
-      this.setToMemory(key, fileData, this.getTTL(type));
-      return fileData;
-    }
-
-    console.log(`캐시 미스: ${key}`);
-    return null;
-  }
-
-  /**
-   * 캐시에 데이터 저장
-   * @param type 캐시 타입
-   * @param date 날짜
-   * @param data 저장할 데이터
-   * @param params 추가 파라미터
-   */
-  set<T>(type: string, date: string, data: T, params?: any): void {
-    const key = this.generateCacheKey(type, date, params);
-    const ttl = this.getTTL(type);
-
-    console.log(`캐시 저장: ${key}, TTL: ${ttl}ms`);
-
-    // 메모리와 파일 모두에 저장
-    this.setToMemory(key, data, ttl);
-    this.setToFile(key, data, ttl);
-  }
-
-  /**
-   * 캐시 타입별 TTL 설정
-   */
-  private getTTL(type: string): number {
-    const now = new Date();
-    const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
-    const tomorrow = new Date(today);
-    tomorrow.setDate(tomorrow.getDate() + 1);
-
-    // 당일 데이터는 자정까지, 미래 데이터는 6시간
-    const isToday = type.includes(today.toISOString().split("T")[0]);
-
-    if (isToday) {
-      // 당일 데이터: 자정까지
-      return tomorrow.getTime() - Date.now();
-    } else {
-      // 미래 데이터: 6시간
-      return 6 * 60 * 60 * 1000;
-    }
-  }
-
-  /**
-   * 특정 캐시 삭제
-   */
-  delete(type: string, date: string, params?: any): void {
-    const key = this.generateCacheKey(type, date, params);
-
-    // 메모리에서 삭제
-    this.memoryCache.delete(key);
-
-    // 파일에서 삭제
-    const filePath = this.getFilePath(key);
-    if (fs.existsSync(filePath)) {
-      fs.unlinkSync(filePath);
-    }
-
-    console.log(`캐시 삭제: ${key}`);
-  }
-
-  /**
-   * 만료된 캐시 정리
-   */
-  cleanup(): void {
-    // 메모리 캐시 정리
-    for (const [key, item] of this.memoryCache.entries()) {
-      if (this.isExpired(item)) {
-        this.memoryCache.delete(key);
-      }
-    }
-
-    // 파일 캐시 정리
-    try {
-      const files = fs.readdirSync(this.cacheDir);
-      for (const file of files) {
-        if (file.endsWith(".json")) {
-          const filePath = path.join(this.cacheDir, file);
-          const content = fs.readFileSync(filePath, "utf-8");
-          const item: CacheItem<any> = JSON.parse(content);
-
-          if (this.isExpired(item)) {
-            fs.unlinkSync(filePath);
-            console.log(`만료된 캐시 파일 삭제: ${file}`);
-          }
-        }
-      }
-    } catch (error) {
-      console.error("캐시 정리 중 오류:", error);
-    }
-  }
-
-  /**
-   * 전체 캐시 삭제
-   */
-  clear(): void {
-    this.memoryCache.clear();
-
-    try {
-      const files = fs.readdirSync(this.cacheDir);
-      for (const file of files) {
-        if (file.endsWith(".json")) {
-          fs.unlinkSync(path.join(this.cacheDir, file));
-        }
-      }
-      console.log("전체 캐시 삭제 완료");
-    } catch (error) {
-      console.error("캐시 삭제 중 오류:", error);
-    }
-  }
-
-  /**
-   * 캐시 통계 조회
-   */
-  getStats(): { memoryCount: number; fileCount: number; cacheHits: number } {
-    let fileCount = 0;
-    try {
-      const files = fs.readdirSync(this.cacheDir);
-      fileCount = files.filter((f) => f.endsWith(".json")).length;
-    } catch (error) {
-      // 디렉토리가 없거나 읽기 실패
-    }
-
-    return {
-      memoryCount: this.memoryCache.size,
-      fileCount,
-      cacheHits: 0, // 실제 구현에서는 히트 카운터 추가 필요
-    };
   }
 }
 
-// 싱글톤 인스턴스
 export const cacheService = new CacheService();

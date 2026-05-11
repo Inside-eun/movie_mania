@@ -1,6 +1,13 @@
 "use client";
 
-import { useState, useCallback } from "react";
+import { useState, useCallback, useEffect } from "react";
+
+export type SortType = "time" | "distance";
+
+export interface UserLocation {
+  latitude: number;
+  longitude: number;
+}
 
 export function useMovieFilter() {
   const [selectedMovies, setSelectedMovies] = useState<string[]>([]);
@@ -8,6 +15,32 @@ export function useMovieFilter() {
   const [filterType, setFilterType] = useState<"movie" | "theater">("movie");
   const [showPastSchedules, setShowPastSchedules] = useState(false);
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+  const [sortType, setSortType] = useState<SortType>("time");
+  const [userLocation, setUserLocation] = useState<UserLocation | null>(null);
+  const [locationError, setLocationError] = useState<string | null>(null);
+
+  // 사용자 위치 가져오기
+  useEffect(() => {
+    if ("geolocation" in navigator) {
+      navigator.geolocation.getCurrentPosition(
+        (position) => {
+          const location = {
+            latitude: position.coords.latitude,
+            longitude: position.coords.longitude,
+          };
+          console.log("[위치 수신 성공]", location);
+          setUserLocation(location);
+          setLocationError(null);
+        },
+        (error) => {
+          setLocationError("위치 정보를 가져올 수 없습니다");
+          console.error("[위치 수신 실패]", error);
+        }
+      );
+    } else {
+      setLocationError("브라우저에서 위치 정보를 지원하지 않습니다");
+    }
+  }, []);
 
   // 영화 필터 토글
   const handleMovieFilter = useCallback((movieTitle: string) => {
@@ -31,6 +64,11 @@ export function useMovieFilter() {
   const handleFilterTypeChange = useCallback((type: "movie" | "theater") => {
     setFilterType(type);
     setIsDropdownOpen(false);
+  }, []);
+
+  // 여러 극장 한꺼번에 선택 (즐겨찾기 일괄 선택용)
+  const handleBulkTheaterSelect = useCallback((theaterNames: string[]) => {
+    setSelectedTheaters(theaterNames);
   }, []);
 
   // 현재 필터 초기화
@@ -76,6 +114,10 @@ export function useMovieFilter() {
     [selectedTheaters]
   );
 
+  const handleSortTypeChange = useCallback((type: SortType) => {
+    setSortType(type);
+  }, []);
+
   return {
     selectedMovies,
     selectedTheaters,
@@ -86,10 +128,15 @@ export function useMovieFilter() {
     setShowPastSchedules,
     handleMovieFilter,
     handleTheaterFilter,
+    handleBulkTheaterSelect,
     handleFilterTypeChange,
     handleClearFilters,
     resetAllFilters,
     getSelectedMovieText,
     getSelectedTheaterText,
+    sortType,
+    userLocation,
+    locationError,
+    handleSortTypeChange,
   };
 }

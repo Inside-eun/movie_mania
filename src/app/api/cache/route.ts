@@ -26,6 +26,15 @@ export async function GET(request: Request) {
           timestamp: new Date().toISOString()
         });
 
+      case 'ping': {
+        const result = await cache.ping();
+        return NextResponse.json({
+          success: result.ok,
+          ...result,
+          timestamp: new Date().toISOString(),
+        });
+      }
+
       case 'cleanup':
         // 만료된 캐시 정리
         cache.cleanup();
@@ -38,7 +47,7 @@ export async function GET(request: Request) {
       default:
         return NextResponse.json({
           success: false,
-          error: '유효하지 않은 액션입니다. (stats, cleanup 중 하나를 선택하세요)',
+          error: '유효하지 않은 액션입니다. (ping, stats, cleanup 중 하나를 선택하세요)',
         }, { status: 400 });
     }
   } catch (error) {

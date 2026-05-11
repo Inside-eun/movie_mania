@@ -1,29 +1,19 @@
 "use client";
 
-import { trackDateChange, trackSearchClick } from "@/utils/gtm";
+import { useRef } from "react";
+import { trackDateChange } from "@/utils/gtm";
 
 interface DateSelectorProps {
   selectedDate: string;
   onDateChange: (date: string) => void;
-  loading: boolean;
-  onSearch: () => void;
 }
 
 export default function DateSelector({
   selectedDate,
   onDateChange,
-  loading,
-  onSearch,
 }: DateSelectorProps) {
-  const handleDateChange = (newDate: string) => {
-    trackDateChange(newDate);
-    onDateChange(newDate);
-  };
+  const inputRef = useRef<HTMLInputElement>(null);
 
-  const handleSearch = () => {
-    trackSearchClick(selectedDate);
-    onSearch();
-  };
   const getLocalDateString = (date: Date): string => {
     const seoulDate = new Date(date.toLocaleString('en-US', { timeZone: 'Asia/Seoul' }));
     const year = seoulDate.getFullYear();
@@ -32,32 +22,32 @@ export default function DateSelector({
     return `${year}-${month}-${day}`;
   };
 
+  const formatDisplayDate = (dateStr: string): string => {
+    if (!dateStr) return '';
+    const [year, month, day] = dateStr.split('-');
+    return `${year}. ${month}. ${day}.`;
+  };
+
   return (
-    <div className="flex gap-2 w-full items-center">
-      <input
-        type="date"
-        className="flex-1 px-3 py-2 border rounded-lg text-sm bg-white dark:bg-gray-800 border-gray-300 dark:border-gray-600 text-gray-900 dark:text-gray-100"
-        value={selectedDate}
-        onChange={(e) => handleDateChange(e.target.value)}
-        min={getLocalDateString(new Date())}
-        max={getLocalDateString(new Date(Date.now() + 7 * 24 * 60 * 60 * 1000))}
-        disabled={false}
-      />
+    <div className="flex-1 relative">
       <button
-        onClick={handleSearch}
-        disabled={loading}
-        className="px-4 py-2 bg-blue-500 dark:bg-blue-600 text-white rounded-lg hover:bg-blue-600 dark:hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center whitespace-nowrap text-sm font-medium active:scale-95 transition-all"
+        type="button"
+        className="w-full px-3 py-2 border text-sm bg-[#0d0d0d] border-orange-500 text-gray-100 text-left cursor-pointer"
       >
-        {loading ? (
-          <svg className="animate-spin h-4 w-4" fill="none" viewBox="0 0 24 24">
-            <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
-            <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-          </svg>
-        ) : (
-          "조회"
-        )}
+        {formatDisplayDate(selectedDate)}
       </button>
+      <input
+        ref={inputRef}
+        type="date"
+        className="absolute inset-0 opacity-0 w-full cursor-pointer"
+        value={selectedDate}
+        onChange={(e) => {
+          trackDateChange(e.target.value);
+          onDateChange(e.target.value);
+          inputRef.current?.blur();
+        }}
+        max={getLocalDateString(new Date(Date.now() + 7 * 24 * 60 * 60 * 1000))}
+      />
     </div>
   );
 }
-

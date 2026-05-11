@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
 
 export const dynamic = "force-dynamic";
-export const maxDuration = 300; // Vercel Pro: 최대 5분
+export const maxDuration = 10; // Vercel Hobby 플랜 제한
 
 async function getScheduleService() {
   const { ScheduleService } = await import("@/services/scheduleService");
@@ -13,85 +13,58 @@ async function getCacheService() {
   return cacheService;
 }
 
-async function handlePrefetch(request: Request) {
+function verifyToken(request: Request): boolean {
   const { searchParams } = new URL(request.url);
-  const authToken = searchParams.get("token");
-  
-  // 디버깅 로그
-  console.log("=== 토큰 인증 디버깅 ===");
-  console.log("받은 토큰:", authToken);
-  console.log("환경변수 토큰:", process.env.PREFETCH_TOKEN);
-  console.log("토큰 일치 여부:", authToken === process.env.PREFETCH_TOKEN);
-  console.log("받은 토큰 길이:", authToken?.length);
-  console.log("환경변수 토큰 길이:", process.env.PREFETCH_TOKEN?.length);
-  
-  // 간단한 인증 (환경변수로 토큰 설정)
-  if (authToken !== process.env.PREFETCH_TOKEN) {
-    return NextResponse.json(
-      { 
-        success: false, 
-        error: "Unauthorized",
-        debug: {
-          receivedToken: authToken,
-          expectedToken: process.env.PREFETCH_TOKEN ? "설정됨" : "설정 안됨",
-          match: authToken === process.env.PREFETCH_TOKEN
-        }
-      },
-      { status: 401 }
-    );
+  return searchParams.get("token") === process.env.PREFETCH_TOKEN;
+}
+
+async function handlePrefetch(request: Request) {
+  if (!verifyToken(request)) {
+    return NextResponse.json({ success: false, error: "Unauthorized" }, { status: 401 });
   }
 
   const scheduleService = await getScheduleService();
   const cache = await getCacheService();
 
-  console.log("=== 스케줄 프리페치 시작 ===");
+  console.log("=== [Cron 1] 크롤링 프리페치 시작 ===");
   const startTime = Date.now();
 
-  // 오늘부터 7일치 데이터 미리 수집
+  // 오늘 하루치만 크롤링 (Hobby 플랜 10초 제한)
+  // 나머지 날짜는 사용자 요청 시 on-demand 캐싱
+  const today = new Date();
+  const dateStr = today.toISOString().split("T")[0];
+
+  console.log(`\n${dateStr} 크롤링 중...`);
+
   const results = [];
-  for (let i = 0; i < 7; i++) {
-    const targetDate = new Date();
-    targetDate.setDate(targetDate.getDate() + i);
-    const dateStr = targetDate.toISOString().split("T")[0];
+  try {
+    // 캐시 강제 갱신: 서브 캐시(art_cinemas, kofa_api)까지 포함 전체 삭제
+    await Promise.all([
+      cache.deleteAllByTypeDate("integrated", dateStr),
+      cache.deleteAllByTypeDate("art_cinemas", dateStr),
+      cache.deleteAllByTypeDate("kofa_api", dateStr),
+    ]);
+    const movies = await (scheduleService as any).crawlArtCinemasWithKMDBByDate(today);
 
-    console.log(`\n${dateStr} 데이터 수집 중...`);
-    
-    try {
-      const movies = await (scheduleService as any).crawlArtCinemasWithKMDBByDate(targetDate);
-      
-      results.push({
-        date: dateStr,
-        count: movies.length,
-        success: true,
-      });
-
-      console.log(`${dateStr}: ${movies.length}개 스케줄 수집 완료`);
-    } catch (error) {
-      console.error(`${dateStr} 수집 실패:`, error);
-      results.push({
-        date: dateStr,
-        count: 0,
-        success: false,
-        error: error instanceof Error ? error.message : "Unknown error",
-      });
-    }
-
-    // 날짜 간 딜레이
-    if (i < 6) {
-      await new Promise((resolve) => setTimeout(resolve, 1000));
-    }
+    results.push({ date: dateStr, count: movies.length, success: true });
+    console.log(`${dateStr}: ${movies.length}개 스케줄 저장 완료`);
+  } catch (error) {
+    console.error(`${dateStr} 수집 실패:`, error);
+    results.push({
+      date: dateStr,
+      count: 0,
+      success: false,
+      error: error instanceof Error ? error.message : "Unknown error",
+    });
   }
 
   const elapsedTime = Date.now() - startTime;
-  const cacheStats = cache.getStats();
-
-  console.log(`\n=== 프리페치 완료 (${elapsedTime}ms) ===`);
+  console.log(`\n=== [Cron 1] 크롤링 완료 (${elapsedTime}ms) ===`);
 
   return NextResponse.json({
     success: true,
     results,
     elapsedTime,
-    cacheStats,
     timestamp: new Date().toISOString(),
   });
 }

@@ -1,11 +1,19 @@
 "use client";
 
-import { useEffect, useState } from "react";
-import { getMovieInfoFromKOBIS } from "../services/kobisApi";
+import {
+  useEffect,
+  useRef,
+  useState,
+} from 'react';
+
+import { getBookingFallbackUrl } from '@/lib/bookingFallbacks';
+
+import PosterImage from './PosterImage';
 
 interface MovieModalProps {
   isOpen: boolean;
   onClose: () => void;
+  selectedDate?: string;
   movie: {
     title: string;
     theater: string;
@@ -15,6 +23,7 @@ interface MovieModalProps {
     movieCode?: string;
     director?: string;
     posterUrl?: string;
+    tmdbPosterUrl?: string;
     prodYear?: string;
     runtime?: string;
     source?: string;
@@ -40,62 +49,54 @@ interface KMDBApiData {
   cCodeSubName2?: string;
 }
 
-
-export default function MovieModal({ isOpen, onClose, movie }: MovieModalProps) {
+export default function MovieModal({
+  isOpen,
+  onClose,
+  movie,
+  selectedDate,
+}: MovieModalProps) {
   const [kobisData, setKobisData] = useState<KOBISMovieInfo | null>(null);
   const [kmdbData, setKmdbData] = useState<KMDBApiData | null>(null);
   const [loading, setLoading] = useState(false);
+  const [bookingUrl, setBookingUrl] = useState<string | null>(null);
+  const [bookingIsFallback, setBookingIsFallback] = useState(false);
+  const fetchAbortRef = useRef<AbortController | null>(null);
 
-  // 영화가 변경될 때 API 호출
   useEffect(() => {
     if (isOpen && movie && movie.movieCode) {
       setLoading(true);
-      
-      // 즉시 기본 정보 표시를 위해 로딩 상태를 짧게 유지
-      const loadingTimer = setTimeout(() => {
-        setLoading(false);
-      }, 1000); // 최대 1초 로딩
-      
-      // 새로운 API 라우트를 통해 영화 정보 가져오기
+      const loadingTimer = setTimeout(() => setLoading(false), 1000);
+
       const fetchMovieInfo = async () => {
         try {
-          const apiUrl = `/api/movie-info?movieCode=${movie.movieCode}&source=${movie.source || 'KOBIS'}`;
-          console.log(`모달에서 API 호출: ${apiUrl}`);
-          
+          const apiUrl = `/api/movie-info?movieCode=${movie.movieCode}&source=${
+            movie.source || "KOBIS"
+          }`;
           const response = await fetch(apiUrl);
           const result = await response.json();
-          
-          console.log(`모달 API 응답:`, result);
-          
+
           if (result.success && result.data) {
-            if (movie.source === 'KMDB_API') {
-              console.log(`KMDB 데이터 설정:`, result.data);
+            const source = result.dataSource ?? movie.source;
+            if (source === "KMDB_API") {
               setKmdbData(result.data);
-            } else {
-              console.log(`KOBIS 데이터 설정:`, result.data);
-              setKobisData(result.data);
-            }
-          } else {
-            console.error('영화 정보 API 호출 실패:', result.error);
-            if (movie.source === 'KMDB_API') {
-              setKmdbData(null);
-            } else {
               setKobisData(null);
+            } else {
+              setKobisData(result.data);
+              setKmdbData(null);
             }
-          }
-        } catch (error) {
-          console.error('영화 정보 API 호출 중 오류:', error);
-          if (movie.source === 'KMDB_API') {
-            setKmdbData(null);
           } else {
+            setKmdbData(null);
             setKobisData(null);
           }
+        } catch {
+          setKmdbData(null);
+          setKobisData(null);
         } finally {
           clearTimeout(loadingTimer);
           setLoading(false);
         }
       };
-      
+
       fetchMovieInfo();
     } else {
       setKobisData(null);
@@ -104,233 +105,239 @@ export default function MovieModal({ isOpen, onClose, movie }: MovieModalProps) 
     }
   }, [isOpen, movie]);
 
-  // ESC 키로 모달 닫기
   useEffect(() => {
-    const handleEscape = (event: KeyboardEvent) => {
-      if (event.key === 'Escape') {
-        onClose();
-      }
-    };
+    // 이전 요청 취소
+    fetchAbortRef.current?.abort();
 
-    if (isOpen) {
-      document.addEventListener('keydown', handleEscape);
-      // 모달이 열릴 때 body 스크롤 방지
-      document.body.style.overflow = 'hidden';
+    if (!isOpen || !movie || !selectedDate) {
+      setBookingUrl(null);
+      setBookingIsFallback(false);
+      return;
     }
 
+    // 폴백 URL 즉시 표시 — 사용자가 기다리지 않아도 바로 클릭 가능
+    const fallback = getBookingFallbackUrl(movie.theater);
+    if (fallback) {
+      setBookingUrl(fallback);
+      setBookingIsFallback(true);
+    } else {
+      setBookingUrl(null);
+      setBookingIsFallback(false);
+    }
+
+    // 정확한 상영 URL을 백그라운드에서 가져와 조용히 교체
+    const controller = new AbortController();
+    fetchAbortRef.current = controller;
+    const timeoutId = setTimeout(() => controller.abort(), 12000);
+
+    const params = new URLSearchParams({
+      theater: movie.theater,
+      title: movie.title,
+      time: movie.time,
+      date: selectedDate,
+    });
+
+    fetch(`/api/booking-url?${params}`, { signal: controller.signal })
+      .then((r) => r.json())
+      .then((data) => {
+        if (data.url && !data.isFallback) {
+          setBookingUrl(data.url);
+          setBookingIsFallback(false);
+        }
+      })
+      .catch(() => {})
+      .finally(() => clearTimeout(timeoutId));
+
     return () => {
-      document.removeEventListener('keydown', handleEscape);
-      document.body.style.overflow = 'unset';
+      controller.abort();
+      clearTimeout(timeoutId);
+    };
+  }, [isOpen, movie, selectedDate]);
+
+  useEffect(() => {
+    const handleEscape = (e: KeyboardEvent) => {
+      if (e.key === "Escape") onClose();
+    };
+    if (isOpen) {
+      document.addEventListener("keydown", handleEscape);
+      document.body.style.overflow = "hidden";
+    }
+    return () => {
+      document.removeEventListener("keydown", handleEscape);
+      document.body.style.overflow = "unset";
     };
   }, [isOpen, onClose]);
 
   if (!isOpen || !movie) return null;
 
-  return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center">
-      {/* 배경 오버레이 */}
-      <div 
-        className="absolute inset-0 bg-black bg-opacity-50 transition-opacity"
-        onClick={onClose}
-      />
-      
-      {/* 모달 콘텐츠 */}
-      <div className="relative bg-white dark:bg-gray-800 rounded-lg shadow-xl max-w-md w-full mx-4 max-h-[90vh] overflow-y-auto">
-        {/* 모달 헤더 */}
-        <div className="flex items-center justify-between p-6 border-b border-gray-200 dark:border-gray-700">
-          <h2 className="text-xl font-bold text-gray-900 dark:text-gray-100">
-            영화 상세 정보
-          </h2>
-          <button
-            onClick={onClose}
-            className="p-2 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-full transition-colors"
-          >
-            <svg className="w-6 h-6 text-gray-500 dark:text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-            </svg>
-          </button>
-        </div>
+  const posterUrl = movie.tmdbPosterUrl || movie.posterUrl || "/NoPoster.png";
 
-        {/* 모달 바디 */}
-        <div className="p-6">
-          <div className="space-y-4">
-            {/* 영화 제목 */}
-            <div className="text-center mb-6">
-              <h2 className="text-xl font-bold text-gray-900 dark:text-gray-100 mb-1">
-                {movie.title}
-              </h2>
-              {kobisData?.movieNmEn && (
-                <p className="text-sm text-gray-600 dark:text-gray-400">
-                  {kobisData.movieNmEn}
-                </p>
+  const director =
+    kobisData?.directors?.[0]?.peopleNm || movie.director || null;
+  const prodYear = kobisData?.prdtYear || movie.prodYear || null;
+  const runtime = kobisData?.showTm || movie.runtime || null;
+  const genres = kobisData?.genres?.map((g) => g.genreNm).join(", ") || null;
+  const rating =
+    kobisData?.audits?.[0]?.watchGradeNm || kmdbData?.cCodeSubName2 || null;
+
+  const endTime = (() => {
+    if (!runtime) return null;
+    const runtimeMin = parseInt(runtime);
+    if (isNaN(runtimeMin)) return null;
+    const isCineQ =
+      movie.theater?.toLowerCase().includes("씨네큐") ||
+      movie.theater?.toLowerCase().includes("cineq");
+    const isCGV = movie.theater?.toLowerCase().includes("cgv");
+    const extra = isCineQ || isCGV ? 10 : 0;
+    const [h, m] = movie.time.split(":").map(Number);
+    const end = new Date();
+    end.setHours(h, m + runtimeMin + extra, 0, 0);
+    return `${String(end.getHours()).padStart(2, "0")}:${String(
+      end.getMinutes()
+    ).padStart(2, "0")}`;
+  })();
+
+  return (
+    <div className="fixed inset-0 z-50 flex items-center justify-center px-4">
+      <div className="absolute inset-0 bg-black/70" onClick={onClose} />
+
+      <div className="relative w-full max-w-lg overflow-hidden shadow-2xl border border-gray-800">
+        {/* 블러 배경 */}
+        <div
+          className="absolute inset-0 scale-110"
+          style={{
+            backgroundImage: `url(${posterUrl})`,
+            backgroundSize: "cover",
+            backgroundPosition: "center",
+            filter: "blur(20px)",
+            opacity: 0.3,
+          }}
+        />
+        <div className="absolute inset-0 bg-gradient-to-r from-black/85 via-black/60 to-black/75" />
+
+        {/* 닫기 버튼 */}
+        <button
+          onClick={onClose}
+          aria-label="닫기"
+          className="absolute top-3 right-3 z-10 p-1.5 rounded-full bg-black/40 hover:bg-black/70 transition-colors"
+        >
+          <svg
+            className="w-4 h-4 text-gray-300"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth={2}
+              d="M6 18L18 6M6 6l12 12"
+            />
+          </svg>
+        </button>
+
+        {/* 콘텐츠 */}
+        <div className="relative flex items-center gap-5 px-5 py-6">
+          {/* 포스터 */}
+          <div className="relative flex-shrink-0 h-52 aspect-[2/3] overflow-hidden shadow-2xl ">
+            <PosterImage
+              src={posterUrl}
+              alt={movie.title}
+              priority
+              sizes="140px"
+            />
+          </div>
+
+          {/* 영화 정보 */}
+          <div className="flex-1 min-w-0">
+            <h2 className="text-white font-bold text-lg leading-snug mb-3">
+              {movie.title}
+            </h2>
+
+            {loading ? (
+              <div className="flex items-center gap-2 py-2">
+                <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-orange-500" />
+                <span className="text-xs text-gray-400">불러오는 중...</span>
+              </div>
+            ) : (
+              <div className="flex flex-col gap-1.5">
+                {director && (
+                  <div className="flex items-center gap-2">
+                    <span className="text-orange-500 text-xs w-16 flex-shrink-0">
+                      감독
+                    </span>
+                    <span className="text-gray-200 text-xs truncate">
+                      {director}
+                    </span>
+                  </div>
+                )}
+                {prodYear && (
+                  <div className="flex items-center gap-2">
+                    <span className="text-orange-500 text-xs w-16 flex-shrink-0">
+                      제작년도
+                    </span>
+                    <span className="text-gray-200 text-xs">{prodYear}년</span>
+                  </div>
+                )}
+                {runtime && (
+                  <div className="flex items-center gap-2">
+                    <span className="text-orange-500 text-xs w-16 flex-shrink-0">
+                      러닝타임
+                    </span>
+                    <span className="text-gray-200 text-xs">{runtime}분</span>
+                  </div>
+                )}
+                <div className="flex items-center gap-2">
+                  <span className="text-orange-500 text-xs w-16 flex-shrink-0">
+                    상영시간
+                  </span>
+                  <span className="text-orange-400 text-xs font-semibold">
+                    {movie.time}
+                    {endTime && (
+                      <span className="text-gray-400 font-normal">
+                        {" "}
+                        ~ {endTime}
+                      </span>
+                    )}
+                  </span>
+                </div>
+                {genres && (
+                  <div className="flex items-center gap-2">
+                    <span className="text-orange-500 text-xs w-16 flex-shrink-0">
+                      장르
+                    </span>
+                    <span className="text-gray-200 text-xs">{genres}</span>
+                  </div>
+                )}
+                {rating && (
+                  <div className="flex items-center gap-2">
+                    <span className="text-orange-500 text-xs w-16 flex-shrink-0">
+                      관람등급
+                    </span>
+                    <span className="text-gray-200 text-xs">{rating}</span>
+                  </div>
+                )}
+              </div>
+            )}
+
+            <div className="mt-3 pt-3 border-t border-white/10 flex items-center justify-between gap-2">
+              <span className="text-gray-400 text-xs truncate">{movie.theater}</span>
+              {bookingUrl && (
+                <a
+                  href={bookingUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  onClick={(e) => e.stopPropagation()}
+                  className="flex-shrink-0 flex items-center gap-1 px-2.5 py-1 text-xs font-semibold bg-orange-500 text-black hover:bg-orange-400 transition-colors"
+                >
+                  {bookingIsFallback ? "극장 바로가기" : "예매하기"}
+                  <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
+                  </svg>
+                </a>
               )}
             </div>
-
-            {/* 로딩 상태 */}
-            {loading && (
-              <div className="flex flex-col items-center justify-center py-6">
-                <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-500 mb-3"></div>
-                <span className="text-sm text-gray-600 dark:text-gray-400 text-center">
-                  영화 상세 정보를 불러오는 중...
-                </span>
-                <span className="text-xs text-gray-500 dark:text-gray-500 mt-1">
-                  잠시만 기다려주세요
-                </span>
-              </div>
-            )}
-
-            {/* KOBIS API 데이터 */}
-            {kobisData && !loading && (
-              <div className="bg-blue-50 dark:bg-blue-900 p-4 rounded-lg">
-                <div className="space-y-3">
-                  {kobisData.directors && kobisData.directors.length > 0 && (
-                    <div className="flex justify-between items-center">
-                      <span className="text-sm font-medium text-blue-800 dark:text-blue-200">감독</span>
-                      <span className="text-sm text-blue-700 dark:text-blue-300">
-                        {kobisData.directors.map(d => d.peopleNm).join(', ')}
-                      </span>
-                    </div>
-                  )}
-                  
-                  {kobisData.actors && kobisData.actors.length > 0 && (
-                    <div className="flex justify-between items-start">
-                      <span className="text-sm font-medium text-blue-800 dark:text-blue-200">주요 배우</span>
-                      <span className="text-sm text-blue-700 dark:text-blue-300 text-right max-w-[200px]">
-                        {kobisData.actors.slice(0, 3).map(actor => actor.peopleNm).join(', ')}
-                        {kobisData.actors.length > 3 && ` 외 ${kobisData.actors.length - 3}명`}
-                      </span>
-                    </div>
-                  )}
-                  
-                  {kobisData.openDt && (
-                    <div className="flex justify-between items-center">
-                      <span className="text-sm font-medium text-blue-800 dark:text-blue-200">개봉일</span>
-                      <span className="text-sm text-blue-700 dark:text-blue-300">
-                        {kobisData.openDt.replace(/(\d{4})(\d{2})(\d{2})/, '$1-$2-$3')}
-                      </span>
-                    </div>
-                  )}
-                  
-                  {kobisData.showTm && (
-                    <div className="flex justify-between items-center">
-                      <span className="text-sm font-medium text-blue-800 dark:text-blue-200">러닝타임</span>
-                      <span className="text-sm text-blue-700 dark:text-blue-300">
-                        {kobisData.showTm}분
-                      </span>
-                    </div>
-                  )}
-                  
-                  {kobisData.genres && kobisData.genres.length > 0 && (
-                    <div className="flex justify-between items-center">
-                      <span className="text-sm font-medium text-blue-800 dark:text-blue-200">장르</span>
-                      <span className="text-sm text-blue-700 dark:text-blue-300">
-                        {kobisData.genres.map(g => g.genreNm).join(', ')}
-                      </span>
-                    </div>
-                  )}
-                  
-                  {kobisData.audits && kobisData.audits.length > 0 && (
-                    <div className="flex justify-between items-center">
-                      <span className="text-sm font-medium text-blue-800 dark:text-blue-200">관람등급</span>
-                      <span className="text-sm text-blue-700 dark:text-blue-300">
-                        {kobisData.audits[0].watchGradeNm}
-                      </span>
-                    </div>
-                  )}
-                </div>
-              </div>
-            )}
-
-            {/* 영상자료원 영화 정보 (KMDB_API인 경우) */}
-            {movie.source === 'KMDB_API' && (
-              <div className="bg-blue-50 dark:bg-blue-900 p-4 rounded-lg">
-                <div className="space-y-3">
-                  {movie.director && (
-                    <div className="flex justify-between items-center">
-                      <span className="text-sm font-medium text-blue-800 dark:text-blue-200">감독</span>
-                      <span className="text-sm text-blue-700 dark:text-blue-300">{movie.director}</span>
-                    </div>
-                  )}
-                  
-                  {kmdbData?.cActors && (
-                    <div className="flex justify-between items-start">
-                      <span className="text-sm font-medium text-blue-800 dark:text-blue-200">주요 배우</span>
-                      <span className="text-sm text-blue-700 dark:text-blue-300 text-right max-w-[200px]">
-                        {kmdbData.cActors.split(',').slice(0, 3).join(', ')}
-                        {kmdbData.cActors.split(',').length > 3 && ` 외 ${kmdbData.cActors.split(',').length - 3}명`}
-                      </span>
-                    </div>
-                  )}
-                  
-                  {movie.prodYear && (
-                    <div className="flex justify-between items-center">
-                      <span className="text-sm font-medium text-blue-800 dark:text-blue-200">제작년도</span>
-                      <span className="text-sm text-blue-700 dark:text-blue-300">{movie.prodYear}년</span>
-                    </div>
-                  )}
-                  
-                  {movie.runtime && (
-                    <div className="flex justify-between items-center">
-                      <span className="text-sm font-medium text-blue-800 dark:text-blue-200">러닝타임</span>
-                      <span className="text-sm text-blue-700 dark:text-blue-300">{movie.runtime}분</span>
-                    </div>
-                  )}
-                  
-                  {kmdbData?.cCodeSubName2 && (
-                    <div className="flex justify-between items-center">
-                      <span className="text-sm font-medium text-blue-800 dark:text-blue-200">관람등급</span>
-                      <span className="text-sm text-blue-700 dark:text-blue-300">{kmdbData.cCodeSubName2}</span>
-                    </div>
-                  )}
-                </div>
-              </div>
-            )}
-
-            {/* 상영 정보 - 간단하게 표시 */}
-            <div className="text-center">
-              <div className="text-sm text-gray-600 dark:text-gray-400">
-                {movie.time}
-                {/* 러닝타임이 있으면 끝나는 시간 계산해서 표시 */}
-                {(() => {
-                  const runtime = kobisData?.showTm || movie.runtime;
-                  if (runtime) {
-                    const runtimeMinutes = parseInt(runtime);
-                    if (!isNaN(runtimeMinutes)) {
-                      // 씨네큐, CGV는 10분 추가
-                      const isCineQ = movie.theater?.toLowerCase().includes('씨네큐') || movie.theater?.toLowerCase().includes('cineq');
-                      const isCGV = movie.theater?.toLowerCase().includes('cgv');
-                      const additionalMinutes = (isCineQ || isCGV) ? 10 : 0;
-                      
-                      const totalMinutes = runtimeMinutes + additionalMinutes;
-                      
-                      // 시작 시간 파싱
-                      const [startHours, startMinutes] = movie.time.split(':').map(Number);
-                      const startTime = new Date();
-                      startTime.setHours(startHours, startMinutes, 0, 0);
-                      
-                      // 끝나는 시간 계산
-                      const endTime = new Date(startTime.getTime() + totalMinutes * 60 * 1000);
-                      const endTimeStr = `${String(endTime.getHours()).padStart(2, '0')}:${String(endTime.getMinutes()).padStart(2, '0')}`;
-                      
-                      return ` - ${endTimeStr}`;
-                    }
-                  }
-                  return '';
-                })()}
-                <span className="text-gray-500 dark:text-gray-500"> / {movie.theater}</span>
-              </div>
-            </div>
           </div>
-        </div>
-
-        {/* 모달 푸터 */}
-        <div className="flex justify-end gap-3 p-6 border-t border-gray-200 dark:border-gray-700">
-          <button
-            onClick={onClose}
-            className="px-4 py-2 text-sm font-medium text-gray-700 dark:text-gray-300 bg-gray-100 dark:bg-gray-700 hover:bg-gray-200 dark:hover:bg-gray-600 rounded-lg transition-colors"
-          >
-            닫기
-          </button>
         </div>
       </div>
     </div>

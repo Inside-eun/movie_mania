@@ -3,15 +3,8 @@
 @tailwind utilities;
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+  --background: #0d0d0d;
+  --foreground: #ededed;
 }
 
 body {
@@ -20,17 +13,17 @@ body {
   font-family: Arial, Helvetica, sans-serif;
 }
 
-/* 다크모드 전체 배경 */
 html {
-  background: white;
+  background: #0d0d0d;
+}
+
+/* 다크모드 전체 배경 */
+.dark body {
+  background: #0d0d0d;
 }
 
 .dark html {
-  background: #111827;
-}
-
-.dark body {
-  background: #111827;
+  background: #0d0d0d;
 }
 
 /* 텍스트 줄임 유틸리티 */

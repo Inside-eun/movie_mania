@@ -1,5 +1,49 @@
+// undici(cheerio 의존)가 전역 File을 참조하므로, Next 서버 번들에서 폴리필
+if (typeof globalThis.File === "undefined" && typeof globalThis.Blob !== "undefined") {
+  (globalThis as any).File = class File extends (globalThis as any).Blob {
+    name: string;
+    lastModified: number;
+    constructor(
+      bits: BlobPart[] | Blob,
+      name: string,
+      options?: { type?: string; lastModified?: number }
+    ) {
+      super(bits, options);
+      this.name = name ?? "";
+      this.lastModified = options?.lastModified ?? Date.now();
+    }
+  };
+}
+
 import { NextResponse } from "next/server";
 import { MovieSchedule } from "@/types";
+
+interface TMDBMovieSummary {
+  title: string;
+  tmdbId: number;
+  originalTitle: string;
+  overview: string;
+  posterUrl: string | null;
+  releaseDate: string | null;
+  voteAverage: number;
+}
+
+async function mergeTMDBData(movies: MovieSchedule[], cache: any): Promise<MovieSchedule[]> {
+  const db = await cache.getTmdbDb();
+  return movies.map((movie: MovieSchedule) => {
+    const key = (movie.title ?? "").trim().replace(/\s+/g, " ");
+    const tmdb = db[key];
+    if (tmdb) {
+      return {
+        ...movie,
+        tmdbPosterUrl: tmdb.posterUrl ?? undefined,
+        tmdbReleaseDate: tmdb.releaseDate ?? undefined,
+        tmdbOverview: tmdb.overview ?? undefined,
+      };
+    }
+    return movie;
+  });
+}
 
 // 동적 렌더링 강제
 export const dynamic = "force-dynamic";
@@ -42,7 +86,7 @@ export async function GET(request: Request) {
 
     // 강제 새로고침이 아닌 경우 캐시 먼저 확인
     if (!forceFresh) {
-      const cachedData = cache.get(type, dateStr) as MovieSchedule[] | null;
+      const cachedData = await cache.get(type, dateStr) as MovieSchedule[] | null;
       if (cachedData) {
         console.log(`캐시에서 ${type} 데이터 반환`);
         // 캐시된 데이터의 showtime을 Date 객체로 복원
@@ -63,7 +107,9 @@ export async function GET(request: Request) {
       movies = await (scheduleService as any).crawlArtCinemasWithKMDBByDate(targetDate);
     }
 
-    
+    // TMDB DB에서 포스터/상세정보 머지
+    movies = await mergeTMDBData(movies, cache);
+
     // 전체 영화 목록을 시간순으로 정렬
     movies.sort((a, b) => {
       const timeA = a.time;
