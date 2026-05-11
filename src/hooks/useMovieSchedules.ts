@@ -12,7 +12,7 @@ export function useMovieSchedules(
   showPastSchedules: boolean
 ) {
   const [allMovies, setAllMovies] = useState<MovieSchedule[]>([]);
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [lastUpdate, setLastUpdate] = useState<string | null>(null);
 
