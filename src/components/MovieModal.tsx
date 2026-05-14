@@ -8,6 +8,7 @@ import {
 
 import { getBookingFallbackUrl } from '@/lib/bookingFallbacks';
 import { trackMovieDetailOpened, trackMovieDetailLoadTime, trackBookingClicked } from '@/utils/gtm';
+import { shareMovie, triggerHaptic } from '@/lib/native';
 
 import PosterImage from './PosterImage';
 
@@ -227,26 +228,30 @@ export default function MovieModal({
         />
         <div className="absolute inset-0 bg-gradient-to-r from-black/85 via-black/60 to-black/75" />
 
-        {/* 닫기 버튼 */}
-        <button
-          onClick={onClose}
-          aria-label="닫기"
-          className="absolute top-3 right-3 z-10 p-1.5 rounded-full bg-black/40 hover:bg-black/70 transition-colors"
-        >
-          <svg
-            className="w-4 h-4 text-gray-300"
-            fill="none"
-            stroke="currentColor"
-            viewBox="0 0 24 24"
+        {/* 공유 / 닫기 버튼 */}
+        <div className="absolute top-3 right-3 z-10 flex items-center gap-1.5">
+          <button
+            onClick={() => {
+              triggerHaptic('light');
+              shareMovie(movie.title, movie.theater, movie.time);
+            }}
+            aria-label="공유"
+            className="p-1.5 rounded-full bg-black/40 hover:bg-black/70 transition-colors"
           >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              strokeWidth={2}
-              d="M6 18L18 6M6 6l12 12"
-            />
-          </svg>
-        </button>
+            <svg className="w-4 h-4 text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.368 2.684 3 3 0 00-5.368-2.684z" />
+            </svg>
+          </button>
+          <button
+            onClick={onClose}
+            aria-label="닫기"
+            className="p-1.5 rounded-full bg-black/40 hover:bg-black/70 transition-colors"
+          >
+            <svg className="w-4 h-4 text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+            </svg>
+          </button>
+        </div>
 
         {/* 콘텐츠 */}
         <div className="relative flex items-center gap-5 px-5 py-6">

@@ -19,6 +19,15 @@
     "prefetch:prod": "./scripts/prefetch-production.sh"
   },
   "dependencies": {
+    "@capacitor/app": "^8.1.0",
+    "@capacitor/cli": "^8.3.4",
+    "@capacitor/core": "^8.3.4",
+    "@capacitor/haptics": "^8.0.2",
+    "@capacitor/ios": "^8.3.4",
+    "@capacitor/local-notifications": "^8.1.0",
+    "@capacitor/share": "^8.0.1",
+    "@capacitor/splash-screen": "^8.0.1",
+    "@capacitor/status-bar": "^8.0.2",
     "@ducanh2912/next-pwa": "^10.2.9",
     "@upstash/redis": "^1.37.0",
     "@vercel/analytics": "^1.6.1",

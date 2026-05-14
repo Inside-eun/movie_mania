@@ -3,6 +3,14 @@
 import { useState } from "react";
 import CalendarView from "./CalendarView";
 import { MovieSchedule } from "@/types";
+import {
+  isNative,
+  requestNotificationPermission,
+  scheduleMovieNotification,
+  cancelMovieNotification,
+  movieNotificationId,
+  triggerHaptic,
+} from "@/lib/native";
 
 interface WishlistViewProps {
   wishlistMovies: MovieSchedule[];
@@ -24,6 +32,52 @@ export default function WishlistView({
   const [wishlistViewMode, setWishlistViewMode] = useState<"list" | "calendar">(
     "calendar"
   );
+  const [scheduledIds, setScheduledIds] = useState<Set<string>>(() => {
+    if (typeof window === "undefined") return new Set();
+    try {
+      const saved = localStorage.getItem("movie_notification_ids");
+      return new Set(saved ? JSON.parse(saved) : []);
+    } catch {
+      return new Set();
+    }
+  });
+
+  const notifKey = (movie: MovieSchedule, date: string) =>
+    `${movie.title}-${movie.theater}-${movie.time}-${date}`;
+
+  const handleToggleNotification = async (movie: MovieSchedule, date: string) => {
+    if (!isNative()) return;
+    triggerHaptic("light");
+    const key = notifKey(movie, date);
+    const id = movieNotificationId(movie.title, `${date}-${movie.time}`);
+
+    if (scheduledIds.has(key)) {
+      await cancelMovieNotification(id);
+      setScheduledIds((prev) => {
+        const next = new Set(prev);
+        next.delete(key);
+        localStorage.setItem("movie_notification_ids", JSON.stringify([...next]));
+        return next;
+      });
+      return;
+    }
+
+    const granted = await requestNotificationPermission();
+    if (!granted) return;
+
+    const [h, m] = movie.time.split(":").map(Number);
+    const movieAt = new Date(`${date}T${String(h).padStart(2, "0")}:${String(m).padStart(2, "0")}:00`);
+    const notifyAt = new Date(movieAt.getTime() - 60 * 60 * 1000);
+    if (notifyAt <= new Date()) return;
+
+    await scheduleMovieNotification(id, movie.title, movie.theater, notifyAt);
+    setScheduledIds((prev) => {
+      const next = new Set(prev);
+      next.add(key);
+      localStorage.setItem("movie_notification_ids", JSON.stringify([...next]));
+      return next;
+    });
+  };
 
   const getLocalDateString = (date: Date): string => {
     const seoulDate = new Date(
@@ -231,20 +285,42 @@ export default function WishlistView({
                           )}
                         </div>
 
-                        {/* 찜 제거 버튼 */}
-                        <button
-                          onClick={(e) => {
-                            e.stopPropagation();
-                            onToggleWishlist(movie);
-                          }}
-                          aria-label="찜 목록에서 제거"
-                          className="flex-shrink-0 p-1.5 bg-black/40 hover:bg-black/70 rounded-full transition-colors z-10"
-                          title="찜 목록에서 제거"
-                        >
-                          <svg className="w-4 h-4 text-red-400 fill-current" viewBox="0 0 24 24">
-                            <path d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
-                          </svg>
-                        </button>
+                        {/* 알림 / 찜 제거 버튼 */}
+                        <div className="flex flex-col gap-1.5 flex-shrink-0 z-10">
+                          {isNative() && !isPast && (
+                            <button
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                handleToggleNotification(movie, date);
+                              }}
+                              aria-label="상영 알림 설정"
+                              className="p-1.5 bg-black/40 hover:bg-black/70 rounded-full transition-colors"
+                              title="1시간 전 알림"
+                            >
+                              <svg
+                                className={`w-4 h-4 ${scheduledIds.has(notifKey(movie, date)) ? "text-orange-400 fill-current" : "text-gray-400"}`}
+                                viewBox="0 0 24 24"
+                                fill={scheduledIds.has(notifKey(movie, date)) ? "currentColor" : "none"}
+                                stroke="currentColor"
+                              >
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" />
+                              </svg>
+                            </button>
+                          )}
+                          <button
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              onToggleWishlist(movie);
+                            }}
+                            aria-label="찜 목록에서 제거"
+                            className="p-1.5 bg-black/40 hover:bg-black/70 rounded-full transition-colors"
+                            title="찜 목록에서 제거"
+                          >
+                            <svg className="w-4 h-4 text-red-400 fill-current" viewBox="0 0 24 24">
+                              <path d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
+                            </svg>
+                          </button>
+                        </div>
                       </div>
                     </div>
                   );

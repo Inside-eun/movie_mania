@@ -4,6 +4,7 @@ import Script from "next/script"
 import type { Metadata, Viewport } from "next";
 import "./globals.css";
 import ErrorBoundary from "@/components/ErrorBoundary";
+import CapacitorInit from "@/components/CapacitorInit";
 
 export const metadata: Metadata = {
   title: "영화방랑자",
@@ -90,6 +91,7 @@ export default function RootLayout({
             style={{ display: 'none', visibility: 'hidden' }}
           />
         </noscript>
+        <CapacitorInit />
         <ErrorBoundary>
           {children}
         </ErrorBoundary>
