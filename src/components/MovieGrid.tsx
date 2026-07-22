@@ -21,6 +21,8 @@ interface MovieGridProps {
   userLocation?: UserLocation | null;
   locationError?: string | null;
   onSortTypeChange?: (type: SortType) => void;
+  onTheaterClick?: (theaterName: string) => void;
+  onMapClick?: (movie: MovieSchedule) => void;
 }
 
 export default function MovieGrid({
@@ -33,6 +35,8 @@ export default function MovieGrid({
   userLocation = null,
   locationError = null,
   onSortTypeChange,
+  onTheaterClick,
+  onMapClick,
 }: MovieGridProps) {
   const getLocalDateString = (date: Date): string => {
     const seoulDate = new Date(date.toLocaleString("en-US", { timeZone: "Asia/Seoul" }));
@@ -173,11 +177,39 @@ export default function MovieGrid({
                   </time>
                 </div>
 
-                <div className="flex items-center justify-between">
-                  <span className="text-[11px] text-gray-400 truncate">{movie.theater}</span>
-                  {distance && (
-                    <span className="text-[11px] text-gray-500 ml-1 flex-shrink-0">{distance}</span>
+                <div className="flex items-center justify-between gap-1">
+                  {onTheaterClick ? (
+                    <button
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        onTheaterClick(movie.theater);
+                      }}
+                      className="text-[11px] text-gray-400 truncate underline decoration-dotted underline-offset-2 hover:text-orange-400 transition-colors min-w-0"
+                    >
+                      {movie.theater}
+                    </button>
+                  ) : (
+                    <span className="text-[11px] text-gray-400 truncate">{movie.theater}</span>
                   )}
+                  <div className="flex items-center gap-1 flex-shrink-0">
+                    {distance && (
+                      <span className="text-[11px] text-gray-500">{distance}</span>
+                    )}
+                    {onMapClick && (
+                      <button
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          onMapClick(movie);
+                        }}
+                        aria-label="지도로 소요시간 보기"
+                        className="p-0.5 text-gray-500 hover:text-orange-400 transition-colors"
+                      >
+                        <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 20l-5.447-2.724A1 1 0 013 16.382V5.618a1 1 0 011.447-.894L9 7m0 13l6-3m-6 3V7m6 10l4.553 2.276A1 1 0 0021 18.382V7.618a1 1 0 00-.553-.894L15 4m0 13V4m0 0L9 7" />
+                        </svg>
+                      </button>
+                    )}
+                  </div>
                 </div>
               </div>
             </div>

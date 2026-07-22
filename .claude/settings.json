@@ -1,7 +1,34 @@
 {
   "permissions": {
     "allow": [
-      "Bash(node -e ' *)"
+      "Bash(node -e ' *)",
+      "Bash(mkdir -p \"src/app/prototype/login\" \"src/app/prototype/theaters/[cd]\" \"src/app/prototype/route/[cd]\" \"src/app/prototype/favorites-map\" \"src/app/prototype/events/[id]\" \"src/components/prototype\")",
+      "Bash(echo \"exit:$?\")",
+      "Bash(curl -s -o /dev/null -w \"%{http_code}\" http://localhost:3000)",
+      "Bash(/usr/bin/curl -s \"http://localhost:3001/prototype/theaters/001149\")",
+      "Bash(/usr/bin/curl -s \"http://localhost:3001/prototype/events/kubrick-retro\")",
+      "Bash(/usr/bin/curl -s \"http://localhost:3001/prototype\")",
+      "Read(//private/tmp/**)",
+      "Bash(/usr/bin/curl -s -o /tmp/home.html -w \"home: %{http_code}\\\\n\" http://localhost:3000/)",
+      "Bash(/usr/bin/curl -s -o /dev/null -w \"prototype\\(should be 404\\): %{http_code}\\\\n\" http://localhost:3000/prototype)",
+      "Read(//tmp/**)",
+      "Bash(node /private/tmp/claude-501/-Users-choedam-eun-Desktop-work-Movie-movie-mania/ce37aa2f-2648-4c36-8219-25754a3155e8/scratchpad/verify.js)",
+      "Bash(node verify_tmp.js)",
+      "Bash(node verify_tmp.cjs)",
+      "Bash(node verify_tmp2.cjs)",
+      "Bash(find /tmp /private/tmp /var/folders -maxdepth 4 -iname \"*.png\" -newer /Users/choedam-eun/Desktop/work/Movie/movie_mania/package.json 2>/dev/null | head -20 *)",
+      "Read(//private/var/folders/**)",
+      "Read(//Users/choedam-eun/.claude/**)",
+      "Bash(defaults read *)",
+      "Read(//Users/choedam-eun/Desktop/**)",
+      "Read(//Users/choedam-eun/Downloads/**)",
+      "Bash(sips -g pixelWidth -g pixelHeight \"/Users/choedam-eun/Desktop/스크린샷 2026-07-21 오후 2.18.12.png\")",
+      "Bash(mkdir -p /Users/choedam-eun/Desktop/work/Movie/movie_mania/public/mock *)",
+      "Bash(python3 -c ' *)"
+    ],
+    "additionalDirectories": [
+      "/Users/choedam-eun/Desktop/work/Movie/movie_mania/src/app/prototype/theaters",
+      "/Users/choedam-eun/Desktop"
     ]
   }
 }

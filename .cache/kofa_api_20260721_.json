@@ -1,0 +1,42 @@
+{
+  "data": [
+    {
+      "title": "복지",
+      "theater": "한국영상자료원 시네마테크KOFA",
+      "area": "마포구",
+      "screen": "시네마테크KOFA 2관",
+      "time": "14:00",
+      "showtime": "2026-07-21T05:00:00.000Z",
+      "movieCode": "PM_010530",
+      "director": "프레더릭 와이즈먼",
+      "prodYear": "1975",
+      "runtime": "168",
+      "actors": null,
+      "synopsis": "<style type=\"text/css\">&lt;!--td {border: 1px solid #cccccc;}br {mso-data-placement:same-cell;}-->\r\n</style>\r\n1970년대 초 뉴욕시 복지 사무소를 비추며 붐비는 대기실, 긴장된 직원과 민원인의 대화, 끝없는 관료적 지연을 기록한다. 그의 카메라는 실업자, 노숙인, 노인, 깨진 가정의 아이들이 겪는 고충과 복잡한 규정을 헤쳐 나가는 사회복지사들의 분투를 포착한다. 분노를 쏟아내는 참전 용사, 지친 경비원의 절망, 좌절, 작은 친절의 순간들을 켜켜이 쌓아가면서 제도의 관성 속 인간의 인내를 그린 카프카적 초상을 창조하였다.",
+      "posterUrl": "https://www.koreafilm.or.kr/upload/programMovieManage/202606/091d37f4-d260-423b-91cd-5faf90cadae7.jpg",
+      "rating": "12세이상관람가",
+      "format": "D-Cinema(4K)",
+      "source": "KMDB_API"
+    },
+    {
+      "title": "백화점",
+      "theater": "한국영상자료원 시네마테크KOFA",
+      "area": "마포구",
+      "screen": "시네마테크KOFA 2관",
+      "time": "18:00",
+      "showtime": "2026-07-21T09:00:00.000Z",
+      "movieCode": "PM_010535",
+      "director": "프레더릭 와이즈먼",
+      "prodYear": "1983",
+      "runtime": "118",
+      "actors": null,
+      "synopsis": "<style type=\"text/css\">&lt;!--td {border: 1px solid #cccccc;}br {mso-data-placement:same-cell;}-->\r\n</style>\r\n댈러스에 위치한 니만 마커스 백화점 본점과 본사는 연휴 시즌을 배경으로 고급 소매업이 어떻게 작동하는지를 보여준다. 제품 선정과 마케팅 회의, 진열 디자인, 피팅과 직원 교육, 가격과 판촉 논의가 이어진다. 매장에서는 직원이 고객을 맞이하고 의류를 선보이며, 피팅룸에서는 정밀한 조정이 이루어진다. 관리자들은 수요 예측과 재고를 검토하며 매장의 운영을 본사 목표에 맞춘다. 캐롤 공연과 쇼윈도 연출 같은 시즌 행사가 일상과 교차하고, 절제된 관찰은 욕망과 소비, 제도적 질서가 맞물리는 지점을 드러낸다.<br />\r\n&nbsp;",
+      "posterUrl": "https://www.koreafilm.or.kr/upload/programMovieManage/202606/7db20caf-ba19-4963-bd0a-32bb13d65bd1.jpg",
+      "rating": "15세이상관람가",
+      "format": "D-Cinema(4K)",
+      "source": "KMDB_API"
+    }
+  ],
+  "timestamp": 1784608130580,
+  "expiresAt": 1784694530580
+}

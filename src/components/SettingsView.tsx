@@ -1,14 +1,19 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo } from "react";
 import { artCinemas } from "@/data/artCinemas";
+import MockMapView, { MapPin } from "@/components/MockMapView";
+import { toSvgPoint } from "@/mock/mockMap";
 
 const SEOUL_THEATERS = artCinemas.map((c) => ({ name: c.cdNm, area: c.area }));
+
+type FavoriteViewMode = "list" | "map";
 
 export default function SettingsView() {
   const [favoriteTheaters, setFavoriteTheaters] = useState<string[]>([]);
   const [expandedSection, setExpandedSection] = useState<string | null>(null);
   const [savedMsg, setSavedMsg] = useState(false);
+  const [favoriteViewMode, setFavoriteViewMode] = useState<FavoriteViewMode>("list");
 
   useEffect(() => {
     const savedTheaters = localStorage.getItem("favoriteTheaters");
@@ -26,6 +31,21 @@ export default function SettingsView() {
     setSavedMsg(true);
     setTimeout(() => setSavedMsg(false), 2000);
   };
+
+  const mapPins: MapPin[] = useMemo(
+    () =>
+      artCinemas.map((c) => {
+        const p = toSvgPoint(c.lat, c.lng);
+        return {
+          id: c.cdNm,
+          xPct: p.xPct,
+          yPct: p.yPct,
+          label: c.cdNm,
+          selected: favoriteTheaters.includes(c.cdNm),
+        };
+      }),
+    [favoriteTheaters]
+  );
 
   const toggle = (section: string) =>
     setExpandedSection(expandedSection === section ? null : section);
@@ -63,9 +83,36 @@ export default function SettingsView() {
           </button>
           {expandedSection === "theaters" && (
             <div className="px-4 pb-4 pt-3 border-t border-gray-800">
-              <p className="text-xs text-gray-500 mb-3">
-                자주 가는 영화관을 선택하면 거리 정렬 시 우선 표시됩니다.
-              </p>
+              <div className="flex items-center justify-between mb-3">
+                <p className="text-xs text-gray-500">
+                  자주 가는 영화관을 선택하면 거리 정렬 시 우선 표시됩니다.
+                </p>
+                <div className="flex gap-1 flex-shrink-0 ml-2">
+                  <button
+                    onClick={() => setFavoriteViewMode("list")}
+                    className={`px-2 py-1 text-[10px] font-medium transition-all ${
+                      favoriteViewMode === "list" ? "bg-orange-500 text-black" : "bg-gray-800 text-gray-400"
+                    }`}
+                  >
+                    목록
+                  </button>
+                  <button
+                    onClick={() => setFavoriteViewMode("map")}
+                    className={`px-2 py-1 text-[10px] font-medium transition-all ${
+                      favoriteViewMode === "map" ? "bg-orange-500 text-black" : "bg-gray-800 text-gray-400"
+                    }`}
+                  >
+                    지도
+                  </button>
+                </div>
+              </div>
+
+              {favoriteViewMode === "map" && (
+                <div className="mb-3">
+                  <MockMapView pins={mapPins} onPinClick={toggleTheater} height={280} />
+                </div>
+              )}
+
               <div className="grid grid-cols-2 gap-2">
                 {SEOUL_THEATERS.map((theater) => {
                   const selected = favoriteTheaters.includes(theater.name);
