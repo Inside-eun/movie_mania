@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 
-import { getSummary, recordEvent } from "@/lib/analyticsStore";
+import { clearEvents, getSummary, recordEvent } from "@/lib/analyticsStore";
 import { SimilarAlgorithm } from "@/lib/similarMovies";
 
 const ALGORITHMS: SimilarAlgorithm[] = ["director", "genre", "cast", "year", "random"];
@@ -42,4 +42,9 @@ export async function POST(request: Request) {
 
 export async function GET() {
   return NextResponse.json({ success: true, data: await getSummary() });
+}
+
+export async function DELETE() {
+  await clearEvents();
+  return NextResponse.json({ success: true });
 }

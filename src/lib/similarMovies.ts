@@ -63,17 +63,56 @@ function bestByYear(source: CatalogMovie, pool: CatalogMovie[]) {
   return { value: year, matches, label: `${year}년 개봉작` };
 }
 
-const RESOLVERS: Record<
-  Exclude<SimilarAlgorithm, "random">,
-  (source: CatalogMovie, pool: CatalogMovie[]) => { value: string; matches: CatalogMovie[]; label: string } | null
-> = {
+type ResolverKey = Exclude<SimilarAlgorithm, "random">;
+type ResolverResult = { value: string; matches: CatalogMovie[]; label: string } | null;
+
+const RESOLVERS: Record<ResolverKey, (source: CatalogMovie, pool: CatalogMovie[]) => ResolverResult> = {
   director: bestByDirector,
   genre: bestByGenre,
   cast: bestByCast,
   year: bestByYear,
 };
 
+const ALGO_KEYS = Object.keys(RESOLVERS) as ResolverKey[];
 const COUNT = 4;
+
+// 장르/개봉년도는 대부분의 영화에 매칭되는 반면 감독/배우는 카탈로그 규모상 겹치는 경우가
+// 훨씬 적다(장르 매칭 가능 ~99% vs 감독 ~30%). 매칭 가능한 알고리즘 중 균등 추첨만 하면
+// 장르·연도 쪽으로 선택이 크게 쏠리므로, 전역 매칭 가능 비율의 역수 제곱으로 가중치를 줘서
+// 노출 빈도를 보정한다.
+let cachedWeights: Record<ResolverKey, number> | null = null;
+
+function getAlgorithmWeights(): Record<ResolverKey, number> {
+  if (cachedWeights) return cachedWeights;
+
+  const catalog = getTestCatalog();
+  const availability: Record<ResolverKey, number> = { director: 0, genre: 0, cast: 0, year: 0 };
+  for (const movie of catalog) {
+    const pool = catalog.filter((m) => m.title !== movie.title);
+    for (const key of ALGO_KEYS) {
+      if (RESOLVERS[key](movie, pool)) availability[key] += 1;
+    }
+  }
+
+  const weights = {} as Record<ResolverKey, number>;
+  for (const key of ALGO_KEYS) {
+    const rate = availability[key] / catalog.length;
+    weights[key] = rate > 0 ? (1 / rate) ** 2 : 0;
+  }
+  cachedWeights = weights;
+  return weights;
+}
+
+function pickWeighted(candidates: Array<{ algorithm: ResolverKey; result: NonNullable<ResolverResult> }>) {
+  const weights = getAlgorithmWeights();
+  const totalWeight = candidates.reduce((sum, c) => sum + weights[c.algorithm], 0);
+  let r = Math.random() * totalWeight;
+  for (const c of candidates) {
+    r -= weights[c.algorithm];
+    if (r <= 0) return c;
+  }
+  return candidates[candidates.length - 1];
+}
 
 export function pickSimilarMovies(sourceTitle: string): SimilarMoviesResult | null {
   const catalog = getTestCatalog();
@@ -81,16 +120,23 @@ export function pickSimilarMovies(sourceTitle: string): SimilarMoviesResult | nu
   if (!source) return null;
 
   const pool = catalog.filter((m) => m.title !== sourceTitle);
-  const order = shuffle(Object.keys(RESOLVERS) as Array<keyof typeof RESOLVERS>);
 
-  for (const algorithm of order) {
-    const result = RESOLVERS[algorithm](source, pool);
-    if (!result) continue;
+  const candidates = ALGO_KEYS.reduce<Array<{ algorithm: ResolverKey; result: NonNullable<ResolverResult> }>>(
+    (acc, algorithm) => {
+      const result = RESOLVERS[algorithm](source, pool);
+      if (result) acc.push({ algorithm, result });
+      return acc;
+    },
+    [],
+  );
+
+  if (candidates.length > 0) {
+    const chosen = pickWeighted(candidates);
     return {
-      algorithm,
-      label: result.label,
-      matchedValue: result.value,
-      items: shuffle(result.matches).slice(0, COUNT),
+      algorithm: chosen.algorithm,
+      label: chosen.result.label,
+      matchedValue: chosen.result.value,
+      items: shuffle(chosen.result.matches).slice(0, COUNT),
     };
   }
 

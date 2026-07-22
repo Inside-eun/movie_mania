@@ -4,13 +4,11 @@ import Link from "next/link";
 import { useMemo } from "react";
 
 import PosterImage from "@/components/PosterImage";
-import TestStatsPanel from "@/components/TestStatsPanel";
 import { trackListClick } from "@/lib/analyticsClient";
 import { getTestCatalog } from "@/mock/testCatalog";
 
 export default function TestHomePage() {
   const catalog = useMemo(() => getTestCatalog(), []);
-  const scheduledCount = useMemo(() => catalog.filter((m) => m.theater).length, [catalog]);
 
   return (
     <div className="min-h-screen bg-black text-gray-100 pb-16">
@@ -19,13 +17,19 @@ export default function TestHomePage() {
           <h1 className="text-base font-bold text-white">테스트 프로토타입</h1>
           <p className="text-[11px] text-gray-500">리뉴얼 상세 페이지 · 추천 알고리즘 실험용</p>
         </div>
-        <span className="text-[10px] font-bold text-black bg-orange-500 px-2 py-0.5">TEST</span>
+        <div className="flex items-center gap-2">
+          <Link
+            href="/test/stats"
+            className="text-[10px] font-bold text-gray-300 border border-gray-700 px-2 py-0.5 hover:border-orange-500 hover:text-orange-400 transition-colors"
+          >
+            📊 통계
+          </Link>
+          <span className="text-[10px] font-bold text-black bg-orange-500 px-2 py-0.5">TEST</span>
+        </div>
       </div>
 
       <main className="container mx-auto px-4 pt-4 max-w-4xl">
-        <p className="text-xs text-gray-500 mb-3">
-          {catalog.length}개 작품 · 오늘 상영 {scheduledCount} · TMDB 평점 top {catalog.length - scheduledCount}
-        </p>
+        <p className="text-xs text-gray-500 mb-3">{catalog.length}개 작품</p>
 
         <div className="grid grid-cols-2 lg:grid-cols-3 gap-3">
           {catalog.map((movie) => (
@@ -37,15 +41,11 @@ export default function TestHomePage() {
             >
               <div className="relative w-full aspect-[2/3] bg-gray-800">
                 <PosterImage src={movie.posterUrl} alt={movie.title} sizes="(max-width: 1024px) 50vw, 33vw" />
-                {movie.theater ? (
-                  <span className="absolute top-1.5 left-1.5 text-[9px] font-bold text-black bg-orange-500 px-1.5 py-0.5">
-                    상영중
-                  </span>
-                ) : typeof movie.meta?.voteAverage === "number" && movie.meta.voteAverage > 0 ? (
+                {typeof movie.meta?.voteAverage === "number" && movie.meta.voteAverage > 0 && (
                   <span className="absolute top-1.5 left-1.5 text-[9px] font-bold text-white bg-black/70 px-1.5 py-0.5">
                     ★ {movie.meta.voteAverage.toFixed(1)}
                   </span>
-                ) : null}
+                )}
               </div>
               <div className="p-2.5 flex flex-col gap-1">
                 <h2 className="text-[13px] font-bold text-white leading-snug truncate">{movie.title}</h2>
@@ -60,8 +60,6 @@ export default function TestHomePage() {
             </Link>
           ))}
         </div>
-
-        <TestStatsPanel />
       </main>
     </div>
   );

@@ -78,6 +78,19 @@ export async function recordEvent(event: ClickEvent): Promise<void> {
   writeFileEvents(events.length > MAX_EVENTS ? events.slice(events.length - MAX_EVENTS) : events);
 }
 
+export async function clearEvents(): Promise<void> {
+  if (redis) {
+    try {
+      await redis.del(EVENTS_KEY);
+      return;
+    } catch (e) {
+      console.warn("analytics Redis 초기화 실패:", e);
+      return;
+    }
+  }
+  writeFileEvents([]);
+}
+
 export interface AnalyticsSummary {
   totalEvents: number;
   backend: "redis" | "file";
