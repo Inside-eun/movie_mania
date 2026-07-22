@@ -12,6 +12,7 @@ export interface MovieMeta {
   posterUrl: string | null;
   overview: string | null;
   voteAverage: number | null;
+  popularity?: number | null;
 }
 
 const metaByTitle = raw as Record<string, MovieMeta>;

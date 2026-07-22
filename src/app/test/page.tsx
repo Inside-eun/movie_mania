@@ -10,6 +10,7 @@ import { getTestCatalog } from "@/mock/testCatalog";
 
 export default function TestHomePage() {
   const catalog = useMemo(() => getTestCatalog(), []);
+  const scheduledCount = useMemo(() => catalog.filter((m) => m.theater).length, [catalog]);
 
   return (
     <div className="min-h-screen bg-black text-gray-100 pb-16">
@@ -22,7 +23,9 @@ export default function TestHomePage() {
       </div>
 
       <main className="container mx-auto px-4 pt-4 max-w-4xl">
-        <p className="text-xs text-gray-500 mb-3">{catalog.length}개 작품</p>
+        <p className="text-xs text-gray-500 mb-3">
+          {catalog.length}개 작품 · 오늘 상영 {scheduledCount} · TMDB 평점 top {catalog.length - scheduledCount}
+        </p>
 
         <div className="grid grid-cols-2 lg:grid-cols-3 gap-3">
           {catalog.map((movie) => (
@@ -34,6 +37,15 @@ export default function TestHomePage() {
             >
               <div className="relative w-full aspect-[2/3] bg-gray-800">
                 <PosterImage src={movie.posterUrl} alt={movie.title} sizes="(max-width: 1024px) 50vw, 33vw" />
+                {movie.theater ? (
+                  <span className="absolute top-1.5 left-1.5 text-[9px] font-bold text-black bg-orange-500 px-1.5 py-0.5">
+                    상영중
+                  </span>
+                ) : typeof movie.meta?.voteAverage === "number" && movie.meta.voteAverage > 0 ? (
+                  <span className="absolute top-1.5 left-1.5 text-[9px] font-bold text-white bg-black/70 px-1.5 py-0.5">
+                    ★ {movie.meta.voteAverage.toFixed(1)}
+                  </span>
+                ) : null}
               </div>
               <div className="p-2.5 flex flex-col gap-1">
                 <h2 className="text-[13px] font-bold text-white leading-snug truncate">{movie.title}</h2>

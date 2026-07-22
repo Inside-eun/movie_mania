@@ -87,7 +87,11 @@ export default function TestMovieDetailPage() {
         )}
 
         <div className="mb-4 text-[11px] text-gray-500">
-          현재 상영 · {movie.theater} {movie.time}
+          {movie.theater && movie.time ? (
+            <>현재 상영 · {movie.theater} {movie.time}</>
+          ) : (
+            <>TMDB 평점 상위작{meta?.voteAverage ? ` · ★ ${meta.voteAverage.toFixed(1)}` : ""}</>
+          )}
         </div>
 
         {/* 함께 보면 좋은 작품 - 4가지 알고리즘 중 무작위 1개 */}
