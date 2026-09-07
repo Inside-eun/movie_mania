@@ -2,8 +2,8 @@
 
 import { useEffect, useState } from "react";
 
-import MockMapView from "@/components/MockMapView";
-import { estimateTravel, toSvgPoint } from "@/mock/mockMap";
+import MapView from "@/components/MapView";
+import { estimateTravel } from "@/mock/mockMap";
 
 // 위치 권한이 없을 때 기본값 (서울시청)
 const DEFAULT_USER_LOCATION = { latitude: 37.5663, longitude: 126.9779 };
@@ -53,8 +53,6 @@ export default function RouteMapModal({
 
   if (!isOpen || latitude == null || longitude == null || !theaterName) return null;
 
-  const theaterPoint = toSvgPoint(latitude, longitude);
-  const userPoint = toSvgPoint(userLocation.latitude, userLocation.longitude);
   const travel = estimateTravel(userLocation.latitude, userLocation.longitude, latitude, longitude);
 
   return (
@@ -80,9 +78,9 @@ export default function RouteMapModal({
           </button>
         </div>
 
-        <MockMapView
-          pins={[{ id: theaterName, xPct: theaterPoint.xPct, yPct: theaterPoint.yPct, label: theaterName, selected: true }]}
-          userPoint={userPoint}
+        <MapView
+          pins={[{ id: theaterName, lat: latitude, lng: longitude, label: theaterName, selected: true }]}
+          userPoint={{ lat: userLocation.latitude, lng: userLocation.longitude }}
           height={240}
         />
 

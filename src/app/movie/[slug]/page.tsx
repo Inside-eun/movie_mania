@@ -5,12 +5,13 @@ import Link from "next/link";
 import { useParams, useRouter } from "next/navigation";
 
 import PosterImage from "@/components/PosterImage";
-import TheaterMapMock from "@/components/TheaterMapMock";
+import TheaterMap from "@/components/TheaterMap";
 import TheaterDetailModal from "@/components/TheaterDetailModal";
 import { getBookingFallbackUrl } from "@/lib/bookingFallbacks";
 import { useWishlist } from "@/hooks";
 import { MovieSchedule } from "@/types";
 import { getRecommendations } from "@/mock/recommendations";
+import { getTheaterDetailByName } from "@/mock/theaterDetails";
 
 interface KOBISMovieInfo {
   movieCd?: string;
@@ -58,6 +59,7 @@ export default function MovieDetailPage() {
 
   const movie = stored?.movie ?? null;
   const selectedDate = stored?.selectedDate;
+  const theaterDetail = movie?.theater ? getTheaterDetailByName(movie.theater) : undefined;
   const wishlist = useWishlist(selectedDate ?? "");
 
   // 감독/장르/등급 등 상세 정보
@@ -253,8 +255,14 @@ export default function MovieDetailPage() {
           </div>
         </div>
 
-        {/* 지도 목업 */}
-        <TheaterMapMock height={260} />
+        {/* 극장 위치 지도 */}
+        <TheaterMap
+          height={260}
+          lat={theaterDetail?.lat}
+          lng={theaterDetail?.lng}
+          name={movie.theater}
+          address={theaterDetail?.address}
+        />
         <p className="text-[11px] text-gray-500 mt-2 mb-6">
           * 본 영화관은 정시 상영합니다.
         </p>

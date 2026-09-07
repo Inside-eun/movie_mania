@@ -30,6 +30,9 @@ yarn-error.log*
 # vercel
 .vercel
 
+# instagram scan script: session cookies, scan state, review output — never commit
+.instagram-scan/
+
 # typescript
 *.tsbuildinfo
 next-env.d.ts

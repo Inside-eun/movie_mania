@@ -2,8 +2,7 @@
 
 import { useState, useEffect, useMemo } from "react";
 import { artCinemas } from "@/data/artCinemas";
-import MockMapView, { MapPin } from "@/components/MockMapView";
-import { toSvgPoint } from "@/mock/mockMap";
+import MapView, { MapPin } from "@/components/MapView";
 
 const SEOUL_THEATERS = artCinemas.map((c) => ({ name: c.cdNm, area: c.area }));
 
@@ -34,16 +33,13 @@ export default function SettingsView() {
 
   const mapPins: MapPin[] = useMemo(
     () =>
-      artCinemas.map((c) => {
-        const p = toSvgPoint(c.lat, c.lng);
-        return {
-          id: c.cdNm,
-          xPct: p.xPct,
-          yPct: p.yPct,
-          label: c.cdNm,
-          selected: favoriteTheaters.includes(c.cdNm),
-        };
-      }),
+      artCinemas.map((c) => ({
+        id: c.cdNm,
+        lat: c.lat,
+        lng: c.lng,
+        label: c.cdNm,
+        selected: favoriteTheaters.includes(c.cdNm),
+      })),
     [favoriteTheaters]
   );
 
@@ -109,7 +105,7 @@ export default function SettingsView() {
 
               {favoriteViewMode === "map" && (
                 <div className="mb-3">
-                  <MockMapView pins={mapPins} onPinClick={toggleTheater} height={280} />
+                  <MapView pins={mapPins} onPinClick={toggleTheater} height={280} />
                 </div>
               )}
 

@@ -1,9 +1,12 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
 
-import { mockEvents, getEvent } from "@/mock/events";
-import { getSnapshotMoviesByTitles } from "@/mock/snapshot";
+import { mockEvents, getEvent, CuratedEvent } from "@/mock/events";
+import { useWeeklySchedules } from "@/hooks/useWeeklySchedules";
+import { getLocalDateString } from "@/utils/date";
+import { MovieSchedule } from "@/types";
 
 const STORAGE_KEY = "notifyAlerts";
 
@@ -11,9 +14,33 @@ function alertKey(eventId: string, title: string) {
   return `${eventId}::${title}`;
 }
 
+function formatMonthDay(dateStr: string): string {
+  const [, month, day] = dateStr.split("-");
+  return `${Number(month)}/${Number(day)}`;
+}
+
+// 이번 주(오늘 포함 7일) 데이터에서 극장 이름 + 제목이 둘 다 일치하는 첫 상영일을 찾는다.
+// 제목만 보고 매칭하면 다른 극장(예: CGV아트하우스가 트는 재상영)까지 잡혀서
+// "이 극장에서 상영 중"이라고 착각하게 만들 수 있어 theaterName도 반드시 같이 본다.
+function findMatch(
+  weekly: ReturnType<typeof useWeeklySchedules>,
+  event: CuratedEvent,
+  movieTitle: string
+): { date: string; movie: MovieSchedule } | null {
+  for (const date of weekly.dates) {
+    const movies = weekly.scheduleByDate[date];
+    if (!movies) continue;
+    const movie = movies.find((m) => m.theater === event.theaterName && m.title === movieTitle);
+    if (movie) return { date, movie };
+  }
+  return null;
+}
+
 export default function EventsView() {
+  const router = useRouter();
   const [selectedEventId, setSelectedEventId] = useState<string | null>(null);
   const [alerts, setAlerts] = useState<string[]>([]);
+  const weekly = useWeeklySchedules();
 
   useEffect(() => {
     const saved = localStorage.getItem(STORAGE_KEY);
@@ -29,12 +56,17 @@ export default function EventsView() {
     });
   };
 
+  // 극장 메인 화면(page.tsx)의 openMovieDetail과 동일한 방식으로 저장 후 이동한다.
+  const openMovieDetail = (movie: MovieSchedule, date: string) => {
+    const slug = encodeURIComponent(movie.movieCode || movie.title);
+    sessionStorage.setItem(`movieDetail:${slug}`, JSON.stringify({ movie, selectedDate: date }));
+    router.push(`/movie/${slug}`);
+  };
+
   const selectedEvent = selectedEventId ? getEvent(selectedEventId) : null;
 
   if (selectedEvent) {
-    const nowShowingTitles = new Set(
-      getSnapshotMoviesByTitles(selectedEvent.movieTitles).map((m) => m.title)
-    );
+    const today = getLocalDateString(new Date());
 
     return (
       <div>
@@ -54,21 +86,42 @@ export default function EventsView() {
 
         <p className="text-sm text-gray-300 mb-6 leading-relaxed">{selectedEvent.description}</p>
 
+        {weekly.loading && (
+          <p className="text-[11px] text-gray-500 mb-3">
+            이번 주 상영 정보 확인 중... ({weekly.loadedDays}/{weekly.totalDays}일)
+          </p>
+        )}
+
         <h3 className="text-sm font-bold text-white mb-2">상영작</h3>
         <div className="space-y-2">
           {selectedEvent.movieTitles.map((title) => {
             const isAlerted = alerts.includes(alertKey(selectedEvent.id, title));
-            const nowShowing = nowShowingTitles.has(title);
+            const match = findMatch(weekly, selectedEvent, title);
+            const matchedDate = match?.date ?? null;
+            const isShowingToday = matchedDate === today;
+            const isScheduledLater = matchedDate !== null && !isShowingToday;
+            const hasSchedule = matchedDate !== null;
             return (
               <div
                 key={title}
                 className="flex items-center justify-between bg-gray-900 border border-gray-800 px-3 py-2.5"
               >
-                <div className="min-w-0 flex-1">
-                  <p className="text-sm font-medium text-white truncate">{title}</p>
+                <div
+                  className={`min-w-0 flex-1 ${hasSchedule ? "cursor-pointer" : ""}`}
+                  onClick={() => match && openMovieDetail(match.movie, match.date)}
+                >
+                  <p
+                    className={`text-sm font-medium text-white truncate ${
+                      hasSchedule ? "hover:text-orange-400" : ""
+                    }`}
+                  >
+                    {title}
+                  </p>
                   <p className="text-[10px] mt-0.5">
-                    {nowShowing ? (
+                    {isShowingToday ? (
                       <span className="text-green-400">현재 상영 중</span>
+                    ) : isScheduledLater ? (
+                      <span className="text-blue-400">{formatMonthDay(matchedDate!)} 상영 예정</span>
                     ) : (
                       <span className="text-gray-500">상영 정보 미등록</span>
                     )}
@@ -76,16 +129,22 @@ export default function EventsView() {
                 </div>
                 <button
                   onClick={() => toggleAlert(selectedEvent.id, title)}
-                  disabled={nowShowing}
+                  disabled={hasSchedule}
                   className={`ml-3 flex-shrink-0 px-3 py-1.5 text-[11px] font-bold transition-all ${
-                    nowShowing
+                    hasSchedule
                       ? "bg-gray-800 text-gray-600 cursor-not-allowed"
                       : isAlerted
                         ? "bg-orange-500 text-black"
                         : "bg-gray-800 text-gray-300 hover:bg-gray-700"
                   }`}
                 >
-                  {nowShowing ? "상영 중" : isAlerted ? "🔔 알림 설정됨" : "🔕 알림 신청"}
+                  {isShowingToday
+                    ? "상영 중"
+                    : isScheduledLater
+                      ? "상영 예정"
+                      : isAlerted
+                        ? "🔔 알림 설정됨"
+                        : "🔕 알림 신청"}
                 </button>
               </div>
             );
