@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState } from 'react';
 
 export default function InfoView() {
   const [expandedSection, setExpandedSection] = useState<string | null>(null);
@@ -171,9 +171,6 @@ export default function InfoView() {
 
       {/* 제작자 정보 */}
       <div className="text-center pt-6 border-t border-gray-700">
-        <p className="text-sm text-gray-400 mb-2">
-          만든 사람: 제육볶음 달달볶아
-        </p>
         <p className="text-xs text-gray-500">
           © 2025 영화방랑자. All rights reserved.
         </p>
