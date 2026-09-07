@@ -6,6 +6,7 @@ import {
 } from 'react';
 
 import dynamic from 'next/dynamic';
+import { useRouter } from 'next/navigation';
 
 import {
   useMovieFilter,
@@ -14,6 +15,7 @@ import {
 } from '@/hooks';
 import { MovieSchedule } from '@/types';
 import { getLocalDateString } from '@/utils/date';
+import { getTheaterDetailByName } from '@/mock/theaterDetails';
 
 import DateSelector from '../components/DateSelector';
 import Header from '../components/Header';
@@ -23,19 +25,31 @@ import MovieGrid from '../components/MovieGrid';
 
 const WishlistView = dynamic(() => import("../components/WishlistView"), { loading: () => null });
 const SettingsView = dynamic(() => import("../components/SettingsView"), { loading: () => null });
-const MovieModal = dynamic(() => import("../components/MovieModal"), { loading: () => null });
+const LoginView = dynamic(() => import("../components/LoginView"), { loading: () => null });
+const EventsView = dynamic(() => import("../components/EventsView"), { loading: () => null });
+const TheaterDetailModal = dynamic(() => import("../components/TheaterDetailModal"), { loading: () => null });
+const RouteMapModal = dynamic(() => import("../components/RouteMapModal"), { loading: () => null });
 
 export default function Home() {
+  const router = useRouter();
   const [selectedDate, setSelectedDate] = useState(
     getLocalDateString(new Date())
   );
 
   const [showWishlistView, setShowWishlistView] = useState(false);
   const [showInfoView, setShowInfoView] = useState(false);
+  const [showLoginView, setShowLoginView] = useState(false);
+  const [showEventsView, setShowEventsView] = useState(false);
 
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  const [selectedMovieForModal, setSelectedMovieForModal] =
-    useState<MovieSchedule | null>(null);
+  const [isTheaterModalOpen, setIsTheaterModalOpen] = useState(false);
+  const [selectedTheaterName, setSelectedTheaterName] = useState<string | null>(null);
+
+  const [isRouteMapOpen, setIsRouteMapOpen] = useState(false);
+  const [routeTarget, setRouteTarget] = useState<{
+    name: string;
+    latitude: number | null;
+    longitude: number | null;
+  } | null>(null);
 
   const filter = useMovieFilter();
   const schedules = useMovieSchedules(
@@ -54,42 +68,100 @@ export default function Home() {
     [filter]
   );
 
-  const openModal = useCallback((movie: MovieSchedule) => {
-    setSelectedMovieForModal(movie);
-    setIsModalOpen(true);
+  const openMovieDetail = useCallback(
+    (movie: MovieSchedule) => {
+      const slug = encodeURIComponent(movie.movieCode || movie.title);
+      sessionStorage.setItem(
+        `movieDetail:${slug}`,
+        JSON.stringify({ movie, selectedDate })
+      );
+      router.push(`/movie/${slug}`);
+    },
+    [selectedDate, router]
+  );
+
+  const openTheaterModal = useCallback((theaterName: string) => {
+    setSelectedTheaterName(theaterName);
+    setIsTheaterModalOpen(true);
   }, []);
 
-  const closeModal = useCallback(() => {
-    setIsModalOpen(false);
-    setSelectedMovieForModal(null);
+  const closeTheaterModal = useCallback(() => {
+    setIsTheaterModalOpen(false);
+    setSelectedTheaterName(null);
+  }, []);
+
+  const openRouteMapForMovie = useCallback((movie: MovieSchedule) => {
+    setRouteTarget({
+      name: movie.theater,
+      latitude: movie.latitude ?? null,
+      longitude: movie.longitude ?? null,
+    });
+    setIsRouteMapOpen(true);
+  }, []);
+
+  const openRouteMapForTheater = useCallback((theaterName: string) => {
+    const theater = getTheaterDetailByName(theaterName);
+    setIsTheaterModalOpen(false);
+    setRouteTarget({
+      name: theaterName,
+      latitude: theater?.lat ?? null,
+      longitude: theater?.lng ?? null,
+    });
+    setIsRouteMapOpen(true);
+  }, []);
+
+  const closeRouteMap = useCallback(() => {
+    setIsRouteMapOpen(false);
+    setRouteTarget(null);
   }, []);
 
   const goToHome = useCallback(() => {
     setShowWishlistView(false);
     setShowInfoView(false);
+    setShowLoginView(false);
+    setShowEventsView(false);
   }, []);
 
   const goToWishlist = useCallback(() => {
     setShowWishlistView(true);
     setShowInfoView(false);
+    setShowLoginView(false);
+    setShowEventsView(false);
   }, []);
 
   const goToInfo = useCallback(() => {
     setShowWishlistView(false);
     setShowInfoView(true);
+    setShowLoginView(false);
+    setShowEventsView(false);
+  }, []);
+
+  const goToEvents = useCallback(() => {
+    setShowWishlistView(false);
+    setShowInfoView(false);
+    setShowLoginView(false);
+    setShowEventsView(true);
+  }, []);
+
+  const goToLogin = useCallback(() => {
+    setShowWishlistView(false);
+    setShowInfoView(false);
+    setShowEventsView(false);
+    setShowLoginView(true);
   }, []);
 
   const isToday = selectedDate === getLocalDateString(new Date());
-  const isHomeView = !showWishlistView && !showInfoView;
+  const isHomeView =
+    !showWishlistView && !showInfoView && !showLoginView && !showEventsView;
 
   return (
     <>
-      <Header />
+      <Header onAccountClick={goToLogin} />
 
       {/* 히어로 배너 - ALL SCREENINGS 뷰에서만 (로딩 중 스켈레톤으로 CLS 방지) */}
       {isHomeView && (
         schedules.allMovies.length > 0
-          ? <MovieBanner movies={schedules.allMovies} onMovieClick={openModal} />
+          ? <MovieBanner movies={schedules.allMovies} onMovieClick={openMovieDetail} />
           : schedules.loading
             ? <div className="w-full bg-gray-900/50 animate-pulse" style={{ height: "260px" }} />
             : null
@@ -158,13 +230,15 @@ export default function Home() {
               selectedDate={selectedDate}
               selectedMovies={filter.selectedMovies}
               selectedTheaters={filter.selectedTheaters}
-              onMovieClick={openModal}
+              onMovieClick={openMovieDetail}
               onToggleWishlist={wishlist.toggleWishlist}
               isInWishlist={wishlist.isInWishlist}
               sortType={filter.sortType}
               userLocation={filter.userLocation}
               locationError={filter.locationError}
               onSortTypeChange={filter.handleSortTypeChange}
+              onTheaterClick={openTheaterModal}
+              onMapClick={openRouteMapForMovie}
             />
           )}
 
@@ -204,7 +278,7 @@ export default function Home() {
           <WishlistView
             wishlistMovies={wishlist.wishlistMovies}
             wishlistCount={wishlist.count}
-            onMovieClick={openModal}
+            onMovieClick={openMovieDetail}
             onToggleWishlist={wishlist.toggleWishlist}
             onClearAll={wishlist.clearAll}
             getWishlistByDate={wishlist.getWishlistByDate}
@@ -213,11 +287,23 @@ export default function Home() {
 
         {showInfoView && <SettingsView />}
 
-        <MovieModal
-          isOpen={isModalOpen}
-          onClose={closeModal}
-          movie={selectedMovieForModal}
-          selectedDate={selectedDate}
+        {showEventsView && <EventsView />}
+
+        {showLoginView && <LoginView />}
+
+        <TheaterDetailModal
+          isOpen={isTheaterModalOpen}
+          onClose={closeTheaterModal}
+          theaterName={selectedTheaterName}
+          onRouteClick={openRouteMapForTheater}
+        />
+
+        <RouteMapModal
+          isOpen={isRouteMapOpen}
+          onClose={closeRouteMap}
+          theaterName={routeTarget?.name ?? null}
+          latitude={routeTarget?.latitude ?? null}
+          longitude={routeTarget?.longitude ?? null}
         />
 
         {/* 하단 네비게이션 (모바일) */}
@@ -270,6 +356,28 @@ export default function Home() {
                 </span>
               )}
               <span className="text-[10px] font-medium">찜</span>
+            </button>
+
+            <button
+              onClick={goToEvents}
+              className={`flex flex-col items-center justify-center flex-1 h-full transition-colors ${
+                showEventsView ? "text-orange-500" : "text-gray-400"
+              }`}
+            >
+              <svg
+                className="w-5 h-5 mb-0.5"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M11 5.882V19.24a1.76 1.76 0 01-3.417.592l-2.147-6.15M18 13a3 3 0 100-6M5.436 13.683A4.001 4.001 0 017 6h1.832c4.1 0 7.625-1.234 9.168-3v14c-1.543-1.766-5.067-3-9.168-3H7a3.988 3.988 0 01-1.564-.317z"
+                />
+              </svg>
+              <span className="text-[10px] font-medium">기획전</span>
             </button>
 
             <button
