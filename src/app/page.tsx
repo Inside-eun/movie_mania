@@ -25,7 +25,6 @@ import MovieGrid from '../components/MovieGrid';
 
 const WishlistView = dynamic(() => import("../components/WishlistView"), { loading: () => null });
 const SettingsView = dynamic(() => import("../components/SettingsView"), { loading: () => null });
-const LoginView = dynamic(() => import("../components/LoginView"), { loading: () => null });
 const EventsView = dynamic(() => import("../components/EventsView"), { loading: () => null });
 const TheaterDetailModal = dynamic(() => import("../components/TheaterDetailModal"), { loading: () => null });
 const RouteMapModal = dynamic(() => import("../components/RouteMapModal"), { loading: () => null });
@@ -38,7 +37,6 @@ export default function Home() {
 
   const [showWishlistView, setShowWishlistView] = useState(false);
   const [showInfoView, setShowInfoView] = useState(false);
-  const [showLoginView, setShowLoginView] = useState(false);
   const [showEventsView, setShowEventsView] = useState(false);
 
   const [isTheaterModalOpen, setIsTheaterModalOpen] = useState(false);
@@ -118,45 +116,34 @@ export default function Home() {
   const goToHome = useCallback(() => {
     setShowWishlistView(false);
     setShowInfoView(false);
-    setShowLoginView(false);
     setShowEventsView(false);
   }, []);
 
   const goToWishlist = useCallback(() => {
     setShowWishlistView(true);
     setShowInfoView(false);
-    setShowLoginView(false);
     setShowEventsView(false);
   }, []);
 
   const goToInfo = useCallback(() => {
     setShowWishlistView(false);
     setShowInfoView(true);
-    setShowLoginView(false);
     setShowEventsView(false);
   }, []);
 
   const goToEvents = useCallback(() => {
     setShowWishlistView(false);
     setShowInfoView(false);
-    setShowLoginView(false);
     setShowEventsView(true);
-  }, []);
-
-  const goToLogin = useCallback(() => {
-    setShowWishlistView(false);
-    setShowInfoView(false);
-    setShowEventsView(false);
-    setShowLoginView(true);
   }, []);
 
   const isToday = selectedDate === getLocalDateString(new Date());
   const isHomeView =
-    !showWishlistView && !showInfoView && !showLoginView && !showEventsView;
+    !showWishlistView && !showInfoView && !showEventsView;
 
   return (
     <>
-      <Header onAccountClick={goToLogin} />
+      <Header />
 
       {/* 히어로 배너 - ALL SCREENINGS 뷰에서만 (로딩 중 스켈레톤으로 CLS 방지) */}
       {isHomeView && (
@@ -288,8 +275,6 @@ export default function Home() {
         {showInfoView && <SettingsView />}
 
         {showEventsView && <EventsView />}
-
-        {showLoginView && <LoginView />}
 
         <TheaterDetailModal
           isOpen={isTheaterModalOpen}

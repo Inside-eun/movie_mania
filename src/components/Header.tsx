@@ -1,22 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
-
-interface HeaderProps {
-  onAccountClick?: () => void;
-}
-
-export default function Header({ onAccountClick }: HeaderProps) {
-  const [initial, setInitial] = useState<string | null>(null);
-
-  useEffect(() => {
-    const linked = localStorage.getItem("linkedAccount");
-    if (linked) {
-      const account = JSON.parse(linked);
-      setInitial(account.name?.slice(0, 1) ?? null);
-    }
-  }, []);
-
+export default function Header() {
   return (
     <header className="sticky top-0 z-50 bg-black border-b border-gray-800 shadow-sm">
       <div className="container mx-auto px-4 py-2 max-w-4xl">
@@ -42,23 +26,6 @@ export default function Header({ onAccountClick }: HeaderProps) {
               서울 예술영화관 상영시간표
             </p>
           </div>
-          {onAccountClick && (
-            <button
-              onClick={onAccountClick}
-              aria-label="계정"
-              className="flex-shrink-0 w-7 h-7 rounded-full flex items-center justify-center border border-gray-700 hover:border-orange-500 transition-colors"
-            >
-              {initial ? (
-                <span className="w-full h-full rounded-full bg-orange-500 text-black text-xs font-bold flex items-center justify-center">
-                  {initial}
-                </span>
-              ) : (
-                <svg className="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
-                </svg>
-              )}
-            </button>
-          )}
         </div>
       </div>
     </header>
