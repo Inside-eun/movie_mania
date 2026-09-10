@@ -1,8 +1,13 @@
 "use client";
 
-import { useState, useEffect, useMemo } from "react";
-import { artCinemas } from "@/data/artCinemas";
-import MapView, { MapPin } from "@/components/MapView";
+import {
+  useEffect,
+  useMemo,
+  useState,
+} from 'react';
+
+import MapView, { MapPin } from '@/components/MapView';
+import { artCinemas } from '@/data/artCinemas';
 
 const SEOUL_THEATERS = artCinemas.map((c) => ({ name: c.cdNm, area: c.area }));
 
@@ -344,7 +349,6 @@ export default function SettingsView() {
 
       {/* 푸터 */}
       <div className="text-center pt-4 pb-2">
-        <p className="text-xs text-gray-500">만든 사람: 제육볶음 달달볶아</p>
         <p className="text-[10px] text-gray-500 mt-1">© 2025-2026 영화방랑자. All rights reserved.</p>
       </div>
     </div>

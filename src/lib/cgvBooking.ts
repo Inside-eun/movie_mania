@@ -6,7 +6,9 @@
 // https://cgv.co.kr/cnm/movieBook/movie?movNo={movNo}&scnYmd={date}&siteNo={siteNo}&siteNm={siteNm}&scnsNo={scnsNo}
 //
 // 새 영화 추가 방법:
-// DevTools Network 탭 → searchMovScnInfo 응답 → movNo 값 확인 → cgvMovNoCache.json에 추가
+// npx tsx src/scripts/fetchCgvMovNo.ts "영화 제목" (= npm run cgv:movno -- "영화 제목")
+// 자동 조회가 안 되면(신작 미색인 등) DevTools Network 탭 → searchMovScnInfo 응답에서
+// movNo 확인 후 addCGVMovNo.ts로 수동 추가.
 
 import movNoCache from './cgvMovNoCache.json';
 

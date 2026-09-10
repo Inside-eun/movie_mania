@@ -8,7 +8,6 @@ import { useWeeklySchedules } from "@/hooks/useWeeklySchedules";
 import { getLocalDateString } from "@/utils/date";
 import { MovieSchedule } from "@/types";
 import { CreditsByTitle } from "@/mock/recommendations";
-import PosterImage from "@/components/PosterImage";
 
 function formatMonthDay(dateStr: string): string {
   const [, month, day] = dateStr.split("-");
@@ -19,6 +18,11 @@ function formatYear(dateStr: string | null | undefined): string | null {
   if (!dateStr) return null;
   const year = dateStr.split("-")[0];
   return year || null;
+}
+
+function formatMovieList(titles: string[]): string {
+  const shown = titles.slice(0, 3).join(" · ");
+  return titles.length > 3 ? `${shown} 외 ${titles.length - 3}편` : shown;
 }
 
 // 이번 주(오늘 포함 7일) 데이터에서 극장 이름 + 제목이 둘 다 일치하는 첫 상영일을 찾는다.
@@ -38,14 +42,11 @@ function findMatch(
   return null;
 }
 
-function MovieCardSkeleton() {
+function MovieRowSkeleton() {
   return (
-    <div className="bg-gray-900 border border-gray-800">
-      <div className="skeleton-bar w-full aspect-[2/3]" />
-      <div className="p-2 space-y-1.5">
-        <span className="skeleton-bar block h-3 w-full" />
-        <span className="skeleton-bar block h-3 w-2/3" />
-      </div>
+    <div className="py-3 space-y-1.5">
+      <span className="skeleton-bar block h-3.5 w-2/3" />
+      <span className="skeleton-bar block h-3 w-1/3" />
     </div>
   );
 }
@@ -100,14 +101,19 @@ export default function EventsView() {
           ← 기획전 목록
         </button>
 
-        <div className="h-28 mb-4 flex items-end p-4" style={{ backgroundColor: selectedEvent.bannerColor }}>
-          <div>
-            <h2 className="text-lg font-bold text-white drop-shadow">{selectedEvent.title}</h2>
-            <p className="text-xs text-white/80">{selectedEvent.theaterName} · {selectedEvent.period}</p>
+        <div className="mb-5 bg-gray-900 border border-white/10 p-3 sm:p-4">
+          <div className="flex items-center justify-between gap-2 mb-1">
+            <p className="text-[10px] font-semibold uppercase tracking-[0.1em] text-orange-400">
+              {selectedEvent.theaterName}
+            </p>
+            <p className="shrink-0 text-[10px] text-gray-500">{selectedEvent.period}</p>
           </div>
+          <h2 className="text-lg font-bold text-white leading-snug">{selectedEvent.title}</h2>
         </div>
 
-        <p className="text-sm text-gray-300 mb-6 leading-relaxed">{selectedEvent.description}</p>
+        <p className="text-sm text-gray-300 mb-6 leading-relaxed border-l-2 border-orange-500/60 pl-4">
+          {selectedEvent.description}
+        </p>
 
         {weekly.loading && (
           <p className="text-[11px] text-gray-500 mb-3">
@@ -115,10 +121,14 @@ export default function EventsView() {
           </p>
         )}
 
-        <h3 className="text-sm font-bold text-white mb-2">상영작</h3>
-        <div className="grid grid-cols-2 gap-3">
+        <div className="flex items-baseline justify-between mb-1">
+          <h3 className="text-base font-bold text-white">상영작</h3>
+          <span className="text-[11px] text-gray-500">{selectedEvent.movieTitles.length}편</span>
+        </div>
+
+        <div className="divide-y divide-white/10 border-t border-white/10">
           {creditsLoading
-            ? selectedEvent.movieTitles.map((title) => <MovieCardSkeleton key={title} />)
+            ? selectedEvent.movieTitles.map((title) => <MovieRowSkeleton key={title} />)
             : selectedEvent.movieTitles.map((title) => {
                 const credits = creditsByTitle[title];
                 const match = findMatch(weekly, selectedEvent, title);
@@ -128,46 +138,38 @@ export default function EventsView() {
                 const hasSchedule = matchedDate !== null;
                 const year = formatYear(credits?.releaseDate);
 
-                const CardWrapper = hasSchedule ? "button" : "div";
+                const RowWrapper = hasSchedule ? "button" : "div";
 
                 return (
-                  <CardWrapper
+                  <RowWrapper
                     key={title}
                     {...(hasSchedule
                       ? { onClick: () => match && openMovieDetail(match.movie, match.date) }
                       : {})}
-                    className={`bg-gray-900 border border-gray-800 text-left overflow-hidden ${
-                      hasSchedule ? "hover:border-orange-500 transition-colors" : ""
+                    className={`flex items-center justify-between gap-3 w-full text-left py-3 ${
+                      hasSchedule ? "hover:bg-white/5 transition-colors" : ""
                     }`}
                   >
-                    <div className="relative w-full aspect-[2/3] bg-gray-800">
-                      <PosterImage src={credits?.posterUrl ?? null} alt={title} sizes="50vw" />
-                      {!hasSchedule && (
-                        <div className="absolute inset-0 bg-black/50" />
-                      )}
-                    </div>
-                    <div className="p-2">
-                      <p className="text-xs font-medium text-white leading-snug line-clamp-2 min-h-[2.25em]">
-                        {title}
-                      </p>
+                    <div className="min-w-0">
+                      <p className="text-sm font-medium text-white truncate">{title}</p>
                       {(credits?.director || year) && (
-                        <p className="text-[10px] text-gray-400 mt-0.5 truncate">
+                        <p className="text-[11px] text-gray-400 mt-0.5 truncate">
                           {credits?.director}
                           {credits?.director && year && " · "}
                           {year}
                         </p>
                       )}
-                      <p className="text-[10px] mt-1">
-                        {isShowingToday ? (
-                          <span className="text-green-400">현재 상영 중</span>
-                        ) : isScheduledLater ? (
-                          <span className="text-blue-400">{formatMonthDay(matchedDate!)} 상영 예정</span>
-                        ) : (
-                          <span className="text-gray-500">상영 정보 미등록</span>
-                        )}
-                      </p>
                     </div>
-                  </CardWrapper>
+                    <span className="shrink-0 text-[11px]">
+                      {isShowingToday ? (
+                        <span className="text-green-400">현재 상영 중</span>
+                      ) : isScheduledLater ? (
+                        <span className="text-blue-400">{formatMonthDay(matchedDate!)} 상영 예정</span>
+                      ) : (
+                        <span className="text-gray-500">상영 정보 미등록</span>
+                      )}
+                    </span>
+                  </RowWrapper>
                 );
               })}
         </div>
@@ -177,28 +179,24 @@ export default function EventsView() {
 
   return (
     <div>
-      <div className="mb-4">
-        <h2 className="text-base font-bold text-white">기획전</h2>
-        <p className="text-xs text-gray-500 mt-0.5">
-          영화관별 기획전을 둘러보세요.
-        </p>
-      </div>
+      <h2 className="text-base font-bold text-white text-center mb-5">기획전</h2>
 
       <div className="space-y-3">
         {mockEvents.map((e) => (
           <button
             key={e.id}
             onClick={() => setSelectedEventId(e.id)}
-            className="block w-full text-left border border-gray-800 overflow-hidden hover:border-orange-500 transition-colors"
+            className="block w-full text-left bg-gray-900 border border-white/10 p-3 hover:border-orange-500/70 transition-colors"
           >
-            <div className="h-20 flex items-end p-3" style={{ backgroundColor: e.bannerColor }}>
-              <p className="text-base font-bold text-white drop-shadow">{e.title}</p>
+            <div className="flex items-center justify-between gap-2 mb-1">
+              <p className="text-[10px] font-semibold uppercase tracking-[0.1em] text-orange-400">
+                {e.theaterName}
+              </p>
+              <p className="shrink-0 text-[10px] text-gray-500">{e.period}</p>
             </div>
-            <div className="bg-gray-900 px-3 py-2.5">
-              <p className="text-[11px] text-gray-400">{e.theaterName} · {e.period}</p>
-              <p className="text-xs text-gray-300 mt-1">{e.summary}</p>
-              <p className="text-[10px] text-gray-500 mt-1">{e.movieTitles.length}개 작품</p>
-            </div>
+            <p className="text-sm font-bold text-white leading-snug line-clamp-1">{e.title}</p>
+            <p className="text-[13px] text-gray-300 mt-1.5 leading-relaxed line-clamp-2">{e.summary}</p>
+            <p className="text-[11px] text-gray-500 mt-1 truncate">{formatMovieList(e.movieTitles)}</p>
           </button>
         ))}
       </div>

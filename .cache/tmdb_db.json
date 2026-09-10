@@ -2680,5 +2680,23 @@
     "posterUrl": "https://image.tmdb.org/t/p/w342/mkuftCjvlQtkLh2VyvsgzwOqOHm.jpg",
     "releaseDate": "1981-08-21",
     "voteAverage": 6.6
+  },
+  "경주기행": {
+    "title": "경주기행",
+    "tmdbId": 1235769,
+    "originalTitle": "경주기행",
+    "overview": "엄마 옥실과 세 딸 장주, 영주, 동주는 8년 전 수학여행을 떠난 이후 다시는 돌아오지 못한 막내 경주의 생일을 맞아 단체 티셔츠까지 맞춰 입고 경주로 가족여행을 떠난다. 얼핏 단란하고 화목한 가족여행처럼 보이지만, 봉고차 트렁크에는 낯선 한 남자가 실려 있는데…",
+    "posterUrl": "https://image.tmdb.org/t/p/w342/2dAd2APyFUyJ6qEv9VFHdHQtQI6.jpg",
+    "releaseDate": "2026-08-26",
+    "voteAverage": 9
+  },
+  "우연과 상상": {
+    "title": "우연과 상상",
+    "tmdbId": 795811,
+    "originalTitle": "偶然と想像",
+    "overview": "메이코는 집으로 돌아가는 택시 안에서 친구에게 새로운 연애 상대 이야기를 듣는다. 여대생 나오는 교수 앞에서 그가 쓴 소설의 일부를 낭독한다. 20년 만에 고향을 찾은 나츠코는 그토록 만나고 싶던 동창생과 재회한다.  우연이 만들어내는 조용히 아주 크게 움직이는 인생의 순간들이 있다. 이 영화는 그에 대한 상상의 결과물이다.",
+    "posterUrl": "https://image.tmdb.org/t/p/w342/qdGy0fp0NabutYcANGetM9M15fh.jpg",
+    "releaseDate": "2021-04-11",
+    "voteAverage": 7.222
   }
 }

@@ -6,7 +6,6 @@ import { useParams, useRouter } from "next/navigation";
 
 import PosterImage from "@/components/PosterImage";
 import TheaterMap from "@/components/TheaterMap";
-import TheaterDetailModal from "@/components/TheaterDetailModal";
 import { getBookingFallbackUrl } from "@/lib/bookingFallbacks";
 import { useWishlist } from "@/hooks";
 import { MovieSchedule, ScheduleResponse } from "@/types";
@@ -66,7 +65,6 @@ export default function MovieDetailPage() {
   const [bookingIsFallback, setBookingIsFallback] = useState(false);
   const fetchAbortRef = useRef<AbortController | null>(null);
 
-  const [isTheaterModalOpen, setIsTheaterModalOpen] = useState(false);
 
   useEffect(() => {
     const raw = sessionStorage.getItem(`movieDetail:${params.slug}`);
@@ -224,6 +222,10 @@ export default function MovieDetailPage() {
   const runtime = kobisData?.showTm || movie.runtime || null;
   const genres = kobisData?.genres?.map((g) => g.genreNm).join(", ") || null;
   const rating = kobisData?.audits?.[0]?.watchGradeNm || kmdbData?.cCodeSubName2 || null;
+  // 멀티플렉스(CGV/롯데시네마/메가박스/씨네큐)는 광고·예고편이 붙어 정시 상영이 아니므로 안내 문구를 뺀다.
+  const isMultiplexTheater = ["cgv", "롯데시네마", "메가박스", "씨네큐"].some((chain) =>
+    movie.theater?.toLowerCase().includes(chain)
+  );
 
   const endTime = (() => {
     if (!runtime) return null;
@@ -319,12 +321,7 @@ export default function MovieDetailPage() {
 
               <div className="flex items-center gap-2 pt-1">
                 <span className="text-orange-500 text-xs w-16 flex-shrink-0">영화관</span>
-                <button
-                  onClick={() => setIsTheaterModalOpen(true)}
-                  className="text-gray-200 text-xs underline decoration-dotted underline-offset-2 hover:text-orange-400 transition-colors truncate"
-                >
-                  {movie.theater}
-                </button>
+                <span className="text-gray-200 text-xs truncate">{movie.theater}</span>
               </div>
             </div>
           </div>
@@ -342,9 +339,11 @@ export default function MovieDetailPage() {
           name={movie.theater}
           address={theaterDetail?.address}
         />
-        <p className="text-[11px] text-gray-500 mt-2 mb-6">
-          * 본 영화관은 정시 상영합니다.
-        </p>
+        <div className="mt-2 mb-6">
+          {!isMultiplexTheater && (
+            <p className="text-[11px] text-gray-500">* 본 영화관은 정시 상영합니다.</p>
+          )}
+        </div>
 
         {/* 추천작 */}
         {!recommendationReady && (
@@ -414,12 +413,6 @@ export default function MovieDetailPage() {
         </div>
         )}
       </div>
-
-      <TheaterDetailModal
-        isOpen={isTheaterModalOpen}
-        onClose={() => setIsTheaterModalOpen(false)}
-        theaterName={movie.theater}
-      />
 
       {/* 하단 고정바 */}
       <div className="fixed bottom-0 left-0 right-0 z-40 bg-black border-t border-gray-800 px-4 pt-3 pb-[calc(0.75rem_+_env(safe-area-inset-bottom))]">

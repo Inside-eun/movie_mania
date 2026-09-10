@@ -33,6 +33,9 @@ yarn-error.log*
 # instagram scan script: session cookies, scan state, review output — never commit
 .instagram-scan/
 
+# blog-bot: raw terminal/chat logs and generated drafts — personal notes, never commit
+.blog-bot/
+
 # typescript
 *.tsbuildinfo
 next-env.d.ts
@@ -44,3 +47,4 @@ next-env.d.ts
 **/public/sw.js.map
 **/public/workbox-*.js.map
 **/public/worker-*.js.map
+.env*

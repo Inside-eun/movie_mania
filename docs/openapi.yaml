@@ -1,0 +1,512 @@
+openapi: 3.0.3
+info:
+  title: movie_mania API
+  version: "1.0"
+servers:
+  - url: /api
+components:
+  schemas:
+    ApiError:
+      type: object
+      properties:
+        success:
+          type: boolean
+          example: false
+        error:
+          type: string
+        details:
+          type: string
+      required: [error]
+paths:
+  /movies:
+    get:
+      summary: List arthouse movie showtimes
+      description: >-
+        `dynamic = 'force-dynamic'`. Queries the `Movie` Mongoose model directly
+        (no cache layer), filtered to `theater.type: 'arthouse'`.
+      parameters:
+        - name: date
+          in: query
+          schema: { type: string, format: date }
+          description: Restricts to showtimes on this date (parsed as a 24h window).
+        - name: city
+          in: query
+          schema: { type: string }
+          description: Prefix-matched against `theater.location`.
+      responses:
+        "200":
+          description: Up to 100 matching showtimes, sorted by `showtime` ascending.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  description: Raw Mongoose `Movie` documents.
+        "500":
+          description: Query failed.
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/ApiError" }
+
+  /schedules:
+    get:
+      summary: Integrated theater schedule (arthouse + KMDB), cached
+      description: >-
+        `dynamic = 'force-dynamic'`. Reads from `cacheService` first (keyed by
+        `type` + date); on a miss, crawls via `ScheduleService.crawlArtCinemasWithKMDBByDate`
+        and merges TMDB poster/overview data from the TMDB cache DB before returning.
+      parameters:
+        - name: type
+          in: query
+          schema: { type: string, enum: [integrated, kofa, art], default: integrated }
+        - name: date
+          in: query
+          schema: { type: string, format: date }
+          description: Defaults to today if omitted or invalid.
+        - name: force
+          in: query
+          schema: { type: string, enum: ["true"] }
+          description: Set to `"true"` to bypass the cache and re-crawl.
+      responses:
+        "200":
+          description: Schedule for the resolved date.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success: { type: boolean, example: true }
+                  count: { type: integer }
+                  data:
+                    type: array
+                    items: { type: object, description: MovieSchedule }
+                  cache:
+                    type: object
+                    properties:
+                      fromCache: { type: boolean }
+                      stats: { type: object }
+                      date: { type: string, format: date }
+                      type: { type: string }
+                  timestamp: { type: string, format: date-time }
+        "500":
+          description: Crawl or cache failure.
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: "#/components/schemas/ApiError"
+                  - type: object
+                    properties:
+                      stack:
+                        type: string
+                        description: Only present when `NODE_ENV=development`.
+                      environment:
+                        type: string
+                        enum: [vercel, local]
+
+  /schedules/prefetch:
+    get:
+      summary: Cron 1 — force-refresh today's crawled schedule cache
+      description: >-
+        `dynamic = 'force-dynamic'`, `maxDuration = 10` (Vercel Hobby limit — only
+        today's date is crawled). Deletes the `integrated`, `art_cinemas`, and
+        `kofa_api` cache entries for today, then re-crawls. Same handler for GET and POST.
+      parameters:
+        - name: token
+          in: query
+          required: true
+          schema: { type: string }
+          description: Must equal `PREFETCH_TOKEN` env var.
+      responses:
+        "200":
+          description: Crawl result for today.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success: { type: boolean }
+                  results:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        date: { type: string, format: date }
+                        count: { type: integer }
+                        success: { type: boolean }
+                        error: { type: string }
+                  elapsedTime: { type: integer, description: milliseconds }
+                  timestamp: { type: string, format: date-time }
+        "401":
+          description: Missing or wrong `token`.
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/ApiError" }
+        "500":
+          description: Unhandled crawl error.
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/ApiError" }
+    post:
+      summary: Same as GET — alternate method for cron callers that POST.
+      parameters:
+        - name: token
+          in: query
+          required: true
+          schema: { type: string }
+      responses:
+        "200": { description: See GET /schedules/prefetch. }
+        "401": { description: See GET /schedules/prefetch. }
+        "500": { description: See GET /schedules/prefetch. }
+
+  /schedules/prefetch-tmdb:
+    get:
+      summary: Cron 2 — enrich today's cached schedule with TMDB data
+      description: >-
+        `dynamic = 'force-dynamic'`, `maxDuration = 10`. Requires the `integrated`
+        cache for today to already exist (i.e. Cron 1 / `/schedules/prefetch` ran
+        first). Looks up unseen movie titles against TMDB in batches of 10,
+        updates the shared TMDB cache DB, and overwrites today's `integrated`
+        cache entry with `tmdbPosterUrl` merged in. Same handler for GET and POST.
+      parameters:
+        - name: token
+          in: query
+          required: true
+          schema: { type: string }
+          description: Must equal `PREFETCH_TOKEN` env var.
+      responses:
+        "200":
+          description: TMDB enrichment result.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success: { type: boolean }
+                  tmdbNew: { type: integer, description: Newly-fetched TMDB entries. }
+                  results:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        date: { type: string, format: date }
+                        count: { type: integer }
+                        success: { type: boolean }
+                  elapsedTime: { type: integer }
+                  timestamp: { type: string, format: date-time }
+        "400":
+          description: No crawled cache for today — Cron 1 hasn't run yet.
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/ApiError" }
+        "401":
+          description: Missing or wrong `token`.
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/ApiError" }
+        "500":
+          description: Missing `TMDB_API_KEY`, or unhandled error.
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/ApiError" }
+    post:
+      summary: Same as GET — alternate method for cron callers that POST.
+      parameters:
+        - name: token
+          in: query
+          required: true
+          schema: { type: string }
+      responses:
+        "200": { description: See GET /schedules/prefetch-tmdb. }
+        "400": { description: See GET /schedules/prefetch-tmdb. }
+        "401": { description: See GET /schedules/prefetch-tmdb. }
+        "500": { description: See GET /schedules/prefetch-tmdb. }
+
+  /boxoffice:
+    get:
+      summary: Yesterday's box office top 5
+      description: "`dynamic = 'force-dynamic'`. Delegates to `ScheduleService.getBoxOfficeTop5()`."
+      responses:
+        "200":
+          description: Top 5 movies for yesterday's date.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success: { type: boolean }
+                  data:
+                    type: object
+                    properties:
+                      targetDate: { type: string, format: date }
+                      movies: { type: array, items: { type: object } }
+                      count: { type: integer }
+                  timestamp: { type: string, format: date-time }
+        "500":
+          description: Box office lookup failed.
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/ApiError" }
+
+  /tmdb-movies:
+    get:
+      summary: TMDB metadata for movies showing on a given date
+      description: >-
+        `dynamic = 'force-dynamic'`. Reads today's/target date's schedule (cache
+        or live crawl), collects unique titles, and resolves each against the
+        TMDB cache DB, searching TMDB live (batches of 10) for any not yet cached.
+      parameters:
+        - name: date
+          in: query
+          schema: { type: string, format: date }
+          description: Defaults to today if omitted or invalid.
+      responses:
+        "200":
+          description: TMDB summaries for every unique movie title on that date.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success: { type: boolean }
+                  fromCache: { type: boolean, description: "false if any title required a live TMDB search." }
+                  date: { type: string, format: date }
+                  count: { type: integer }
+                  data:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        title: { type: string }
+                        tmdbId: { type: integer }
+                        originalTitle: { type: string }
+                        overview: { type: string }
+                        posterUrl: { type: string, nullable: true }
+                        releaseDate: { type: string, nullable: true }
+                        voteAverage: { type: number }
+        "500":
+          description: Crawl, cache, or TMDB lookup failed.
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/ApiError" }
+
+  /movie-news:
+    get:
+      summary: Recent Korean movie news headlines
+      description: >-
+        Scrapes the Google News RSS feed for "영화" and enriches each of the
+        top 8 items with an OG image via `axios`/`cheerio`. Backed by an
+        in-process memory cache (`CACHE_TTL_MS` = 30 minutes) — **not**
+        `dynamic = 'force-dynamic'`, so it can be statically cached by Next.js
+        between deploys. On scrape failure, falls back to the last cached
+        items, or an empty array if there's no cache yet — this endpoint
+        never returns a non-200 response.
+      responses:
+        "200":
+          description: Up to 8 news items, or a stale/empty array on scrape failure.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    title: { type: string }
+                    link: { type: string }
+                    source: { type: string }
+                    pubDate: { type: string }
+                    imageUrl: { type: string, nullable: true }
+                    description: { type: string }
+
+  /movie-info:
+    get:
+      summary: Movie detail lookup (KOBIS, with KMDB fallback)
+      description: >-
+        Without `source`, tries KOBIS first (`getMovieInfoFromKOBIS`) then falls
+        back to the KMDB API if KOBIS has nothing and `KMDB_API_KEY` is set.
+        With `source=KMDB_API`, queries KMDB directly.
+      parameters:
+        - name: movieCode
+          in: query
+          required: true
+          schema: { type: string }
+        - name: source
+          in: query
+          schema: { type: string, enum: [KMDB_API] }
+      responses:
+        "200":
+          description: Movie detail from whichever source resolved it.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success: { type: boolean, example: true }
+                  data: { type: object, nullable: true }
+                  dataSource: { type: string, enum: [KOBIS, KMDB_API] }
+        "400":
+          description: Missing `movieCode`.
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/ApiError" }
+        "500":
+          description: "`source=KMDB_API` requested but `KMDB_API_KEY` is unset, or lookup failed."
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/ApiError" }
+
+  /cache:
+    get:
+      summary: Cache admin — stats, ping, or cleanup
+      description: "`dynamic = 'force-dynamic'`."
+      parameters:
+        - name: action
+          in: query
+          required: true
+          schema: { type: string, enum: [stats, ping, cleanup] }
+      responses:
+        "200":
+          description: Result shape depends on `action` (stats → `{success,stats,timestamp}`, ping → `{success,ok,...,timestamp}`, cleanup → `{success,message,timestamp}`).
+          content:
+            application/json:
+              schema: { type: object }
+        "400":
+          description: Missing or unrecognized `action`.
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/ApiError" }
+        "500":
+          description: Cache backend error.
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/ApiError" }
+    delete:
+      summary: Cache admin — delete all, or one type+date entry
+      parameters:
+        - name: type
+          in: query
+          schema: { type: string }
+          description: Required together with `date`; omit both to clear everything.
+        - name: date
+          in: query
+          schema: { type: string, format: date }
+      responses:
+        "200":
+          description: Deletion confirmed.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success: { type: boolean }
+                  message: { type: string }
+                  timestamp: { type: string, format: date-time }
+        "400":
+          description: Only one of `type`/`date` was provided.
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/ApiError" }
+        "500":
+          description: Cache backend error.
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/ApiError" }
+
+  /booking-url:
+    get:
+      summary: Resolve a ticket booking deep link for a theater chain
+      description: >-
+        `dynamic = 'force-dynamic'`. Dispatches to a per-chain builder (Dtryx,
+        Moviee, CGV, CineQ, Lotte, Megabox) based on `theater`. This endpoint
+        never returns a non-200 status — failure is signaled via `success: false`
+        in the body, with a chain-specific fallback URL where available.
+      parameters:
+        - name: theater
+          in: query
+          required: true
+          schema: { type: string }
+        - name: title
+          in: query
+          schema: { type: string }
+        - name: time
+          in: query
+          schema: { type: string }
+        - name: date
+          in: query
+          required: true
+          schema: { type: string, format: date }
+      responses:
+        "200":
+          description: "Booking URL, a fallback URL, or `url: null` if unsupported/missing params."
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success: { type: boolean }
+                  url: { type: string, nullable: true }
+                  isFallback: { type: boolean }
+                  reason: { type: string, enum: [unsupported] }
+
+  /analytics/track:
+    post:
+      summary: Record a click event (list click or recommendation click)
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              oneOf:
+                - type: object
+                  properties:
+                    type: { type: string, enum: [list_click] }
+                    movieTitle: { type: string }
+                  required: [type, movieTitle]
+                - type: object
+                  properties:
+                    type: { type: string, enum: [recommendation_click] }
+                    algorithm: { type: string, enum: [director, genre, cast, year, random] }
+                    sourceTitle: { type: string }
+                    targetTitle: { type: string }
+                  required: [type, algorithm, sourceTitle, targetTitle]
+      responses:
+        "200":
+          description: Event recorded.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties: { success: { type: boolean, example: true } }
+        "400":
+          description: Body didn't match either known event shape.
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/ApiError" }
+        "500":
+          description: Failed to persist the event.
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/ApiError" }
+    get:
+      summary: Get aggregated analytics summary
+      responses:
+        "200":
+          description: Summary of recorded events.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success: { type: boolean }
+                  data: { type: object, description: "Shape of getSummary()." }
+    delete:
+      summary: Clear all recorded analytics events
+      responses:
+        "200":
+          description: Events cleared.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties: { success: { type: boolean, example: true } }

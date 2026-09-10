@@ -15,7 +15,6 @@ import {
 } from '@/hooks';
 import { MovieSchedule } from '@/types';
 import { getLocalDateString } from '@/utils/date';
-import { getTheaterDetailByName } from '@/mock/theaterDetails';
 
 import DateSelector from '../components/DateSelector';
 import Header from '../components/Header';
@@ -26,7 +25,6 @@ import MovieGrid from '../components/MovieGrid';
 const WishlistView = dynamic(() => import("../components/WishlistView"), { loading: () => null });
 const SettingsView = dynamic(() => import("../components/SettingsView"), { loading: () => null });
 const EventsView = dynamic(() => import("../components/EventsView"), { loading: () => null });
-const TheaterDetailModal = dynamic(() => import("../components/TheaterDetailModal"), { loading: () => null });
 const RouteMapModal = dynamic(() => import("../components/RouteMapModal"), { loading: () => null });
 
 export default function Home() {
@@ -38,9 +36,6 @@ export default function Home() {
   const [showWishlistView, setShowWishlistView] = useState(false);
   const [showInfoView, setShowInfoView] = useState(false);
   const [showEventsView, setShowEventsView] = useState(false);
-
-  const [isTheaterModalOpen, setIsTheaterModalOpen] = useState(false);
-  const [selectedTheaterName, setSelectedTheaterName] = useState<string | null>(null);
 
   const [isRouteMapOpen, setIsRouteMapOpen] = useState(false);
   const [routeTarget, setRouteTarget] = useState<{
@@ -78,32 +73,11 @@ export default function Home() {
     [selectedDate, router]
   );
 
-  const openTheaterModal = useCallback((theaterName: string) => {
-    setSelectedTheaterName(theaterName);
-    setIsTheaterModalOpen(true);
-  }, []);
-
-  const closeTheaterModal = useCallback(() => {
-    setIsTheaterModalOpen(false);
-    setSelectedTheaterName(null);
-  }, []);
-
   const openRouteMapForMovie = useCallback((movie: MovieSchedule) => {
     setRouteTarget({
       name: movie.theater,
       latitude: movie.latitude ?? null,
       longitude: movie.longitude ?? null,
-    });
-    setIsRouteMapOpen(true);
-  }, []);
-
-  const openRouteMapForTheater = useCallback((theaterName: string) => {
-    const theater = getTheaterDetailByName(theaterName);
-    setIsTheaterModalOpen(false);
-    setRouteTarget({
-      name: theaterName,
-      latitude: theater?.lat ?? null,
-      longitude: theater?.lng ?? null,
     });
     setIsRouteMapOpen(true);
   }, []);
@@ -224,7 +198,6 @@ export default function Home() {
               userLocation={filter.userLocation}
               locationError={filter.locationError}
               onSortTypeChange={filter.handleSortTypeChange}
-              onTheaterClick={openTheaterModal}
               onMapClick={openRouteMapForMovie}
             />
           )}
@@ -275,13 +248,6 @@ export default function Home() {
         {showInfoView && <SettingsView />}
 
         {showEventsView && <EventsView />}
-
-        <TheaterDetailModal
-          isOpen={isTheaterModalOpen}
-          onClose={closeTheaterModal}
-          theaterName={selectedTheaterName}
-          onRouteClick={openRouteMapForTheater}
-        />
 
         <RouteMapModal
           isOpen={isRouteMapOpen}
