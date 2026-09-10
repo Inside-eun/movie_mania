@@ -257,61 +257,68 @@ export default function MovieDetailPage() {
           <div className="flex-1 min-w-0 order-1">
             <h1 className="text-lg font-bold text-white leading-snug mb-3">{movie.title}</h1>
 
-            {loading ? (
-              <div className="flex items-center gap-2 py-2">
-                <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-orange-500" />
-                <span className="text-xs text-gray-400">불러오는 중...</span>
+            <div className="flex flex-col gap-1.5">
+              {director ? (
+                <InfoRow label="감독">
+                  <span className="text-gray-200 text-xs truncate">{director}</span>
+                </InfoRow>
+              ) : loading ? (
+                <SkeletonRow label="감독" width="w-20" />
+              ) : null}
+
+              {prodYear ? (
+                <InfoRow label="제작년도">
+                  <span className="text-gray-200 text-xs">{prodYear}년</span>
+                </InfoRow>
+              ) : loading ? (
+                <SkeletonRow label="제작년도" width="w-10" />
+              ) : null}
+
+              {runtime ? (
+                <InfoRow label="러닝타임">
+                  <span className="text-gray-200 text-xs">{runtime}분</span>
+                </InfoRow>
+              ) : loading ? (
+                <SkeletonRow label="러닝타임" width="w-12" />
+              ) : null}
+
+              <InfoRow label="상영시간">
+                <span className="text-orange-400 text-xs font-semibold flex items-center gap-1.5">
+                  {movie.time}
+                  {endTime ? (
+                    <span className="text-gray-400 font-normal"> ~ {endTime}</span>
+                  ) : loading ? (
+                    <span className="skeleton-bar h-2.5 w-10 inline-block" />
+                  ) : null}
+                </span>
+              </InfoRow>
+
+              {genres ? (
+                <InfoRow label="장르">
+                  <span className="text-gray-200 text-xs">{genres}</span>
+                </InfoRow>
+              ) : loading ? (
+                <SkeletonRow label="장르" width="w-24" />
+              ) : null}
+
+              {rating ? (
+                <InfoRow label="관람등급">
+                  <span className="text-gray-200 text-xs">{rating}</span>
+                </InfoRow>
+              ) : loading ? (
+                <SkeletonRow label="관람등급" width="w-14" />
+              ) : null}
+
+              <div className="flex items-center gap-2 pt-1">
+                <span className="text-orange-500 text-xs w-16 flex-shrink-0">영화관</span>
+                <button
+                  onClick={() => setIsTheaterModalOpen(true)}
+                  className="text-gray-200 text-xs underline decoration-dotted underline-offset-2 hover:text-orange-400 transition-colors truncate"
+                >
+                  {movie.theater}
+                </button>
               </div>
-            ) : (
-              <div className="flex flex-col gap-1.5">
-                {director && (
-                  <div className="flex items-center gap-2">
-                    <span className="text-orange-500 text-xs w-16 flex-shrink-0">감독</span>
-                    <span className="text-gray-200 text-xs truncate">{director}</span>
-                  </div>
-                )}
-                {prodYear && (
-                  <div className="flex items-center gap-2">
-                    <span className="text-orange-500 text-xs w-16 flex-shrink-0">제작년도</span>
-                    <span className="text-gray-200 text-xs">{prodYear}년</span>
-                  </div>
-                )}
-                {runtime && (
-                  <div className="flex items-center gap-2">
-                    <span className="text-orange-500 text-xs w-16 flex-shrink-0">러닝타임</span>
-                    <span className="text-gray-200 text-xs">{runtime}분</span>
-                  </div>
-                )}
-                <div className="flex items-center gap-2">
-                  <span className="text-orange-500 text-xs w-16 flex-shrink-0">상영시간</span>
-                  <span className="text-orange-400 text-xs font-semibold">
-                    {movie.time}
-                    {endTime && <span className="text-gray-400 font-normal"> ~ {endTime}</span>}
-                  </span>
-                </div>
-                {genres && (
-                  <div className="flex items-center gap-2">
-                    <span className="text-orange-500 text-xs w-16 flex-shrink-0">장르</span>
-                    <span className="text-gray-200 text-xs">{genres}</span>
-                  </div>
-                )}
-                {rating && (
-                  <div className="flex items-center gap-2">
-                    <span className="text-orange-500 text-xs w-16 flex-shrink-0">관람등급</span>
-                    <span className="text-gray-200 text-xs">{rating}</span>
-                  </div>
-                )}
-                <div className="flex items-center gap-2 pt-1">
-                  <span className="text-orange-500 text-xs w-16 flex-shrink-0">영화관</span>
-                  <button
-                    onClick={() => setIsTheaterModalOpen(true)}
-                    className="text-gray-200 text-xs underline decoration-dotted underline-offset-2 hover:text-orange-400 transition-colors truncate"
-                  >
-                    {movie.theater}
-                  </button>
-                </div>
-              </div>
-            )}
+            </div>
           </div>
 
           <div className="relative flex-shrink-0 w-28 aspect-[2/3] overflow-hidden shadow-2xl order-2">
