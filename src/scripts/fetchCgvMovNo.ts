@@ -34,6 +34,11 @@ function normalizeTitle(title: string): string {
   return title.replace(/\s+/g, '');
 }
 
+// CGV가 예전에 쓰던 5자리 안팎의 구형 movNo는 다른 영화에 재할당된 사례가 확인됨
+// (예: "기생충"→81774, "라디오 스타"→12413가 실제로는 전혀 다른 영화로 감).
+// 지금 신작에 쓰이는 형식(30으로 시작하는 8자리)만 신뢰한다.
+const SAFE_MOVNO_PATTERN = /^30\d{6}$/;
+
 async function searchCgvMovie(
   page: import('puppeteer').Page,
   title: string,
@@ -74,6 +79,7 @@ async function run(titles: string[]) {
   const skipped: string[] = [];
   const notFound: string[] = [];
   const ambiguous: string[] = [];
+  const unsafeFormat: string[] = [];
 
   for (const title of titles) {
     if (existing[title]) {
@@ -85,8 +91,14 @@ async function run(titles: string[]) {
     const exact = results.filter((r) => normalizeTitle(r.movNm) === normalizeTitle(title));
 
     if (exact.length === 1) {
-      existing[title] = exact[0].movNo;
-      added.push(`  추가됨:   ${title} → ${exact[0].movNo}`);
+      if (SAFE_MOVNO_PATTERN.test(exact[0].movNo)) {
+        existing[title] = exact[0].movNo;
+        added.push(`  추가됨:   ${title} → ${exact[0].movNo}`);
+      } else {
+        unsafeFormat.push(
+          `  구형 ID(신뢰 불가): ${title} → ${exact[0].movNo} — 다른 영화로 재할당됐을 수 있어 자동 추가 안 함`,
+        );
+      }
     } else if (exact.length > 1) {
       ambiguous.push(
         `  다중 일치: ${title} → ${exact.map((r) => `${r.movNm}(${r.movNo})`).join(', ')}`,
@@ -106,13 +118,13 @@ async function run(titles: string[]) {
   fs.writeFileSync(CACHE_PATH, JSON.stringify(sorted, null, 2) + '\n', 'utf-8');
 
   console.log(
-    `\n✅ 완료: ${added.length}편 추가, ${skipped.length}편 스킵, ${notFound.length}편 못 찾음, ${ambiguous.length}편 다중 일치\n`,
+    `\n✅ 완료: ${added.length}편 추가, ${skipped.length}편 스킵, ${notFound.length}편 못 찾음, ${ambiguous.length}편 다중 일치, ${unsafeFormat.length}편 구형 ID\n`,
   );
-  [...added, ...skipped, ...notFound, ...ambiguous].forEach((line) => console.log(line));
+  [...added, ...skipped, ...notFound, ...ambiguous, ...unsafeFormat].forEach((line) => console.log(line));
 
-  if (notFound.length || ambiguous.length) {
+  if (notFound.length || ambiguous.length || unsafeFormat.length) {
     console.log(
-      '\n못 찾았거나 다중 일치한 영화는 DevTools로 확인 후 addCGVMovNo.ts로 수동 추가해줘.',
+      '\n못 찾았거나 다중 일치/구형 ID인 영화는 DevTools로 확인 후 addCGVMovNo.ts로 수동 추가해줘.',
     );
   }
   console.log('');
