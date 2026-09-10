@@ -28,6 +28,48 @@ export function getTMDBImageUrl(
   return `${TMDB_IMAGE_BASE_URL}/${size}${path}`;
 }
 
+export interface TMDBMovieCredits {
+  director: string | null;
+  cast: string[];
+}
+
+interface TMDBCreditsResponse {
+  cast: Array<{ name: string; order: number }>;
+  crew: Array<{ name: string; job: string }>;
+}
+
+/** 제목으로 TMDB에서 검색 후 감독/출연진(상위 5명)을 조회한다. 매칭 실패 시 null. */
+export async function getMovieCredits(title: string): Promise<TMDBMovieCredits | null> {
+  const apiKey = process.env.TMDB_API_KEY;
+  if (!apiKey) return null;
+
+  const movie = await searchMovieByTitle(title);
+  if (!movie) return null;
+
+  try {
+    const response = await axios.get<TMDBCreditsResponse>(
+      `${TMDB_BASE_URL}/movie/${movie.id}/credits`,
+      {
+        params: { api_key: apiKey, language: "ko-KR" },
+        timeout: 8000,
+        headers: { Accept: "application/json" },
+      },
+    );
+
+    const director = response.data.crew?.find((c) => c.job === "Director")?.name ?? null;
+    const cast = (response.data.cast ?? [])
+      .slice()
+      .sort((a, b) => a.order - b.order)
+      .slice(0, 5)
+      .map((c) => c.name);
+
+    return { director, cast };
+  } catch (error) {
+    console.error("TMDB 크레딧 조회 실패:", error);
+    return null;
+  }
+}
+
 export async function searchMovieByTitle(
   title: string,
 ): Promise<TMDBMovieResult | null> {

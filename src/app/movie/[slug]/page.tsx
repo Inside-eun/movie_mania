@@ -10,7 +10,7 @@ import TheaterDetailModal from "@/components/TheaterDetailModal";
 import { getBookingFallbackUrl } from "@/lib/bookingFallbacks";
 import { useWishlist } from "@/hooks";
 import { MovieSchedule, ScheduleResponse } from "@/types";
-import { getRecommendations } from "@/mock/recommendations";
+import { getRecommendations, CreditsByTitle } from "@/mock/recommendations";
 import { getTheaterDetailByName } from "@/mock/theaterDetails";
 
 interface KOBISMovieInfo {
@@ -32,6 +32,23 @@ interface StoredMovieDetail {
   selectedDate: string;
 }
 
+function InfoRow({ label, children }: { label: string; children: React.ReactNode }) {
+  return (
+    <div className="flex items-center gap-2">
+      <span className="text-orange-500 text-xs w-16 flex-shrink-0">{label}</span>
+      {children}
+    </div>
+  );
+}
+
+function SkeletonRow({ label, width }: { label: string; width: string }) {
+  return (
+    <InfoRow label={label}>
+      <span className={`skeleton-bar h-3 ${width}`} />
+    </InfoRow>
+  );
+}
+
 export default function MovieDetailPage() {
   const params = useParams<{ slug: string }>();
   const router = useRouter();
@@ -39,6 +56,7 @@ export default function MovieDetailPage() {
   const [stored, setStored] = useState<StoredMovieDetail | null>(null);
   const [notFound, setNotFound] = useState(false);
   const [dateMovies, setDateMovies] = useState<MovieSchedule[]>([]);
+  const [creditsByTitle, setCreditsByTitle] = useState<CreditsByTitle>({});
 
   const [kobisData, setKobisData] = useState<KOBISMovieInfo | null>(null);
   const [kmdbData, setKmdbData] = useState<KMDBApiData | null>(null);
@@ -85,6 +103,28 @@ export default function MovieDetailPage() {
       })
       .catch(() => {});
   }, [selectedDate]);
+
+  // 추천작 감독/출연진 매칭용 크레딧 (해당 날짜 상영작 전체 + 현재 영화)
+  useEffect(() => {
+    if (!movie || dateMovies.length === 0) return;
+
+    const titles = Array.from(new Set([movie.title, ...dateMovies.map((m) => m.title)]));
+    const controller = new AbortController();
+
+    fetch("/api/movie-credits", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ titles }),
+      signal: controller.signal,
+    })
+      .then((res) => res.json())
+      .then((data: { success: boolean; data?: CreditsByTitle }) => {
+        if (data.success && data.data) setCreditsByTitle(data.data);
+      })
+      .catch(() => {});
+
+    return () => controller.abort();
+  }, [movie, dateMovies]);
 
   // 감독/장르/등급 등 상세 정보
   useEffect(() => {
@@ -194,7 +234,7 @@ export default function MovieDetailPage() {
     return `${String(end.getHours()).padStart(2, "0")}:${String(end.getMinutes()).padStart(2, "0")}`;
   })();
 
-  const recommendation = getRecommendations(movie, dateMovies);
+  const recommendation = getRecommendations(movie, dateMovies, creditsByTitle);
   const inWishlist = wishlist.isInWishlist(movie);
 
   return (
