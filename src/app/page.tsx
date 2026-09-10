@@ -154,7 +154,7 @@ export default function Home() {
             : null
       )}
 
-      <main className="container mx-auto px-4 pb-24 pt-4 max-w-4xl min-h-screen">
+      <main className="container mx-auto px-4 pb-[calc(6rem_+_env(safe-area-inset-bottom))] pt-4 max-w-4xl min-h-screen">
         {/* 필터 영역 */}
         {isHomeView && (
           <div className="flex gap-2 items-start mb-4">
@@ -292,7 +292,7 @@ export default function Home() {
         />
 
         {/* 하단 네비게이션 (모바일) */}
-        <nav className="fixed bottom-0 left-0 right-0 bg-black border-t border-gray-800 shadow-lg z-40 sm:hidden">
+        <nav className="fixed bottom-0 left-0 right-0 bg-black border-t border-gray-800 shadow-lg z-40 pb-[env(safe-area-inset-bottom)] sm:hidden">
           <div className="flex items-center justify-around h-16">
             <button
               onClick={goToHome}
