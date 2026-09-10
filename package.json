@@ -18,7 +18,8 @@
     "prefetch:local": "./scripts/prefetch-local.sh",
     "prefetch:prod": "./scripts/prefetch-production.sh",
     "scan:instagram": "npx tsx src/scripts/scan-instagram-events.ts",
-    "cgv:movno": "npx tsx src/scripts/fetchCgvMovNo.ts"
+    "cgv:movno": "npx tsx src/scripts/fetchCgvMovNo.ts",
+    "cgv:movno:batch": "npx tsx src/scripts/batchFetchCgvMovNo.ts"
   },
   "dependencies": {
     "@capacitor/app": "^8.1.1",

@@ -59,10 +59,10 @@ async function searchCgvMovie(
   }, title);
 }
 
-async function run(titles: string[]) {
+export async function run(titles: string[]) {
   if (titles.length === 0) {
     console.error('❌ 조회할 영화 제목이 없습니다.');
-    process.exit(1);
+    return;
   }
 
   const existing: Record<string, string> = JSON.parse(fs.readFileSync(CACHE_PATH, 'utf-8'));
@@ -89,19 +89,20 @@ async function run(titles: string[]) {
 
     const results = await searchCgvMovie(page, title);
     const exact = results.filter((r) => normalizeTitle(r.movNm) === normalizeTitle(title));
+    // 같은 제목이 신형(30xxxxxx)/구형 ID로 중복 검색되는 경우가 있어, 신형을 우선
+    // 신뢰하고 구형은 무시한다(구형은 다른 영화로 재할당됐을 위험이 있으므로).
+    const safeExact = exact.filter((r) => SAFE_MOVNO_PATTERN.test(r.movNo));
 
-    if (exact.length === 1) {
-      if (SAFE_MOVNO_PATTERN.test(exact[0].movNo)) {
-        existing[title] = exact[0].movNo;
-        added.push(`  추가됨:   ${title} → ${exact[0].movNo}`);
-      } else {
-        unsafeFormat.push(
-          `  구형 ID(신뢰 불가): ${title} → ${exact[0].movNo} — 다른 영화로 재할당됐을 수 있어 자동 추가 안 함`,
-        );
-      }
-    } else if (exact.length > 1) {
+    if (safeExact.length === 1) {
+      existing[title] = safeExact[0].movNo;
+      added.push(`  추가됨:   ${title} → ${safeExact[0].movNo}`);
+    } else if (safeExact.length > 1) {
       ambiguous.push(
-        `  다중 일치: ${title} → ${exact.map((r) => `${r.movNm}(${r.movNo})`).join(', ')}`,
+        `  다중 일치: ${title} → ${safeExact.map((r) => `${r.movNm}(${r.movNo})`).join(', ')}`,
+      );
+    } else if (exact.length > 0) {
+      unsafeFormat.push(
+        `  구형 ID(신뢰 불가): ${title} → ${exact.map((r) => r.movNo).join(', ')} — 다른 영화로 재할당됐을 수 있어 자동 추가 안 함`,
       );
     } else {
       notFound.push(`  못 찾음:  ${title}`);
@@ -130,16 +131,21 @@ async function run(titles: string[]) {
   console.log('');
 }
 
-const args = process.argv.slice(2);
-if (args.length > 0) {
-  run(args);
-} else {
-  console.log('영화 제목을 한 줄에 하나씩 입력하고 Enter 후 Ctrl+D (Mac: Ctrl+D, Windows: Ctrl+Z+Enter):\n');
-  const rl = readline.createInterface({ input: process.stdin });
-  const titles: string[] = [];
-  rl.on('line', (line) => {
-    const t = line.trim();
-    if (t) titles.push(t);
-  });
-  rl.on('close', () => run(titles));
+// batchFetchCgvMovNo.ts 등 다른 스크립트에서 run()을 import해 쓸 때는 아래 CLI
+// 진입부가 실행되지 않도록 직접 실행된 경우에만 동작시킨다.
+const isDirectRun = import.meta.url === `file://${process.argv[1]}`;
+if (isDirectRun) {
+  const args = process.argv.slice(2);
+  if (args.length > 0) {
+    run(args);
+  } else {
+    console.log('영화 제목을 한 줄에 하나씩 입력하고 Enter 후 Ctrl+D (Mac: Ctrl+D, Windows: Ctrl+Z+Enter):\n');
+    const rl = readline.createInterface({ input: process.stdin });
+    const titles: string[] = [];
+    rl.on('line', (line) => {
+      const t = line.trim();
+      if (t) titles.push(t);
+    });
+    rl.on('close', () => run(titles));
+  }
 }
