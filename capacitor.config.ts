@@ -5,7 +5,7 @@ const config: CapacitorConfig = {
   appName: '영화방랑자',
   webDir: 'public',
   server: {
-    url: 'https://moviemania-olive.vercel.app',
+    url: 'https://moviemania-git-feature-capacitor-ios-app-dameuns-projects.vercel.app',
     cleartext: false,
   },
   ios: {
