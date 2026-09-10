@@ -7,16 +7,18 @@ import { mockEvents, getEvent, CuratedEvent } from "@/mock/events";
 import { useWeeklySchedules } from "@/hooks/useWeeklySchedules";
 import { getLocalDateString } from "@/utils/date";
 import { MovieSchedule } from "@/types";
-
-const STORAGE_KEY = "notifyAlerts";
-
-function alertKey(eventId: string, title: string) {
-  return `${eventId}::${title}`;
-}
+import { CreditsByTitle } from "@/mock/recommendations";
+import PosterImage from "@/components/PosterImage";
 
 function formatMonthDay(dateStr: string): string {
   const [, month, day] = dateStr.split("-");
   return `${Number(month)}/${Number(day)}`;
+}
+
+function formatYear(dateStr: string | null | undefined): string | null {
+  if (!dateStr) return null;
+  const year = dateStr.split("-")[0];
+  return year || null;
 }
 
 // 이번 주(오늘 포함 7일) 데이터에서 극장 이름 + 제목이 둘 다 일치하는 첫 상영일을 찾는다.
@@ -36,25 +38,48 @@ function findMatch(
   return null;
 }
 
+function MovieCardSkeleton() {
+  return (
+    <div className="bg-gray-900 border border-gray-800">
+      <div className="skeleton-bar w-full aspect-[2/3]" />
+      <div className="p-2 space-y-1.5">
+        <span className="skeleton-bar block h-3 w-full" />
+        <span className="skeleton-bar block h-3 w-2/3" />
+      </div>
+    </div>
+  );
+}
+
 export default function EventsView() {
   const router = useRouter();
   const [selectedEventId, setSelectedEventId] = useState<string | null>(null);
-  const [alerts, setAlerts] = useState<string[]>([]);
+  const [creditsByTitle, setCreditsByTitle] = useState<CreditsByTitle>({});
+  const [creditsLoading, setCreditsLoading] = useState(false);
   const weekly = useWeeklySchedules();
 
-  useEffect(() => {
-    const saved = localStorage.getItem(STORAGE_KEY);
-    if (saved) setAlerts(JSON.parse(saved));
-  }, []);
+  const selectedEvent = selectedEventId ? getEvent(selectedEventId) : null;
 
-  const toggleAlert = (eventId: string, title: string) => {
-    const key = alertKey(eventId, title);
-    setAlerts((prev) => {
-      const next = prev.includes(key) ? prev.filter((k) => k !== key) : [...prev, key];
-      localStorage.setItem(STORAGE_KEY, JSON.stringify(next));
-      return next;
-    });
-  };
+  useEffect(() => {
+    if (!selectedEvent) return;
+
+    const controller = new AbortController();
+    setCreditsLoading(true);
+
+    fetch("/api/movie-credits", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ titles: selectedEvent.movieTitles }),
+      signal: controller.signal,
+    })
+      .then((res) => res.json())
+      .then((data: { success: boolean; data?: CreditsByTitle }) => {
+        if (data.success && data.data) setCreditsByTitle(data.data);
+      })
+      .catch(() => {})
+      .finally(() => setCreditsLoading(false));
+
+    return () => controller.abort();
+  }, [selectedEvent]);
 
   // 극장 메인 화면(page.tsx)의 openMovieDetail과 동일한 방식으로 저장 후 이동한다.
   const openMovieDetail = (movie: MovieSchedule, date: string) => {
@@ -62,8 +87,6 @@ export default function EventsView() {
     sessionStorage.setItem(`movieDetail:${slug}`, JSON.stringify({ movie, selectedDate: date }));
     router.push(`/movie/${slug}`);
   };
-
-  const selectedEvent = selectedEventId ? getEvent(selectedEventId) : null;
 
   if (selectedEvent) {
     const today = getLocalDateString(new Date());
@@ -93,67 +116,61 @@ export default function EventsView() {
         )}
 
         <h3 className="text-sm font-bold text-white mb-2">상영작</h3>
-        <div className="space-y-2">
-          {selectedEvent.movieTitles.map((title) => {
-            const isAlerted = alerts.includes(alertKey(selectedEvent.id, title));
-            const match = findMatch(weekly, selectedEvent, title);
-            const matchedDate = match?.date ?? null;
-            const isShowingToday = matchedDate === today;
-            const isScheduledLater = matchedDate !== null && !isShowingToday;
-            const hasSchedule = matchedDate !== null;
-            return (
-              <div
-                key={title}
-                className="flex items-center justify-between bg-gray-900 border border-gray-800 px-3 py-2.5"
-              >
-                <div
-                  className={`min-w-0 flex-1 ${hasSchedule ? "cursor-pointer" : ""}`}
-                  onClick={() => match && openMovieDetail(match.movie, match.date)}
-                >
-                  <p
-                    className={`text-sm font-medium text-white truncate ${
-                      hasSchedule ? "hover:text-orange-400" : ""
+        <div className="grid grid-cols-2 gap-3">
+          {creditsLoading
+            ? selectedEvent.movieTitles.map((title) => <MovieCardSkeleton key={title} />)
+            : selectedEvent.movieTitles.map((title) => {
+                const credits = creditsByTitle[title];
+                const match = findMatch(weekly, selectedEvent, title);
+                const matchedDate = match?.date ?? null;
+                const isShowingToday = matchedDate === today;
+                const isScheduledLater = matchedDate !== null && !isShowingToday;
+                const hasSchedule = matchedDate !== null;
+                const year = formatYear(credits?.releaseDate);
+
+                const CardWrapper = hasSchedule ? "button" : "div";
+
+                return (
+                  <CardWrapper
+                    key={title}
+                    {...(hasSchedule
+                      ? { onClick: () => match && openMovieDetail(match.movie, match.date) }
+                      : {})}
+                    className={`bg-gray-900 border border-gray-800 text-left overflow-hidden ${
+                      hasSchedule ? "hover:border-orange-500 transition-colors" : ""
                     }`}
                   >
-                    {title}
-                  </p>
-                  <p className="text-[10px] mt-0.5">
-                    {isShowingToday ? (
-                      <span className="text-green-400">현재 상영 중</span>
-                    ) : isScheduledLater ? (
-                      <span className="text-blue-400">{formatMonthDay(matchedDate!)} 상영 예정</span>
-                    ) : (
-                      <span className="text-gray-500">상영 정보 미등록</span>
-                    )}
-                  </p>
-                </div>
-                <button
-                  onClick={() => toggleAlert(selectedEvent.id, title)}
-                  disabled={hasSchedule}
-                  className={`ml-3 flex-shrink-0 px-3 py-1.5 text-[11px] font-bold transition-all ${
-                    hasSchedule
-                      ? "bg-gray-800 text-gray-600 cursor-not-allowed"
-                      : isAlerted
-                        ? "bg-orange-500 text-black"
-                        : "bg-gray-800 text-gray-300 hover:bg-gray-700"
-                  }`}
-                >
-                  {isShowingToday
-                    ? "상영 중"
-                    : isScheduledLater
-                      ? "상영 예정"
-                      : isAlerted
-                        ? "🔔 알림 설정됨"
-                        : "🔕 알림 신청"}
-                </button>
-              </div>
-            );
-          })}
+                    <div className="relative w-full aspect-[2/3] bg-gray-800">
+                      <PosterImage src={credits?.posterUrl ?? null} alt={title} sizes="50vw" />
+                      {!hasSchedule && (
+                        <div className="absolute inset-0 bg-black/50" />
+                      )}
+                    </div>
+                    <div className="p-2">
+                      <p className="text-xs font-medium text-white leading-snug line-clamp-2 min-h-[2.25em]">
+                        {title}
+                      </p>
+                      {(credits?.director || year) && (
+                        <p className="text-[10px] text-gray-400 mt-0.5 truncate">
+                          {credits?.director}
+                          {credits?.director && year && " · "}
+                          {year}
+                        </p>
+                      )}
+                      <p className="text-[10px] mt-1">
+                        {isShowingToday ? (
+                          <span className="text-green-400">현재 상영 중</span>
+                        ) : isScheduledLater ? (
+                          <span className="text-blue-400">{formatMonthDay(matchedDate!)} 상영 예정</span>
+                        ) : (
+                          <span className="text-gray-500">상영 정보 미등록</span>
+                        )}
+                      </p>
+                    </div>
+                  </CardWrapper>
+                );
+              })}
         </div>
-
-        <p className="text-xs text-gray-500 mt-4 leading-relaxed">
-          알림을 신청하면 해당 영화의 상영 정보가 새로 등록될 때 푸시 알림으로 안내해드립니다.
-        </p>
       </div>
     );
   }
@@ -163,7 +180,7 @@ export default function EventsView() {
       <div className="mb-4">
         <h2 className="text-base font-bold text-white">기획전</h2>
         <p className="text-xs text-gray-500 mt-0.5">
-          영화관별 기획전을 둘러보고, 원하는 작품의 상영 등록 알림을 신청해보세요.
+          영화관별 기획전을 둘러보세요.
         </p>
       </div>
 

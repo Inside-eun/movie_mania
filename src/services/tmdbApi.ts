@@ -31,6 +31,9 @@ export function getTMDBImageUrl(
 export interface TMDBMovieCredits {
   director: string | null;
   cast: string[];
+  posterUrl: string | null;
+  overview: string | null;
+  releaseDate: string | null;
 }
 
 interface TMDBCreditsResponse {
@@ -38,7 +41,7 @@ interface TMDBCreditsResponse {
   crew: Array<{ name: string; job: string }>;
 }
 
-/** 제목으로 TMDB에서 검색 후 감독/출연진(상위 5명)을 조회한다. 매칭 실패 시 null. */
+/** 제목으로 TMDB에서 검색 후 감독/출연진(상위 5명)·포스터·줄거리·개봉일을 조회한다. 매칭 실패 시 null. */
 export async function getMovieCredits(title: string): Promise<TMDBMovieCredits | null> {
   const apiKey = process.env.TMDB_API_KEY;
   if (!apiKey) return null;
@@ -63,7 +66,13 @@ export async function getMovieCredits(title: string): Promise<TMDBMovieCredits |
       .slice(0, 5)
       .map((c) => c.name);
 
-    return { director, cast };
+    return {
+      director,
+      cast,
+      posterUrl: getTMDBImageUrl(movie.poster_path, "w342"),
+      overview: movie.overview || null,
+      releaseDate: movie.release_date || null,
+    };
   } catch (error) {
     console.error("TMDB 크레딧 조회 실패:", error);
     return null;
