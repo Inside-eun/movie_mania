@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 
 import MapView from "@/components/MapView";
+import { getCurrentPosition } from "@/lib/geolocation";
 import { estimateTravel } from "@/mock/mockMap";
 
 // 위치 권한이 없을 때 기본값 (서울시청)
@@ -27,14 +28,13 @@ export default function RouteMapModal({
   const [usingDefault, setUsingDefault] = useState(true);
 
   useEffect(() => {
-    if (!isOpen || !("geolocation" in navigator)) return;
-    navigator.geolocation.getCurrentPosition(
-      (pos) => {
-        setUserLocation({ latitude: pos.coords.latitude, longitude: pos.coords.longitude });
+    if (!isOpen) return;
+    getCurrentPosition()
+      .then((location) => {
+        setUserLocation(location);
         setUsingDefault(false);
-      },
-      () => setUsingDefault(true)
-    );
+      })
+      .catch(() => setUsingDefault(true));
   }, [isOpen]);
 
   useEffect(() => {
