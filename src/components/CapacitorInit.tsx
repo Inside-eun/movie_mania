@@ -17,7 +17,6 @@ export default function CapacitorInit() {
       ]);
 
       await StatusBar.setStyle({ style: Style.Dark });
-      await StatusBar.setBackgroundColor({ color: '#000000' });
       await SplashScreen.hide();
 
       const backListener = await App.addListener('backButton', ({ canGoBack }) => {
