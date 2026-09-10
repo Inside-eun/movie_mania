@@ -22,6 +22,12 @@ export interface RecommendationGroup {
 
 export type CreditsByTitle = Record<string, TMDBMovieCredits | null | undefined>;
 
+// 기획전 그룹핑은 크레딧(감독/배우) 조회 없이도 바로 결정되므로,
+// 상세 페이지가 크레딧 로딩 스켈레톤을 보여줄지 판단할 때 이 함수로 먼저 걸러낸다.
+export function isEventMovie(title: string): boolean {
+  return mockEvents.some((e) => e.movieTitles.includes(title));
+}
+
 function toItems(movies: MovieSchedule[]): RecommendedItem[] {
   return movies.map((m) => ({
     title: m.title,

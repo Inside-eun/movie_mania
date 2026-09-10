@@ -10,7 +10,7 @@ import TheaterDetailModal from "@/components/TheaterDetailModal";
 import { getBookingFallbackUrl } from "@/lib/bookingFallbacks";
 import { useWishlist } from "@/hooks";
 import { MovieSchedule, ScheduleResponse } from "@/types";
-import { getRecommendations, CreditsByTitle } from "@/mock/recommendations";
+import { getRecommendations, isEventMovie, CreditsByTitle } from "@/mock/recommendations";
 import { getTheaterDetailByName } from "@/mock/theaterDetails";
 
 interface KOBISMovieInfo {
@@ -57,6 +57,7 @@ export default function MovieDetailPage() {
   const [notFound, setNotFound] = useState(false);
   const [dateMovies, setDateMovies] = useState<MovieSchedule[]>([]);
   const [creditsByTitle, setCreditsByTitle] = useState<CreditsByTitle>({});
+  const [creditsLoading, setCreditsLoading] = useState(true);
 
   const [kobisData, setKobisData] = useState<KOBISMovieInfo | null>(null);
   const [kmdbData, setKmdbData] = useState<KMDBApiData | null>(null);
@@ -111,6 +112,8 @@ export default function MovieDetailPage() {
     const titles = Array.from(new Set([movie.title, ...dateMovies.map((m) => m.title)]));
     const controller = new AbortController();
 
+    setCreditsLoading(true);
+
     fetch("/api/movie-credits", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
@@ -121,7 +124,8 @@ export default function MovieDetailPage() {
       .then((data: { success: boolean; data?: CreditsByTitle }) => {
         if (data.success && data.data) setCreditsByTitle(data.data);
       })
-      .catch(() => {});
+      .catch(() => {})
+      .finally(() => setCreditsLoading(false));
 
     return () => controller.abort();
   }, [movie, dateMovies]);
@@ -234,7 +238,11 @@ export default function MovieDetailPage() {
     return `${String(end.getHours()).padStart(2, "0")}:${String(end.getMinutes()).padStart(2, "0")}`;
   })();
 
-  const recommendation = getRecommendations(movie, dateMovies, creditsByTitle);
+  const recommendationReady =
+    dateMovies.length > 0 && (isEventMovie(movie.title) || !creditsLoading);
+  const recommendation = recommendationReady
+    ? getRecommendations(movie, dateMovies, creditsByTitle)
+    : null;
   const inWishlist = wishlist.isInWishlist(movie);
 
   return (
@@ -339,7 +347,22 @@ export default function MovieDetailPage() {
         </p>
 
         {/* 추천작 */}
-        {recommendation.items.length > 0 && (
+        {!recommendationReady && (
+          <div className="mb-6">
+            <span className="skeleton-bar inline-block h-4 w-32 mb-3" />
+            <div className="flex gap-3 overflow-x-auto pb-2 -mx-4 px-4">
+              {Array.from({ length: 6 }).map((_, i) => (
+                <div key={i} className="flex-shrink-0 w-24">
+                  <div className="skeleton-bar w-24 aspect-[2/3] mb-1.5" />
+                  <span className="skeleton-bar block h-3 w-full mb-1" />
+                  <span className="skeleton-bar block h-3 w-2/3" />
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
+
+        {recommendationReady && recommendation && recommendation.items.length > 0 && (
         <div className="mb-6">
           <h2 className="text-sm font-bold text-white mb-3">{recommendation.reason}</h2>
           <div className="flex gap-3 overflow-x-auto pb-2 -mx-4 px-4">
