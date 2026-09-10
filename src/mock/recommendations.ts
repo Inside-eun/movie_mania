@@ -1,10 +1,10 @@
-// 프로토타입 전용: 영화 상세 페이지 하단 "추천작" 섹션을 위한 목업 추천 로직.
+// 영화 상세 페이지 하단 "추천작" 섹션을 위한 규칙 기반 추천 로직.
 // 실제 추천 알고리즘이 아니며, 기획전 그룹핑 → 동일 극장 상영작 → 무작위 순으로
-// 화면에 채울 후보를 골라주는 규칙 기반 목업이다.
+// 화면에 채울 후보를 골라주는 규칙 기반 목업이다. 후보 movies는 호출부에서
+// 해당 날짜의 실제 상영 데이터를 넘겨받아 사용한다(포스터/시간이 실제 값이 되도록).
 import { MovieSchedule } from "@/types";
 
 import { mockEvents } from "./events";
-import { getSnapshotMovies } from "./snapshot";
 
 export interface RecommendedItem {
   title: string;
@@ -19,9 +19,10 @@ export interface RecommendationGroup {
   items: RecommendedItem[];
 }
 
-export function getRecommendations(movie: MovieSchedule): RecommendationGroup {
-  const allMovies = getSnapshotMovies();
-
+export function getRecommendations(
+  movie: MovieSchedule,
+  allMovies: MovieSchedule[]
+): RecommendationGroup {
   const event = mockEvents.find((e) => e.movieTitles.includes(movie.title));
   if (event) {
     const siblingTitles = event.movieTitles.filter((t) => t !== movie.title);

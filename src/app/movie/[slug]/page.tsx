@@ -9,7 +9,7 @@ import TheaterMap from "@/components/TheaterMap";
 import TheaterDetailModal from "@/components/TheaterDetailModal";
 import { getBookingFallbackUrl } from "@/lib/bookingFallbacks";
 import { useWishlist } from "@/hooks";
-import { MovieSchedule } from "@/types";
+import { MovieSchedule, ScheduleResponse } from "@/types";
 import { getRecommendations } from "@/mock/recommendations";
 import { getTheaterDetailByName } from "@/mock/theaterDetails";
 
@@ -38,6 +38,7 @@ export default function MovieDetailPage() {
 
   const [stored, setStored] = useState<StoredMovieDetail | null>(null);
   const [notFound, setNotFound] = useState(false);
+  const [dateMovies, setDateMovies] = useState<MovieSchedule[]>([]);
 
   const [kobisData, setKobisData] = useState<KOBISMovieInfo | null>(null);
   const [kmdbData, setKmdbData] = useState<KMDBApiData | null>(null);
@@ -61,6 +62,29 @@ export default function MovieDetailPage() {
   const selectedDate = stored?.selectedDate;
   const theaterDetail = movie?.theater ? getTheaterDetailByName(movie.theater) : undefined;
   const wishlist = useWishlist(selectedDate ?? "");
+
+  // 추천작 섹션에 쓸 해당 날짜의 실제 상영 데이터 (홈 화면 캐시 우선, 없으면 조회)
+  useEffect(() => {
+    if (!selectedDate) return;
+
+    try {
+      const cached = localStorage.getItem(`schedules_v1_${selectedDate}`);
+      if (cached) {
+        const entry = JSON.parse(cached) as { movies: MovieSchedule[] };
+        setDateMovies(entry.movies);
+        return;
+      }
+    } catch {
+      // 캐시 파싱 실패 시 API 조회로 진행
+    }
+
+    fetch(`/api/schedules?type=integrated&date=${selectedDate}`)
+      .then((res) => res.json())
+      .then((data: ScheduleResponse) => {
+        if (data.success) setDateMovies(data.data);
+      })
+      .catch(() => {});
+  }, [selectedDate]);
 
   // 감독/장르/등급 등 상세 정보
   useEffect(() => {
@@ -170,7 +194,7 @@ export default function MovieDetailPage() {
     return `${String(end.getHours()).padStart(2, "0")}:${String(end.getMinutes()).padStart(2, "0")}`;
   })();
 
-  const recommendation = getRecommendations(movie);
+  const recommendation = getRecommendations(movie, dateMovies);
   const inWishlist = wishlist.isInWishlist(movie);
 
   return (
@@ -268,6 +292,7 @@ export default function MovieDetailPage() {
         </p>
 
         {/* 추천작 */}
+        {recommendation.items.length > 0 && (
         <div className="mb-6">
           <h2 className="text-sm font-bold text-white mb-3">{recommendation.reason}</h2>
           <div className="flex gap-3 overflow-x-auto pb-2 -mx-4 px-4">
@@ -317,6 +342,7 @@ export default function MovieDetailPage() {
             ))}
           </div>
         </div>
+        )}
       </div>
 
       <TheaterDetailModal
