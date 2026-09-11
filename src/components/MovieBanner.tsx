@@ -136,7 +136,7 @@ export default function MovieBanner({ onEventClick }: MovieBannerProps) {
 
           {/* 콘텐츠 */}
           <div
-            className="absolute inset-0 flex items-center justify-center"
+            className="absolute inset-0 flex items-center px-4 gap-4"
             style={{ opacity: fading ? 0 : 1, transition: "opacity 0.25s" }}
           >
             {/* 포스터 */}
