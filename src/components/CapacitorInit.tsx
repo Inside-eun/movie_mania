@@ -2,6 +2,12 @@
 
 import { useEffect } from 'react';
 
+declare global {
+  interface Window {
+    gtag?: (...args: unknown[]) => void;
+  }
+}
+
 export default function CapacitorInit() {
   useEffect(() => {
     let cleanup: (() => void) | undefined;
@@ -23,7 +29,16 @@ export default function CapacitorInit() {
         if (!canGoBack) App.exitApp();
       });
 
-      cleanup = () => backListener.remove();
+      const pauseListener = await App.addListener('pause', () => {
+        window.gtag?.('event', 'app_background', {
+          screen_path: window.location.pathname + window.location.search,
+        });
+      });
+
+      cleanup = () => {
+        backListener.remove();
+        pauseListener.remove();
+      };
     }
 
     init();
