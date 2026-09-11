@@ -16,7 +16,6 @@ type FavoriteViewMode = "list" | "map";
 export default function SettingsView() {
   const [favoriteTheaters, setFavoriteTheaters] = useState<string[]>([]);
   const [expandedSection, setExpandedSection] = useState<string | null>(null);
-  const [savedMsg, setSavedMsg] = useState(false);
   const [favoriteViewMode, setFavoriteViewMode] = useState<FavoriteViewMode>("list");
 
   useEffect(() => {
@@ -25,15 +24,11 @@ export default function SettingsView() {
   }, []);
 
   const toggleTheater = (name: string) => {
-    setFavoriteTheaters((prev) =>
-      prev.includes(name) ? prev.filter((t) => t !== name) : [...prev, name]
-    );
-  };
-
-  const saveTheaters = () => {
-    localStorage.setItem("favoriteTheaters", JSON.stringify(favoriteTheaters));
-    setSavedMsg(true);
-    setTimeout(() => setSavedMsg(false), 2000);
+    setFavoriteTheaters((prev) => {
+      const next = prev.includes(name) ? prev.filter((t) => t !== name) : [...prev, name];
+      localStorage.setItem("favoriteTheaters", JSON.stringify(next));
+      return next;
+    });
   };
 
   const mapPins: MapPin[] = useMemo(
@@ -148,12 +143,6 @@ export default function SettingsView() {
                   </button>
                 ))}
               </div>
-              <button
-                onClick={saveTheaters}
-                className="mt-3 w-full py-2 bg-orange-500 text-black text-xs font-bold transition-all hover:bg-orange-400 active:scale-[0.98]"
-              >
-                {savedMsg ? "저장되었습니다 ✓" : "저장"}
-              </button>
             </div>
           )}
         </div>
