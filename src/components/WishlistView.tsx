@@ -154,6 +154,7 @@ export default function WishlistView({
                   return (
                     <div
                       key={`${movie.title}-${movie.theater}-${movie.time}`}
+                      data-testid="wishlist-movie-card"
                       onClick={() => onMovieClick(movie)}
                       className={`relative overflow-hidden cursor-pointer border transition-all ${
                         isPast

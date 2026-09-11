@@ -91,6 +91,7 @@ export default function MovieFilter({
     <>
       {/* 필터 아이콘 버튼 */}
       <button
+        data-testid="filter-toggle-button"
         onClick={() => setIsFilterExpanded(true)}
         className="relative p-2 bg-[#0d0d0d] border border-orange-500 text-gray-300 hover:bg-gray-900 transition-all z-10"
       >
@@ -137,6 +138,7 @@ export default function MovieFilter({
               {/* 필터 탭과 초기화 버튼 */}
               <div className="flex gap-2">
                 <button
+                  data-testid="filter-tab-movie"
                   onClick={() => onFilterTypeChange("movie")}
                   className={`flex-1 py-2 px-3 text-xs font-medium transition-all rounded-sm ${
                     filterType === "movie"
@@ -147,6 +149,7 @@ export default function MovieFilter({
                   영화별
                 </button>
                 <button
+                  data-testid="filter-tab-theater"
                   onClick={() => onFilterTypeChange("theater")}
                   className={`flex-1 py-2 px-3 text-xs font-medium transition-all rounded-sm ${
                     filterType === "theater"

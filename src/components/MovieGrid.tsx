@@ -204,6 +204,7 @@ export default function MovieGrid({
           return (
             <div
               key={index}
+              data-testid="movie-card"
               onClick={() => onMovieClick(movie)}
               className={
                 isListLayout
