@@ -1,6 +1,7 @@
 "use client";
 
 import {
+  LayoutType,
   SortType,
   UserLocation,
 } from '@/hooks/useMovieFilter';
@@ -18,9 +19,11 @@ interface MovieGridProps {
   onToggleWishlist: (movie: MovieSchedule) => void;
   isInWishlist: (movie: MovieSchedule) => boolean;
   sortType?: SortType;
+  layoutType?: LayoutType;
   userLocation?: UserLocation | null;
   locationError?: string | null;
   onSortTypeChange?: (type: SortType) => void;
+  onLayoutTypeChange?: (type: LayoutType) => void;
   onTheaterClick?: (theaterName: string) => void;
   onMapClick?: (movie: MovieSchedule) => void;
 }
@@ -32,12 +35,15 @@ export default function MovieGrid({
   onToggleWishlist,
   isInWishlist,
   sortType = "time",
+  layoutType = "grid2",
   userLocation = null,
   locationError = null,
   onSortTypeChange,
+  onLayoutTypeChange,
   onTheaterClick,
   onMapClick,
 }: MovieGridProps) {
+  const isListLayout = layoutType === "list";
   const getLocalDateString = (date: Date): string => {
     const seoulDate = new Date(date.toLocaleString("en-US", { timeZone: "Asia/Seoul" }));
     const year = seoulDate.getFullYear();
@@ -83,7 +89,7 @@ export default function MovieGrid({
 
   return (
     <div>
-      {/* 정렬 컨트롤 */}
+      {/* 정렬 / 레이아웃 컨트롤 */}
       <div className="mb-3 flex items-center justify-between">
         <span className="text-xs text-gray-400">{futureMovies.length}개 상영</span>
         <div className="flex items-center gap-1">
@@ -114,11 +120,68 @@ export default function MovieGrid({
               </button>
             </div>
           )}
+          {onLayoutTypeChange && (
+            <div className="flex gap-1 ml-1">
+              <button
+                onClick={() => onLayoutTypeChange("grid2")}
+                aria-label="2열 그리드로 보기"
+                title="2열 그리드"
+                className={`p-1.5 transition-all ${
+                  layoutType === "grid2"
+                    ? "bg-orange-500 text-black"
+                    : "bg-gray-800 text-gray-400 hover:bg-gray-700"
+                }`}
+              >
+                <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <rect x="3" y="4" width="8" height="16" rx="1" strokeWidth={2} />
+                  <rect x="13" y="4" width="8" height="16" rx="1" strokeWidth={2} />
+                </svg>
+              </button>
+              <button
+                onClick={() => onLayoutTypeChange("grid3")}
+                aria-label="3열 그리드로 보기"
+                title="3열 그리드"
+                className={`p-1.5 transition-all ${
+                  layoutType === "grid3"
+                    ? "bg-orange-500 text-black"
+                    : "bg-gray-800 text-gray-400 hover:bg-gray-700"
+                }`}
+              >
+                <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <rect x="2.5" y="4" width="5.5" height="16" rx="1" strokeWidth={2} />
+                  <rect x="9.25" y="4" width="5.5" height="16" rx="1" strokeWidth={2} />
+                  <rect x="16" y="4" width="5.5" height="16" rx="1" strokeWidth={2} />
+                </svg>
+              </button>
+              <button
+                onClick={() => onLayoutTypeChange("list")}
+                aria-label="가로 리스트로 보기"
+                title="가로 리스트"
+                className={`p-1.5 transition-all ${
+                  layoutType === "list"
+                    ? "bg-orange-500 text-black"
+                    : "bg-gray-800 text-gray-400 hover:bg-gray-700"
+                }`}
+              >
+                <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
+                </svg>
+              </button>
+            </div>
+          )}
         </div>
       </div>
 
       {/* 영화 카드 그리드 */}
-      <div className="grid grid-cols-2 lg:grid-cols-3 gap-3">
+      <div
+        className={
+          isListLayout
+            ? "flex flex-col gap-2"
+            : layoutType === "grid3"
+              ? "grid grid-cols-3 gap-2"
+              : "grid grid-cols-2 lg:grid-cols-3 gap-3"
+        }
+      >
         {sortedMovies.map((movie, index) => {
           const posterUrl = movie.tmdbPosterUrl || movie.posterUrl || null;
           const distance =
@@ -131,43 +194,78 @@ export default function MovieGrid({
                 ).toFixed(1) + "km"
               : movie.area || null;
 
+          const wishlistButton = (
+            <button
+              onClick={(e) => {
+                e.stopPropagation();
+                onToggleWishlist(movie);
+              }}
+              aria-label={isInWishlist(movie) ? "찜 목록에서 제거" : "찜 목록에 추가"}
+              className={
+                isListLayout
+                  ? "flex-shrink-0 p-1 transition-all active:scale-90"
+                  : "absolute top-2 right-2 p-1.5 bg-black/60 hover:bg-black/80 rounded-full transition-all active:scale-90"
+              }
+            >
+              <svg
+                className={`w-3.5 h-3.5 ${
+                  isInWishlist(movie)
+                    ? "text-orange-500"
+                    : isListLayout
+                      ? "text-gray-500"
+                      : "text-white"
+                }`}
+                fill={isInWishlist(movie) ? "currentColor" : "none"}
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
+              </svg>
+            </button>
+          );
+
           return (
             <div
               key={index}
               onClick={() => onMovieClick(movie)}
-              className="overflow-hidden cursor-pointer active:scale-[0.98] transition-all duration-200 bg-gray-900 flex flex-col"
+              className={
+                isListLayout
+                  ? "overflow-hidden cursor-pointer active:scale-[0.98] transition-all duration-200 bg-gray-900 flex flex-row gap-3 p-2"
+                  : "overflow-hidden cursor-pointer active:scale-[0.98] transition-all duration-200 bg-gray-900 flex flex-col"
+              }
             >
               {/* 포스터 */}
-              <div className="relative w-full aspect-[2/3] bg-gray-800 flex-shrink-0">
+              <div
+                className={
+                  isListLayout
+                    ? "relative w-16 flex-shrink-0 aspect-[2/3] bg-gray-800"
+                    : "relative w-full aspect-[2/3] bg-gray-800 flex-shrink-0"
+                }
+              >
                 <PosterImage
                   src={posterUrl}
                   alt={movie.title}
                   priority={index < 4}
-                  sizes="(max-width: 1024px) 50vw, 33vw"
+                  sizes={
+                    isListLayout
+                      ? "64px"
+                      : layoutType === "grid3"
+                        ? "(max-width: 1024px) 33vw, 25vw"
+                        : "(max-width: 1024px) 50vw, 33vw"
+                  }
                 />
 
-                {/* 위시리스트 버튼 */}
-                <button
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    onToggleWishlist(movie);
-                  }}
-                  aria-label={isInWishlist(movie) ? "찜 목록에서 제거" : "찜 목록에 추가"}
-                  className="absolute top-2 right-2 p-1.5 bg-black/60 hover:bg-black/80 rounded-full transition-all active:scale-90"
-                >
-                  <svg
-                    className={`w-3.5 h-3.5 ${isInWishlist(movie) ? "text-orange-500" : "text-white"}`}
-                    fill={isInWishlist(movie) ? "currentColor" : "none"}
-                    stroke="currentColor"
-                    viewBox="0 0 24 24"
-                  >
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
-                  </svg>
-                </button>
+                {!isListLayout && wishlistButton}
               </div>
 
               {/* 정보 영역 - 제목, 영화관, 거리 */}
-              <div className="p-2.5 flex flex-col gap-1">
+              <div
+                className={
+                  isListLayout
+                    ? "flex-1 min-w-0 flex flex-col justify-center gap-1"
+                    : "p-2.5 flex flex-col gap-1"
+                }
+              >
                 <div className="flex items-start gap-1.5">
                   <h2 className="text-[14px] font-bold text-white leading-snug flex-1 min-w-0 truncate">
                     {movie.title}
@@ -175,6 +273,7 @@ export default function MovieGrid({
                   <time className="text-[14px] font-bold text-orange-500 flex-shrink-0 leading-snug">
                     {movie.time}
                   </time>
+                  {isListLayout && wishlistButton}
                 </div>
 
                 <div className="flex items-center justify-between gap-1">

@@ -9,6 +9,7 @@ export const THEATER_SCREEN_FILTERS = {
   "CGV 강변": "4관",
   "CGV 신촌아트레온": "10관",
   "CGV 여의도": "5관",
+  "CGV 동대문": "6관",
   "롯데시네마 노원": "6관",
   "롯데시네마 신도림": "4관",
 };

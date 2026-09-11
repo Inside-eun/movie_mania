@@ -36,6 +36,7 @@ export default function Home() {
   const [showWishlistView, setShowWishlistView] = useState(false);
   const [showInfoView, setShowInfoView] = useState(false);
   const [showEventsView, setShowEventsView] = useState(false);
+  const [pendingEventId, setPendingEventId] = useState<string | null>(null);
 
   const [isRouteMapOpen, setIsRouteMapOpen] = useState(false);
   const [routeTarget, setRouteTarget] = useState<{
@@ -91,21 +92,32 @@ export default function Home() {
     setShowWishlistView(false);
     setShowInfoView(false);
     setShowEventsView(false);
+    setPendingEventId(null);
   }, []);
 
   const goToWishlist = useCallback(() => {
     setShowWishlistView(true);
     setShowInfoView(false);
     setShowEventsView(false);
+    setPendingEventId(null);
   }, []);
 
   const goToInfo = useCallback(() => {
     setShowWishlistView(false);
     setShowInfoView(true);
     setShowEventsView(false);
+    setPendingEventId(null);
   }, []);
 
   const goToEvents = useCallback(() => {
+    setShowWishlistView(false);
+    setShowInfoView(false);
+    setShowEventsView(true);
+    setPendingEventId(null);
+  }, []);
+
+  const goToEventDetail = useCallback((eventId: string) => {
+    setPendingEventId(eventId);
     setShowWishlistView(false);
     setShowInfoView(false);
     setShowEventsView(true);
@@ -122,7 +134,7 @@ export default function Home() {
       {/* 히어로 배너 - ALL SCREENINGS 뷰에서만 (로딩 중 스켈레톤으로 CLS 방지) */}
       {isHomeView && (
         schedules.allMovies.length > 0
-          ? <MovieBanner movies={schedules.allMovies} onMovieClick={openMovieDetail} />
+          ? <MovieBanner onEventClick={goToEventDetail} />
           : schedules.loading
             ? <div className="w-full bg-gray-900/50 animate-pulse" style={{ height: "260px" }} />
             : null
@@ -195,9 +207,11 @@ export default function Home() {
               onToggleWishlist={wishlist.toggleWishlist}
               isInWishlist={wishlist.isInWishlist}
               sortType={filter.sortType}
+              layoutType={filter.layoutType}
               userLocation={filter.userLocation}
               locationError={filter.locationError}
               onSortTypeChange={filter.handleSortTypeChange}
+              onLayoutTypeChange={filter.handleLayoutTypeChange}
               onMapClick={openRouteMapForMovie}
             />
           )}
@@ -247,7 +261,7 @@ export default function Home() {
 
         {showInfoView && <SettingsView />}
 
-        {showEventsView && <EventsView />}
+        {showEventsView && <EventsView initialEventId={pendingEventId} />}
 
         <RouteMapModal
           isOpen={isRouteMapOpen}

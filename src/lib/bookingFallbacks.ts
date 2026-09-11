@@ -14,8 +14,6 @@ const BOOKING_FALLBACK_URLS: Record<string, string> = {
   '허리우드클래식': 'https://www.dtryx.com/reserve/cinema.do?BrandCd=etc&CinemaCd=000115',
   // cgv 극장은 아래 getBookingFallbackUrl에서 통합검색 URL로 별도 처리
   // (movNo 없이 movieBook/movie로 보내면 CGV가 "잘못된 요청" 하드 에러를 띄움)
-  // cineq 극장
-  '씨네큐 신도림': 'https://www.cineq.co.kr/?theaterCode=1001',
   // koreafilm 극장
   '한국영상자료원 시네마테크KOFA': 'https://www.koreafilm.or.kr/cinematheque/schedule',
   // tinyticket 극장

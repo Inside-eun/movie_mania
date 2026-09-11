@@ -51,9 +51,13 @@ function MovieRowSkeleton() {
   );
 }
 
-export default function EventsView() {
+interface EventsViewProps {
+  initialEventId?: string | null;
+}
+
+export default function EventsView({ initialEventId = null }: EventsViewProps) {
   const router = useRouter();
-  const [selectedEventId, setSelectedEventId] = useState<string | null>(null);
+  const [selectedEventId, setSelectedEventId] = useState<string | null>(initialEventId);
   const [creditsByTitle, setCreditsByTitle] = useState<CreditsByTitle>({});
   const [creditsLoading, setCreditsLoading] = useState(false);
   const weekly = useWeeklySchedules();

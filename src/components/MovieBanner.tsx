@@ -8,36 +8,52 @@ import {
   useState,
 } from 'react';
 
-import { MovieSchedule } from '@/types';
+import { mockEvents, CuratedEvent } from '@/mock/events';
+import { useWeeklySchedules } from '@/hooks/useWeeklySchedules';
 
 import PosterImage from './PosterImage';
 
 interface MovieBannerProps {
-  movies: MovieSchedule[];
-  onMovieClick?: (movie: MovieSchedule) => void;
+  onEventClick?: (eventId: string) => void;
 }
 
-export default function MovieBanner({ movies, onMovieClick }: MovieBannerProps) {
+interface EventSlide {
+  event: CuratedEvent;
+  posterUrl: string;
+}
+
+export default function MovieBanner({ onEventClick }: MovieBannerProps) {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [fading, setFading] = useState(false);
+  const weekly = useWeeklySchedules();
 
-  const displayMovies = useMemo(() => {
-    const withPosters = movies
-      .filter((m) => m.tmdbPosterUrl || m.posterUrl)
-      .reduce<MovieSchedule[]>((acc, movie) => {
-        if (!acc.some((m) => m.title === movie.title)) acc.push(movie);
-        return acc;
-      }, []);
-    const arr = [...withPosters];
-    for (let i = arr.length - 1; i > 0; i--) {
-      const j = Math.floor(Math.random() * (i + 1));
-      [arr[i], arr[j]] = [arr[j], arr[i]];
+  // 기획전 상영작 중 이번 주 상영이 확인되고 포스터가 있는 첫 작품을 대표 이미지로 쓴다.
+  const eventSlides = useMemo<EventSlide[]>(() => {
+    const slides: EventSlide[] = [];
+    for (const event of mockEvents) {
+      let posterUrl = "";
+      outer: for (const title of event.movieTitles) {
+        for (const date of weekly.dates) {
+          const movies = weekly.scheduleByDate[date];
+          if (!movies) continue;
+          const movie = movies.find(
+            (m) => m.theater === event.theaterName && m.title === title
+          );
+          const found = movie?.tmdbPosterUrl || movie?.posterUrl;
+          if (found) {
+            posterUrl = found;
+            break outer;
+          }
+        }
+      }
+      if (posterUrl) slides.push({ event, posterUrl });
     }
-    return arr.slice(0, 8);
-  }, [movies]);
+    return slides;
+  }, [weekly.dates, weekly.scheduleByDate]);
 
-  // index 0 = 퀴즈 배너, index 1+ = 영화 슬라이드
-  const totalSlides = displayMovies.length + 1;
+  // index 0 ~ eventSlides.length-1 = 기획전 슬라이드, 마지막 index = 퀴즈 배너
+  const totalSlides = eventSlides.length + 1;
+  const quizIndex = totalSlides - 1;
 
   const goTo = useCallback(
     (idx: number) => {
@@ -60,17 +76,22 @@ export default function MovieBanner({ movies, onMovieClick }: MovieBannerProps) 
     return () => clearInterval(interval);
   }, [totalSlides, goToNext]);
 
-  if (displayMovies.length === 0) return null;
+  // 슬라이드 개수가 바뀌면(기획전 로딩 완료 등) 범위를 벗어나지 않게 보정한다.
+  useEffect(() => {
+    if (currentIndex >= totalSlides) setCurrentIndex(0);
+  }, [totalSlides, currentIndex]);
 
-  const isQuizSlide = currentIndex === 0;
-  const movie = isQuizSlide ? null : displayMovies[currentIndex - 1];
-  const posterUrl = movie ? (movie.tmdbPosterUrl || movie.posterUrl || "") : "";
+  if (eventSlides.length === 0 && weekly.loading) return null;
+  if (totalSlides === 0) return null;
+
+  const isQuizSlide = currentIndex === quizIndex;
+  const slide = isQuizSlide ? null : eventSlides[currentIndex];
 
   const handleClick = () => {
     if (isQuizSlide) {
       window.open('https://cine21.com/event/quiz', '_blank', 'noopener,noreferrer');
-    } else if (movie && onMovieClick) {
-      onMovieClick(movie);
+    } else if (slide && onEventClick) {
+      onEventClick(slide.event.id);
     }
   };
 
@@ -95,21 +116,21 @@ export default function MovieBanner({ movies, onMovieClick }: MovieBannerProps) 
             />
           </div>
         </div>
-      ) : (
+      ) : slide ? (
         <>
           {/* 블러 배경 */}
           <div
             className="absolute inset-0 scale-110"
             style={{
-              backgroundImage: `url(${posterUrl})`,
+              backgroundImage: `url(${slide.posterUrl})`,
               backgroundSize: "cover",
               backgroundPosition: "center",
-              filter: "blur(18px)",
-              opacity: 0.25,
+              filter: "blur(20px)",
+              opacity: 0.35,
               transition: "opacity 0.3s",
             }}
           />
-          <div className="absolute inset-0 bg-gradient-to-r from-black/80 via-black/40 to-black/60" />
+          <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/50 to-black/70" />
 
           {/* 콘텐츠 */}
           <div
@@ -117,19 +138,18 @@ export default function MovieBanner({ movies, onMovieClick }: MovieBannerProps) 
             style={{ opacity: fading ? 0 : 1, transition: "opacity 0.25s" }}
           >
             {/* 포스터 */}
-            <div className="relative flex-shrink-0 h-52 aspect-[2/3] overflow-hidden shadow-2xl">
+            <div className="relative flex-shrink-0 h-52 aspect-[2/3] overflow-hidden shadow-2xl ring-1 ring-white/10">
               <PosterImage
-                src={posterUrl}
-                alt={movie!.title}
-                priority
+                src={slide.posterUrl}
+                alt={slide.event.title}
                 sizes="140px"
               />
             </div>
 
-            {/* 영화 정보 */}
+            {/* 기획전 정보 */}
             <div className="flex-1 min-w-0">
-              <span className="inline-block bg-orange-500 text-black text-[10px] font-black px-2 py-0.5 mb-2 tracking-widest uppercase">
-                Now Showing
+              <span className="inline-block bg-purple-500 text-black text-[10px] font-black px-2 py-0.5 mb-2 tracking-widest uppercase">
+                기획전
               </span>
               <h2
                 className="text-white font-bold text-lg leading-snug mb-1"
@@ -140,56 +160,26 @@ export default function MovieBanner({ movies, onMovieClick }: MovieBannerProps) 
                   overflow: "hidden",
                 }}
               >
-                {movie!.title}
+                {slide.event.title}
               </h2>
-              {movie!.director && (
-                <p className="text-gray-400 text-xs mb-3 truncate">{movie!.director}</p>
-              )}
-
-              <div className="flex flex-col gap-1.5">
-                <div className="flex items-center gap-1.5">
-                  <svg
-                    className="w-3.5 h-3.5 text-orange-500 flex-shrink-0"
-                    fill="none"
-                    stroke="currentColor"
-                    viewBox="0 0 24 24"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth={2}
-                      d="M17.657 16.657L13.414 20.9a2 2 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"
-                    />
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth={2}
-                      d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"
-                    />
-                  </svg>
-                  <span className="text-gray-300 text-sm truncate">{movie!.theater}</span>
-                </div>
-                <div className="flex items-center gap-1.5">
-                  <svg
-                    className="w-3.5 h-3.5 text-orange-500 flex-shrink-0"
-                    fill="none"
-                    stroke="currentColor"
-                    viewBox="0 0 24 24"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth={2}
-                      d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"
-                    />
-                  </svg>
-                  <span className="text-orange-400 text-sm font-bold">{movie!.time}</span>
-                </div>
-              </div>
+              <p className="text-gray-400 text-xs mb-3 truncate">
+                {slide.event.theaterName} · {slide.event.period}
+              </p>
+              <p
+                className="text-gray-300 text-xs leading-relaxed"
+                style={{
+                  display: "-webkit-box",
+                  WebkitLineClamp: 2,
+                  WebkitBoxOrient: "vertical",
+                  overflow: "hidden",
+                }}
+              >
+                {slide.event.summary}
+              </p>
             </div>
           </div>
         </>
-      )}
+      ) : null}
 
       {/* 하단 인디케이터 */}
       {totalSlides > 1 && (
@@ -198,7 +188,7 @@ export default function MovieBanner({ movies, onMovieClick }: MovieBannerProps) 
             <button
               key={i}
               onClick={(e) => { e.stopPropagation(); goTo(i); }}
-              aria-label={i === 0 ? "퀴즈 배너로 이동" : `${i}번 영화로 이동`}
+              aria-label={i === quizIndex ? "퀴즈 배너로 이동" : `${i + 1}번 기획전으로 이동`}
               className="rounded-full transition-all duration-300"
               style={{
                 width: i === currentIndex ? "16px" : "6px",
