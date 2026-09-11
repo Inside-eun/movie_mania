@@ -167,7 +167,7 @@ export default function MovieDetailPage() {
     fetchAbortRef.current?.abort();
     if (!movie || !selectedDate) return;
 
-    const fallback = getBookingFallbackUrl(movie.theater, movie.title);
+    const fallback = getBookingFallbackUrl(movie.theater);
     if (fallback) {
       setBookingUrl(fallback);
       setBookingIsFallback(true);

@@ -1,4 +1,4 @@
-import { isSupportedCGVTheater, getCGVSearchFallbackUrl } from './cgvBooking';
+import { isSupportedCGVTheater, CGV_CINEMA_PICKER_URL } from './cgvBooking';
 
 // 클라이언트에서 즉시 사용 가능한 폴백 URL 맵 (next/cache 미사용)
 const BOOKING_FALLBACK_URLS: Record<string, string> = {
@@ -29,11 +29,9 @@ const BOOKING_FALLBACK_URLS: Record<string, string> = {
   '픽처하우스': 'https://www.megabox.co.kr/picturehouse',
 };
 
-export function getBookingFallbackUrl(theaterName: string, movieTitle?: string): string | null {
+export function getBookingFallbackUrl(theaterName: string): string | null {
   if (isSupportedCGVTheater(theaterName)) {
-    return movieTitle
-      ? getCGVSearchFallbackUrl(movieTitle)
-      : 'https://cgv.co.kr/tme/itgrSrch';
+    return CGV_CINEMA_PICKER_URL;
   }
   return BOOKING_FALLBACK_URLS[theaterName] ?? null;
 }

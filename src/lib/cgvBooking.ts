@@ -4,7 +4,9 @@
 // 중요: movieBook/movie 페이지는 movNo가 없으면 CGV 서버가 아예
 // "잘못된 요청으로 처리할 수 없습니다" 하드 에러를 띄운다(siteNo/siteNm/scnsNo만
 // 있고 movNo가 없는 URL로 실기기 Safari에서 직접 확인함). 그래서 캐시 미스일 때는
-// siteNo 기반 URL을 만들지 않고 통합검색 페이지로 대신 보낸다.
+// siteNo 기반 URL을 만들지 않고 "극장별 예매"(movieBook/cinema) 페이지로 보낸다
+// — movNo/날짜 없이도 에러 없이 열리고 사용자가 극장만 고르면 바로 예매로
+// 이어지는 진짜 살아있는 페이지임을 실기기 Safari로 확인함.
 //
 // URL 구조(movNo 있을 때):
 // https://cgv.co.kr/cnm/movieBook/movie?movNo={movNo}&scnYmd={date}&siteNo={siteNo}&siteNm={siteNm}&scnsNo={scnsNo}
@@ -54,15 +56,12 @@ export function isSupportedCGVTheater(theaterName: string): boolean {
   return theaterName in CGV_CINEMAS;
 }
 
-// movNo 없이는 movieBook/movie가 하드 에러를 띄우므로, 영화 제목으로 통합검색
-// 페이지에 보내 사용자가 직접 예매하기를 누르게 한다(에러는 안 나지만 검색어
-// 자동입력은 안 됨 — CGV가 query 파라미터로 즉시 검색해주진 않음, 실기기 확인함).
-export function getCGVSearchFallbackUrl(movieTitle: string): string {
-  return `https://cgv.co.kr/tme/itgrSrch?query=${encodeURIComponent(movieTitle)}`;
-}
+// movNo 없이는 movieBook/movie가 하드 에러를 띄우므로, 극장별 예매(cinema) 페이지로
+// 보내 사용자가 직접 극장을 고르고 예매하게 한다.
+export const CGV_CINEMA_PICKER_URL = 'https://cgv.co.kr/cnm/movieBook/cinema';
 
 export function getCGVFallbackUrl(theaterName: string): string | null {
-  return CGV_CINEMAS[theaterName] ? 'https://cgv.co.kr/tme/itgrSrch' : null;
+  return CGV_CINEMAS[theaterName] ? CGV_CINEMA_PICKER_URL : null;
 }
 
 // CGV가 예전에 쓰던 5자리 안팎의 구형 movNo는 이후 다른 영화에 재할당된 사례가
@@ -100,6 +99,6 @@ export async function buildCGVBookingUrl(
   }
 
   // 캐시 미스: movNo 없이 movieBook/movie로 보내면 CGV가 "잘못된 요청" 하드 에러를
-  // 띄우므로, 통합검색 페이지로 대신 보낸다.
-  return { url: getCGVSearchFallbackUrl(movieTitle), isFallback: true };
+  // 띄우므로, 극장별 예매 페이지로 대신 보낸다.
+  return { url: CGV_CINEMA_PICKER_URL, isFallback: true };
 }
