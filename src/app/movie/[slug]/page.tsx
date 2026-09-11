@@ -8,6 +8,7 @@ import PosterImage from "@/components/PosterImage";
 import TheaterMap from "@/components/TheaterMap";
 import { getBookingFallbackUrl } from "@/lib/bookingFallbacks";
 import { trackBookingClicked, trackMovieDetailOpened } from "@/utils/gtm";
+import { hapticImpact } from "@/lib/haptics";
 import { useWishlist } from "@/hooks";
 import { MovieSchedule, ScheduleResponse } from "@/types";
 import { getRecommendations, isEventMovie, CreditsByTitle } from "@/mock/recommendations";
@@ -423,7 +424,10 @@ export default function MovieDetailPage() {
       <div className="fixed bottom-0 left-0 right-0 z-40 bg-black border-t border-gray-800 px-4 pt-3 pb-[calc(0.75rem_+_env(safe-area-inset-bottom))]">
         <div className="container mx-auto max-w-2xl flex items-center gap-3">
           <button
-            onClick={() => wishlist.toggleWishlist(movie)}
+            onClick={() => {
+              hapticImpact("light");
+              wishlist.toggleWishlist(movie);
+            }}
             aria-label={inWishlist ? "찜 목록에서 제거" : "찜 목록에 추가"}
             className="flex-shrink-0 w-11 h-11 flex items-center justify-center border border-gray-700 hover:border-orange-500 transition-colors"
           >

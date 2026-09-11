@@ -8,6 +8,7 @@ import {
 import { MovieSchedule } from '@/types';
 import { calculateDistance } from '@/utils/date';
 import { trackSortChanged } from '@/utils/gtm';
+import { hapticImpact } from '@/lib/haptics';
 
 import PosterImage from './PosterImage';
 
@@ -101,6 +102,7 @@ export default function MovieGrid({
             <button
               onClick={() => {
                 const next = sortType === "time" ? "distance" : "time";
+                hapticImpact("light");
                 onSortTypeChange(next);
                 trackSortChanged(next);
               }}
@@ -172,6 +174,7 @@ export default function MovieGrid({
             <button
               onClick={(e) => {
                 e.stopPropagation();
+                hapticImpact("light");
                 onToggleWishlist(movie);
               }}
               aria-label={isInWishlist(movie) ? "찜 목록에서 제거" : "찜 목록에 추가"}

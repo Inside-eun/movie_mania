@@ -4,6 +4,11 @@ import { useState, useEffect, useCallback } from "react";
 import { MovieSchedule } from "@/types";
 import { getLocalDateString } from "@/utils/date";
 import { trackWishlistAdd, trackWishlistRemove, trackWishlistClear } from "@/utils/gtm";
+import {
+  scheduleShowtimeReminder,
+  cancelShowtimeReminder,
+  cancelAllShowtimeReminders,
+} from "@/lib/localNotifications";
 
 const STORAGE_KEY_WISHLIST = "movieWishlist";
 const STORAGE_KEY_MOVIES = "movieWishlistMovies";
@@ -57,6 +62,7 @@ export function useWishlist(selectedDate: string) {
           newWishlistMovies.splice(movieIndex, 1);
         }
         trackWishlistRemove(movie.title, movie.theater, movie.time);
+        cancelShowtimeReminder(movie);
       } else {
         newWishlist.add(movieKey);
         const [hours, minutes] = movie.time.split(":").map(Number);
@@ -68,6 +74,7 @@ export function useWishlist(selectedDate: string) {
           showtime: correctShowtime.toISOString(),
         });
         trackWishlistAdd(movie.title, movie.theater, movie.time);
+        scheduleShowtimeReminder(movie, correctShowtime);
       }
 
       setWishlist(newWishlist);
@@ -86,6 +93,7 @@ export function useWishlist(selectedDate: string) {
     localStorage.removeItem(STORAGE_KEY_WISHLIST);
     localStorage.removeItem(STORAGE_KEY_MOVIES);
     trackWishlistClear(previousCount);
+    cancelAllShowtimeReminders();
   }, [wishlist]);
 
   // 개수

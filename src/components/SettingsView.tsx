@@ -9,6 +9,7 @@ import {
 import MapView, { MapPin } from '@/components/MapView';
 import { artCinemas } from '@/data/artCinemas';
 import { trackFavoriteTheaterSaved } from '@/utils/gtm';
+import { hapticImpact } from '@/lib/haptics';
 
 const SEOUL_THEATERS = artCinemas.map((c) => ({ name: c.cdNm, area: c.area }));
 
@@ -25,6 +26,7 @@ export default function SettingsView() {
   }, []);
 
   const toggleTheater = (name: string) => {
+    hapticImpact("light");
     setFavoriteTheaters((prev) => {
       const next = prev.includes(name) ? prev.filter((t) => t !== name) : [...prev, name];
       localStorage.setItem("favoriteTheaters", JSON.stringify(next));
@@ -188,6 +190,14 @@ export default function SettingsView() {
                 <ul className="space-y-1.5 list-disc list-inside">
                   <li>즐겨찾는 영화관, 찜 목록은 기기(브라우저)의 로컬 스토리지에만 저장되며, 외부 서버로 전송되지 않습니다.</li>
                   <li>앱을 삭제하거나 저장공간을 초기화하면 해당 데이터도 함께 삭제됩니다.</li>
+                </ul>
+              </div>
+              <div className="space-y-1.5">
+                <p className="font-semibold text-gray-300">🔔 알림</p>
+                <ul className="space-y-1.5 list-disc list-inside">
+                  <li>찜한 영화의 <span className="text-orange-400">상영 30분 전</span>에 알림을 보내드립니다.</li>
+                  <li>알림 동의 전 먼저 이용 목적을 안내하며, 동의 시에만 알림 권한을 요청합니다.</li>
+                  <li>기기 설정 &gt; 알림에서 언제든 끌 수 있으며, 꺼도 다른 기능은 그대로 이용할 수 있습니다.</li>
                 </ul>
               </div>
               <div className="space-y-1.5">

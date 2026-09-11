@@ -8,6 +8,7 @@ import {
 } from 'react';
 
 import { trackEngagementTime } from '@/utils/gtm';
+import { hapticImpact } from '@/lib/haptics';
 
 import dynamic from 'next/dynamic';
 import { useRouter } from 'next/navigation';
@@ -118,6 +119,7 @@ export default function Home() {
   }, []);
 
   const goToHome = useCallback(() => {
+    hapticImpact("light");
     setShowWishlistView(false);
     setShowInfoView(false);
     setShowEventsView(false);
@@ -125,6 +127,7 @@ export default function Home() {
   }, []);
 
   const goToWishlist = useCallback(() => {
+    hapticImpact("light");
     setShowWishlistView(true);
     setShowInfoView(false);
     setShowEventsView(false);
@@ -132,6 +135,7 @@ export default function Home() {
   }, []);
 
   const goToInfo = useCallback(() => {
+    hapticImpact("light");
     setShowWishlistView(false);
     setShowInfoView(true);
     setShowEventsView(false);
@@ -139,6 +143,7 @@ export default function Home() {
   }, []);
 
   const goToEvents = useCallback(() => {
+    hapticImpact("light");
     setShowWishlistView(false);
     setShowInfoView(false);
     setShowEventsView(true);

@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import { trackDarkModeToggle } from '@/utils/gtm';
+import { hapticImpact } from '@/lib/haptics';
 
 export default function DarkModeToggle() {
   const [isDark, setIsDark] = useState(false);
@@ -67,6 +68,7 @@ export default function DarkModeToggle() {
     }
 
     trackDarkModeToggle(newDarkMode);
+    hapticImpact("light");
   };
 
   return (
