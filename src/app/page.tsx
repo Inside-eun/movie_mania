@@ -317,7 +317,9 @@ export default function Home() {
 
         {showInfoView && <SettingsView />}
 
-        {showEventsView && <EventsView initialEventId={pendingEventId} />}
+        {showEventsView && (
+          <EventsView initialEventId={pendingEventId} onExitToHome={goToHome} />
+        )}
 
         <RouteMapModal
           isOpen={isRouteMapOpen}
