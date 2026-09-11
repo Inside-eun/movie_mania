@@ -1,7 +1,8 @@
 import { NextResponse } from "next/server";
 
 export const dynamic = "force-dynamic";
-export const maxDuration = 10; // Vercel Hobby 플랜 제한
+// Hobby 플랜도 실제로는 60초까지 허용된다(예전 10초 제한 기준이 남아있던 값).
+export const maxDuration = 60;
 
 async function getScheduleService() {
   const { ScheduleService } = await import("@/services/scheduleService");
@@ -29,7 +30,7 @@ async function handlePrefetch(request: Request) {
   console.log("=== [Cron 1] 크롤링 프리페치 시작 ===");
   const startTime = Date.now();
 
-  // Hobby 플랜 10초 제한 때문에 한 번의 호출당 하루치만 크롤링한다.
+  // 한 번의 호출당 하루치만 크롤링한다(여러 극장 순회라 하루치도 수십 초 걸릴 수 있음).
   // daysAhead(0~6)로 오늘 포함 이번 주 각 날짜를 별도 크론 호출로 나눠 미리 채워둔다.
   const { searchParams } = new URL(request.url);
   const daysAhead = Math.min(6, Math.max(0, parseInt(searchParams.get("daysAhead") || "0", 10) || 0));

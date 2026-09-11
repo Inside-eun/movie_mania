@@ -2,7 +2,8 @@ import { NextResponse } from "next/server";
 import { MovieSchedule } from "@/types";
 
 export const dynamic = "force-dynamic";
-export const maxDuration = 10; // Vercel Hobby 플랜 제한
+// Hobby 플랜도 실제로는 60초까지 허용된다(예전 10초 제한 기준이 남아있던 값).
+export const maxDuration = 60;
 
 interface TMDBMovieSummary {
   title: string;
@@ -40,7 +41,7 @@ async function handlePrefetchTMDB(request: Request) {
   console.log("=== [Cron 2] TMDB 프리페치 시작 ===");
   const startTime = Date.now();
 
-  // Hobby 플랜 10초 제한 때문에 한 번의 호출당 하루치만 처리한다.
+  // 한 번의 호출당 하루치만 처리한다.
   // daysAhead(0~6)는 Cron 1과 짝을 맞춰 오늘 포함 이번 주 각 날짜를 가리킨다.
   const { searchParams } = new URL(request.url);
   const daysAhead = Math.min(6, Math.max(0, parseInt(searchParams.get("daysAhead") || "0", 10) || 0));
