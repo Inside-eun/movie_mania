@@ -195,6 +195,7 @@ export default function EventsView({ initialEventId = null }: EventsViewProps) {
         {mockEvents.map((e) => (
           <button
             key={e.id}
+            data-testid="event-card"
             onClick={() => {
               trackEventListItemClicked(e.title);
               setSelectedEventId(e.id);

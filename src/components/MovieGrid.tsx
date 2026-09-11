@@ -106,6 +106,7 @@ export default function MovieGrid({
           )}
           {onSortTypeChange && (
             <button
+              data-testid="sort-toggle-button"
               onClick={() => {
                 const next = sortType === "time" ? "distance" : "time";
                 hapticImpact("light");
@@ -123,6 +124,7 @@ export default function MovieGrid({
           )}
           {onLayoutTypeChange && (
             <button
+              data-testid="layout-toggle-button"
               onClick={() =>
                 onLayoutTypeChange(
                   layoutType === "grid2" ? "grid3" : layoutType === "grid3" ? "list" : "grid2",
