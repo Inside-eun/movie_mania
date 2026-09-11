@@ -7,6 +7,7 @@ import { useParams, useRouter } from "next/navigation";
 import PosterImage from "@/components/PosterImage";
 import TheaterMap from "@/components/TheaterMap";
 import { getBookingFallbackUrl } from "@/lib/bookingFallbacks";
+import { trackBookingClicked, trackMovieDetailOpened } from "@/utils/gtm";
 import { useWishlist } from "@/hooks";
 import { MovieSchedule, ScheduleResponse } from "@/types";
 import { getRecommendations, isEventMovie, CreditsByTitle } from "@/mock/recommendations";
@@ -79,6 +80,10 @@ export default function MovieDetailPage() {
   const selectedDate = stored?.selectedDate;
   const theaterDetail = movie?.theater ? getTheaterDetailByName(movie.theater) : undefined;
   const wishlist = useWishlist(selectedDate ?? "");
+
+  useEffect(() => {
+    if (movie) trackMovieDetailOpened(movie.title, movie.theater);
+  }, [movie]);
 
   // 추천작 섹션에 쓸 해당 날짜의 실제 상영 데이터 (홈 화면 캐시 우선, 없으면 조회)
   useEffect(() => {
@@ -437,6 +442,7 @@ export default function MovieDetailPage() {
             rel="noopener noreferrer"
             onClick={(e) => {
               if (!bookingUrl) e.preventDefault();
+              else trackBookingClicked(movie.title, movie.theater, bookingIsFallback);
             }}
             className={`flex-1 py-3 text-center text-sm font-bold transition-colors ${
               bookingUrl

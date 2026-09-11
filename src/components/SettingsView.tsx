@@ -8,6 +8,7 @@ import {
 
 import MapView, { MapPin } from '@/components/MapView';
 import { artCinemas } from '@/data/artCinemas';
+import { trackFavoriteTheaterSaved } from '@/utils/gtm';
 
 const SEOUL_THEATERS = artCinemas.map((c) => ({ name: c.cdNm, area: c.area }));
 
@@ -27,6 +28,7 @@ export default function SettingsView() {
     setFavoriteTheaters((prev) => {
       const next = prev.includes(name) ? prev.filter((t) => t !== name) : [...prev, name];
       localStorage.setItem("favoriteTheaters", JSON.stringify(next));
+      trackFavoriteTheaterSaved(next.length);
       return next;
     });
   };

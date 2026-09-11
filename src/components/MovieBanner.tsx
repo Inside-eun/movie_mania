@@ -10,6 +10,7 @@ import {
 
 import { mockEvents, CuratedEvent } from '@/mock/events';
 import { useWeeklySchedules } from '@/hooks/useWeeklySchedules';
+import { trackQuizBannerClicked } from '@/utils/gtm';
 
 import PosterImage from './PosterImage';
 
@@ -89,6 +90,7 @@ export default function MovieBanner({ onEventClick }: MovieBannerProps) {
 
   const handleClick = () => {
     if (isQuizSlide) {
+      trackQuizBannerClicked();
       window.open('https://cine21.com/event/quiz', '_blank', 'noopener,noreferrer');
     } else if (slide && onEventClick) {
       onEventClick(slide.event.id);

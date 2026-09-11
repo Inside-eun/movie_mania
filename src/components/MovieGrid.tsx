@@ -7,6 +7,7 @@ import {
 } from '@/hooks/useMovieFilter';
 import { MovieSchedule } from '@/types';
 import { calculateDistance } from '@/utils/date';
+import { trackSortChanged } from '@/utils/gtm';
 
 import PosterImage from './PosterImage';
 
@@ -98,7 +99,11 @@ export default function MovieGrid({
           )}
           {onSortTypeChange && (
             <button
-              onClick={() => onSortTypeChange(sortType === "time" ? "distance" : "time")}
+              onClick={() => {
+                const next = sortType === "time" ? "distance" : "time";
+                onSortTypeChange(next);
+                trackSortChanged(next);
+              }}
               title="탭하여 정렬 방식 전환"
               className="flex items-center gap-1 px-2.5 py-1 text-xs font-medium bg-gray-800 text-gray-300 hover:bg-gray-700 transition-all"
             >

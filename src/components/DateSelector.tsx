@@ -1,6 +1,7 @@
 "use client";
 
 import { useRef } from "react";
+import { trackDateChange } from "@/utils/gtm";
 
 interface DateSelectorProps {
   selectedDate: string;
@@ -41,6 +42,7 @@ export default function DateSelector({
         className="absolute inset-0 opacity-0 w-full cursor-pointer"
         value={selectedDate}
         onChange={(e) => {
+          trackDateChange(e.target.value);
           onDateChange(e.target.value);
           inputRef.current?.blur();
         }}
