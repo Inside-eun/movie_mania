@@ -18,16 +18,6 @@ if (typeof globalThis.File === "undefined" && typeof globalThis.Blob !== "undefi
 import { NextResponse } from "next/server";
 import { MovieSchedule } from "@/types";
 
-interface TMDBMovieSummary {
-  title: string;
-  tmdbId: number;
-  originalTitle: string;
-  overview: string;
-  posterUrl: string | null;
-  releaseDate: string | null;
-  voteAverage: number;
-}
-
 async function mergeTMDBData(movies: MovieSchedule[], cache: any): Promise<MovieSchedule[]> {
   const db = await cache.getTmdbDb();
   return movies.map((movie: MovieSchedule) => {
