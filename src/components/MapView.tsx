@@ -1,7 +1,7 @@
 "use client";
 
 import { useCallback, useRef } from "react";
-import { Map, CustomOverlayMap, useKakaoLoader } from "react-kakao-maps-sdk";
+import { Map, CustomOverlayMap, ZoomControl, useKakaoLoader } from "react-kakao-maps-sdk";
 
 export interface MapPin {
   id: string;
@@ -86,6 +86,8 @@ export default function MapView({ pins, userPoint, onPinClick, height = 320 }: M
         level={7}
         onCreate={handleMapCreate}
       >
+        <ZoomControl position={kakao.maps.ControlPosition.RIGHT} />
+
         {pins.map((pin) => (
           <CustomOverlayMap key={pin.id} position={{ lat: pin.lat, lng: pin.lng }} yAnchor={1} clickable>
             <button onClick={() => onPinClick?.(pin.id)} className="flex flex-col items-center group">
