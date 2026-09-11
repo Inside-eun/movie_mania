@@ -145,6 +145,14 @@ export const artCinemas = [
     address: "서울 중구 정동길 3",
   },
   {
+    cd: "001300",
+    cdNm: "서울영화센터",
+    area: "중구",
+    lat: 37.5645252,
+    lng: 126.9912968,
+    address: "서울 중구 마른내로 38",
+  },
+  {
     cd: "001165",
     cdNm: "청춘극장",
     area: "중구",

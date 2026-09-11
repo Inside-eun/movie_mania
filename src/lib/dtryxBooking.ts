@@ -48,6 +48,12 @@ export const DTRYX_CINEMAS: Record<string, DtryxCinemaConfig> = {
     cinemaCd: '000162',
     fallbackUrl: 'https://www.dtryx.com/reserve/cinema.do?BrandCd=etc&CinemaCd=000162',
   },
+  '서울영화센터': {
+    cgid: DTRYX_PLATFORM_CGID,
+    brandCd: 'etc',
+    cinemaCd: '000160',
+    fallbackUrl: 'https://www.dtryx.com/reserve/cinema.do?BrandCd=etc&CinemaCd=000160',
+  },
   '아트하우스모모': {
     cgid: DTRYX_PLATFORM_CGID,
     brandCd: 'indieart',

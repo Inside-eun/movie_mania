@@ -21,6 +21,7 @@ export const instagramScanTargets: InstagramScanTarget[] = [
   { username: "arirang_cine", theaterName: "아리랑시네센터(서울)" },
   { username: "cinecube_kr", theaterName: "씨네큐브광화문(서울)" },
   { username: "seoulartcinema", theaterName: "서울아트시네마" },
+  { username: "seoulfilmcenter", theaterName: "서울영화센터" },
   // CGV 아트하우스 계정 하나가 여러 지점(용산아이파크몰/압구정/신촌아트레온/대학로/강변/여의도)을
   // 함께 다룸 — 어느 지점인지는 캡션 내용을 보고 검토 단계에서 사람이 확인해야 한다.
   { username: "cgv_arthouse", theaterName: "CGV아트하우스" },
