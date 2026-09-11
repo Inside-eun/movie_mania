@@ -19,7 +19,7 @@ import {
   useWishlist,
 } from '@/hooks';
 import { MovieSchedule } from '@/types';
-import { getLocalDateString } from '@/utils/date';
+import { addDaysToDateString, getLocalDateString } from '@/utils/date';
 
 import DateSelector from '../components/DateSelector';
 import Header from '../components/Header';
@@ -91,6 +91,13 @@ export default function Home() {
     },
     [filter]
   );
+
+  const goToNextDay = useCallback(() => {
+    hapticImpact("light");
+    const nextDate = addDaysToDateString(selectedDate, 1);
+    handleDateChange(nextDate);
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  }, [selectedDate, handleDateChange]);
 
   const openMovieDetail = useCallback(
     (movie: MovieSchedule) => {
@@ -252,6 +259,17 @@ export default function Home() {
               onLayoutTypeChange={filter.handleLayoutTypeChange}
               onMapClick={openRouteMapForMovie}
             />
+          )}
+
+        {!schedules.loading &&
+          isHomeView &&
+          schedules.filteredMovies.length > 0 && (
+            <button
+              onClick={goToNextDay}
+              className="w-full mt-4 py-3 text-center text-sm text-gray-300 bg-gray-900/60 border border-gray-800 hover:bg-gray-800 transition-colors"
+            >
+              {Number(addDaysToDateString(selectedDate, 1).split("-")[2])}일 상영 시간표 &gt;
+            </button>
           )}
 
         {!schedules.loading &&

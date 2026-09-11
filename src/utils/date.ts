@@ -9,6 +9,16 @@ export function getLocalDateString(date: Date): string {
   return `${year}-${month}-${day}`;
 }
 
+// YYYY-MM-DD 문자열에 일수를 더한 새 날짜 문자열 반환
+export function addDaysToDateString(dateStr: string, days: number): string {
+  const [year, month, day] = dateStr.split("-").map(Number);
+  const date = new Date(year, month - 1, day + days);
+  const newYear = date.getFullYear();
+  const newMonth = String(date.getMonth() + 1).padStart(2, "0");
+  const newDay = String(date.getDate()).padStart(2, "0");
+  return `${newYear}-${newMonth}-${newDay}`;
+}
+
 // 시간 문자열을 Date로 파싱
 export function parseMovieTime(timeStr: string, dateStr: string): Date {
   const [hours, minutes] = timeStr.split(":").map(Number);
