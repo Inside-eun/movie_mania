@@ -3,6 +3,11 @@
 import { useState } from "react";
 import CalendarView from "./CalendarView";
 import { MovieSchedule } from "@/types";
+import {
+  trackWishlistRemove,
+  trackWishlistClear,
+  trackWishlistViewModeChanged,
+} from "@/utils/gtm";
 
 interface WishlistViewProps {
   wishlistMovies: MovieSchedule[];
@@ -41,7 +46,10 @@ export default function WishlistView({
       {wishlistCount > 0 && (
         <div className="flex border border-gray-800 p-1 max-w-md mx-auto">
           <button
-            onClick={() => setWishlistViewMode("calendar")}
+            onClick={() => {
+              trackWishlistViewModeChanged("calendar");
+              setWishlistViewMode("calendar");
+            }}
             className={`flex-1 py-2 px-4 text-sm font-medium transition-all duration-200 flex items-center justify-center gap-2 ${
               wishlistViewMode === "calendar"
                 ? "bg-orange-500 text-black"
@@ -64,7 +72,10 @@ export default function WishlistView({
             달력
           </button>
           <button
-            onClick={() => setWishlistViewMode("list")}
+            onClick={() => {
+              trackWishlistViewModeChanged("list");
+              setWishlistViewMode("list");
+            }}
             className={`flex-1 py-2 px-4 text-sm font-medium transition-all duration-200 flex items-center justify-center gap-2 ${
               wishlistViewMode === "list"
                 ? "bg-orange-500 text-black"
@@ -236,6 +247,7 @@ export default function WishlistView({
                         <button
                           onClick={(e) => {
                             e.stopPropagation();
+                            trackWishlistRemove(movie.title, movie.theater, movie.time);
                             onToggleWishlist(movie);
                           }}
                           aria-label="찜 목록에서 제거"
@@ -266,6 +278,7 @@ export default function WishlistView({
                   "찜 목록을 모두 삭제하시겠어요?\n삭제된 데이터는 복구되지 않습니다."
                 )
               ) {
+                trackWishlistClear(wishlistCount);
                 onClearAll();
               }
             }}

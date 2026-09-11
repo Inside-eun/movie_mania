@@ -7,7 +7,7 @@ import {
   useState,
 } from 'react';
 
-import { trackEngagementTime } from '@/utils/gtm';
+import { trackEngagementTime, trackTabChanged } from '@/utils/gtm';
 import { hapticImpact } from '@/lib/haptics';
 
 import dynamic from 'next/dynamic';
@@ -120,6 +120,7 @@ export default function Home() {
 
   const goToHome = useCallback(() => {
     hapticImpact("light");
+    trackTabChanged("home");
     setShowWishlistView(false);
     setShowInfoView(false);
     setShowEventsView(false);
@@ -128,6 +129,7 @@ export default function Home() {
 
   const goToWishlist = useCallback(() => {
     hapticImpact("light");
+    trackTabChanged("wishlist");
     setShowWishlistView(true);
     setShowInfoView(false);
     setShowEventsView(false);
@@ -136,6 +138,7 @@ export default function Home() {
 
   const goToInfo = useCallback(() => {
     hapticImpact("light");
+    trackTabChanged("settings");
     setShowWishlistView(false);
     setShowInfoView(true);
     setShowEventsView(false);
@@ -144,6 +147,7 @@ export default function Home() {
 
   const goToEvents = useCallback(() => {
     hapticImpact("light");
+    trackTabChanged("events");
     setShowWishlistView(false);
     setShowInfoView(false);
     setShowEventsView(true);

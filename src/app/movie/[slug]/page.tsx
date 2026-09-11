@@ -7,7 +7,14 @@ import { useParams, useRouter } from "next/navigation";
 import PosterImage from "@/components/PosterImage";
 import TheaterMap from "@/components/TheaterMap";
 import { getBookingFallbackUrl } from "@/lib/bookingFallbacks";
-import { trackBookingClicked, trackMovieDetailOpened } from "@/utils/gtm";
+import {
+  trackBookingClicked,
+  trackMovieDetailOpened,
+  trackWishlistAdd,
+  trackWishlistRemove,
+  trackRecommendationClicked,
+  trackBackButtonClicked,
+} from "@/utils/gtm";
 import { hapticImpact } from "@/lib/haptics";
 import { useWishlist } from "@/hooks";
 import { MovieSchedule, ScheduleResponse } from "@/types";
@@ -257,7 +264,10 @@ export default function MovieDetailPage() {
     <div className="min-h-screen bg-black text-gray-100 pb-[calc(6rem_+_env(safe-area-inset-bottom))]">
       <div className="sticky top-0 z-40 bg-black border-b border-gray-800 px-4 py-2.5">
         <button
-          onClick={() => router.back()}
+          onClick={() => {
+            trackBackButtonClicked("movie_detail");
+            router.back();
+          }}
           className="flex items-center gap-1.5 text-sm text-gray-300 hover:text-orange-400 transition-colors"
         >
           <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -382,6 +392,7 @@ export default function MovieDetailPage() {
                     e.preventDefault();
                     return;
                   }
+                  trackRecommendationClicked(item.title);
                   const slug = encodeURIComponent(item.title);
                   sessionStorage.setItem(
                     `movieDetail:${slug}`,
@@ -426,6 +437,11 @@ export default function MovieDetailPage() {
           <button
             onClick={() => {
               hapticImpact("light");
+              if (inWishlist) {
+                trackWishlistRemove(movie.title, movie.theater, movie.time);
+              } else {
+                trackWishlistAdd(movie.title, movie.theater, movie.time);
+              }
               wishlist.toggleWishlist(movie);
             }}
             aria-label={inWishlist ? "찜 목록에서 제거" : "찜 목록에 추가"}

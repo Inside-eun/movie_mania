@@ -8,6 +8,7 @@ import { useWeeklySchedules } from "@/hooks/useWeeklySchedules";
 import { getLocalDateString } from "@/utils/date";
 import { MovieSchedule } from "@/types";
 import { CreditsByTitle } from "@/mock/recommendations";
+import { trackEventListItemClicked, trackEventMovieClicked } from "@/utils/gtm";
 
 function formatMonthDay(dateStr: string): string {
   const [, month, day] = dateStr.split("-");
@@ -148,7 +149,12 @@ export default function EventsView({ initialEventId = null }: EventsViewProps) {
                   <RowWrapper
                     key={title}
                     {...(hasSchedule
-                      ? { onClick: () => match && openMovieDetail(match.movie, match.date) }
+                      ? {
+                          onClick: () => {
+                            trackEventMovieClicked(title, selectedEvent.title);
+                            match && openMovieDetail(match.movie, match.date);
+                          },
+                        }
                       : {})}
                     className={`flex items-center justify-between gap-3 w-full text-left py-3 ${
                       hasSchedule ? "hover:bg-white/5 transition-colors" : ""
@@ -189,7 +195,10 @@ export default function EventsView({ initialEventId = null }: EventsViewProps) {
         {mockEvents.map((e) => (
           <button
             key={e.id}
-            onClick={() => setSelectedEventId(e.id)}
+            onClick={() => {
+              trackEventListItemClicked(e.title);
+              setSelectedEventId(e.id);
+            }}
             className="block w-full text-left bg-gray-900 border border-white/10 p-3 hover:border-orange-500/70 transition-colors"
           >
             <div className="flex items-center justify-between gap-2 mb-1">

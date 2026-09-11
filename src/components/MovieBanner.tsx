@@ -10,7 +10,7 @@ import {
 
 import { mockEvents, CuratedEvent } from '@/mock/events';
 import { useWeeklySchedules } from '@/hooks/useWeeklySchedules';
-import { trackQuizBannerClicked } from '@/utils/gtm';
+import { trackQuizBannerClicked, trackBannerIndicatorClicked } from '@/utils/gtm';
 
 import PosterImage from './PosterImage';
 
@@ -191,7 +191,11 @@ export default function MovieBanner({ onEventClick }: MovieBannerProps) {
           {Array.from({ length: totalSlides }).map((_, i) => (
             <button
               key={i}
-              onClick={(e) => { e.stopPropagation(); goTo(i); }}
+              onClick={(e) => {
+                e.stopPropagation();
+                trackBannerIndicatorClicked("event", i);
+                goTo(i);
+              }}
               aria-label={i === quizIndex ? "퀴즈 배너로 이동" : `${i + 1}번 기획전으로 이동`}
               className="rounded-full transition-all duration-300"
               style={{
