@@ -36,6 +36,9 @@ yarn-error.log*
 # blog-bot: raw terminal/chat logs and generated drafts — personal notes, never commit
 .blog-bot/
 
+# cgv-movno 배치 스크립트 launchd 로그
+.cgv-movno/
+
 # typescript
 *.tsbuildinfo
 next-env.d.ts
