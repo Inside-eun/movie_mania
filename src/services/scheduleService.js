@@ -446,10 +446,6 @@ export class ScheduleService {
         String(today.getMonth() + 1).padStart(2, "0") +
         String(today.getDate()).padStart(2, "0");
 
-      // 박스오피스 1~5위 영화 목록 조회
-      console.log("박스오피스 1~5위 영화 조회 중...");
-      const top5Movies = await this.getBoxOfficeTop5();
-
       console.log("\n예술영화관 상영시간표 조회 중...");
       console.log(`총 ${artCinemas.length}개 예술영화관 조회`);
 
@@ -469,14 +465,6 @@ export class ScheduleService {
                 const cleanTitle = item.movieNm
                   .replace(/\s*\([^)]*\)/g, "")
                   .trim();
-
-                // 박스오피스 1~5위 영화는 제외
-                if (top5Movies.includes(cleanTitle)) {
-                  console.log(
-                    `🚫 [제외됨] 박스오피스 상위 영화: ${cleanTitle}`
-                  );
-                  continue;
-                }
 
                 // 상영관 필터 체크
                 const screenCheck = checkScreenFilter(theater.cdNm, item.scrnNm);
@@ -589,13 +577,8 @@ export class ScheduleService {
 
       console.log("=== 예술영화관 + 한국영상자료원 통합 조회 ===\n");
 
-      // 박스오피스 1~5위 영화 목록 조회
-      console.log("박스오피스 1~5위 영화 조회 중...");
-      const top5Movies = await this.getBoxOfficeTop5();
-
       // 예술영화관 스케줄 조회
       const artCinemaMovies = await this.getArtCinemaSchedulesByDate(
-        top5Movies,
         targetDate
       );
 
@@ -645,16 +628,15 @@ export class ScheduleService {
     }
   }
 
-  async getArtCinemaSchedules(top5Movies) {
-    return this.getArtCinemaSchedulesByDate(top5Movies, new Date());
+  async getArtCinemaSchedules() {
+    return this.getArtCinemaSchedulesByDate(new Date());
   }
 
-  async getArtCinemaSchedulesByDate(top5Movies, targetDate) {
+  async getArtCinemaSchedulesByDate(targetDate) {
     const dateStr = targetDate.toISOString().split("T")[0]; // YYYY-MM-DD 형식
-    const cacheParams = { excludeMovies: top5Movies }; // 제외할 영화 목록을 캐시 키에 포함
 
     // 캐시에서 먼저 확인
-    const cachedData = await cacheService.get("art_cinemas", dateStr, cacheParams);
+    const cachedData = await cacheService.get("art_cinemas", dateStr);
     if (cachedData) {
       console.log("예술영화관: 캐시된 데이터 사용");
       return cachedData;
@@ -689,18 +671,6 @@ export class ScheduleService {
               const cleanTitle = item.movieNm
                 .replace(/\s*\([^)]*\)/g, "")
                 .trim();
-
-              // 박스오피스 1~5위 영화는 제외
-              if (top5Movies.includes(cleanTitle)) {
-                console.log(`🚫 [제외됨] 박스오피스 상위 영화: ${cleanTitle}`);
-                continue;
-              }
-              
-              // 디버깅: 모든 영화 제목 로깅 (Vercel에서만)
-              if (process.env.VERCEL === "1") {
-                console.log(`✅ [포함됨] ${cleanTitle} (박스오피스 제외 목록: ${top5Movies.join(', ')})`);
-              }
-
 
               // 상영관 필터 체크
               const screenCheck = checkScreenFilter(theater.cdNm, item.scrnNm);
@@ -769,7 +739,7 @@ export class ScheduleService {
     }
 
     // 캐시에 저장
-    await cacheService.set("art_cinemas", dateStr, allMovies, cacheParams);
+    await cacheService.set("art_cinemas", dateStr, allMovies);
 
     return allMovies;
   }
@@ -782,10 +752,6 @@ export class ScheduleService {
         today.getFullYear() +
         String(today.getMonth() + 1).padStart(2, "0") +
         String(today.getDate()).padStart(2, "0");
-
-      // 박스오피스 1~5위 영화 목록 조회
-      console.log("박스오피스 1~5위 영화 조회 중...");
-      const top5Movies = await this.getBoxOfficeTop5();
 
       // 마포구 전체 극장 목록 조회
       console.log("\n마포구 극장 목록 조회 중...");
@@ -805,12 +771,6 @@ export class ScheduleService {
               const cleanTitle = item.movieNm
                 .replace(/\s*\([^)]*\)/g, "")
                 .trim(); // 괄호 안 내용 제거
-
-              // 박스오피스 1~5위 영화는 제외
-              if (top5Movies.includes(cleanTitle)) {
-                console.log(`🚫 [제외됨] 박스오피스 상위 영화: ${cleanTitle}`);
-                return; // 건너뛰기
-              }
 
               // 상영관 필터 체크
               const screenCheck = checkScreenFilter(theater.cdNm, item.scrnNm);
