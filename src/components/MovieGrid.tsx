@@ -97,77 +97,46 @@ export default function MovieGrid({
             <span className="text-xs text-red-500 mr-2">{locationError}</span>
           )}
           {onSortTypeChange && (
-            <div className="flex gap-1">
-              <button
-                onClick={() => onSortTypeChange("time")}
-                className={`px-2.5 py-1 text-xs font-medium transition-all ${
-                  sortType === "time"
-                    ? "bg-orange-500 text-black"
-                    : "bg-gray-800 text-gray-400 hover:bg-gray-700"
-                }`}
-              >
-                시간순
-              </button>
-              <button
-                onClick={() => onSortTypeChange("distance")}
-                className={`px-2.5 py-1 text-xs font-medium transition-all ${
-                  sortType === "distance"
-                    ? "bg-orange-500 text-black"
-                    : "bg-gray-800 text-gray-400 hover:bg-gray-700"
-                }`}
-              >
-                거리순
-              </button>
-            </div>
+            <button
+              onClick={() => onSortTypeChange(sortType === "time" ? "distance" : "time")}
+              title="탭하여 정렬 방식 전환"
+              className="flex items-center gap-1 px-2.5 py-1 text-xs font-medium bg-gray-800 text-gray-300 hover:bg-gray-700 transition-all"
+            >
+              <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 16V4m0 0L3 8m4-4l4 4m6 4v12m0 0l4-4m-4 4l-4-4" />
+              </svg>
+              {sortType === "time" ? "시간순" : "거리순"}
+            </button>
           )}
           {onLayoutTypeChange && (
-            <div className="flex gap-1 ml-1">
-              <button
-                onClick={() => onLayoutTypeChange("grid2")}
-                aria-label="2열 그리드로 보기"
-                title="2열 그리드"
-                className={`p-1.5 transition-all ${
-                  layoutType === "grid2"
-                    ? "bg-orange-500 text-black"
-                    : "bg-gray-800 text-gray-400 hover:bg-gray-700"
-                }`}
-              >
+            <button
+              onClick={() =>
+                onLayoutTypeChange(
+                  layoutType === "grid2" ? "grid3" : layoutType === "grid3" ? "list" : "grid2",
+                )
+              }
+              title="탭하여 보기 방식 전환"
+              className="flex items-center gap-1 p-1.5 ml-1 bg-gray-800 text-gray-300 hover:bg-gray-700 transition-all"
+            >
+              {layoutType === "grid2" && (
                 <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <rect x="3" y="4" width="8" height="16" rx="1" strokeWidth={2} />
                   <rect x="13" y="4" width="8" height="16" rx="1" strokeWidth={2} />
                 </svg>
-              </button>
-              <button
-                onClick={() => onLayoutTypeChange("grid3")}
-                aria-label="3열 그리드로 보기"
-                title="3열 그리드"
-                className={`p-1.5 transition-all ${
-                  layoutType === "grid3"
-                    ? "bg-orange-500 text-black"
-                    : "bg-gray-800 text-gray-400 hover:bg-gray-700"
-                }`}
-              >
+              )}
+              {layoutType === "grid3" && (
                 <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <rect x="2.5" y="4" width="5.5" height="16" rx="1" strokeWidth={2} />
                   <rect x="9.25" y="4" width="5.5" height="16" rx="1" strokeWidth={2} />
                   <rect x="16" y="4" width="5.5" height="16" rx="1" strokeWidth={2} />
                 </svg>
-              </button>
-              <button
-                onClick={() => onLayoutTypeChange("list")}
-                aria-label="가로 리스트로 보기"
-                title="가로 리스트"
-                className={`p-1.5 transition-all ${
-                  layoutType === "list"
-                    ? "bg-orange-500 text-black"
-                    : "bg-gray-800 text-gray-400 hover:bg-gray-700"
-                }`}
-              >
+              )}
+              {layoutType === "list" && (
                 <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
                 </svg>
-              </button>
-            </div>
+              )}
+            </button>
           )}
         </div>
       </div>
