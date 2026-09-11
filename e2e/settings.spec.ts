@@ -1,5 +1,5 @@
 import { test, expect } from "@playwright/test";
-import { bottomNav, hasAnyMovieCard, waitForScheduleLoaded } from "./helpers";
+import { bottomNav, closeFilterSheet, hasAnyMovieCard, waitForScheduleLoaded } from "./helpers";
 
 test.describe("설정 화면 & 즐겨찾는 영화관", () => {
   test("영화관을 즐겨찾기에 추가하면 칩으로 표시되고, 홈 필터에도 즐겨찾기 그룹이 뜬다", async ({
@@ -51,7 +51,7 @@ test.describe("설정 화면 & 즐겨찾는 영화관", () => {
     // 뒷정리: 즐겨찾기 해제
     // SettingsView는 탭을 벗어났다 돌아오면 매번 다시 마운트되어 아코디언이
     // 접힌 상태로 초기화되므로, 해제하려면 섹션을 다시 펼쳐야 한다.
-    await page.locator('button:has(svg path[d^="M6 18L18 6"])').click();
+    await closeFilterSheet(page);
     await bottomNav(page).getByRole("button", { name: "설정" }).click();
     await page.getByRole("button", { name: /즐겨찾는 영화관$/ }).click();
     await page.getByRole("button", { name: `${theaterName} 즐겨찾기 해제` }).click();

@@ -18,6 +18,23 @@ export function bottomNav(page: Page) {
   return page.locator("nav");
 }
 
+/**
+ * 필터 바텀시트의 닫기(X) 버튼을 누른다.
+ * Vercel 프리뷰 배포에는 화면 하단에 <vercel-live-feedback> 위젯이 떠서
+ * 클릭을 가로채는 경우가 있어(프로덕션에는 없음) force로 우회한다.
+ */
+export async function closeFilterSheet(page: Page) {
+  await page
+    .locator('button:has(svg path[d^="M6 18L18 6"])')
+    .first()
+    .click({ force: true });
+  // 닫힘 애니메이션(300ms) 동안 백드롭이 클릭을 가로채므로, 완전히 사라질 때까지 기다린다.
+  await page.locator(".fixed.inset-0.bg-black\\/60").waitFor({
+    state: "detached",
+    timeout: 5000,
+  }).catch(() => {});
+}
+
 /** 오늘 날짜 기준으로 상영 영화가 1개 이상 있는지 여부 */
 export async function hasAnyMovieCard(page: Page): Promise<boolean> {
   const emptyState = page.getByText("상영 중인 예술영화가 없습니다.");

@@ -1,5 +1,5 @@
 import { test, expect } from "@playwright/test";
-import { hasAnyMovieCard, waitForScheduleLoaded } from "./helpers";
+import { closeFilterSheet, hasAnyMovieCard, waitForScheduleLoaded } from "./helpers";
 
 test.describe("영화관별 필터", () => {
   test("영화관을 선택하면 목록이 좁혀지고, 초기화하면 되돌아온다", async ({ page }) => {
@@ -23,7 +23,7 @@ test.describe("영화관별 필터", () => {
     await firstCheckbox.check();
 
     // 바텀시트 닫기
-    await page.locator('button:has(svg path[d^="M6 18L18 6"])').click();
+    await closeFilterSheet(page);
 
     const filteredCount = await page.getByTestId("movie-card").count();
     expect(filteredCount).toBeGreaterThan(0);
@@ -38,7 +38,7 @@ test.describe("영화관별 필터", () => {
     await page.getByTestId("filter-toggle-button").click();
     await expect(page.getByRole("button", { name: "초기화" })).toBeVisible();
     await page.getByRole("button", { name: "초기화" }).click();
-    await page.locator('button:has(svg path[d^="M6 18L18 6"])').click();
+    await closeFilterSheet(page);
 
     const restoredCount = await page.getByTestId("movie-card").count();
     expect(restoredCount).toBe(totalBefore);
