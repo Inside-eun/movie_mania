@@ -82,7 +82,9 @@ export default function MovieBanner({ onEventClick }: MovieBannerProps) {
     if (currentIndex >= totalSlides) setCurrentIndex(0);
   }, [totalSlides, currentIndex]);
 
-  if (eventSlides.length === 0 && weekly.loading) return null;
+  // 주간 일정이 하루치씩 순차 로드되는 동안 기획전 매칭 결과가 점점 늘어나 보이는 걸 막기 위해,
+  // 전체 로딩이 끝날 때까지는 배너를 노출하지 않는다.
+  if (weekly.loading) return null;
   if (totalSlides === 0) return null;
 
   const isQuizSlide = currentIndex === quizIndex;

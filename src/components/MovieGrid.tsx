@@ -107,7 +107,7 @@ export default function MovieGrid({
                 trackSortChanged(next);
               }}
               title="탭하여 정렬 방식 전환"
-              className="flex items-center gap-1 px-2.5 py-1 text-xs font-medium bg-gray-800 text-gray-300 hover:bg-gray-700 transition-all"
+              className="flex items-center justify-center gap-1 h-7 px-2.5 text-xs font-medium bg-gray-800 text-gray-300 hover:bg-gray-700 transition-all"
             >
               <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 16V4m0 0L3 8m4-4l4 4m6 4v12m0 0l4-4m-4 4l-4-4" />
@@ -123,7 +123,7 @@ export default function MovieGrid({
                 )
               }
               title="탭하여 보기 방식 전환"
-              className="flex items-center gap-1 p-1.5 ml-1 bg-gray-800 text-gray-300 hover:bg-gray-700 transition-all"
+              className="flex items-center justify-center gap-1 h-7 w-7 ml-1 bg-gray-800 text-gray-300 hover:bg-gray-700 transition-all"
             >
               {layoutType === "grid2" && (
                 <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
