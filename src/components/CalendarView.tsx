@@ -2,6 +2,7 @@
 
 import { useState, useMemo } from "react";
 import { MovieSchedule } from "@/types";
+import { trackCalendarMonthChanged, trackCalendarDateClicked } from "@/utils/gtm";
 
 interface CalendarViewProps {
   wishlistMovies: MovieSchedule[];
@@ -92,12 +93,14 @@ export default function CalendarView({
   }, [currentMonth]);
 
   const prevMonth = () => {
+    trackCalendarMonthChanged("prev");
     setCurrentMonth(
       new Date(currentMonth.getFullYear(), currentMonth.getMonth() - 1)
     );
   };
 
   const nextMonth = () => {
+    trackCalendarMonthChanged("next");
     setCurrentMonth(
       new Date(currentMonth.getFullYear(), currentMonth.getMonth() + 1)
     );
@@ -124,6 +127,7 @@ export default function CalendarView({
   const handleDateClick = (date: Date) => {
     const dateStr = getDateString(date);
     if (hasMovies(date)) {
+      trackCalendarDateClicked(moviesByDate[dateStr].length);
       setSelectedDateForModal(dateStr);
       setIsDateModalOpen(true);
     }

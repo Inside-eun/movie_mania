@@ -6,6 +6,12 @@ import {
 } from 'react';
 
 import { MovieSchedule } from '@/types';
+import {
+  trackFilterOpened,
+  trackFilterTabChanged,
+  trackFilterReset,
+  trackFavoriteGroupFilterClicked,
+} from '@/utils/gtm';
 
 interface MovieFilterProps {
   filterType: "movie" | "theater";
@@ -80,6 +86,7 @@ export default function MovieFilter({
     favoritesInCurrentShowings.every((t) => selectedTheaters.includes(t));
 
   const handleFavoriteGroupClick = () => {
+    trackFavoriteGroupFilterClicked(!isFavoriteGroupActive);
     if (isFavoriteGroupActive) {
       onBulkTheaterSelect([]);
     } else {
@@ -92,7 +99,10 @@ export default function MovieFilter({
       {/* 필터 아이콘 버튼 */}
       <button
         data-testid="filter-toggle-button"
-        onClick={() => setIsFilterExpanded(true)}
+        onClick={() => {
+          trackFilterOpened();
+          setIsFilterExpanded(true);
+        }}
         className="relative p-2 bg-[#0d0d0d] border border-orange-500 text-gray-300 hover:bg-gray-900 transition-all z-10"
       >
         <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -139,7 +149,10 @@ export default function MovieFilter({
               <div className="flex gap-2">
                 <button
                   data-testid="filter-tab-movie"
-                  onClick={() => onFilterTypeChange("movie")}
+                  onClick={() => {
+                    trackFilterTabChanged("movie");
+                    onFilterTypeChange("movie");
+                  }}
                   className={`flex-1 py-2 px-3 text-xs font-medium transition-all rounded-sm ${
                     filterType === "movie"
                       ? "bg-orange-500 text-black"
@@ -150,7 +163,10 @@ export default function MovieFilter({
                 </button>
                 <button
                   data-testid="filter-tab-theater"
-                  onClick={() => onFilterTypeChange("theater")}
+                  onClick={() => {
+                    trackFilterTabChanged("theater");
+                    onFilterTypeChange("theater");
+                  }}
                   className={`flex-1 py-2 px-3 text-xs font-medium transition-all rounded-sm ${
                     filterType === "theater"
                       ? "bg-orange-500 text-black"
@@ -161,7 +177,10 @@ export default function MovieFilter({
                 </button>
                 {isFiltered && (
                   <button
-                    onClick={onClearFilters}
+                    onClick={() => {
+                      trackFilterReset();
+                      onClearFilters();
+                    }}
                     className="px-3 py-2 border border-orange-500 text-gray-300 text-xs hover:bg-orange-500/10 transition-all rounded-sm"
                   >
                     초기화

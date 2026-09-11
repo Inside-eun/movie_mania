@@ -7,7 +7,13 @@ import {
 } from '@/hooks/useMovieFilter';
 import { MovieSchedule } from '@/types';
 import { calculateDistance } from '@/utils/date';
-import { trackSortChanged } from '@/utils/gtm';
+import {
+  trackSortChanged,
+  trackWishlistAdd,
+  trackWishlistRemove,
+  trackTheaterNameClicked,
+  trackMapIconClicked,
+} from '@/utils/gtm';
 import { hapticImpact } from '@/lib/haptics';
 
 import PosterImage from './PosterImage';
@@ -100,6 +106,7 @@ export default function MovieGrid({
           )}
           {onSortTypeChange && (
             <button
+              data-testid="sort-toggle-button"
               onClick={() => {
                 const next = sortType === "time" ? "distance" : "time";
                 hapticImpact("light");
@@ -117,6 +124,7 @@ export default function MovieGrid({
           )}
           {onLayoutTypeChange && (
             <button
+              data-testid="layout-toggle-button"
               onClick={() =>
                 onLayoutTypeChange(
                   layoutType === "grid2" ? "grid3" : layoutType === "grid3" ? "list" : "grid2",
@@ -175,6 +183,11 @@ export default function MovieGrid({
               onClick={(e) => {
                 e.stopPropagation();
                 hapticImpact("light");
+                if (isInWishlist(movie)) {
+                  trackWishlistRemove(movie.title, movie.theater, movie.time);
+                } else {
+                  trackWishlistAdd(movie.title, movie.theater, movie.time);
+                }
                 onToggleWishlist(movie);
               }}
               aria-label={isInWishlist(movie) ? "찜 목록에서 제거" : "찜 목록에 추가"}
@@ -259,6 +272,7 @@ export default function MovieGrid({
                     <button
                       onClick={(e) => {
                         e.stopPropagation();
+                        trackTheaterNameClicked(movie.theater);
                         onTheaterClick(movie.theater);
                       }}
                       className="text-[11px] text-gray-400 truncate underline decoration-dotted underline-offset-2 hover:text-orange-400 transition-colors min-w-0"
@@ -276,6 +290,7 @@ export default function MovieGrid({
                       <button
                         onClick={(e) => {
                           e.stopPropagation();
+                          trackMapIconClicked(movie.theater);
                           onMapClick(movie);
                         }}
                         aria-label="지도로 소요시간 보기"

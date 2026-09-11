@@ -78,7 +78,8 @@ export default function RootLayout({
               window.dataLayer = window.dataLayer || [];
               function gtag(){dataLayer.push(arguments);}
               gtag('js', new Date());
-              gtag('config', '${GA_ID}');
+              var isDebug = window.location.search.indexOf('ga_debug=1') !== -1;
+              gtag('config', '${GA_ID}', isDebug ? { debug_mode: true } : {});
             `,
           }}
         />

@@ -7,7 +7,7 @@ import {
   useState,
 } from 'react';
 
-import { trackEngagementTime } from '@/utils/gtm';
+import { trackEngagementTime, trackTabChanged } from '@/utils/gtm';
 import { hapticImpact } from '@/lib/haptics';
 
 import dynamic from 'next/dynamic';
@@ -19,7 +19,7 @@ import {
   useWishlist,
 } from '@/hooks';
 import { MovieSchedule } from '@/types';
-import { getLocalDateString } from '@/utils/date';
+import { addDaysToDateString, getLocalDateString } from '@/utils/date';
 
 import DateSelector from '../components/DateSelector';
 import Header from '../components/Header';
@@ -92,6 +92,13 @@ export default function Home() {
     [filter]
   );
 
+  const goToNextDay = useCallback(() => {
+    hapticImpact("light");
+    const nextDate = addDaysToDateString(selectedDate, 1);
+    handleDateChange(nextDate);
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  }, [selectedDate, handleDateChange]);
+
   const openMovieDetail = useCallback(
     (movie: MovieSchedule) => {
       const slug = encodeURIComponent(movie.movieCode || movie.title);
@@ -120,6 +127,7 @@ export default function Home() {
 
   const goToHome = useCallback(() => {
     hapticImpact("light");
+    trackTabChanged("home");
     setShowWishlistView(false);
     setShowInfoView(false);
     setShowEventsView(false);
@@ -128,6 +136,7 @@ export default function Home() {
 
   const goToWishlist = useCallback(() => {
     hapticImpact("light");
+    trackTabChanged("wishlist");
     setShowWishlistView(true);
     setShowInfoView(false);
     setShowEventsView(false);
@@ -136,6 +145,7 @@ export default function Home() {
 
   const goToInfo = useCallback(() => {
     hapticImpact("light");
+    trackTabChanged("settings");
     setShowWishlistView(false);
     setShowInfoView(true);
     setShowEventsView(false);
@@ -144,6 +154,7 @@ export default function Home() {
 
   const goToEvents = useCallback(() => {
     hapticImpact("light");
+    trackTabChanged("events");
     setShowWishlistView(false);
     setShowInfoView(false);
     setShowEventsView(true);
@@ -252,6 +263,17 @@ export default function Home() {
 
         {!schedules.loading &&
           isHomeView &&
+          schedules.filteredMovies.length > 0 && (
+            <button
+              onClick={goToNextDay}
+              className="w-full mt-4 py-3 text-center text-sm text-gray-300 bg-gray-900/60 border border-gray-800 hover:bg-gray-800 transition-colors"
+            >
+              {Number(addDaysToDateString(selectedDate, 1).split("-")[2])}일 상영 시간표 &gt;
+            </button>
+          )}
+
+        {!schedules.loading &&
+          isHomeView &&
           schedules.allMovies.length === 0 &&
           !schedules.error && (
             <div className="text-center py-8 text-gray-500">
@@ -295,7 +317,9 @@ export default function Home() {
 
         {showInfoView && <SettingsView />}
 
-        {showEventsView && <EventsView initialEventId={pendingEventId} />}
+        {showEventsView && (
+          <EventsView initialEventId={pendingEventId} onExitToHome={goToHome} />
+        )}
 
         <RouteMapModal
           isOpen={isRouteMapOpen}

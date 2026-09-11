@@ -18,6 +18,23 @@ export function bottomNav(page: Page) {
   return page.locator("nav");
 }
 
+/**
+ * 필터 바텀시트의 닫기(X) 버튼을 누른다.
+ * Vercel 프리뷰 배포에는 화면 하단에 <vercel-live-feedback> 위젯이 떠서
+ * 클릭을 가로채는 경우가 있어(프로덕션에는 없음) force로 우회한다.
+ */
+export async function closeFilterSheet(page: Page) {
+  await page
+    .locator('button:has(svg path[d^="M6 18L18 6"])')
+    .first()
+    .click({ force: true });
+  // 닫힘 애니메이션(300ms) 동안 백드롭이 클릭을 가로채므로, 완전히 사라질 때까지 기다린다.
+  await page.locator(".fixed.inset-0.bg-black\\/60").waitFor({
+    state: "detached",
+    timeout: 5000,
+  }).catch(() => {});
+}
+
 /** 오늘 날짜 기준으로 상영 영화가 1개 이상 있는지 여부 */
 export async function hasAnyMovieCard(page: Page): Promise<boolean> {
   const emptyState = page.getByText("상영 중인 예술영화가 없습니다.");
@@ -25,4 +42,44 @@ export async function hasAnyMovieCard(page: Page): Promise<boolean> {
     return false;
   }
   return true;
+}
+
+export type CapturedGaEvent = { name: string; params: Record<string, unknown> };
+
+/**
+ * GA4 이벤트(window.gtag → window.dataLayer.push)를 가로채서 기록한다.
+ * 실제 구글로는 아무 것도 전송하지 않는다:
+ *   1) googletagmanager.com / google-analytics.com 으로 나가는 네트워크 요청을 차단
+ *   2) dataLayer.push를 오버라이드해서 event 호출만 window.__gaEvents에 기록
+ *
+ * 반드시 page.goto() 하기 전에 호출해야 한다 (addInitScript는 다음 네비게이션부터 적용됨).
+ */
+export async function captureGaEvents(page: Page) {
+  await page.route(
+    /googletagmanager\.com|google-analytics\.com|analytics\.google\.com/,
+    (route) => route.abort()
+  );
+
+  await page.addInitScript(() => {
+    // layout.tsx의 인라인 스크립트가 `window.dataLayer = window.dataLayer || []`로
+    // 재사용하므로, 여기서 먼저 만들어둔 배열의 push를 오버라이드해두면 그대로 이어받는다.
+    (window as any).dataLayer = [];
+    (window as any).__gaEvents = [] as CapturedGaEvent[];
+    const dataLayer = (window as any).dataLayer as any[];
+    const originalPush = dataLayer.push.bind(dataLayer);
+    dataLayer.push = (...entries: any[]) => {
+      for (const entry of entries) {
+        // gtag()는 arguments 객체를 그대로 push하므로 인덱스로 접근한다.
+        if (entry && entry[0] === "event") {
+          (window as any).__gaEvents.push({ name: entry[1], params: entry[2] ?? {} });
+        }
+      }
+      return originalPush(...entries);
+    };
+  });
+}
+
+/** 지금까지 캡처된 GA4 이벤트 목록을 가져온다. */
+export async function getGaEvents(page: Page): Promise<CapturedGaEvent[]> {
+  return page.evaluate(() => (window as any).__gaEvents ?? []);
 }

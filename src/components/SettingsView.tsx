@@ -8,7 +8,11 @@ import {
 
 import MapView, { MapPin } from '@/components/MapView';
 import { artCinemas } from '@/data/artCinemas';
-import { trackFavoriteTheaterSaved } from '@/utils/gtm';
+import {
+  trackFavoriteTheaterSaved,
+  trackSettingsSectionToggled,
+  trackFavoriteViewModeChanged,
+} from '@/utils/gtm';
 import { hapticImpact } from '@/lib/haptics';
 
 const SEOUL_THEATERS = artCinemas.map((c) => ({ name: c.cdNm, area: c.area }));
@@ -47,8 +51,10 @@ export default function SettingsView() {
     [favoriteTheaters]
   );
 
-  const toggle = (section: string) =>
+  const toggle = (section: string) => {
+    if (expandedSection !== section) trackSettingsSectionToggled(section);
     setExpandedSection(expandedSection === section ? null : section);
+  };
 
   return (
     <div className="space-y-6 text-gray-100">
@@ -89,7 +95,10 @@ export default function SettingsView() {
                 </p>
                 <div className="flex gap-1 flex-shrink-0 ml-2">
                   <button
-                    onClick={() => setFavoriteViewMode("list")}
+                    onClick={() => {
+                      trackFavoriteViewModeChanged("list");
+                      setFavoriteViewMode("list");
+                    }}
                     className={`px-2 py-1 text-[10px] font-medium transition-all ${
                       favoriteViewMode === "list" ? "bg-orange-500 text-black" : "bg-gray-800 text-gray-400"
                     }`}
@@ -97,7 +106,10 @@ export default function SettingsView() {
                     목록
                   </button>
                   <button
-                    onClick={() => setFavoriteViewMode("map")}
+                    onClick={() => {
+                      trackFavoriteViewModeChanged("map");
+                      setFavoriteViewMode("map");
+                    }}
                     className={`px-2 py-1 text-[10px] font-medium transition-all ${
                       favoriteViewMode === "map" ? "bg-orange-500 text-black" : "bg-gray-800 text-gray-400"
                     }`}

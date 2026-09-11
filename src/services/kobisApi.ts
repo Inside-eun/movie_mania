@@ -24,12 +24,6 @@ interface KOBISMovieInfo {
   }>;
 }
 
-interface KOBISResponse {
-  movieInfoResult: {
-    movieInfo: KOBISMovieInfo;
-  };
-}
-
 // 메모리 캐시 (간단한 캐시 구현)
 const movieInfoCache = new Map<string, { data: Partial<KOBISMovieInfo> | null; timestamp: number }>();
 const CACHE_TTL = 30 * 60 * 1000; // 30분

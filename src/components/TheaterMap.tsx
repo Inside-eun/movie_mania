@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { Map, MapMarker, useKakaoLoader } from "react-kakao-maps-sdk";
+import { trackMapZoomClicked } from "@/utils/gtm";
 
 interface TheaterMapProps {
   lat?: number;
@@ -74,14 +75,20 @@ export default function TheaterMap({ lat, lng, name, address, height = 260 }: Th
 
       <div className="absolute bottom-2 right-2 flex flex-col gap-1">
         <button
-          onClick={() => setLevel((prev) => Math.max(1, prev - 1))}
+          onClick={() => {
+            trackMapZoomClicked("in");
+            setLevel((prev) => Math.max(1, prev - 1));
+          }}
           aria-label="확대"
           className="w-7 h-7 flex items-center justify-center bg-black/70 text-white text-base font-bold hover:bg-black/90 transition-colors"
         >
           +
         </button>
         <button
-          onClick={() => setLevel((prev) => Math.min(14, prev + 1))}
+          onClick={() => {
+            trackMapZoomClicked("out");
+            setLevel((prev) => Math.min(14, prev + 1));
+          }}
           aria-label="축소"
           className="w-7 h-7 flex items-center justify-center bg-black/70 text-white text-base font-bold hover:bg-black/90 transition-colors"
         >

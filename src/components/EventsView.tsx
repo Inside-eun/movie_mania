@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 
 import { mockEvents, getEvent, CuratedEvent } from "@/mock/events";
@@ -8,6 +8,7 @@ import { useWeeklySchedules } from "@/hooks/useWeeklySchedules";
 import { getLocalDateString } from "@/utils/date";
 import { MovieSchedule } from "@/types";
 import { CreditsByTitle } from "@/mock/recommendations";
+import { trackEventListItemClicked, trackEventMovieClicked } from "@/utils/gtm";
 
 function formatMonthDay(dateStr: string): string {
   const [, month, day] = dateStr.split("-");
@@ -53,14 +54,17 @@ function MovieRowSkeleton() {
 
 interface EventsViewProps {
   initialEventId?: string | null;
+  onExitToHome?: () => void;
 }
 
-export default function EventsView({ initialEventId = null }: EventsViewProps) {
+export default function EventsView({ initialEventId = null, onExitToHome }: EventsViewProps) {
   const router = useRouter();
   const [selectedEventId, setSelectedEventId] = useState<string | null>(initialEventId);
   const [creditsByTitle, setCreditsByTitle] = useState<CreditsByTitle>({});
   const [creditsLoading, setCreditsLoading] = useState(false);
   const weekly = useWeeklySchedules();
+  // 홈 배너를 눌러 목록을 거치지 않고 바로 상세로 들어온 경우, 뒤로가기는 목록이 아니라 홈으로 가야 한다.
+  const openedDirectlyFromHomeRef = useRef(initialEventId != null);
 
   const selectedEvent = selectedEventId ? getEvent(selectedEventId) : null;
 
@@ -99,10 +103,16 @@ export default function EventsView({ initialEventId = null }: EventsViewProps) {
     return (
       <div>
         <button
-          onClick={() => setSelectedEventId(null)}
+          onClick={() => {
+            if (openedDirectlyFromHomeRef.current && onExitToHome) {
+              onExitToHome();
+            } else {
+              setSelectedEventId(null);
+            }
+          }}
           className="text-xs text-gray-400 hover:text-orange-400 mb-3 flex items-center gap-1"
         >
-          ← 기획전 목록
+          {openedDirectlyFromHomeRef.current && onExitToHome ? "← 홈" : "← 기획전 목록"}
         </button>
 
         <div className="mb-5 bg-gray-900 border border-white/10 p-3 sm:p-4">
@@ -148,7 +158,12 @@ export default function EventsView({ initialEventId = null }: EventsViewProps) {
                   <RowWrapper
                     key={title}
                     {...(hasSchedule
-                      ? { onClick: () => match && openMovieDetail(match.movie, match.date) }
+                      ? {
+                          onClick: () => {
+                            trackEventMovieClicked(title, selectedEvent.title);
+                            match && openMovieDetail(match.movie, match.date);
+                          },
+                        }
                       : {})}
                     className={`flex items-center justify-between gap-3 w-full text-left py-3 ${
                       hasSchedule ? "hover:bg-white/5 transition-colors" : ""
@@ -189,7 +204,11 @@ export default function EventsView({ initialEventId = null }: EventsViewProps) {
         {mockEvents.map((e) => (
           <button
             key={e.id}
-            onClick={() => setSelectedEventId(e.id)}
+            data-testid="event-card"
+            onClick={() => {
+              trackEventListItemClicked(e.title);
+              setSelectedEventId(e.id);
+            }}
             className="block w-full text-left bg-gray-900 border border-white/10 p-3 hover:border-orange-500/70 transition-colors"
           >
             <div className="flex items-center justify-between gap-2 mb-1">
