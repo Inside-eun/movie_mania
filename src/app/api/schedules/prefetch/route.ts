@@ -29,12 +29,15 @@ async function handlePrefetch(request: Request) {
   console.log("=== [Cron 1] 크롤링 프리페치 시작 ===");
   const startTime = Date.now();
 
-  // 오늘 하루치만 크롤링 (Hobby 플랜 10초 제한)
-  // 나머지 날짜는 사용자 요청 시 on-demand 캐싱
-  const today = new Date();
-  const dateStr = today.toISOString().split("T")[0];
+  // Hobby 플랜 10초 제한 때문에 한 번의 호출당 하루치만 크롤링한다.
+  // daysAhead(0~6)로 오늘 포함 이번 주 각 날짜를 별도 크론 호출로 나눠 미리 채워둔다.
+  const { searchParams } = new URL(request.url);
+  const daysAhead = Math.min(6, Math.max(0, parseInt(searchParams.get("daysAhead") || "0", 10) || 0));
+  const targetDate = new Date();
+  targetDate.setDate(targetDate.getDate() + daysAhead);
+  const dateStr = targetDate.toISOString().split("T")[0];
 
-  console.log(`\n${dateStr} 크롤링 중...`);
+  console.log(`\n${dateStr} (daysAhead=${daysAhead}) 크롤링 중...`);
 
   const results = [];
   try {
@@ -44,7 +47,7 @@ async function handlePrefetch(request: Request) {
       cache.deleteAllByTypeDate("art_cinemas", dateStr),
       cache.deleteAllByTypeDate("kofa_api", dateStr),
     ]);
-    const movies = await (scheduleService as any).crawlArtCinemasWithKMDBByDate(today);
+    const movies = await (scheduleService as any).crawlArtCinemasWithKMDBByDate(targetDate);
 
     results.push({ date: dateStr, count: movies.length, success: true });
     console.log(`${dateStr}: ${movies.length}개 스케줄 저장 완료`);
