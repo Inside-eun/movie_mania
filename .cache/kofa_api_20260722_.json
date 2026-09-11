@@ -1,0 +1,60 @@
+{
+  "data": [
+    {
+      "title": "청소년 법원",
+      "theater": "한국영상자료원 시네마테크KOFA",
+      "area": "마포구",
+      "screen": "시네마테크KOFA 2관",
+      "time": "11:30",
+      "showtime": "2026-07-22T02:30:00.000Z",
+      "movieCode": "PM_010534",
+      "director": "프레더릭 와이즈먼",
+      "prodYear": "1973",
+      "runtime": "143",
+      "actors": null,
+      "synopsis": "<style type=\"text/css\">&lt;!--td {border: 1px solid #cccccc;}br {mso-data-placement:same-cell;}-->\r\n</style>\r\n1970년대 초 테네시주 멤피스의 청소년 법원의 일상을 보여준다. 무장 강도, 약물 남용, 가출, 가정위탁 등 다양한 사건들이 재판정과 사무실을 오가며 펼쳐진다. 판사, 검사, 사회복지사들이 소년 피고인을 심문하고 판결하는 과정 속에서 제도의 냉정함과 감정의 균열이 교차한다. 성인 재판 대상이 될 위기에 놓인 열일곱 살 소년, 울음을 멈추라는 경찰의 말에 얼어붙는 소녀의 모습은 처벌과 돌봄, 무관심이 뒤얽힌 구조를 선명히 드러낸다. 제도적 절차 속에서도 인간성과 권력의 관계를 묻는다.",
+      "posterUrl": "https://www.koreafilm.or.kr/upload/programMovieManage/202606/cd05ad73-6b3e-4a5d-8211-b0848223ca58.jpg",
+      "rating": "12세이상관람가",
+      "format": "D-Cinema(4K)",
+      "source": "KMDB_API"
+    },
+    {
+      "title": "고등학교",
+      "theater": "한국영상자료원 시네마테크KOFA",
+      "area": "마포구",
+      "screen": "시네마테크KOFA 2관",
+      "time": "15:00",
+      "showtime": "2026-07-22T06:00:00.000Z",
+      "movieCode": "PM_010533",
+      "director": "프레더릭 와이즈먼",
+      "prodYear": "1968",
+      "runtime": "75",
+      "actors": null,
+      "synopsis": "<style type=\"text/css\">&lt;!--td {border: 1px solid #cccccc;}br {mso-data-placement:same-cell;}-->\r\n</style>\r\n필라델피아의 한 공립 고등학교를 카메라에 담는다. 학생, 교사, 행정가 사이의 일상적 상호작용을 관찰하고, 징계 회의, 애국 집회, 수업 장면을 통해 미국의 학교에서 권위와 순응이 어떻게 강요되는지 드러낸다. 와이즈먼은 반복과 구조를 통해 학교가 행동, 언어, 사회적 규범을 형성하는 과정을 보여주며, 교육이 단순히 지식을 전달하는 것을 넘어 더 넓은 통제 체계에 순응하는 시민을 길러내는 역할을 한다는 점을 시사한다.",
+      "posterUrl": "https://www.koreafilm.or.kr/upload/programMovieManage/202606/14a64378-9a89-4a3f-8d3a-4c979418d99e.jpg",
+      "rating": "12세이상관람가",
+      "format": "D-Cinema(4K)",
+      "source": "KMDB_API"
+    },
+    {
+      "title": "가정폭력",
+      "theater": "한국영상자료원 시네마테크KOFA",
+      "area": "마포구",
+      "screen": "시네마테크KOFA 2관",
+      "time": "17:00",
+      "showtime": "2026-07-22T08:00:00.000Z",
+      "movieCode": "PM_010537",
+      "director": "프레더릭 와이즈먼",
+      "prodYear": "2001",
+      "runtime": "196",
+      "actors": null,
+      "synopsis": "<style type=\"text/css\">&lt;!--td {border: 1px solid #cccccc;}br {mso-data-placement:same-cell;}-->\r\n</style>\r\n플로리다주 최대의 가정 폭력 피해 여성&middot;아동 보호시설인 &#39;더 스프링&#39;과 관련 사건을 다루는 지역 경찰의 활동을 다룬 작품이다. 영화는 접수 면담, 상담 세션, 집단 치료, 분노 관리 수업, 직원 회의, 현장 개입 장면을 따라간다. 관료적 절차와 날것의 감정 사이를 오가며, 분노를 토로하는 여성들, 트라우마에 맞서는 아이들, 연대의 순간들을 포착하고, 가부장적 폭력의 순환과 이를 끊기 위한 이들의 회복력을 조명한다.",
+      "posterUrl": "https://www.koreafilm.or.kr/upload/programMovieManage/202606/71af6bc3-4c7d-459a-8ebe-df87230f389d.jpg",
+      "rating": "15세이상관람가",
+      "format": "D-Cinema(4K)",
+      "source": "KMDB_API"
+    }
+  ],
+  "timestamp": 1784689665094,
+  "expiresAt": 1784776065094
+}

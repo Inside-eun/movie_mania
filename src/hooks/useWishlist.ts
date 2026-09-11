@@ -56,7 +56,6 @@ export function useWishlist(selectedDate: string) {
         if (movieIndex > -1) {
           newWishlistMovies.splice(movieIndex, 1);
         }
-        // 찜 제거 이벤트 추적
         trackWishlistRemove(movie.title, movie.theater, movie.time);
       } else {
         newWishlist.add(movieKey);
@@ -68,7 +67,6 @@ export function useWishlist(selectedDate: string) {
           ...movie,
           showtime: correctShowtime.toISOString(),
         });
-        // 찜 추가 이벤트 추적
         trackWishlistAdd(movie.title, movie.theater, movie.time);
       }
 
@@ -87,7 +85,6 @@ export function useWishlist(selectedDate: string) {
     setWishlistMovies([]);
     localStorage.removeItem(STORAGE_KEY_WISHLIST);
     localStorage.removeItem(STORAGE_KEY_MOVIES);
-    // 전체 삭제 이벤트 추적
     trackWishlistClear(previousCount);
   }, [wishlist]);
 

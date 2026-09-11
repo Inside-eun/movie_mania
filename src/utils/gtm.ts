@@ -66,10 +66,10 @@ export const trackEvent = (
 export const trackDateChange = (selectedDate: string) => {
   const today = new Date();
   today.setHours(0, 0, 0, 0);
-  
+
   const selected = new Date(selectedDate);
   selected.setHours(0, 0, 0, 0);
-  
+
   const daysFromToday = Math.floor(
     (selected.getTime() - today.getTime()) / (1000 * 60 * 60 * 24)
   );

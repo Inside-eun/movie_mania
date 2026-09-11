@@ -10,6 +10,7 @@ import {
 import { trackEngagementTime } from '@/utils/gtm';
 
 import dynamic from 'next/dynamic';
+import { useRouter } from 'next/navigation';
 
 import {
   useMovieFilter,
@@ -18,6 +19,7 @@ import {
 } from '@/hooks';
 import { MovieSchedule } from '@/types';
 import { getLocalDateString } from '@/utils/date';
+import { trackEngagementTime } from '@/utils/gtm';
 
 import DateSelector from '../components/DateSelector';
 import Header from '../components/Header';
@@ -27,19 +29,26 @@ import MovieGrid from '../components/MovieGrid';
 
 const WishlistView = dynamic(() => import("../components/WishlistView"), { loading: () => null });
 const SettingsView = dynamic(() => import("../components/SettingsView"), { loading: () => null });
-const MovieModal = dynamic(() => import("../components/MovieModal"), { loading: () => null });
+const EventsView = dynamic(() => import("../components/EventsView"), { loading: () => null });
+const RouteMapModal = dynamic(() => import("../components/RouteMapModal"), { loading: () => null });
 
 export default function Home() {
+  const router = useRouter();
   const [selectedDate, setSelectedDate] = useState(
     getLocalDateString(new Date())
   );
 
   const [showWishlistView, setShowWishlistView] = useState(false);
   const [showInfoView, setShowInfoView] = useState(false);
+  const [showEventsView, setShowEventsView] = useState(false);
+  const [pendingEventId, setPendingEventId] = useState<string | null>(null);
 
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  const [selectedMovieForModal, setSelectedMovieForModal] =
-    useState<MovieSchedule | null>(null);
+  const [isRouteMapOpen, setIsRouteMapOpen] = useState(false);
+  const [routeTarget, setRouteTarget] = useState<{
+    name: string;
+    latitude: number | null;
+    longitude: number | null;
+  } | null>(null);
 
   const filter = useMovieFilter();
   const schedules = useMovieSchedules(
@@ -50,6 +59,31 @@ export default function Home() {
   );
   const wishlist = useWishlist(selectedDate);
 
+  // 실제로 화면에 보인 누적 시간 측정 (탭 전환, 백그라운드 제외)
+  const visibleSinceRef = useRef<number>(Date.now());
+  const totalVisibleMsRef = useRef<number>(0);
+
+  useEffect(() => {
+    const handleVisibility = () => {
+      if (document.visibilityState === 'hidden') {
+        totalVisibleMsRef.current += Date.now() - visibleSinceRef.current;
+      } else {
+        visibleSinceRef.current = Date.now();
+      }
+    };
+    const handleUnload = () => {
+      const total = totalVisibleMsRef.current + (Date.now() - visibleSinceRef.current);
+      trackEngagementTime(Math.round(total / 1000));
+    };
+
+    document.addEventListener('visibilitychange', handleVisibility);
+    window.addEventListener('pagehide', handleUnload);
+    return () => {
+      document.removeEventListener('visibilitychange', handleVisibility);
+      window.removeEventListener('pagehide', handleUnload);
+    };
+  }, []);
+
   const handleDateChange = useCallback(
     (date: string) => {
       setSelectedDate(date);
@@ -58,29 +92,65 @@ export default function Home() {
     [filter]
   );
 
-  const openModal = useCallback((movie: MovieSchedule) => {
-    setSelectedMovieForModal(movie);
-    setIsModalOpen(true);
+  const openMovieDetail = useCallback(
+    (movie: MovieSchedule) => {
+      const slug = encodeURIComponent(movie.movieCode || movie.title);
+      sessionStorage.setItem(
+        `movieDetail:${slug}`,
+        JSON.stringify({ movie, selectedDate })
+      );
+      router.push(`/movie/${slug}`);
+    },
+    [selectedDate, router]
+  );
+
+  const openRouteMapForMovie = useCallback((movie: MovieSchedule) => {
+    setRouteTarget({
+      name: movie.theater,
+      latitude: movie.latitude ?? null,
+      longitude: movie.longitude ?? null,
+    });
+    setIsRouteMapOpen(true);
   }, []);
 
-  const closeModal = useCallback(() => {
-    setIsModalOpen(false);
-    setSelectedMovieForModal(null);
+  const closeRouteMap = useCallback(() => {
+    setIsRouteMapOpen(false);
+    setRouteTarget(null);
   }, []);
 
   const goToHome = useCallback(() => {
     setShowWishlistView(false);
     setShowInfoView(false);
+    setShowEventsView(false);
+    setPendingEventId(null);
   }, []);
 
   const goToWishlist = useCallback(() => {
     setShowWishlistView(true);
     setShowInfoView(false);
+    setShowEventsView(false);
+    setPendingEventId(null);
   }, []);
 
   const goToInfo = useCallback(() => {
     setShowWishlistView(false);
     setShowInfoView(true);
+    setShowEventsView(false);
+    setPendingEventId(null);
+  }, []);
+
+  const goToEvents = useCallback(() => {
+    setShowWishlistView(false);
+    setShowInfoView(false);
+    setShowEventsView(true);
+    setPendingEventId(null);
+  }, []);
+
+  const goToEventDetail = useCallback((eventId: string) => {
+    setPendingEventId(eventId);
+    setShowWishlistView(false);
+    setShowInfoView(false);
+    setShowEventsView(true);
   }, []);
 
   // 실제로 화면에 보인 누적 시간 측정 (탭 전환, 백그라운드 제외)
@@ -109,7 +179,8 @@ export default function Home() {
   }, []);
 
   const isToday = selectedDate === getLocalDateString(new Date());
-  const isHomeView = !showWishlistView && !showInfoView;
+  const isHomeView =
+    !showWishlistView && !showInfoView && !showEventsView;
 
   return (
     <>
@@ -118,13 +189,13 @@ export default function Home() {
       {/* 히어로 배너 - ALL SCREENINGS 뷰에서만 (로딩 중 스켈레톤으로 CLS 방지) */}
       {isHomeView && (
         schedules.allMovies.length > 0
-          ? <MovieBanner movies={schedules.allMovies} onMovieClick={openModal} />
+          ? <MovieBanner onEventClick={goToEventDetail} />
           : schedules.loading
             ? <div className="w-full bg-gray-900/50 animate-pulse" style={{ height: "260px" }} />
             : null
       )}
 
-      <main className="container mx-auto px-4 pb-24 pt-4 max-w-4xl min-h-screen">
+      <main className="container mx-auto px-4 pb-[calc(6rem_+_env(safe-area-inset-bottom))] pt-4 max-w-4xl min-h-screen">
         {/* 필터 영역 */}
         {isHomeView && (
           <div className="flex gap-2 items-start mb-4">
@@ -187,13 +258,16 @@ export default function Home() {
               selectedDate={selectedDate}
               selectedMovies={filter.selectedMovies}
               selectedTheaters={filter.selectedTheaters}
-              onMovieClick={openModal}
+              onMovieClick={openMovieDetail}
               onToggleWishlist={wishlist.toggleWishlist}
               isInWishlist={wishlist.isInWishlist}
               sortType={filter.sortType}
+              layoutType={filter.layoutType}
               userLocation={filter.userLocation}
               locationError={filter.locationError}
               onSortTypeChange={filter.handleSortTypeChange}
+              onLayoutTypeChange={filter.handleLayoutTypeChange}
+              onMapClick={openRouteMapForMovie}
             />
           )}
 
@@ -233,7 +307,7 @@ export default function Home() {
           <WishlistView
             wishlistMovies={wishlist.wishlistMovies}
             wishlistCount={wishlist.count}
-            onMovieClick={openModal}
+            onMovieClick={openMovieDetail}
             onToggleWishlist={wishlist.toggleWishlist}
             onClearAll={wishlist.clearAll}
             getWishlistByDate={wishlist.getWishlistByDate}
@@ -242,15 +316,18 @@ export default function Home() {
 
         {showInfoView && <SettingsView />}
 
-        <MovieModal
-          isOpen={isModalOpen}
-          onClose={closeModal}
-          movie={selectedMovieForModal}
-          selectedDate={selectedDate}
+        {showEventsView && <EventsView initialEventId={pendingEventId} />}
+
+        <RouteMapModal
+          isOpen={isRouteMapOpen}
+          onClose={closeRouteMap}
+          theaterName={routeTarget?.name ?? null}
+          latitude={routeTarget?.latitude ?? null}
+          longitude={routeTarget?.longitude ?? null}
         />
 
         {/* 하단 네비게이션 (모바일) */}
-        <nav className="fixed bottom-0 left-0 right-0 bg-black border-t border-gray-800 shadow-lg z-40 sm:hidden">
+        <nav className="fixed bottom-0 left-0 right-0 bg-black border-t border-gray-800 shadow-lg z-40 pb-[env(safe-area-inset-bottom)] sm:hidden">
           <div className="flex items-center justify-around h-16">
             <button
               onClick={goToHome}
@@ -299,6 +376,28 @@ export default function Home() {
                 </span>
               )}
               <span className="text-[10px] font-medium">찜</span>
+            </button>
+
+            <button
+              onClick={goToEvents}
+              className={`flex flex-col items-center justify-center flex-1 h-full transition-colors ${
+                showEventsView ? "text-orange-500" : "text-gray-400"
+              }`}
+            >
+              <svg
+                className="w-5 h-5 mb-0.5"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M11 5.882V19.24a1.76 1.76 0 01-3.417.592l-2.147-6.15M18 13a3 3 0 100-6M5.436 13.683A4.001 4.001 0 017 6h1.832c4.1 0 7.625-1.234 9.168-3v14c-1.543-1.766-5.067-3-9.168-3H7a3.988 3.988 0 01-1.564-.317z"
+                />
+              </svg>
+              <span className="text-[10px] font-medium">기획전</span>
             </button>
 
             <button

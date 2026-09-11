@@ -1,15 +1,23 @@
 "use client";
 
-import { useState, useEffect } from "react";
-import { artCinemas } from "@/data/artCinemas";
-import { trackFavoriteTheaterSaved } from "@/utils/gtm";
+import {
+  useEffect,
+  useMemo,
+  useState,
+} from 'react';
+
+import MapView, { MapPin } from '@/components/MapView';
+import { artCinemas } from '@/data/artCinemas';
+import { trackFavoriteTheaterSaved } from '@/utils/gtm';
 
 const SEOUL_THEATERS = artCinemas.map((c) => ({ name: c.cdNm, area: c.area }));
+
+type FavoriteViewMode = "list" | "map";
 
 export default function SettingsView() {
   const [favoriteTheaters, setFavoriteTheaters] = useState<string[]>([]);
   const [expandedSection, setExpandedSection] = useState<string | null>(null);
-  const [savedMsg, setSavedMsg] = useState(false);
+  const [favoriteViewMode, setFavoriteViewMode] = useState<FavoriteViewMode>("list");
 
   useEffect(() => {
     const savedTheaters = localStorage.getItem("favoriteTheaters");
@@ -17,17 +25,25 @@ export default function SettingsView() {
   }, []);
 
   const toggleTheater = (name: string) => {
-    setFavoriteTheaters((prev) =>
-      prev.includes(name) ? prev.filter((t) => t !== name) : [...prev, name]
-    );
+    setFavoriteTheaters((prev) => {
+      const next = prev.includes(name) ? prev.filter((t) => t !== name) : [...prev, name];
+      localStorage.setItem("favoriteTheaters", JSON.stringify(next));
+      trackFavoriteTheaterSaved(next.length);
+      return next;
+    });
   };
 
-  const saveTheaters = () => {
-    localStorage.setItem("favoriteTheaters", JSON.stringify(favoriteTheaters));
-    trackFavoriteTheaterSaved(favoriteTheaters.length);
-    setSavedMsg(true);
-    setTimeout(() => setSavedMsg(false), 2000);
-  };
+  const mapPins: MapPin[] = useMemo(
+    () =>
+      artCinemas.map((c) => ({
+        id: c.cdNm,
+        lat: c.lat,
+        lng: c.lng,
+        label: c.cdNm,
+        selected: favoriteTheaters.includes(c.cdNm),
+      })),
+    [favoriteTheaters]
+  );
 
   const toggle = (section: string) =>
     setExpandedSection(expandedSection === section ? null : section);
@@ -65,47 +81,70 @@ export default function SettingsView() {
           </button>
           {expandedSection === "theaters" && (
             <div className="px-4 pb-4 pt-3 border-t border-gray-800">
-              <p className="text-xs text-gray-500 mb-3">
-                자주 가는 영화관을 선택하면 거리 정렬 시 우선 표시됩니다.
-              </p>
-              <div className="grid grid-cols-2 gap-2">
-                {SEOUL_THEATERS.map((theater) => {
-                  const selected = favoriteTheaters.includes(theater.name);
-                  return (
-                    <button
-                      key={theater.name}
-                      onClick={() => toggleTheater(theater.name)}
-                      className={`flex items-center gap-2 px-3 py-2 border text-left transition-all ${
-                        selected
-                          ? "border-orange-500 bg-orange-500/10 text-orange-400"
-                          : "border-gray-700 bg-gray-800 text-gray-400 hover:border-gray-600"
-                      }`}
-                    >
-                      <span
-                        className={`w-3.5 h-3.5 border flex-shrink-0 flex items-center justify-center ${
-                          selected ? "border-orange-500 bg-orange-500" : "border-gray-600"
-                        }`}
-                      >
-                        {selected && (
-                          <svg className="w-2.5 h-2.5 text-black" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M5 13l4 4L19 7" />
-                          </svg>
-                        )}
-                      </span>
-                      <div>
-                        <p className="text-xs font-medium leading-tight">{theater.name}</p>
-                        <p className="text-[10px] text-gray-500">{theater.area}</p>
-                      </div>
-                    </button>
-                  );
-                })}
+              <div className="flex items-center justify-between mb-3">
+                <p className="text-xs text-gray-500">
+                  자주 가는 영화관을 선택하면 거리 정렬 시 우선 표시됩니다.
+                </p>
+                <div className="flex gap-1 flex-shrink-0 ml-2">
+                  <button
+                    onClick={() => setFavoriteViewMode("list")}
+                    className={`px-2 py-1 text-[10px] font-medium transition-all ${
+                      favoriteViewMode === "list" ? "bg-orange-500 text-black" : "bg-gray-800 text-gray-400"
+                    }`}
+                  >
+                    목록
+                  </button>
+                  <button
+                    onClick={() => setFavoriteViewMode("map")}
+                    className={`px-2 py-1 text-[10px] font-medium transition-all ${
+                      favoriteViewMode === "map" ? "bg-orange-500 text-black" : "bg-gray-800 text-gray-400"
+                    }`}
+                  >
+                    지도
+                  </button>
+                </div>
               </div>
-              <button
-                onClick={saveTheaters}
-                className="mt-3 w-full py-2 bg-orange-500 text-black text-xs font-bold transition-all hover:bg-orange-400 active:scale-[0.98]"
-              >
-                {savedMsg ? "저장되었습니다 ✓" : "저장"}
-              </button>
+
+              {favoriteViewMode === "map" && (
+                <div className="mb-3">
+                  <MapView pins={mapPins} onPinClick={toggleTheater} height={280} />
+                </div>
+              )}
+
+              {favoriteTheaters.length > 0 && (
+                <div className="flex flex-wrap gap-1.5 mb-3 pb-3 border-b border-gray-800">
+                  {favoriteTheaters.map((name) => (
+                    <span
+                      key={name}
+                      className="inline-flex items-center gap-1 pl-3 pr-1.5 py-1.5 rounded-full border border-orange-500 bg-orange-500/10 text-orange-400 text-xs font-medium"
+                    >
+                      {name}
+                      <button
+                        onClick={() => toggleTheater(name)}
+                        aria-label={`${name} 즐겨찾기 해제`}
+                        className="w-4 h-4 flex items-center justify-center rounded-full text-orange-400 hover:bg-orange-500/20"
+                      >
+                        <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M6 18L18 6M6 6l12 12" />
+                        </svg>
+                      </button>
+                    </span>
+                  ))}
+                </div>
+              )}
+
+              <div className="flex flex-wrap gap-1.5">
+                {SEOUL_THEATERS.filter((theater) => !favoriteTheaters.includes(theater.name)).map((theater) => (
+                  <button
+                    key={theater.name}
+                    onClick={() => toggleTheater(theater.name)}
+                    title={theater.area}
+                    className="px-3 py-1.5 rounded-full border border-gray-700 bg-gray-800 text-gray-400 text-xs font-medium transition-colors hover:border-gray-600 hover:text-gray-200"
+                  >
+                    {theater.name}
+                  </button>
+                ))}
+              </div>
             </div>
           )}
         </div>
@@ -124,7 +163,7 @@ export default function SettingsView() {
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17.657 16.657L13.414 20.9a2 2 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
               </svg>
-              위치 정보 이용 약관
+              개인정보처리방침
             </span>
             <svg
               className={`w-4 h-4 text-gray-400 transition-transform ${expandedSection === "location" ? "rotate-180" : ""}`}
@@ -134,15 +173,41 @@ export default function SettingsView() {
             </svg>
           </button>
           {expandedSection === "location" && (
-            <div className="px-4 py-3 border-t border-gray-800 text-xs text-gray-400 space-y-2">
-              <p className="font-semibold text-gray-300">📍 위치 정보 수집 및 이용</p>
-              <ul className="space-y-1.5 list-disc list-inside">
-                <li>위치 정보는 <span className="text-orange-400">거리순 정렬</span> 기능에만 사용됩니다.</li>
-                <li>수집된 위치 정보는 서버로 전송되지 않으며, 기기 내에서만 처리됩니다.</li>
-                <li>위치 권한을 허용하지 않아도 시간순 정렬로 앱을 정상적으로 이용할 수 있습니다.</li>
-                <li>위치 정보는 브라우저 세션 중에만 임시 보관되며 저장되지 않습니다.</li>
-              </ul>
-              <p className="text-gray-500 mt-2">거리순 정렬 버튼을 누를 때에만 위치 정보 접근이 요청됩니다.</p>
+            <div className="px-4 py-3 border-t border-gray-800 text-xs text-gray-400 space-y-3">
+              <div className="space-y-1.5">
+                <p className="font-semibold text-gray-300">📍 위치 정보</p>
+                <ul className="space-y-1.5 list-disc list-inside">
+                  <li>위치 정보는 <span className="text-orange-400">거리순 정렬</span>과 <span className="text-orange-400">길찾기</span> 기능에만 사용됩니다.</li>
+                  <li>수집된 위치 정보는 서버로 전송되지 않으며, 기기 내에서만 처리됩니다.</li>
+                  <li>위치 권한은 기기의 설정에서 언제든 껐다 켤 수 있으며, 허용하지 않아도 시간순 정렬로 앱을 정상적으로 이용할 수 있습니다.</li>
+                  <li>위치 정보는 세션 중에만 임시 보관되며 별도로 저장되지 않습니다.</li>
+                </ul>
+              </div>
+              <div className="space-y-1.5">
+                <p className="font-semibold text-gray-300">💾 즐겨찾기 · 찜 목록</p>
+                <ul className="space-y-1.5 list-disc list-inside">
+                  <li>즐겨찾는 영화관, 찜 목록은 기기(브라우저)의 로컬 스토리지에만 저장되며, 외부 서버로 전송되지 않습니다.</li>
+                  <li>앱을 삭제하거나 저장공간을 초기화하면 해당 데이터도 함께 삭제됩니다.</li>
+                </ul>
+              </div>
+              <div className="space-y-1.5">
+                <p className="font-semibold text-gray-300">🔗 외부 데이터 제공</p>
+                <ul className="space-y-1.5 list-disc list-inside">
+                  <li>영화·상영 정보 조회를 위해 영화진흥위원회(KOBIS) 공공 API 및 TMDB API를 호출하며, 이 과정에서 이용자를 식별할 수 있는 개인정보는 전송되지 않습니다.</li>
+                </ul>
+              </div>
+              <p className="text-gray-500 mt-2">문의: dameun0808@gmail.com</p>
+              <a
+                href="https://app.notion.com/p/dameun-inside/3d78a7d2d43d80d597dccf430f54b1cd?source=copy_link"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="mt-1 flex items-center justify-center gap-1.5 w-full py-2 border border-gray-700 text-gray-300 text-xs font-medium hover:border-orange-500 hover:text-orange-400 transition-colors"
+              >
+                전체 개인정보처리방침 보기
+                <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
+                </svg>
+              </a>
             </div>
           )}
         </div>
@@ -172,6 +237,15 @@ export default function SettingsView() {
           </button>
           {expandedSection === "updates" && (
             <div className="px-4 py-3 text-xs text-gray-400 space-y-3">
+              <div>
+                <p className="font-semibold text-gray-300">v1.6.0 (2026-09-10)</p>
+                <ul className="list-disc list-inside mt-1 space-y-1">
+                  <li>iOS 앱 출시</li>
+                  <li>위치 정보를 네이티브 위치 서비스로 조회하도록 개선</li>
+                  <li>위치 권한 요청 시 이용 목적 안내 추가</li>
+                  <li>iOS 상태바 하단 흰 여백 표시 오류 수정</li>
+                </ul>
+              </div>
               <div>
                 <p className="font-semibold text-gray-300">v1.5.0 (2026-05-04)</p>
                 <ul className="list-disc list-inside mt-1 space-y-1">
@@ -260,6 +334,7 @@ export default function SettingsView() {
               <p>박스오피스 5위 이하의 작품을 주로 상영하는 서울시 예술영화관 및 예술전용관 정보를 제공합니다.</p>
               <p className="font-semibold text-gray-300 mt-2">💾 찜 목록 안내</p>
               <p>찜 목록은 브라우저 로컬 스토리지에 저장되며, 같은 브라우저에서만 유지됩니다.</p>
+              <p className="text-gray-500 mt-2">This product uses the TMDB API but is not endorsed or certified by TMDB.</p>
             </div>
           )}
         </div>
@@ -267,8 +342,7 @@ export default function SettingsView() {
 
       {/* 푸터 */}
       <div className="text-center pt-4 pb-2">
-        <p className="text-xs text-gray-500">만든 사람: 제육볶음 달달볶아</p>
-        <p className="text-[10px] text-gray-500 mt-1">© 2025 영화방랑자. All rights reserved.</p>
+        <p className="text-[10px] text-gray-500 mt-1">© 2025-2026 영화방랑자. All rights reserved.</p>
       </div>
     </div>
   );

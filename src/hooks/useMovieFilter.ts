@@ -2,12 +2,17 @@
 
 import { useState, useCallback, useEffect } from "react";
 
+import { getCurrentPosition } from "@/lib/geolocation";
+
 export type SortType = "time" | "distance";
+export type LayoutType = "grid2" | "grid3" | "list";
 
 export interface UserLocation {
   latitude: number;
   longitude: number;
 }
+
+const LAYOUT_TYPE_STORAGE_KEY = "movieLayoutType";
 
 export function useMovieFilter() {
   const [selectedMovies, setSelectedMovies] = useState<string[]>([]);
@@ -16,29 +21,33 @@ export function useMovieFilter() {
   const [showPastSchedules, setShowPastSchedules] = useState(false);
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [sortType, setSortType] = useState<SortType>("time");
+  const [layoutType, setLayoutType] = useState<LayoutType>("grid2");
   const [userLocation, setUserLocation] = useState<UserLocation | null>(null);
   const [locationError, setLocationError] = useState<string | null>(null);
 
   // 사용자 위치 가져오기
   useEffect(() => {
-    if ("geolocation" in navigator) {
-      navigator.geolocation.getCurrentPosition(
-        (position) => {
-          const location = {
-            latitude: position.coords.latitude,
-            longitude: position.coords.longitude,
-          };
-          console.log("[위치 수신 성공]", location);
-          setUserLocation(location);
-          setLocationError(null);
-        },
-        (error) => {
-          setLocationError("위치 정보를 가져올 수 없습니다");
-          console.error("[위치 수신 실패]", error);
-        }
-      );
-    } else {
-      setLocationError("브라우저에서 위치 정보를 지원하지 않습니다");
+    getCurrentPosition()
+      .then((location) => {
+        console.log("[위치 수신 성공]", location);
+        setUserLocation(location);
+        setLocationError(null);
+      })
+      .catch((error) => {
+        setLocationError("위치 정보를 가져올 수 없습니다");
+        console.error("[위치 수신 실패]", error);
+      });
+  }, []);
+
+  // 기기에 저장된 리스트 레이아웃 설정 불러오기
+  useEffect(() => {
+    const savedLayoutType = localStorage.getItem(LAYOUT_TYPE_STORAGE_KEY);
+    if (
+      savedLayoutType === "grid2" ||
+      savedLayoutType === "grid3" ||
+      savedLayoutType === "list"
+    ) {
+      setLayoutType(savedLayoutType);
     }
   }, []);
 
@@ -118,6 +127,11 @@ export function useMovieFilter() {
     setSortType(type);
   }, []);
 
+  const handleLayoutTypeChange = useCallback((type: LayoutType) => {
+    setLayoutType(type);
+    localStorage.setItem(LAYOUT_TYPE_STORAGE_KEY, type);
+  }, []);
+
   return {
     selectedMovies,
     selectedTheaters,
@@ -135,8 +149,10 @@ export function useMovieFilter() {
     getSelectedMovieText,
     getSelectedTheaterText,
     sortType,
+    layoutType,
     userLocation,
     locationError,
     handleSortTypeChange,
+    handleLayoutTypeChange,
   };
 }

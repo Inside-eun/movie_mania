@@ -65,8 +65,7 @@ export default function DarkModeToggle() {
     } else {
       document.documentElement.classList.remove('dark');
     }
-    
-    // 다크모드 토글 이벤트 추적
+
     trackDarkModeToggle(newDarkMode);
   };
 

@@ -33,3 +33,33 @@ html {
   -webkit-box-orient: vertical;
   overflow: hidden;
 }
+
+/* 상영 정보 스켈레톤 — 필름 프로젝터가 지나가듯 오렌지 톤 스윕 */
+@keyframes skeleton-sweep {
+  0% {
+    background-position: -160% 0;
+  }
+  100% {
+    background-position: 160% 0;
+  }
+}
+
+.skeleton-bar {
+  position: relative;
+  overflow: hidden;
+  background-color: #1a1a1a;
+}
+
+.skeleton-bar::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background-image: linear-gradient(
+    100deg,
+    transparent 30%,
+    rgba(249, 115, 22, 0.16) 50%,
+    transparent 70%
+  );
+  background-size: 250% 100%;
+  animation: skeleton-sweep 1.5s ease-in-out infinite;
+}

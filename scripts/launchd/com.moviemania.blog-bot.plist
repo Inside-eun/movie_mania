@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+  <key>Label</key>
+  <string>com.moviemania.blog-bot</string>
+
+  <key>ProgramArguments</key>
+  <array>
+    <string>/bin/bash</string>
+    <string>scripts/blog-bot/run.sh</string>
+  </array>
+
+  <key>WorkingDirectory</key>
+  <string>/Users/choedam-eun/Desktop/work/Movie/movie_mania</string>
+
+  <key>EnvironmentVariables</key>
+  <dict>
+    <key>PATH</key>
+    <string>/Users/choedam-eun/.nvm/versions/node/v22.23.2/bin:/usr/bin:/bin:/usr/sbin:/sbin</string>
+  </dict>
+
+  <!-- 매일 00:30에 "전날(어제)" 작업 로그로 초안을 생성. 인자를 안 주면 run.sh가 어제 날짜를 기본값으로 씀. -->
+  <key>StartCalendarInterval</key>
+  <dict>
+    <key>Hour</key>
+    <integer>0</integer>
+    <key>Minute</key>
+    <integer>30</integer>
+  </dict>
+
+  <key>StandardOutPath</key>
+  <string>/Users/choedam-eun/Desktop/work/Movie/movie_mania/.blog-bot/launchd.log</string>
+
+  <key>StandardErrorPath</key>
+  <string>/Users/choedam-eun/Desktop/work/Movie/movie_mania/.blog-bot/launchd.log</string>
+
+  <key>RunAtLoad</key>
+  <false/>
+</dict>
+</plist>

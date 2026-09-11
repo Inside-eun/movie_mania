@@ -1,4 +1,5 @@
-// CGV API 응답에서 movNo를 추출해 cgvMovNoCache.json에 자동 추가
+// CGV API 응답(DevTools에서 수동으로 복사)에서 movNo를 추출해 cgvMovNoCache.json에 추가.
+// 대부분은 fetchCgvMovNo.ts(자동 조회)로 충분함 — 그쪽이 못 찾은 신작/예외 케이스만 여기로.
 //
 // 사용법:
 //   파일로:   npx tsx src/scripts/addCGVMovNo.ts response.json
