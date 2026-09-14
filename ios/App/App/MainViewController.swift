@@ -5,6 +5,20 @@ import WebKit
 class MainViewController: CAPBridgeViewController {
     private var offlineNavigationHandler: OfflineNavigationHandler?
 
+    // 임시 진단용 화면 로그. 케이블 없이도 무슨 일이 일어나는지 스크린샷으로
+    // 확인할 수 있도록 상단에 최근 로그 몇 줄을 띄운다. 원인 파악 끝나면 지울 것.
+    private lazy var debugLabel: UILabel = {
+        let label = UILabel()
+        label.numberOfLines = 0
+        label.font = .monospacedSystemFont(ofSize: 10, weight: .regular)
+        label.textColor = .green
+        label.backgroundColor = UIColor.black.withAlphaComponent(0.85)
+        label.translatesAutoresizingMaskIntoConstraints = false
+        label.isHidden = true
+        return label
+    }()
+    private var debugLines: [String] = []
+
     override func viewDidLoad() {
         super.viewDidLoad()
         webView?.allowsBackForwardNavigationGestures = true
@@ -19,6 +33,13 @@ class MainViewController: CAPBridgeViewController {
             webView?.underPageBackgroundColor = .black
         }
 
+        view.addSubview(debugLabel)
+        NSLayoutConstraint.activate([
+            debugLabel.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
+            debugLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            debugLabel.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+        ])
+
         // CAPBridgeViewController 자체는 WKNavigationDelegate가 아니라 내부적으로
         // 별도 객체를 webView.navigationDelegate로 쓰고 있어서, 이 메서드를
         // 직접 override할 수 없다. 대신 기존 delegate를 감싸는 프록시를 끼워
@@ -26,18 +47,33 @@ class MainViewController: CAPBridgeViewController {
         // 위임한다(브릿지 동작 보존).
         if let webView = webView {
             let originalDelegate = webView.navigationDelegate
-            NSLog("[OfflineHandler] wrapping navigationDelegate, original=%@", originalDelegate.map { String(describing: type(of: $0)) } ?? "nil")
-            let handler = OfflineNavigationHandler(originalDelegate: originalDelegate)
+            appendDebugLog("wrap navigationDelegate, original=\(originalDelegate.map { String(describing: type(of: $0)) } ?? "nil")")
+            let handler = OfflineNavigationHandler(originalDelegate: originalDelegate, log: { [weak self] line in
+                self?.appendDebugLog(line)
+            })
             webView.navigationDelegate = handler
             offlineNavigationHandler = handler
         } else {
-            NSLog("[OfflineHandler] webView is nil in viewDidLoad, cannot wrap navigationDelegate")
+            appendDebugLog("webView is nil, cannot wrap navigationDelegate")
+        }
+    }
+
+    private func appendDebugLog(_ line: String) {
+        NSLog("[OfflineHandler] %@", line)
+        DispatchQueue.main.async { [weak self] in
+            guard let self else { return }
+            self.debugLines.append(line)
+            if self.debugLines.count > 12 { self.debugLines.removeFirst() }
+            self.debugLabel.text = self.debugLines.joined(separator: "\n")
+            self.debugLabel.isHidden = false
+            self.view.bringSubviewToFront(self.debugLabel)
         }
     }
 }
 
 private class OfflineNavigationHandler: NSObject, WKNavigationDelegate {
     private weak var originalDelegate: WKNavigationDelegate?
+    private let log: (String) -> Void
 
     // 오프라인/타임아웃/서버 연결 불가로 최초 로드에 실패했을 때만 로컬
     // 오프라인 안내 페이지로 전환한다. 그 외 에러(예: JS 내부 네비게이션
@@ -53,8 +89,9 @@ private class OfflineNavigationHandler: NSObject, WKNavigationDelegate {
         URLError.dataNotAllowed.rawValue,
     ]
 
-    init(originalDelegate: WKNavigationDelegate?) {
+    init(originalDelegate: WKNavigationDelegate?, log: @escaping (String) -> Void) {
         self.originalDelegate = originalDelegate
+        self.log = log
     }
 
     // 우리가 구현하지 않은 WKNavigationDelegate 메서드는 전부 원래
@@ -71,14 +108,14 @@ private class OfflineNavigationHandler: NSObject, WKNavigationDelegate {
 
     func webView(_ webView: WKWebView, didFailProvisionalNavigation navigation: WKNavigation!, withError error: Error) {
         let nsError = error as NSError
-        NSLog("[OfflineHandler] didFailProvisionalNavigation domain=%@ code=%ld desc=%@", nsError.domain, nsError.code, nsError.localizedDescription)
+        log("didFailProvisional domain=\(nsError.domain) code=\(nsError.code)")
         originalDelegate?.webView?(webView, didFailProvisionalNavigation: navigation, withError: error)
         showOfflinePageIfNetworkError(webView, error)
     }
 
     func webView(_ webView: WKWebView, didFail navigation: WKNavigation!, withError error: Error) {
         let nsError = error as NSError
-        NSLog("[OfflineHandler] didFail domain=%@ code=%ld desc=%@", nsError.domain, nsError.code, nsError.localizedDescription)
+        log("didFail domain=\(nsError.domain) code=\(nsError.code)")
         originalDelegate?.webView?(webView, didFail: navigation, withError: error)
         showOfflinePageIfNetworkError(webView, error)
     }
@@ -86,18 +123,18 @@ private class OfflineNavigationHandler: NSObject, WKNavigationDelegate {
     private func showOfflinePageIfNetworkError(_ webView: WKWebView, _ error: Error) {
         let nsError = error as NSError
         guard nsError.domain == NSURLErrorDomain, offlineErrorCodes.contains(nsError.code) else {
-            NSLog("[OfflineHandler] error not in offline list (domain=%@ code=%ld), ignoring", nsError.domain, nsError.code)
+            log("error not in offline list, ignoring")
             return
         }
         guard let publicDir = Bundle.main.url(forResource: "public", withExtension: nil) else {
-            NSLog("[OfflineHandler] FAILED to locate 'public' folder in bundle")
+            log("FAILED: 'public' folder not in bundle")
             return
         }
         guard let offlineURL = Bundle.main.url(forResource: "offline", withExtension: "html", subdirectory: "public") else {
-            NSLog("[OfflineHandler] FAILED to locate offline.html inside %@", publicDir.path)
+            log("FAILED: offline.html not found in \(publicDir.path)")
             return
         }
-        NSLog("[OfflineHandler] loading offline page from %@", offlineURL.path)
+        log("loading offline.html from \(offlineURL.path)")
         webView.loadFileURL(offlineURL, allowingReadAccessTo: publicDir)
     }
 }
