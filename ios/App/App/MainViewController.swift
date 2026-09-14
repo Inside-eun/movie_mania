@@ -106,6 +106,24 @@ private class OfflineNavigationHandler: NSObject, WKNavigationDelegate {
         return originalDelegate
     }
 
+    // Capacitor의 원래 delegate는 server.url 오리진 밖으로의 네비게이션을
+    // 보안상 취소한다. loadFileURL로 쏘는 file:// 오프라인 페이지도 이 정책에
+    // 걸려 조용히 취소되면서 흰 화면만 남았던 것 — file:// 네비게이션만
+    // 명시적으로 허용하고, 나머지는 원래 delegate의 정책 판단에 그대로 맡긴다.
+    func webView(_ webView: WKWebView, decidePolicyFor navigationAction: WKNavigationAction, decisionHandler: @escaping (WKNavigationActionPolicy) -> Void) {
+        if navigationAction.request.url?.isFileURL == true {
+            log("allowing file:// navigation to \(navigationAction.request.url?.path ?? "")")
+            decisionHandler(.allow)
+            return
+        }
+        if let original = originalDelegate,
+           original.responds(to: #selector(WKNavigationDelegate.webView(_:decidePolicyFor:decisionHandler:))) {
+            original.webView?(webView, decidePolicyFor: navigationAction, decisionHandler: decisionHandler)
+        } else {
+            decisionHandler(.allow)
+        }
+    }
+
     func webView(_ webView: WKWebView, didFailProvisionalNavigation navigation: WKNavigation!, withError error: Error) {
         let nsError = error as NSError
         log("didFailProvisional domain=\(nsError.domain) code=\(nsError.code)")
