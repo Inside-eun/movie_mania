@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+<title>네트워크 연결 필요</title>
+<style>
+  :root { color-scheme: dark; }
+  * { box-sizing: border-box; }
+  html, body {
+    margin: 0;
+    padding: 0;
+    height: 100%;
+    background: #000;
+    color: #e5e7eb;
+    font-family: -apple-system, BlinkMacSystemFont, "Apple SD Gothic Neo", "Malgun Gothic", sans-serif;
+  }
+  .wrap {
+    min-height: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 32px 24px calc(24px + env(safe-area-inset-bottom));
+    text-align: center;
+  }
+  img {
+    width: 100%;
+    max-width: 320px;
+    border-radius: 12px;
+    border: 1px solid #27272a;
+    margin-bottom: 28px;
+    opacity: 0.9;
+  }
+  h1 {
+    font-size: 17px;
+    font-weight: 700;
+    color: #fff;
+    margin: 0 0 8px;
+  }
+  p {
+    font-size: 13px;
+    line-height: 1.6;
+    color: #9ca3af;
+    margin: 0 0 24px;
+    max-width: 320px;
+  }
+  button {
+    appearance: none;
+    border: none;
+    background: #f97316;
+    color: #000;
+    font-size: 14px;
+    font-weight: 700;
+    padding: 12px 28px;
+    border-radius: 999px;
+    cursor: pointer;
+  }
+  button:active {
+    background: #ea580c;
+  }
+</style>
+</head>
+<body>
+  <div class="wrap">
+    <img src="error.png" alt="" />
+    <h1>인터넷 연결을 확인해주세요</h1>
+    <p>네트워크가 연결되어 있지 않아 정보를 불러올 수 없습니다.<br />Wi-Fi 또는 셀룰러 데이터를 켜고 다시 시도해주세요.</p>
+    <button id="retry">다시 시도</button>
+  </div>
+  <script>
+    // 이 페이지는 오프라인일 때 네이티브(MainViewController.swift)가 로드하는
+    // 로컬 파일이라, location.reload()는 이 파일 자체만 다시 열 뿐 네트워크를
+    // 재시도하지 않는다. 실제 서비스 도메인으로 다시 이동시켜야
+    // WKWebView가 로드를 재시도하고, 성공하면 정상 화면으로 넘어간다.
+    // capacitor.config.ts의 server.url과 반드시 동일하게 유지할 것.
+    document.getElementById('retry').addEventListener('click', function () {
+      window.location.href = 'https://moviemania-olive.vercel.app/';
+    });
+  </script>
+</body>
+</html>
