@@ -129,11 +129,15 @@ export default function Home() {
   const goToHome = useCallback(() => {
     hapticImpact("light");
     trackTabChanged("home");
+    if (!showWishlistView && !showInfoView && !showEventsView) {
+      window.scrollTo({ top: 0, behavior: "smooth" });
+      return;
+    }
     setShowWishlistView(false);
     setShowInfoView(false);
     setShowEventsView(false);
     setPendingEventId(null);
-  }, []);
+  }, [showWishlistView, showInfoView, showEventsView]);
 
   const goToWishlist = useCallback(() => {
     hapticImpact("light");

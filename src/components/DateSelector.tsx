@@ -42,8 +42,15 @@ export default function DateSelector({
         className="absolute inset-0 opacity-0 w-full cursor-pointer"
         value={selectedDate}
         onChange={(e) => {
-          trackDateChange(e.target.value);
-          onDateChange(e.target.value);
+          const newValue = e.target.value;
+          const today = getLocalDateString(new Date());
+          if (newValue < today) {
+            e.target.value = selectedDate;
+            inputRef.current?.blur();
+            return;
+          }
+          trackDateChange(newValue);
+          onDateChange(newValue);
           inputRef.current?.blur();
         }}
         min={getLocalDateString(new Date())}
