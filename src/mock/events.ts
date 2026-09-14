@@ -14,7 +14,7 @@ export const mockEvents: CuratedEvent[] = [
   {
     id: "bela-tarr-krasznahorkai",
     title: "벨라 타르 X 라슬로 크러스너호르커이 특별전",
-    theaterNames: ["라이카시네마", "더숲 아트시네마", "아트하우스모모"],
+    theaterNames: ["라이카시네마", "더숲 아트시네마", "아트하우스모모", "CGV아트하우스"],
     period: "2026.09.16 - 2026.10.04",
     summary: "두 거장이 30년간 함께 빚어낸 다섯 편의 걸작",
     description:
