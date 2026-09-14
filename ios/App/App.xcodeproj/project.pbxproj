@@ -87,6 +87,7 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 504EC3161FED79650016851F /* Build configuration list for PBXNativeTarget "App" */;
 			buildPhases = (
+				1A2B3C4D5E6F7A8B9C0D1E2F /* Sync Capacitor Web Assets */,
 				504EC3001FED79650016851F /* Sources */,
 				504EC3011FED79650016851F /* Frameworks */,
 				504EC3021FED79650016851F /* Resources */,
@@ -155,6 +156,24 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		1A2B3C4D5E6F7A8B9C0D1E2F /* Sync Capacitor Web Assets */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "Sync Capacitor Web Assets";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "# ios/App/App/public은 gitignore 대상이라 npx cap copy/sync로만 채워진다.\n# 이걸 깜박하면 offline.html 등 최신 웹 자산이 번들에 안 들어가서 조용히 구버전으로 빌드되므로, 매 빌드마다 자동으로 돌린다.\nexport PATH=\"$PATH:/usr/local/bin:/opt/homebrew/bin:$HOME/.nvm/versions/node/$(ls \"$HOME/.nvm/versions/node\" 2>/dev/null | sort -V | tail -1)/bin\"\n\nPROJECT_ROOT=\"$SRCROOT/../..\"\ncd \"$PROJECT_ROOT\" || exit 1\n\nif ! command -v npx >/dev/null 2>&1; then\n  echo \"warning: npx를 찾을 수 없어 cap copy ios를 건넌뜀니다. ios/App/App/public이 오래된 내용일 수 있습니다. 터미널에서 npx cap copy ios를 수동으로 실행해주세요.\"\n  exit 0\nfi\n\nnpx cap copy ios\n";
+			showEnvVarsInLog = 0;
+		};
+/* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		504EC3001FED79650016851F /* Sources */ = {
