@@ -1,8 +1,9 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { Suspense, useEffect, useRef, useState } from "react";
 import Link from "next/link";
-import { useParams, useRouter } from "next/navigation";
+import Script from "next/script";
+import { useParams, useRouter, useSearchParams } from "next/navigation";
 
 import PosterImage from "@/components/PosterImage";
 import TheaterMap from "@/components/TheaterMap";
@@ -10,6 +11,7 @@ import { getBookingFallbackUrl } from "@/lib/bookingFallbacks";
 import {
   trackBookingClicked,
   trackMovieDetailOpened,
+  trackMovieShareClicked,
   trackWishlistAdd,
   trackWishlistRemove,
   trackRecommendationClicked,
@@ -40,6 +42,30 @@ interface StoredMovieDetail {
   selectedDate: string;
 }
 
+declare global {
+  interface Window {
+    Kakao?: {
+      init: (key: string) => void;
+      isInitialized: () => boolean;
+      Share: {
+        sendDefault: (settings: {
+          objectType: "feed";
+          content: {
+            title: string;
+            description: string;
+            imageUrl: string;
+            link: { mobileWebUrl: string; webUrl: string };
+          };
+          buttons?: Array<{
+            title: string;
+            link: { mobileWebUrl: string; webUrl: string };
+          }>;
+        }) => void;
+      };
+    };
+  }
+}
+
 function InfoRow({ label, children }: { label: string; children: React.ReactNode }) {
   return (
     <div className="flex items-center gap-2">
@@ -58,11 +84,21 @@ function SkeletonRow({ label, width }: { label: string; width: string }) {
 }
 
 export default function MovieDetailPage() {
+  return (
+    <Suspense fallback={<div className="min-h-screen bg-black" />}>
+      <MovieDetailPageInner />
+    </Suspense>
+  );
+}
+
+function MovieDetailPageInner() {
   const params = useParams<{ slug: string }>();
   const router = useRouter();
+  const searchParams = useSearchParams();
 
   const [stored, setStored] = useState<StoredMovieDetail | null>(null);
   const [notFound, setNotFound] = useState(false);
+  const [kakaoReady, setKakaoReady] = useState(false);
   const [dateMovies, setDateMovies] = useState<MovieSchedule[]>([]);
   const [creditsByTitle, setCreditsByTitle] = useState<CreditsByTitle>({});
   const [creditsLoading, setCreditsLoading] = useState(true);
@@ -77,12 +113,36 @@ export default function MovieDetailPage() {
 
   useEffect(() => {
     const raw = sessionStorage.getItem(`movieDetail:${params.slug}`);
-    if (!raw) {
-      setNotFound(true);
+    if (raw) {
+      setStored(JSON.parse(raw));
       return;
     }
-    setStored(JSON.parse(raw));
-  }, [params.slug]);
+
+    // 카카오톡 공유 등으로 세션 정보 없이 바로 진입한 경우, 공유 링크의 쿼리 파라미터로 복원
+    const title = searchParams.get("title");
+    const theater = searchParams.get("theater");
+    const time = searchParams.get("time");
+    const date = searchParams.get("date");
+    if (title && theater && time && date) {
+      setStored({
+        movie: {
+          title,
+          theater,
+          time,
+          area: "",
+          screen: "",
+          showtime: date,
+          posterUrl: searchParams.get("poster") || undefined,
+          movieCode: searchParams.get("movieCode") || undefined,
+          source: searchParams.get("source") || undefined,
+        },
+        selectedDate: date,
+      });
+      return;
+    }
+
+    setNotFound(true);
+  }, [params.slug, searchParams]);
 
   const movie = stored?.movie ?? null;
   const selectedDate = stored?.selectedDate;
@@ -260,9 +320,60 @@ export default function MovieDetailPage() {
     : null;
   const inWishlist = wishlist.isInWishlist(movie);
 
+  const handleKakaoShare = () => {
+    if (!kakaoReady || !window.Kakao?.isInitialized() || !selectedDate) return;
+
+    const shareParams = new URLSearchParams({
+      title: movie.title,
+      theater: movie.theater,
+      time: movie.time,
+      date: selectedDate,
+    });
+    if (movie.movieCode) shareParams.set("movieCode", movie.movieCode);
+    if (movie.source) shareParams.set("source", movie.source);
+    if (posterUrl) shareParams.set("poster", posterUrl);
+
+    const shareUrl = `${window.location.origin}/movie/${params.slug}?${shareParams.toString()}`;
+    const imageUrl = posterUrl.startsWith("http")
+      ? posterUrl
+      : `${window.location.origin}${posterUrl}`;
+
+    trackMovieShareClicked(movie.title, movie.theater);
+    hapticImpact("light");
+
+    window.Kakao.Share.sendDefault({
+      objectType: "feed",
+      content: {
+        title: movie.title,
+        description: `${movie.theater} · ${movie.time} 상영`,
+        imageUrl,
+        link: { mobileWebUrl: shareUrl, webUrl: shareUrl },
+      },
+      buttons: [
+        {
+          title: "상세보기",
+          link: { mobileWebUrl: shareUrl, webUrl: shareUrl },
+        },
+      ],
+    });
+  };
+
   return (
     <div className="min-h-screen bg-black text-gray-100 pb-[calc(6rem_+_env(safe-area-inset-bottom))]">
-      <div className="sticky top-0 z-40 bg-black border-b border-gray-800 px-4 py-2.5">
+      {process.env.NEXT_PUBLIC_KAKAO_MAP_KEY && (
+        <Script
+          src="https://t1.kakaocdn.net/kakao_js_sdk/2.7.4/kakao.min.js"
+          strategy="afterInteractive"
+          onLoad={() => {
+            if (window.Kakao && !window.Kakao.isInitialized()) {
+              window.Kakao.init(process.env.NEXT_PUBLIC_KAKAO_MAP_KEY as string);
+            }
+            setKakaoReady(true);
+          }}
+        />
+      )}
+
+      <div className="sticky top-0 z-40 bg-black border-b border-gray-800 px-4 py-2.5 flex items-center justify-between">
         <button
           onClick={() => {
             trackBackButtonClicked("movie_detail");
@@ -274,6 +385,18 @@ export default function MovieDetailPage() {
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
           </svg>
           뒤로
+        </button>
+
+        <button
+          onClick={handleKakaoShare}
+          disabled={!kakaoReady}
+          aria-label="카카오톡으로 공유하기"
+          className="flex items-center gap-1.5 text-sm text-gray-300 hover:text-orange-400 transition-colors disabled:opacity-40"
+        >
+          <svg className="w-4 h-4" viewBox="0 0 24 24" fill="#FEE500">
+            <path d="M12 3C6.477 3 2 6.463 2 10.74c0 2.735 1.828 5.14 4.583 6.512-.2.751-.727 2.73-.833 3.155-.13.526.194.519.408.378.168-.111 2.674-1.816 3.758-2.554.68.1 1.379.152 2.084.152 5.523 0 10-3.463 10-7.643C22 6.463 17.523 3 12 3z" />
+          </svg>
+          공유
         </button>
       </div>
 
