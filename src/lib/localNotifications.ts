@@ -1,8 +1,19 @@
-import { Capacitor } from "@capacitor/core";
-import { MovieSchedule } from "@/types";
+import { MovieSchedule } from '@/types';
+import { Capacitor } from '@capacitor/core';
 
 const ASK_FLAG_KEY = "notifPermissionAsked";
+const ENABLED_KEY = "showtimeNotificationsEnabled";
+const WISHLIST_MOVIES_KEY = "movieWishlistMovies";
 const REMINDER_LEAD_MINUTES = 30;
+
+// 설정에서 별도로 끄지 않는 한 기본값은 켜짐
+export function isNotificationsEnabled(): boolean {
+  return localStorage.getItem(ENABLED_KEY) !== "false";
+}
+
+export function setNotificationsEnabled(enabled: boolean): void {
+  localStorage.setItem(ENABLED_KEY, String(enabled));
+}
 
 function getMovieKey(movie: MovieSchedule): string {
   return movie.movieCode
@@ -46,6 +57,7 @@ async function ensurePermission(): Promise<boolean> {
 
 export async function scheduleShowtimeReminder(movie: MovieSchedule, showtime: Date) {
   if (!Capacitor.isNativePlatform()) return;
+  if (!isNotificationsEnabled()) return;
 
   const fireAt = new Date(showtime.getTime() - REMINDER_LEAD_MINUTES * 60 * 1000);
   if (fireAt.getTime() <= Date.now()) return;
@@ -59,7 +71,7 @@ export async function scheduleShowtimeReminder(movie: MovieSchedule, showtime: D
       notifications: [
         {
           id: notificationId(movie),
-          title: "곧 상영이 시작돼요",
+          title: "찜한 영화의 상영이 30분 후에 시작됩니다",
           body: `${movie.title} · ${movie.theater} · ${movie.time}`,
           schedule: { at: fireAt },
         },
@@ -89,6 +101,25 @@ export async function cancelAllShowtimeReminders() {
       await LocalNotifications.cancel({
         notifications: pending.notifications.map((n) => ({ id: n.id })),
       });
+    }
+  } catch {
+    // no-op
+  }
+}
+
+// 알림을 다시 켰을 때 찜 목록에 남아있는 향후 상영에 대해 알림을 재예약
+export async function rescheduleAllShowtimeReminders() {
+  if (!Capacitor.isNativePlatform()) return;
+  try {
+    const saved = localStorage.getItem(WISHLIST_MOVIES_KEY);
+    if (!saved) return;
+    const movies: MovieSchedule[] = JSON.parse(saved);
+
+    for (const movie of movies) {
+      if (!movie.showtime) continue;
+      const showtime = new Date(movie.showtime);
+      if (isNaN(showtime.getTime())) continue;
+      await scheduleShowtimeReminder(movie, showtime);
     }
   } catch {
     // no-op

@@ -8,12 +8,20 @@ import {
 
 import MapView, { MapPin } from '@/components/MapView';
 import { artCinemas } from '@/data/artCinemas';
+import { hapticImpact } from '@/lib/haptics';
+import {
+  cancelAllShowtimeReminders,
+  isNotificationsEnabled,
+  rescheduleAllShowtimeReminders,
+  setNotificationsEnabled,
+} from '@/lib/localNotifications';
 import {
   trackFavoriteTheaterSaved,
-  trackSettingsSectionToggled,
   trackFavoriteViewModeChanged,
+  trackNotificationsToggled,
+  trackSettingsSectionToggled,
 } from '@/utils/gtm';
-import { hapticImpact } from '@/lib/haptics';
+import { Capacitor } from '@capacitor/core';
 
 const SEOUL_THEATERS = artCinemas.map((c) => ({ name: c.cdNm, area: c.area }));
 
@@ -23,11 +31,30 @@ export default function SettingsView() {
   const [favoriteTheaters, setFavoriteTheaters] = useState<string[]>([]);
   const [expandedSection, setExpandedSection] = useState<string | null>(null);
   const [favoriteViewMode, setFavoriteViewMode] = useState<FavoriteViewMode>("list");
+  const [notificationsOn, setNotificationsOn] = useState(true);
+  const [isNativeApp, setIsNativeApp] = useState(false);
 
   useEffect(() => {
     const savedTheaters = localStorage.getItem("favoriteTheaters");
     if (savedTheaters) setFavoriteTheaters(JSON.parse(savedTheaters));
+
+    setIsNativeApp(Capacitor.isNativePlatform());
+    setNotificationsOn(isNotificationsEnabled());
   }, []);
+
+  const toggleNotifications = () => {
+    hapticImpact("light");
+    const next = !notificationsOn;
+    setNotificationsOn(next);
+    setNotificationsEnabled(next);
+    trackNotificationsToggled(next);
+
+    if (next) {
+      rescheduleAllShowtimeReminders();
+    } else {
+      cancelAllShowtimeReminders();
+    }
+  };
 
   const toggleTheater = (name: string) => {
     hapticImpact("light");
@@ -163,6 +190,41 @@ export default function SettingsView() {
           )}
         </div>
       </section>
+
+      {/* ─── 알림 ─── */}
+      {isNativeApp && (
+        <section>
+          <p className="text-[10px] font-bold text-orange-500 uppercase tracking-widest mb-2">알림</p>
+          <div className="bg-gray-900 border border-gray-800 overflow-hidden">
+            <div className="w-full px-4 py-3 flex items-center justify-between">
+              <span className="flex items-center gap-2.5 text-sm text-gray-200">
+                <svg className="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" />
+                </svg>
+                찜한 영화 상영 알림
+              </span>
+              <button
+                type="button"
+                role="switch"
+                aria-checked={notificationsOn}
+                onClick={toggleNotifications}
+                className={`relative w-11 h-6 rounded-full transition-colors flex-shrink-0 ${
+                  notificationsOn ? "bg-orange-500" : "bg-gray-700"
+                }`}
+              >
+                <span
+                  className={`absolute top-0.5 left-0.5 w-5 h-5 rounded-full bg-white transition-transform ${
+                    notificationsOn ? "translate-x-5" : "translate-x-0"
+                  }`}
+                />
+              </button>
+            </div>
+            <p className="px-4 pb-3 text-xs text-gray-500">
+              찜한 영화의 상영 30분 전에 알림을 보내드려요. 꺼두면 새 알림이 예약되지 않아요.
+            </p>
+          </div>
+        </section>
+      )}
 
       {/* ─── 위치 정보 ─── */}
       <section>
@@ -350,12 +412,12 @@ export default function SettingsView() {
           </button>
           {expandedSection === "notice" && (
             <div className="px-4 py-3 text-xs text-gray-400 space-y-2">
-              <p className="font-semibold text-gray-300">📌 제작 방식</p>
+              <p className="font-semibold text-gray-300">제작 방식</p>
               <p>KOBIS(영화진흥위원회) 조회 방식을 사용하므로 실제 상영내역과 일치하지 않을 수 있습니다.</p>
-              <p className="font-semibold text-gray-300 mt-2">🎬 영화방랑자란?</p>
-              <p>박스오피스 5위 이하의 작품을 주로 상영하는 서울시 예술영화관 및 예술전용관 정보를 제공합니다.</p>
-              <p className="font-semibold text-gray-300 mt-2">💾 찜 목록 안내</p>
-              <p>찜 목록은 브라우저 로컬 스토리지에 저장되며, 같은 브라우저에서만 유지됩니다.</p>
+              <p className="font-semibold text-gray-300 mt-2">영화방랑자란?</p>
+              <p>서울시 예술영화관 및 예술전용관 정보를 제공합니다.</p>
+              <p className="font-semibold text-gray-300 mt-2">찜 목록 안내</p>
+              <p>찜 목록 및 설정값은 해당 기기 혹은 같은 브라우저에서 유지됩니다.</p>
               <p className="text-gray-500 mt-2">This product uses the TMDB API but is not endorsed or certified by TMDB.</p>
             </div>
           )}
