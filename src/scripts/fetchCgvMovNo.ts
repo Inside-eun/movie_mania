@@ -72,7 +72,14 @@ export async function run(titles: string[]) {
   await page.setUserAgent(USER_AGENT);
 
   console.log('Cloudflare 세션 준비 중...');
-  await page.goto(SEARCH_PAGE_URL, { waitUntil: 'domcontentloaded', timeout: 20000 });
+  // Cloudflare 챌린지 통과까지 네트워크 상황에 따라 20초로는 부족한 경우가 있어(실제
+  // 자동화 실행에서 크래시 발생) 60초로 늘리고, 그래도 실패하면 한 번 더 재시도한다.
+  try {
+    await page.goto(SEARCH_PAGE_URL, { waitUntil: 'domcontentloaded', timeout: 60000 });
+  } catch (err) {
+    console.warn(`⚠️ Cloudflare 세션 준비 1차 실패(${err instanceof Error ? err.message : err}), 재시도...`);
+    await page.goto(SEARCH_PAGE_URL, { waitUntil: 'domcontentloaded', timeout: 60000 });
+  }
   await new Promise((r) => setTimeout(r, 2000));
 
   const added: string[] = [];

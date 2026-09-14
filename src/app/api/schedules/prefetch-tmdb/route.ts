@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import { MovieSchedule } from "@/types";
+import { getLocalDateString } from "@/utils/date";
 
 export const dynamic = "force-dynamic";
 // Hobby 플랜도 실제로는 60초까지 허용된다(예전 10초 제한 기준이 남아있던 값).
@@ -47,7 +48,7 @@ async function handlePrefetchTMDB(request: Request) {
   const daysAhead = Math.min(6, Math.max(0, parseInt(searchParams.get("daysAhead") || "0", 10) || 0));
   const targetDate = new Date();
   targetDate.setDate(targetDate.getDate() + daysAhead);
-  const dateStr = targetDate.toISOString().split("T")[0];
+  const dateStr = getLocalDateString(targetDate);
   const dayMovies: Array<{ dateStr: string; movies: MovieSchedule[] }> = [];
 
   const movies = await cache.get<MovieSchedule[]>("integrated", dateStr);

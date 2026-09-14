@@ -68,6 +68,7 @@ export const GTM_EVENTS = {
   // 설정 화면 관련
   SETTINGS_SECTION_TOGGLED: 'settings_section_toggled',
   FAVORITE_VIEW_MODE_CHANGED: 'favorite_view_mode_changed',
+  NOTIFICATIONS_TOGGLED: 'notifications_toggled',
 
   // 기획전 관련
   EVENT_LIST_ITEM_CLICKED: 'event_list_item_clicked',
@@ -334,6 +335,13 @@ export const trackSettingsSectionToggled = (section: string) => {
  */
 export const trackFavoriteViewModeChanged = (viewMode: 'list' | 'map') => {
   trackEvent(GTM_EVENTS.FAVORITE_VIEW_MODE_CHANGED, { view_mode: viewMode });
+};
+
+/**
+ * 상영 알림 켜기/끄기 토글 이벤트
+ */
+export const trackNotificationsToggled = (enabled: boolean) => {
+  trackEvent(GTM_EVENTS.NOTIFICATIONS_TOGGLED, { enabled });
 };
 
 /**

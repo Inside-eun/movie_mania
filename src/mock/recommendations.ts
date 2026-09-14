@@ -56,7 +56,7 @@ export function getRecommendations(
       const match = allMovies.find((m) => m.title === title);
       return {
         title,
-        theater: match?.theater ?? event.theaterName,
+        theater: match?.theater ?? event.theaterNames[0],
         time: match?.time,
         posterUrl: match?.tmdbPosterUrl || match?.posterUrl,
         showing: Boolean(match),

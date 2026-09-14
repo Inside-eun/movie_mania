@@ -1,4 +1,5 @@
 import { NextResponse } from "next/server";
+import { getLocalDateString } from "@/utils/date";
 
 export const dynamic = "force-dynamic";
 // Hobby 플랜도 실제로는 60초까지 허용된다(예전 10초 제한 기준이 남아있던 값).
@@ -36,7 +37,7 @@ async function handlePrefetch(request: Request) {
   const daysAhead = Math.min(6, Math.max(0, parseInt(searchParams.get("daysAhead") || "0", 10) || 0));
   const targetDate = new Date();
   targetDate.setDate(targetDate.getDate() + daysAhead);
-  const dateStr = targetDate.toISOString().split("T")[0];
+  const dateStr = getLocalDateString(targetDate);
 
   console.log(`\n${dateStr} (daysAhead=${daysAhead}) 크롤링 중...`);
 

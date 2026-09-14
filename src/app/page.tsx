@@ -26,6 +26,7 @@ import Header from '../components/Header';
 import MovieBanner from '../components/MovieBanner';
 import MovieFilter from '../components/MovieFilter';
 import MovieGrid from '../components/MovieGrid';
+import SplashScreen from '../components/SplashScreen';
 
 const WishlistView = dynamic(() => import("../components/WishlistView"), { loading: () => null });
 const SettingsView = dynamic(() => import("../components/SettingsView"), { loading: () => null });
@@ -171,14 +172,25 @@ export default function Home() {
   const isToday = selectedDate === getLocalDateString(new Date());
   const isHomeView =
     !showWishlistView && !showInfoView && !showEventsView;
+  const isInitialLoading =
+    isHomeView && schedules.loading && schedules.allMovies.length === 0;
+
+  const [bannerReady, setBannerReady] = useState(false);
+  useEffect(() => {
+    if (!bannerReady && schedules.allMovies.length > 0) {
+      setBannerReady(true);
+    }
+  }, [bannerReady, schedules.allMovies.length]);
 
   return (
     <>
+      <SplashScreen visible={isInitialLoading} />
+
       <Header />
 
-      {/* 히어로 배너 - ALL SCREENINGS 뷰에서만 (로딩 중 스켈레톤으로 CLS 방지) */}
+      {/* 히어로 배너 - ALL SCREENINGS 뷰에서만 (최초 로딩 중엔 스켈레톤으로 CLS 방지, 이후엔 날짜 변경과 무관하게 계속 표시) */}
       {isHomeView && (
-        schedules.allMovies.length > 0
+        bannerReady
           ? <MovieBanner onEventClick={goToEventDetail} />
           : schedules.loading
             ? <div className="w-full bg-gray-900/50 animate-pulse" style={{ height: "260px" }} />
@@ -228,15 +240,6 @@ export default function Home() {
         {schedules.error && (
           <div className="bg-red-900/50 border border-red-700 text-red-300 px-4 py-3 mb-4">
             {schedules.error}
-          </div>
-        )}
-
-        {schedules.loading && (
-          <div className="text-center py-8">
-            <div className="inline-block animate-spin rounded-full h-8 w-8 border-b-2 border-orange-500"></div>
-            <p className="mt-2 text-gray-500 text-sm">
-              상영시간표를 불러오는 중...
-            </p>
           </div>
         )}
 

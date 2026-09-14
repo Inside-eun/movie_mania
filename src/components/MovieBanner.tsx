@@ -5,6 +5,7 @@ import {
   useCallback,
   useEffect,
   useMemo,
+  useRef,
   useState,
 } from 'react';
 
@@ -38,7 +39,7 @@ export default function MovieBanner({ onEventClick }: MovieBannerProps) {
           const movies = weekly.scheduleByDate[date];
           if (!movies) continue;
           const movie = movies.find(
-            (m) => m.theater === event.theaterName && m.title === title
+            (m) => event.theaterNames.includes(m.theater) && m.title === title
           );
           const found = movie?.tmdbPosterUrl || movie?.posterUrl;
           if (found) {
@@ -71,6 +72,37 @@ export default function MovieBanner({ onEventClick }: MovieBannerProps) {
     goTo((currentIndex + 1) % totalSlides);
   }, [currentIndex, totalSlides, goTo]);
 
+  const goToPrev = useCallback(() => {
+    goTo((currentIndex - 1 + totalSlides) % totalSlides);
+  }, [currentIndex, totalSlides, goTo]);
+
+  // 좌우 스와이프로 슬라이드 이동
+  const touchStart = useRef<{ x: number; y: number } | null>(null);
+  const SWIPE_THRESHOLD = 40;
+
+  const handleTouchStart = (e: React.TouchEvent) => {
+    const touch = e.touches[0];
+    touchStart.current = { x: touch.clientX, y: touch.clientY };
+  };
+
+  const handleTouchEnd = (e: React.TouchEvent) => {
+    const start = touchStart.current;
+    touchStart.current = null;
+    if (!start || totalSlides <= 1) return;
+
+    const touch = e.changedTouches[0];
+    const dx = touch.clientX - start.x;
+    const dy = touch.clientY - start.y;
+
+    if (Math.abs(dx) < SWIPE_THRESHOLD || Math.abs(dx) < Math.abs(dy)) return;
+
+    if (dx < 0) {
+      goToNext();
+    } else {
+      goToPrev();
+    }
+  };
+
   useEffect(() => {
     if (totalSlides <= 1) return;
     const interval = setInterval(goToNext, 4500);
@@ -102,8 +134,10 @@ export default function MovieBanner({ onEventClick }: MovieBannerProps) {
   return (
     <div
       className="relative w-full overflow-hidden bg-black cursor-pointer"
-      style={{ height: "260px" }}
+      style={{ height: "260px", touchAction: "pan-y" }}
       onClick={handleClick}
+      onTouchStart={handleTouchStart}
+      onTouchEnd={handleTouchEnd}
     >
       {isQuizSlide ? (
         <div
@@ -167,7 +201,7 @@ export default function MovieBanner({ onEventClick }: MovieBannerProps) {
                 {slide.event.title}
               </h2>
               <p className="text-gray-400 text-xs mb-3 truncate">
-                {slide.event.theaterName} · {slide.event.period}
+                {slide.event.theaterNames.join(" · ")} · {slide.event.period}
               </p>
               <p
                 className="text-gray-300 text-xs leading-relaxed"
