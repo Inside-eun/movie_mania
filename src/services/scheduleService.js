@@ -14,6 +14,7 @@ import * as cheerio from "cheerio";
 import { artCinemas } from "../data/artCinemas";
 import { cacheService } from "./cacheService";
 import { checkScreenFilter } from "../data/theaterScreenFilters";
+import { getLocalDateString } from "../utils/date";
 
 // 네트워크 설정
 const isVercel = process.env.VERCEL === "1";
@@ -262,7 +263,7 @@ export class ScheduleService {
 
   async getKOFAScheduleFromAPIByDate(targetDate) {
     try {
-      const dateStr = targetDate.toISOString().split("T")[0]; // YYYY-MM-DD 형식
+      const dateStr = getLocalDateString(targetDate); // YYYY-MM-DD 형식 (서울 시간 기준)
       const dateYYYYMMDD = dateStr.replace(/-/g, ''); // YYYYMMDD 형식으로 변환
 
       // 캐시에서 먼저 확인
@@ -489,7 +490,7 @@ export class ScheduleService {
 
   async crawlArtCinemasWithKMDBByDate(targetDate) {
     try {
-      const dateStr = targetDate.toISOString().split("T")[0]; // YYYY-MM-DD 형식
+      const dateStr = getLocalDateString(targetDate); // YYYY-MM-DD 형식 (서울 시간 기준)
 
       // 통합 캐시 확인
       const cachedData = await cacheService.get("integrated", dateStr);
@@ -562,7 +563,7 @@ export class ScheduleService {
   }
 
   async getArtCinemaSchedulesByDate(targetDate) {
-    const dateStr = targetDate.toISOString().split("T")[0]; // YYYY-MM-DD 형식
+    const dateStr = getLocalDateString(targetDate); // YYYY-MM-DD 형식 (서울 시간 기준)
 
     // 캐시에서 먼저 확인
     const cachedData = await cacheService.get("art_cinemas", dateStr);

@@ -42,6 +42,10 @@ const MAX_REQUEST_DELAY_MS = 4000;
 // "[썸머 비트를 타고] 기획전 종료와 ..." 처럼 이미 끝난 기획전을 회고하는 게시물은
 // 새 기획전 공지가 아니므로 제외한다.
 const ENDED_EVENT_PATTERN = /(기획전|특별전)\s*종료|종료.{0,6}(기획전|특별전)/;
+// 한국영상자료원은 "기획전/특별전"이라는 말을 상시 프로그램 홍보에도 자주 써서
+// 키워드만으로 걸러내면 노이즈가 너무 많다. 이 계정만은 캡션에서 상영 기간을
+// 뽑아낼 수 있는 게시물만 후보로 남긴다.
+const PERIOD_REQUIRED_THEATERS = new Set(["한국영상자료원"]);
 
 // 인스타그램 마크업이 바뀌면 여기부터 확인.
 const SELECTORS = {
@@ -169,7 +173,10 @@ async function ensureSession(browser: Browser): Promise<Page> {
     await page.setCookie(...savedCookies);
   }
 
-  await page.goto("https://www.instagram.com/", { waitUntil: "networkidle2" });
+  // Instagram은 백그라운드 요청(웹소켓/폴링)이 끊이지 않아 networkidle2가 영영 안
+  // 잡히고 30초 기본 타임아웃으로 스캔 전체가 죽는 경우가 있었음 — domcontentloaded로
+  // 완화하고 타임아웃도 넉넉히 잡는다.
+  await page.goto("https://www.instagram.com/", { waitUntil: "domcontentloaded", timeout: 45000 });
 
   if (!(await isLoggedIn(page))) {
     console.log("세션이 없거나 만료됨 — 로그인 시도 중...");
@@ -186,7 +193,10 @@ async function ensureSession(browser: Browser): Promise<Page> {
 
 async function collectRecentPostUrls(page: Page, username: string): Promise<string[]> {
   await randomDelay();
-  await page.goto(`https://www.instagram.com/${username}/`, { waitUntil: "networkidle2" });
+  await page.goto(`https://www.instagram.com/${username}/`, {
+    waitUntil: "domcontentloaded",
+    timeout: 45000,
+  });
   await page.waitForSelector(SELECTORS.postLink, { timeout: 15000 }).catch(() => null);
 
   const hrefs = await page.$$eval(SELECTORS.postLink, (anchors) =>
@@ -213,7 +223,7 @@ function stripOgWrapper(text: string): string {
 
 async function fetchCaption(page: Page, postUrl: string): Promise<string> {
   await randomDelay();
-  await page.goto(postUrl, { waitUntil: "networkidle2" });
+  await page.goto(postUrl, { waitUntil: "domcontentloaded", timeout: 45000 });
   const metaContent = await page
     .$eval(SELECTORS.captionMeta, (el) => el.getAttribute("content") ?? "")
     .catch(() => "");
@@ -278,9 +288,10 @@ async function scanAccount(
 // 기간처럼 보이는 텍스트 패턴들. 위에서부터 먼저 매칭되는 걸 채택한다.
 const PERIOD_PATTERNS = [
   // 2026.07.18 - 2026.08.02 / 2026. 09. 16 - 10. 04 (두 번째 연도 생략 가능)
-  /\d{4}\.\s?\d{1,2}\.\s?\d{1,2}\s*[-~]\s*(?:\d{4}\.\s?)?\d{1,2}\.\s?\d{1,2}/,
-  // 2026년 8월 12일(수) ~ 2026년 8월 30일(일) — 요일 괄호는 있어도 없어도 매칭
-  /\d{4}년\s*\d{1,2}월\s*\d{1,2}일(?:\([^)]*\))?\s*[-~]\s*\d{4}년\s*\d{1,2}월\s*\d{1,2}일(?:\([^)]*\))?/,
+  // / 2026.9.10(목)~9.23(수) 처럼 날짜 뒤에 요일 괄호가 붙는 경우도 매칭
+  /\d{4}\.\s?\d{1,2}\.\s?\d{1,2}(?:\([^)]{1,3}\))?\s*[-~]\s*(?:\d{4}\.\s?)?\d{1,2}\.\s?\d{1,2}(?:\([^)]{1,3}\))?/,
+  // 2026년 8월 12일(수) ~ 2026년 8월 30일(일) / 9월 1일(화) ~ 9월 12일(토) — 연도·요일 괄호는 있어도 없어도 매칭
+  /(?:\d{4}년\s*)?\d{1,2}월\s*\d{1,2}일(?:\([^)]{1,3}\))?\s*[-~]\s*(?:\d{4}년\s*)?\d{1,2}월\s*\d{1,2}일(?:\([^)]{1,3}\))?/,
   /\d{1,2}\/\d{1,2}\s*[-~]\s*\d{1,2}\/\d{1,2}/, // 7/18 - 8/2
   /\d{4}\.\d{1,2}\s*[-~]\s*\d{1,2}(?!\.\d)/, // 2026.8 - 9 (월 단위)
 ];
@@ -436,6 +447,10 @@ async function main() {
 
         for (const candidate of candidates) {
           const extracted = parseCaption(candidate.caption);
+          if (PERIOD_REQUIRED_THEATERS.has(candidate.theaterName) && !extracted.period) {
+            console.log(`  · 상영 기간 정보 없어 제외: ${candidate.postUrl}`);
+            continue;
+          }
           reviewEntries.push({
             theaterName: candidate.theaterName,
             postUrl: candidate.postUrl,

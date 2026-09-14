@@ -17,6 +17,7 @@ if (typeof globalThis.File === "undefined" && typeof globalThis.Blob !== "undefi
 
 import { NextResponse } from "next/server";
 import { MovieSchedule } from "@/types";
+import { getLocalDateString } from "@/utils/date";
 
 async function mergeTMDBData(movies: MovieSchedule[], cache: any): Promise<MovieSchedule[]> {
   const db = await cache.getTmdbDb();
@@ -72,7 +73,7 @@ export async function GET(request: Request) {
       }
     }
 
-    const dateStr = targetDate.toISOString().split("T")[0]; // YYYY-MM-DD 형식
+    const dateStr = getLocalDateString(targetDate); // YYYY-MM-DD 형식 (서울 시간 기준)
 
     // 강제 새로고침이 아닌 경우 캐시 먼저 확인
     if (!forceFresh) {

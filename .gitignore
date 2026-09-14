@@ -44,6 +44,9 @@ yarn-error.log*
 # cgv-movno 배치 스크립트 launchd 로그
 .cgv-movno/
 
+# 자동화 상태 대시보드 (로컬 전용 정적 HTML, 절대 배포/커밋하지 않음)
+.status-dashboard/
+
 # typescript
 *.tsbuildinfo
 next-env.d.ts

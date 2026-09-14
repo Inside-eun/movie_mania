@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import { MovieSchedule } from "@/types";
+import { getLocalDateString } from "@/utils/date";
 
 export const dynamic = "force-dynamic";
 
@@ -46,7 +47,7 @@ export async function GET(request: Request) {
         targetDate = parsed;
       }
     }
-    const dateStr = targetDate.toISOString().split("T")[0];
+    const dateStr = getLocalDateString(targetDate);
 
     const cache = await getCacheService();
     const scheduleService = await getScheduleService();

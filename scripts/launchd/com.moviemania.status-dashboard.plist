@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+  <key>Label</key>
+  <string>com.moviemania.status-dashboard</string>
+
+  <key>ProgramArguments</key>
+  <array>
+    <string>/Users/choedam-eun/.nvm/versions/node/v22.23.2/bin/npx</string>
+    <string>tsx</string>
+    <string>src/scripts/generateStatusDashboard.ts</string>
+  </array>
+
+  <key>WorkingDirectory</key>
+  <string>/Users/choedam-eun/Desktop/work/Movie/movie_mania</string>
+
+  <key>EnvironmentVariables</key>
+  <dict>
+    <key>PATH</key>
+    <string>/Users/choedam-eun/.nvm/versions/node/v22.23.2/bin:/usr/bin:/bin:/usr/sbin:/sbin</string>
+  </dict>
+
+  <!-- 매일 08:15 실행. cgv-movno(06:00), Vercel Cron(06:00~07:30), instagram-scan
+       (월요일 07:30)이 모두 끝난 뒤 상태를 모아 .status-dashboard/index.html을 갱신. -->
+  <key>StartCalendarInterval</key>
+  <dict>
+    <key>Hour</key>
+    <integer>8</integer>
+    <key>Minute</key>
+    <integer>15</integer>
+  </dict>
+
+  <key>StandardOutPath</key>
+  <string>/Users/choedam-eun/Desktop/work/Movie/movie_mania/.status-dashboard/launchd.log</string>
+
+  <key>StandardErrorPath</key>
+  <string>/Users/choedam-eun/Desktop/work/Movie/movie_mania/.status-dashboard/launchd.log</string>
+
+  <key>RunAtLoad</key>
+  <false/>
+</dict>
+</plist>
