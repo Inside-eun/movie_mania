@@ -38,7 +38,7 @@ export default function MovieBanner({ onEventClick }: MovieBannerProps) {
           const movies = weekly.scheduleByDate[date];
           if (!movies) continue;
           const movie = movies.find(
-            (m) => m.theater === event.theaterName && m.title === title
+            (m) => event.theaterNames.includes(m.theater) && m.title === title
           );
           const found = movie?.tmdbPosterUrl || movie?.posterUrl;
           if (found) {
@@ -167,7 +167,7 @@ export default function MovieBanner({ onEventClick }: MovieBannerProps) {
                 {slide.event.title}
               </h2>
               <p className="text-gray-400 text-xs mb-3 truncate">
-                {slide.event.theaterName} · {slide.event.period}
+                {slide.event.theaterNames.join(" · ")} · {slide.event.period}
               </p>
               <p
                 className="text-gray-300 text-xs leading-relaxed"

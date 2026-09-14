@@ -28,7 +28,7 @@ function formatMovieList(titles: string[]): string {
 
 // 이번 주(오늘 포함 7일) 데이터에서 극장 이름 + 제목이 둘 다 일치하는 첫 상영일을 찾는다.
 // 제목만 보고 매칭하면 다른 극장(예: CGV아트하우스가 트는 재상영)까지 잡혀서
-// "이 극장에서 상영 중"이라고 착각하게 만들 수 있어 theaterName도 반드시 같이 본다.
+// "이 극장에서 상영 중"이라고 착각하게 만들 수 있어 theaterNames도 반드시 같이 본다.
 function findMatch(
   weekly: ReturnType<typeof useWeeklySchedules>,
   event: CuratedEvent,
@@ -37,7 +37,9 @@ function findMatch(
   for (const date of weekly.dates) {
     const movies = weekly.scheduleByDate[date];
     if (!movies) continue;
-    const movie = movies.find((m) => m.theater === event.theaterName && m.title === movieTitle);
+    const movie = movies.find(
+      (m) => event.theaterNames.includes(m.theater) && m.title === movieTitle
+    );
     if (movie) return { date, movie };
   }
   return null;
@@ -118,7 +120,7 @@ export default function EventsView({ initialEventId = null, onExitToHome }: Even
         <div className="mb-5 bg-gray-900 border border-white/10 p-3 sm:p-4">
           <div className="flex items-center justify-between gap-2 mb-1">
             <p className="text-[10px] font-semibold uppercase tracking-[0.1em] text-orange-400">
-              {selectedEvent.theaterName}
+              {selectedEvent.theaterNames.join(" · ")}
             </p>
             <p className="shrink-0 text-[10px] text-gray-500">{selectedEvent.period}</p>
           </div>
@@ -213,7 +215,7 @@ export default function EventsView({ initialEventId = null, onExitToHome }: Even
           >
             <div className="flex items-center justify-between gap-2 mb-1">
               <p className="text-[10px] font-semibold uppercase tracking-[0.1em] text-orange-400">
-                {e.theaterName}
+                {e.theaterNames.join(" · ")}
               </p>
               <p className="shrink-0 text-[10px] text-gray-500">{e.period}</p>
             </div>

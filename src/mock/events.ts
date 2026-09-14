@@ -3,7 +3,7 @@
 export interface CuratedEvent {
   id: string;
   title: string;
-  theaterName: string;
+  theaterNames: string[]; // 같은 기획전이 여러 극장에서 열리는 경우 모두 나열
   period: string; // 표시용 기간 텍스트
   summary: string;
   description: string;
@@ -14,17 +14,17 @@ export const mockEvents: CuratedEvent[] = [
   {
     id: "bela-tarr-krasznahorkai",
     title: "벨라 타르 X 라슬로 크러스너호르커이 특별전",
-    theaterName: "라이카시네마",
+    theaterNames: ["라이카시네마", "더숲 아트시네마", "아트하우스모모"],
     period: "2026.09.16 - 2026.10.04",
     summary: "두 거장이 30년간 함께 빚어낸 다섯 편의 걸작",
     description:
-      "'이 시대 유일의 시네아스트' 벨라 타르와 2025년 노벨문학상 수상 작가 라슬로 크러스너호르커이. 30년에 걸친 두 거장의 협업으로 탄생한 다섯 편의 전설적인 작품을 라이카시네마에서 4K/2K 리마스터로 만납니다.",
+      "'이 시대 유일의 시네아스트' 벨라 타르와 2025년 노벨문학상 수상 작가 라슬로 크러스너호르커이. 30년에 걸친 두 거장의 협업으로 탄생한 다섯 편의 전설적인 작품을 라이카시네마·더숲아트시네마·아트하우스모모에서 4K/2K 리마스터로 만납니다.",
     movieTitles: ["파멸", "사탄탱고", "베크마이스터 하모니즈", "런던에서 온 사나이", "토리노의 말"],
   },
   {
     id: "emu-wenders",
     title: "빔 벤더스 기획전",
-    theaterName: "에무시네마",
+    theaterNames: ["에무시네마"],
     period: "2026.09 상영 중",
     summary: "로드무비의 거장이 그려낸 길 위의 시간들",
     description:
@@ -42,29 +42,9 @@ export const mockEvents: CuratedEvent[] = [
     ],
   },
   {
-    id: "bela-tarr-deosup",
-    title: "벨라 타르 X 라슬로 크러스너호르커이 특별전",
-    theaterName: "더숲 아트시네마",
-    period: "2026.09.16 -",
-    summary: "종말론적 세계관을 구현한 헝가리 묵시록의 거장들",
-    description:
-      "1980년대부터 함께 작업하며 독창적인 영화 세계를 구축해온 벨라 타르와 라슬로 크러스너호르커이. 소멸과 구원에 대한 질문을 이어온 두 거장의 영화를 더숲아트시네마에서 만납니다.",
-    movieTitles: ["파멸", "사탄탱고", "베크마이스터 하모니즈", "런던에서 온 사나이", "토리노의 말"],
-  },
-  {
-    id: "bela-tarr-momo",
-    title: "벨라 타르 X 라슬로 크러스너호르커이 특별전",
-    theaterName: "아트하우스모모",
-    period: "2026.09.18 -",
-    summary: "벨라 타르 타계 추모, 크러스너호르커이 노벨문학상 수상 기념",
-    description:
-      "벨라 타르의 타계를 추모하고 라슬로 크러스너호르커이의 2025년 노벨문학상 수상을 기념하기 위해 마련된 특별전. 두 거장이 약 30년간 연출과 각본으로 협업한 작품들을 아트하우스모모에서 상영합니다.",
-    movieTitles: ["파멸", "사탄탱고", "베크마이스터 하모니즈", "런던에서 온 사나이", "토리노의 말"],
-  },
-  {
     id: "artnine-suzuki-seijun",
     title: "스즈키 세이준 특별전: 다이쇼 로망 3부작",
-    theaterName: "아트나인",
+    theaterNames: ["아트나인"],
     period: "2026.09.09 - 2026.09.30",
     summary: "장르의 관습을 뒤흔든 거장의 몽환적인 후기 3부작",
     description:
@@ -74,7 +54,7 @@ export const mockEvents: CuratedEvent[] = [
   {
     id: "seoulartcinema-adachi-masao",
     title: "영속하는 혁명: 아다치 마사오 특별전",
-    theaterName: "서울아트시네마",
+    theaterNames: ["서울아트시네마"],
     period: "2026.09.18 - 2026.09.20",
     summary: "정치적 실천으로서의 영화, 아다치 마사오의 동시대성",
     description:
