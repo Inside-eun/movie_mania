@@ -2,7 +2,6 @@
 
 import { Suspense, useEffect, useRef, useState } from "react";
 import Link from "next/link";
-import Script from "next/script";
 import { useParams, useRouter, useSearchParams } from "next/navigation";
 
 import PosterImage from "@/components/PosterImage";
@@ -42,30 +41,6 @@ interface StoredMovieDetail {
   selectedDate: string;
 }
 
-declare global {
-  interface Window {
-    Kakao?: {
-      init: (key: string) => void;
-      isInitialized: () => boolean;
-      Share: {
-        sendDefault: (settings: {
-          objectType: "feed";
-          content: {
-            title: string;
-            description: string;
-            imageUrl: string;
-            link: { mobileWebUrl: string; webUrl: string };
-          };
-          buttons?: Array<{
-            title: string;
-            link: { mobileWebUrl: string; webUrl: string };
-          }>;
-        }) => void;
-      };
-    };
-  }
-}
-
 function InfoRow({ label, children }: { label: string; children: React.ReactNode }) {
   return (
     <div className="flex items-center gap-2">
@@ -98,7 +73,6 @@ function MovieDetailPageInner() {
 
   const [stored, setStored] = useState<StoredMovieDetail | null>(null);
   const [notFound, setNotFound] = useState(false);
-  const [kakaoReady, setKakaoReady] = useState(false);
   const [dateMovies, setDateMovies] = useState<MovieSchedule[]>([]);
   const [creditsByTitle, setCreditsByTitle] = useState<CreditsByTitle>({});
   const [creditsLoading, setCreditsLoading] = useState(true);
@@ -118,7 +92,7 @@ function MovieDetailPageInner() {
       return;
     }
 
-    // 카카오톡 공유 등으로 세션 정보 없이 바로 진입한 경우, 공유 링크의 쿼리 파라미터로 복원
+    // 공유 링크 등으로 세션 정보 없이 바로 진입한 경우, 링크의 쿼리 파라미터로 복원
     const title = searchParams.get("title");
     const theater = searchParams.get("theater");
     const time = searchParams.get("time");
@@ -320,8 +294,8 @@ function MovieDetailPageInner() {
     : null;
   const inWishlist = wishlist.isInWishlist(movie);
 
-  const handleKakaoShare = () => {
-    if (!kakaoReady || !window.Kakao?.isInitialized() || !selectedDate) return;
+  const handleShare = async () => {
+    if (!selectedDate) return;
 
     const shareParams = new URLSearchParams({
       title: movie.title,
@@ -334,46 +308,31 @@ function MovieDetailPageInner() {
     if (posterUrl) shareParams.set("poster", posterUrl);
 
     const shareUrl = `${window.location.origin}/movie/${params.slug}?${shareParams.toString()}`;
-    const imageUrl = posterUrl.startsWith("http")
-      ? posterUrl
-      : `${window.location.origin}${posterUrl}`;
+    const shareText = `${movie.title} - ${movie.theater} ${movie.time}`;
 
     trackMovieShareClicked(movie.title, movie.theater);
     hapticImpact("light");
 
-    window.Kakao.Share.sendDefault({
-      objectType: "feed",
-      content: {
-        title: movie.title,
-        description: `${movie.theater} · ${movie.time} 상영`,
-        imageUrl,
-        link: { mobileWebUrl: shareUrl, webUrl: shareUrl },
-      },
-      buttons: [
-        {
-          title: "상세보기",
-          link: { mobileWebUrl: shareUrl, webUrl: shareUrl },
-        },
-      ],
-    });
+    if (navigator.share) {
+      try {
+        await navigator.share({ title: movie.title, text: shareText, url: shareUrl });
+      } catch {
+        // 사용자가 공유 시트를 취소한 경우 등은 무시
+      }
+      return;
+    }
+
+    try {
+      await navigator.clipboard.writeText(shareUrl);
+      alert("링크가 복사되었습니다.");
+    } catch {
+      // 클립보드 접근 불가 시 조용히 무시
+    }
   };
 
   return (
     <div className="min-h-screen bg-black text-gray-100 pb-[calc(6rem_+_env(safe-area-inset-bottom))]">
-      {process.env.NEXT_PUBLIC_KAKAO_MAP_KEY && (
-        <Script
-          src="https://t1.kakaocdn.net/kakao_js_sdk/2.7.4/kakao.min.js"
-          strategy="afterInteractive"
-          onLoad={() => {
-            if (window.Kakao && !window.Kakao.isInitialized()) {
-              window.Kakao.init(process.env.NEXT_PUBLIC_KAKAO_MAP_KEY as string);
-            }
-            setKakaoReady(true);
-          }}
-        />
-      )}
-
-      <div className="sticky top-0 z-40 bg-black border-b border-gray-800 px-4 py-2.5 flex items-center justify-between">
+      <div className="sticky top-0 z-40 bg-black border-b border-gray-800 px-4 py-2.5">
         <button
           onClick={() => {
             trackBackButtonClicked("movie_detail");
@@ -386,25 +345,25 @@ function MovieDetailPageInner() {
           </svg>
           뒤로
         </button>
-
-        <button
-          onClick={handleKakaoShare}
-          disabled={!kakaoReady}
-          aria-label="카카오톡으로 공유하기"
-          className="flex items-center gap-1.5 text-sm text-gray-300 hover:text-orange-400 transition-colors disabled:opacity-40"
-        >
-          <svg className="w-4 h-4" viewBox="0 0 24 24" fill="#FEE500">
-            <path d="M12 3C6.477 3 2 6.463 2 10.74c0 2.735 1.828 5.14 4.583 6.512-.2.751-.727 2.73-.833 3.155-.13.526.194.519.408.378.168-.111 2.674-1.816 3.758-2.554.68.1 1.379.152 2.084.152 5.523 0 10-3.463 10-7.643C22 6.463 17.523 3 12 3z" />
-          </svg>
-          공유
-        </button>
       </div>
 
       <div className="container mx-auto max-w-2xl px-4 pt-4">
         {/* 영화 정보 */}
         <div className="flex items-start gap-4 mb-4">
           <div className="flex-1 min-w-0 order-1">
-            <h1 className="text-lg font-bold text-white leading-snug mb-3">{movie.title}</h1>
+            <div className="flex items-start justify-between gap-2 mb-3">
+              <h1 className="text-lg font-bold text-white leading-snug">{movie.title}</h1>
+              <button
+                onClick={handleShare}
+                aria-label="공유하기"
+                className="flex-shrink-0 flex items-center gap-1 text-xs text-gray-300 hover:text-orange-400 transition-colors mt-0.5"
+              >
+                <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8.684 13.342a4 4 0 100-5.684m0 5.684a4 4 0 100 5.684m0-5.684L15.316 9.658m-6.632 8.026L15.316 14m0-5.658a4 4 0 105.684 0 4 4 0 00-5.684 0zm0 9.316a4 4 0 105.684 0 4 4 0 00-5.684 0z" />
+                </svg>
+                공유
+              </button>
+            </div>
 
             <div className="flex flex-col gap-1.5">
               {director ? (
