@@ -46,6 +46,7 @@ export default function DateSelector({
           onDateChange(e.target.value);
           inputRef.current?.blur();
         }}
+        min={getLocalDateString(new Date())}
         max={getLocalDateString(new Date(Date.now() + 7 * 24 * 60 * 60 * 1000))}
       />
     </div>
