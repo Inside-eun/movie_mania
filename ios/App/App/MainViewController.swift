@@ -25,9 +25,13 @@ class MainViewController: CAPBridgeViewController {
         // 넣어서, 오프라인/타임아웃 실패만 가로채고 나머지는 그대로 Capacitor에
         // 위임한다(브릿지 동작 보존).
         if let webView = webView {
-            let handler = OfflineNavigationHandler(originalDelegate: webView.navigationDelegate)
+            let originalDelegate = webView.navigationDelegate
+            NSLog("[OfflineHandler] wrapping navigationDelegate, original=%@", originalDelegate.map { String(describing: type(of: $0)) } ?? "nil")
+            let handler = OfflineNavigationHandler(originalDelegate: originalDelegate)
             webView.navigationDelegate = handler
             offlineNavigationHandler = handler
+        } else {
+            NSLog("[OfflineHandler] webView is nil in viewDidLoad, cannot wrap navigationDelegate")
         }
     }
 }
@@ -66,22 +70,34 @@ private class OfflineNavigationHandler: NSObject, WKNavigationDelegate {
     }
 
     func webView(_ webView: WKWebView, didFailProvisionalNavigation navigation: WKNavigation!, withError error: Error) {
+        let nsError = error as NSError
+        NSLog("[OfflineHandler] didFailProvisionalNavigation domain=%@ code=%ld desc=%@", nsError.domain, nsError.code, nsError.localizedDescription)
         originalDelegate?.webView?(webView, didFailProvisionalNavigation: navigation, withError: error)
         showOfflinePageIfNetworkError(webView, error)
     }
 
     func webView(_ webView: WKWebView, didFail navigation: WKNavigation!, withError error: Error) {
+        let nsError = error as NSError
+        NSLog("[OfflineHandler] didFail domain=%@ code=%ld desc=%@", nsError.domain, nsError.code, nsError.localizedDescription)
         originalDelegate?.webView?(webView, didFail: navigation, withError: error)
         showOfflinePageIfNetworkError(webView, error)
     }
 
     private func showOfflinePageIfNetworkError(_ webView: WKWebView, _ error: Error) {
         let nsError = error as NSError
-        guard nsError.domain == NSURLErrorDomain, offlineErrorCodes.contains(nsError.code) else { return }
-        guard
-            let publicDir = Bundle.main.url(forResource: "public", withExtension: nil),
-            let offlineURL = Bundle.main.url(forResource: "offline", withExtension: "html", subdirectory: "public")
-        else { return }
+        guard nsError.domain == NSURLErrorDomain, offlineErrorCodes.contains(nsError.code) else {
+            NSLog("[OfflineHandler] error not in offline list (domain=%@ code=%ld), ignoring", nsError.domain, nsError.code)
+            return
+        }
+        guard let publicDir = Bundle.main.url(forResource: "public", withExtension: nil) else {
+            NSLog("[OfflineHandler] FAILED to locate 'public' folder in bundle")
+            return
+        }
+        guard let offlineURL = Bundle.main.url(forResource: "offline", withExtension: "html", subdirectory: "public") else {
+            NSLog("[OfflineHandler] FAILED to locate offline.html inside %@", publicDir.path)
+            return
+        }
+        NSLog("[OfflineHandler] loading offline page from %@", offlineURL.path)
         webView.loadFileURL(offlineURL, allowingReadAccessTo: publicDir)
     }
 }
