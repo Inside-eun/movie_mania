@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 
 import { mockEvents, getEvent, CuratedEvent } from "@/mock/events";
 import { useWeeklySchedules } from "@/hooks/useWeeklySchedules";
+import { useEdgeSwipeBack } from "@/hooks/useEdgeSwipeBack";
 import { getLocalDateString } from "@/utils/date";
 import { MovieSchedule } from "@/types";
 import { CreditsByTitle } from "@/mock/recommendations";
@@ -80,6 +81,16 @@ export default function EventsView({ initialEventId = null, onExitToHome }: Even
 
   const selectedEvent = selectedEventId ? getEvent(selectedEventId) : null;
 
+  const handleBackFromDetail = () => {
+    if (openedDirectlyFromHomeRef.current && onExitToHome) {
+      onExitToHome();
+    } else {
+      setSelectedEventId(null);
+    }
+  };
+
+  useEdgeSwipeBack(handleBackFromDetail, selectedEvent != null);
+
   useEffect(() => {
     if (!selectedEvent) return;
 
@@ -115,13 +126,7 @@ export default function EventsView({ initialEventId = null, onExitToHome }: Even
     return (
       <div>
         <button
-          onClick={() => {
-            if (openedDirectlyFromHomeRef.current && onExitToHome) {
-              onExitToHome();
-            } else {
-              setSelectedEventId(null);
-            }
-          }}
+          onClick={handleBackFromDetail}
           className="text-xs text-gray-400 hover:text-orange-400 mb-3 flex items-center gap-1"
         >
           {openedDirectlyFromHomeRef.current && onExitToHome ? "← 홈" : "← 기획전 목록"}
