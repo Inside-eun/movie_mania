@@ -234,7 +234,7 @@ export default function EventsView({ initialEventId = null, onExitToHome }: Even
                             >
                               <span
                                 className={`text-[11px] font-semibold ${
-                                  isShowingToday ? "text-green-400" : "text-blue-400"
+                                  isShowingToday ? "text-green-400" : "text-orange-400"
                                 }`}
                               >
                                 {isShowingToday ? "오늘" : formatMonthDay(date)} {movie.time}
