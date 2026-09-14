@@ -10,7 +10,7 @@ import {
 } from 'react';
 
 import { mockEvents, CuratedEvent } from '@/mock/events';
-import { useWeeklySchedules } from '@/hooks/useWeeklySchedules';
+import { getLocalDateString } from '@/utils/date';
 import { trackQuizBannerClicked, trackBannerIndicatorClicked } from '@/utils/gtm';
 
 import PosterImage from './PosterImage';
@@ -24,34 +24,101 @@ interface EventSlide {
   posterUrl: string;
 }
 
+const POSTER_SESSION_STORAGE_KEY = "eventPosters:v1";
+
+// 기획전은 사람이 검수해서 주 1회 정도만 갱신되고, 상영작 포스터도 한 번 정해지면
+// 바뀔 일이 거의 없다. 그날그날의 실제 상영 스케줄을 조회해 포스터를 찾을 필요가
+// 없으므로, 날짜와 무관하게 제목 기준으로 24시간 캐싱되는 /api/movie-credits를
+// 그대로 재사용한다(기획전 상세 화면의 감독/연도 표시도 같은 엔드포인트를 쓴다).
+function usePosterByTitle(titles: string[]) {
+  const [posterByTitle, setPosterByTitle] = useState<Record<string, string>>({});
+  const [loading, setLoading] = useState(true);
+  const titlesKey = titles.join("|");
+
+  useEffect(() => {
+    if (titles.length === 0) {
+      setLoading(false);
+      return;
+    }
+
+    let cancelled = false;
+
+    const cached = sessionStorage.getItem(POSTER_SESSION_STORAGE_KEY);
+    if (cached) {
+      try {
+        const parsed = JSON.parse(cached) as Record<string, string>;
+        if (titles.every((t) => t in parsed)) {
+          setPosterByTitle(parsed);
+          setLoading(false);
+          return;
+        }
+      } catch {
+        // 캐시가 깨졌으면 무시하고 새로 받는다.
+      }
+    }
+
+    fetch("/api/movie-credits", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ titles }),
+    })
+      .then((res) => res.json())
+      .then((data: { success: boolean; data?: Record<string, { posterUrl: string | null } | null> }) => {
+        if (cancelled || !data.success || !data.data) return;
+        const result: Record<string, string> = {};
+        for (const title of titles) {
+          const posterUrl = data.data[title]?.posterUrl;
+          if (posterUrl) result[title] = posterUrl;
+        }
+        setPosterByTitle(result);
+        sessionStorage.setItem(POSTER_SESSION_STORAGE_KEY, JSON.stringify(result));
+      })
+      .catch(() => {})
+      .finally(() => {
+        if (!cancelled) setLoading(false);
+      });
+
+    return () => {
+      cancelled = true;
+    };
+    // titlesKey로 배열 내용이 바뀔 때만 재실행한다.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [titlesKey]);
+
+  return { posterByTitle, loading };
+}
+
 export default function MovieBanner({ onEventClick }: MovieBannerProps) {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [fading, setFading] = useState(false);
-  const weekly = useWeeklySchedules();
 
-  // 기획전 상영작 중 이번 주 상영이 확인되고 포스터가 있는 첫 작품을 대표 이미지로 쓴다.
+  const today = getLocalDateString(new Date());
+  // 노출 기간(startDate~endDate) 안에 든 기획전만 후보로 삼는다.
+  // endDate가 없으면 "상영 중"으로 보고 계속 노출한다(사람이 events.ts에서 직접 뺄 때까지).
+  const activeEvents = useMemo(
+    () =>
+      mockEvents.filter(
+        (e) => e.startDate <= today && (e.endDate === null || today <= e.endDate)
+      ),
+    [today]
+  );
+
+  const candidateTitles = useMemo(
+    () => Array.from(new Set(activeEvents.flatMap((e) => e.movieTitles))),
+    [activeEvents]
+  );
+
+  const { posterByTitle, loading } = usePosterByTitle(candidateTitles);
+
+  // 기획전 상영작 중 포스터가 확인된 첫 작품을 대표 이미지로 쓴다.
   const eventSlides = useMemo<EventSlide[]>(() => {
     const slides: EventSlide[] = [];
-    for (const event of mockEvents) {
-      let posterUrl = "";
-      outer: for (const title of event.movieTitles) {
-        for (const date of weekly.dates) {
-          const movies = weekly.scheduleByDate[date];
-          if (!movies) continue;
-          const movie = movies.find(
-            (m) => event.theaterNames.includes(m.theater) && m.title === title
-          );
-          const found = movie?.tmdbPosterUrl || movie?.posterUrl;
-          if (found) {
-            posterUrl = found;
-            break outer;
-          }
-        }
-      }
-      if (posterUrl) slides.push({ event, posterUrl });
+    for (const event of activeEvents) {
+      const title = event.movieTitles.find((t) => posterByTitle[t]);
+      if (title) slides.push({ event, posterUrl: posterByTitle[title] });
     }
     return slides;
-  }, [weekly.dates, weekly.scheduleByDate]);
+  }, [activeEvents, posterByTitle]);
 
   // index 0 ~ eventSlides.length-1 = 기획전 슬라이드, 마지막 index = 퀴즈 배너
   const totalSlides = eventSlides.length + 1;
@@ -114,10 +181,9 @@ export default function MovieBanner({ onEventClick }: MovieBannerProps) {
     if (currentIndex >= totalSlides) setCurrentIndex(0);
   }, [totalSlides, currentIndex]);
 
-  // 주간 일정이 하루치씩 순차 로드되는 동안 기획전 매칭 결과가 점점 늘어나 보이는 걸 막기 위해,
-  // 전체 로딩이 끝날 때까지는 실제 슬라이드 대신 페이지 진입 시 스켈레톤과 동일한 높이/스타일의
+  // 포스터 조회 중엔 실제 슬라이드 대신 페이지 진입 시 스켈레톤과 동일한 높이/스타일의
   // 플레이스홀더를 보여준다(높이가 0으로 꺼졌다가 다시 나타나는 레이아웃 시프트 방지).
-  if (weekly.loading) {
+  if (loading) {
     return (
       <div
         className="w-full bg-gray-900/50 animate-pulse"

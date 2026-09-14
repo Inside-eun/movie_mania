@@ -5,6 +5,8 @@ export interface CuratedEvent {
   title: string;
   theaterNames: string[]; // 같은 기획전이 여러 극장에서 열리는 경우 모두 나열
   period: string; // 표시용 기간 텍스트
+  startDate: string; // YYYY-MM-DD, 홈 배너 노출 시작일 (이 날짜부터 노출)
+  endDate: string | null; // YYYY-MM-DD, 홈 배너 노출 종료일. "상영 중"처럼 끝이 정해지지 않았으면 null(수동으로 뺄 때까지 계속 노출)
   summary: string;
   description: string;
   movieTitles: string[]; // movies-snapshot.json의 title과 매칭
@@ -16,6 +18,8 @@ export const mockEvents: CuratedEvent[] = [
     title: "벨라 타르 X 라슬로 크러스너호르커이 특별전",
     theaterNames: ["라이카시네마", "더숲 아트시네마", "아트하우스모모", "CGV아트하우스"],
     period: "2026.09.16 - 2026.10.04",
+    startDate: "2026-09-16",
+    endDate: "2026-10-04",
     summary: "두 거장이 30년간 함께 빚어낸 다섯 편의 걸작",
     description:
       "'이 시대 유일의 시네아스트' 벨라 타르와 2025년 노벨문학상 수상 작가 라슬로 크러스너호르커이. 30년에 걸친 두 거장의 협업으로 탄생한 다섯 편의 전설적인 작품을 라이카시네마·더숲아트시네마·아트하우스모모에서 4K/2K 리마스터로 만납니다.",
@@ -26,6 +30,8 @@ export const mockEvents: CuratedEvent[] = [
     title: "빔 벤더스 기획전",
     theaterNames: ["에무시네마"],
     period: "2026.09 상영 중",
+    startDate: "2026-09-01",
+    endDate: null,
     summary: "로드무비의 거장이 그려낸 길 위의 시간들",
     description:
       "에무시네마에서 진행 중인 빔 벤더스 기획전. <파리, 텍사스>, <피나>, <이 세상 끝까지 - 디렉터스 컷> 등 아홉 편의 대표작을 만날 수 있습니다.",
@@ -46,6 +52,8 @@ export const mockEvents: CuratedEvent[] = [
     title: "스즈키 세이준 특별전: 다이쇼 로망 3부작",
     theaterNames: ["아트나인"],
     period: "2026.09.09 - 2026.09.30",
+    startDate: "2026-09-09",
+    endDate: "2026-09-30",
     summary: "장르의 관습을 뒤흔든 거장의 몽환적인 후기 3부작",
     description:
       "일본영화사에서 자신만의 미학을 구축한 거장 스즈키 세이준의 '다이쇼 로망 3부작'. 현실의 논리에서 벗어난 이야기와 몽환적인 이미지, 대담한 색채와 미장센이 돋보이는 후기 대표작 세 편을 아트나인에서 만납니다.",
@@ -56,6 +64,8 @@ export const mockEvents: CuratedEvent[] = [
     title: "영속하는 혁명: 아다치 마사오 특별전",
     theaterNames: ["서울아트시네마"],
     period: "2026.09.18 - 2026.09.20",
+    startDate: "2026-09-18",
+    endDate: "2026-09-20",
     summary: "정치적 실천으로서의 영화, 아다치 마사오의 동시대성",
     description:
       "시대와의 긴장 관계 속에서 영화 제작을 통해 정치적 실천을 시도해 온 아다치 마사오의 후기 작업을 조망하는 3일간의 특별전. 감독과의 온라인 시네토크와 강연도 함께 진행됩니다.",
