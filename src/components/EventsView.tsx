@@ -26,23 +26,33 @@ function formatMovieList(titles: string[]): string {
   return titles.length > 3 ? `${shown} 외 ${titles.length - 3}편` : shown;
 }
 
-// 이번 주(오늘 포함 7일) 데이터에서 극장 이름 + 제목이 둘 다 일치하는 첫 상영일을 찾는다.
+// 이번 주(오늘 포함 7일) 데이터에서 극장 이름 + 제목이 둘 다 일치하는 상영 회차를 전부 찾는다.
 // 제목만 보고 매칭하면 다른 극장(예: CGV아트하우스가 트는 재상영)까지 잡혀서
 // "이 극장에서 상영 중"이라고 착각하게 만들 수 있어 theaterNames도 반드시 같이 본다.
-function findMatch(
+// 기획전이 여러 극장에서 동시에 열리는 경우 같은 영화가 여러 회차로 잡힐 수 있어
+// 하나만 고르지 않고 전부 모아서 이른 시간 순으로 반환한다.
+function findAllMatches(
   weekly: ReturnType<typeof useWeeklySchedules>,
   event: CuratedEvent,
   movieTitle: string
-): { date: string; movie: MovieSchedule } | null {
+): { date: string; movie: MovieSchedule }[] {
+  const matches: { date: string; movie: MovieSchedule }[] = [];
   for (const date of weekly.dates) {
     const movies = weekly.scheduleByDate[date];
     if (!movies) continue;
-    const movie = movies.find(
-      (m) => event.theaterNames.includes(m.theater) && m.title === movieTitle
-    );
-    if (movie) return { date, movie };
+    for (const movie of movies) {
+      if (event.theaterNames.includes(movie.theater) && movie.title === movieTitle) {
+        matches.push({ date, movie });
+      }
+    }
   }
-  return null;
+  // weekly.dates는 이미 날짜 오름차순이고 scheduleByDate[date]도 API에서 시간 오름차순으로
+  // 내려오지만, 안전하게 날짜+시간 기준으로 한 번 더 정렬한다.
+  return matches.sort((a, b) => {
+    const dateDiff = a.date.localeCompare(b.date);
+    if (dateDiff !== 0) return dateDiff;
+    return a.movie.time.localeCompare(b.movie.time);
+  });
 }
 
 function MovieRowSkeleton() {
@@ -147,31 +157,14 @@ export default function EventsView({ initialEventId = null, onExitToHome }: Even
             ? selectedEvent.movieTitles.map((title) => <MovieRowSkeleton key={title} />)
             : selectedEvent.movieTitles.map((title) => {
                 const credits = creditsByTitle[title];
-                const match = findMatch(weekly, selectedEvent, title);
-                const matchedDate = match?.date ?? null;
-                const isShowingToday = matchedDate === today;
-                const isScheduledLater = matchedDate !== null && !isShowingToday;
-                const hasSchedule = matchedDate !== null;
+                const matches = findAllMatches(weekly, selectedEvent, title);
+                const hasSchedule = matches.length > 0;
+                const showTheater = selectedEvent.theaterNames.length > 1;
                 const year = formatYear(credits?.releaseDate);
 
-                const RowWrapper = hasSchedule ? "button" : "div";
-
                 return (
-                  <RowWrapper
-                    key={title}
-                    {...(hasSchedule
-                      ? {
-                          onClick: () => {
-                            trackEventMovieClicked(title, selectedEvent.title);
-                            match && openMovieDetail(match.movie, match.date);
-                          },
-                        }
-                      : {})}
-                    className={`flex items-center justify-between gap-3 w-full text-left py-3 ${
-                      hasSchedule ? "hover:bg-white/5 transition-colors" : ""
-                    }`}
-                  >
-                    <div className="min-w-0">
+                  <div key={title} className="py-3">
+                    <div className="min-w-0 mb-1.5">
                       <p className="text-sm font-medium text-white truncate">{title}</p>
                       {(credits?.director || year) && (
                         <p className="text-[11px] text-gray-400 mt-0.5 truncate">
@@ -181,16 +174,39 @@ export default function EventsView({ initialEventId = null, onExitToHome }: Even
                         </p>
                       )}
                     </div>
-                    <span className="shrink-0 text-[11px]">
-                      {isShowingToday ? (
-                        <span className="text-green-400">현재 상영 중</span>
-                      ) : isScheduledLater ? (
-                        <span className="text-blue-400">{formatMonthDay(matchedDate!)} 상영 예정</span>
-                      ) : (
-                        <span className="text-gray-500">상영 정보 미등록</span>
-                      )}
-                    </span>
-                  </RowWrapper>
+
+                    {hasSchedule ? (
+                      <div className="space-y-1">
+                        {matches.map(({ date, movie }) => {
+                          const isShowingToday = date === today;
+                          return (
+                            <button
+                              key={`${movie.theater}-${date}-${movie.time}`}
+                              onClick={() => {
+                                trackEventMovieClicked(title, selectedEvent.title);
+                                openMovieDetail(movie, date);
+                              }}
+                              className="flex items-center justify-between gap-3 w-full text-left py-1 -mx-1 px-1 rounded hover:bg-white/5 transition-colors"
+                            >
+                              <span className="text-[11px] text-gray-300 truncate">
+                                {showTheater && `${movie.theater} · `}
+                                {isShowingToday ? "오늘" : formatMonthDay(date)} {movie.time}
+                              </span>
+                              <span className="shrink-0 text-[11px]">
+                                {isShowingToday ? (
+                                  <span className="text-green-400">현재 상영 중</span>
+                                ) : (
+                                  <span className="text-blue-400">상영 예정</span>
+                                )}
+                              </span>
+                            </button>
+                          );
+                        })}
+                      </div>
+                    ) : (
+                      <p className="text-[11px] text-gray-500">상영 정보 미등록</p>
+                    )}
+                  </div>
                 );
               })}
         </div>
