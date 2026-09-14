@@ -75,6 +75,19 @@ export default function EventsView({ initialEventId = null, onExitToHome }: Even
   const [selectedEventId, setSelectedEventId] = useState<string | null>(initialEventId);
   const [creditsByTitle, setCreditsByTitle] = useState<CreditsByTitle>({});
   const [creditsLoading, setCreditsLoading] = useState(false);
+  const [expandedTitles, setExpandedTitles] = useState<Set<string>>(new Set());
+
+  const toggleExpanded = (title: string) => {
+    setExpandedTitles((prev) => {
+      const next = new Set(prev);
+      if (next.has(title)) {
+        next.delete(title);
+      } else {
+        next.add(title);
+      }
+      return next;
+    });
+  };
   const weekly = useWeeklySchedules();
   // 홈 배너를 눌러 목록을 거치지 않고 바로 상세로 들어온 경우, 뒤로가기는 목록이 아니라 홈으로 가야 한다.
   const openedDirectlyFromHomeRef = useRef(initialEventId != null);
@@ -166,22 +179,48 @@ export default function EventsView({ initialEventId = null, onExitToHome }: Even
                 const hasSchedule = matches.length > 0;
                 const showTheater = selectedEvent.theaterNames.length > 1;
                 const year = formatYear(credits?.releaseDate);
+                const isExpanded = expandedTitles.has(title);
 
                 return (
                   <div key={title} className="py-3">
-                    <div className="min-w-0 mb-1.5">
-                      <p className="text-sm font-medium text-white truncate">{title}</p>
-                      {(credits?.director || year) && (
-                        <p className="text-[11px] text-gray-400 mt-0.5 truncate">
-                          {credits?.director}
-                          {credits?.director && year && " · "}
-                          {year}
-                        </p>
-                      )}
-                    </div>
+                    <button
+                      type="button"
+                      onClick={() => hasSchedule && toggleExpanded(title)}
+                      disabled={!hasSchedule}
+                      className="flex items-center justify-between gap-3 w-full text-left disabled:cursor-default"
+                    >
+                      <div className="min-w-0">
+                        <p className="text-sm font-medium text-white truncate">{title}</p>
+                        {(credits?.director || year) && (
+                          <p className="text-[11px] text-gray-400 mt-0.5 truncate">
+                            {credits?.director}
+                            {credits?.director && year && " · "}
+                            {year}
+                          </p>
+                        )}
+                      </div>
 
-                    {hasSchedule ? (
-                      <div className="space-y-1">
+                      {hasSchedule ? (
+                        <svg
+                          className={`shrink-0 w-4 h-4 text-gray-400 transition-transform ${
+                            isExpanded ? "rotate-180" : ""
+                          }`}
+                          viewBox="0 0 20 20"
+                          fill="currentColor"
+                        >
+                          <path
+                            fillRule="evenodd"
+                            d="M5.23 7.21a.75.75 0 011.06.02L10 10.94l3.71-3.71a.75.75 0 111.06 1.06l-4.24 4.24a.75.75 0 01-1.06 0L5.21 8.29a.75.75 0 01.02-1.08z"
+                            clipRule="evenodd"
+                          />
+                        </svg>
+                      ) : (
+                        <span className="shrink-0 text-[11px] text-gray-500">상영 정보 미등록</span>
+                      )}
+                    </button>
+
+                    {hasSchedule && isExpanded && (
+                      <div className="grid grid-cols-3 gap-2 mt-2.5">
                         {matches.map(({ date, movie }) => {
                           const isShowingToday = date === today;
                           return (
@@ -191,25 +230,22 @@ export default function EventsView({ initialEventId = null, onExitToHome }: Even
                                 trackEventMovieClicked(title, selectedEvent.title);
                                 openMovieDetail(movie, date);
                               }}
-                              className="flex items-center justify-between gap-3 w-full text-left py-1 -mx-1 px-1 rounded hover:bg-white/5 transition-colors"
+                              className="flex flex-col gap-0.5 text-left p-2 rounded-lg border border-white/10 bg-white/5 hover:border-orange-500/60 hover:bg-white/10 transition-colors"
                             >
-                              <span className="text-[11px] text-gray-300 truncate">
-                                {showTheater && `${movie.theater} · `}
+                              <span
+                                className={`text-[11px] font-semibold ${
+                                  isShowingToday ? "text-green-400" : "text-blue-400"
+                                }`}
+                              >
                                 {isShowingToday ? "오늘" : formatMonthDay(date)} {movie.time}
                               </span>
-                              <span className="shrink-0 text-[11px]">
-                                {isShowingToday ? (
-                                  <span className="text-green-400">현재 상영 중</span>
-                                ) : (
-                                  <span className="text-blue-400">상영 예정</span>
-                                )}
-                              </span>
+                              {showTheater && (
+                                <span className="text-[11px] text-gray-300 truncate">{movie.theater}</span>
+                              )}
                             </button>
                           );
                         })}
                       </div>
-                    ) : (
-                      <p className="text-[11px] text-gray-500">상영 정보 미등록</p>
                     )}
                   </div>
                 );
