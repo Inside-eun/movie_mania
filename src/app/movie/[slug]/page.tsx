@@ -1,8 +1,8 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { Suspense, useEffect, useRef, useState } from "react";
 import Link from "next/link";
-import { useParams, useRouter } from "next/navigation";
+import { useParams, useRouter, useSearchParams } from "next/navigation";
 
 import PosterImage from "@/components/PosterImage";
 import TheaterMap from "@/components/TheaterMap";
@@ -10,6 +10,7 @@ import { getBookingFallbackUrl } from "@/lib/bookingFallbacks";
 import {
   trackBookingClicked,
   trackMovieDetailOpened,
+  trackMovieShareClicked,
   trackWishlistAdd,
   trackWishlistRemove,
   trackRecommendationClicked,
@@ -58,8 +59,17 @@ function SkeletonRow({ label, width }: { label: string; width: string }) {
 }
 
 export default function MovieDetailPage() {
+  return (
+    <Suspense fallback={<div className="min-h-screen bg-black" />}>
+      <MovieDetailPageInner />
+    </Suspense>
+  );
+}
+
+function MovieDetailPageInner() {
   const params = useParams<{ slug: string }>();
   const router = useRouter();
+  const searchParams = useSearchParams();
 
   const [stored, setStored] = useState<StoredMovieDetail | null>(null);
   const [notFound, setNotFound] = useState(false);
@@ -77,12 +87,36 @@ export default function MovieDetailPage() {
 
   useEffect(() => {
     const raw = sessionStorage.getItem(`movieDetail:${params.slug}`);
-    if (!raw) {
-      setNotFound(true);
+    if (raw) {
+      setStored(JSON.parse(raw));
       return;
     }
-    setStored(JSON.parse(raw));
-  }, [params.slug]);
+
+    // 공유 링크 등으로 세션 정보 없이 바로 진입한 경우, 링크의 쿼리 파라미터로 복원
+    const title = searchParams.get("title");
+    const theater = searchParams.get("theater");
+    const time = searchParams.get("time");
+    const date = searchParams.get("date");
+    if (title && theater && time && date) {
+      setStored({
+        movie: {
+          title,
+          theater,
+          time,
+          area: "",
+          screen: "",
+          showtime: date,
+          posterUrl: searchParams.get("poster") || undefined,
+          movieCode: searchParams.get("movieCode") || undefined,
+          source: searchParams.get("source") || undefined,
+        },
+        selectedDate: date,
+      });
+      return;
+    }
+
+    setNotFound(true);
+  }, [params.slug, searchParams]);
 
   const movie = stored?.movie ?? null;
   const selectedDate = stored?.selectedDate;
@@ -260,6 +294,42 @@ export default function MovieDetailPage() {
     : null;
   const inWishlist = wishlist.isInWishlist(movie);
 
+  const handleShare = async () => {
+    if (!selectedDate) return;
+
+    const shareParams = new URLSearchParams({
+      title: movie.title,
+      theater: movie.theater,
+      time: movie.time,
+      date: selectedDate,
+    });
+    if (movie.movieCode) shareParams.set("movieCode", movie.movieCode);
+    if (movie.source) shareParams.set("source", movie.source);
+    if (posterUrl) shareParams.set("poster", posterUrl);
+
+    const shareUrl = `${window.location.origin}/movie/${params.slug}?${shareParams.toString()}`;
+    const shareText = `${movie.title} - ${movie.theater} ${movie.time}`;
+
+    trackMovieShareClicked(movie.title, movie.theater);
+    hapticImpact("light");
+
+    if (navigator.share) {
+      try {
+        await navigator.share({ title: movie.title, text: shareText, url: shareUrl });
+      } catch {
+        // 사용자가 공유 시트를 취소한 경우 등은 무시
+      }
+      return;
+    }
+
+    try {
+      await navigator.clipboard.writeText(shareUrl);
+      alert("링크가 복사되었습니다.");
+    } catch {
+      // 클립보드 접근 불가 시 조용히 무시
+    }
+  };
+
   return (
     <div className="min-h-screen bg-black text-gray-100 pb-[calc(6rem_+_env(safe-area-inset-bottom))]">
       <div className="sticky top-0 z-40 bg-black border-b border-gray-800 px-4 py-2.5">
@@ -281,7 +351,19 @@ export default function MovieDetailPage() {
         {/* 영화 정보 */}
         <div className="flex items-start gap-4 mb-4">
           <div className="flex-1 min-w-0 order-1">
-            <h1 className="text-lg font-bold text-white leading-snug mb-3">{movie.title}</h1>
+            <div className="flex items-start justify-between gap-2 mb-3">
+              <h1 className="text-lg font-bold text-white leading-snug">{movie.title}</h1>
+              <button
+                onClick={handleShare}
+                aria-label="공유하기"
+                className="flex-shrink-0 flex items-center gap-1 text-xs text-gray-300 hover:text-orange-400 transition-colors mt-0.5"
+              >
+                <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8.684 13.342a4 4 0 100-5.684m0 5.684a4 4 0 100 5.684m0-5.684L15.316 9.658m-6.632 8.026L15.316 14m0-5.658a4 4 0 105.684 0 4 4 0 00-5.684 0zm0 9.316a4 4 0 105.684 0 4 4 0 00-5.684 0z" />
+                </svg>
+                공유
+              </button>
+            </div>
 
             <div className="flex flex-col gap-1.5">
               {director ? (

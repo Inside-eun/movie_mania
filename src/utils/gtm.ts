@@ -32,6 +32,9 @@ export const GTM_EVENTS = {
   // 예매 관련
   BOOKING_CLICKED: 'booking_clicked',
 
+  // 카카오톡 공유 관련
+  MOVIE_SHARE_CLICKED: 'movie_share_clicked',
+
   // 배너 관련
   QUIZ_BANNER_CLICKED: 'quiz_banner_clicked',
 
@@ -225,6 +228,16 @@ export const trackBookingClicked = (
     movie_title: movieTitle,
     theater,
     button_type: isFallback ? 'theater_link' : 'booking',
+  });
+};
+
+/**
+ * 영화 상세 카카오톡 공유 클릭 이벤트
+ */
+export const trackMovieShareClicked = (movieTitle: string, theater: string) => {
+  trackEvent(GTM_EVENTS.MOVIE_SHARE_CLICKED, {
+    movie_title: movieTitle,
+    theater,
   });
 };
 

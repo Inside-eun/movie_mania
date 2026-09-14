@@ -175,27 +175,17 @@ export default function Home() {
   const isInitialLoading =
     isHomeView && schedules.loading && schedules.allMovies.length === 0;
 
-  const [bannerReady, setBannerReady] = useState(false);
-  useEffect(() => {
-    if (!bannerReady && schedules.allMovies.length > 0) {
-      setBannerReady(true);
-    }
-  }, [bannerReady, schedules.allMovies.length]);
-
   return (
     <>
       <SplashScreen visible={isInitialLoading} />
 
       <Header />
 
-      {/* 히어로 배너 - ALL SCREENINGS 뷰에서만 (최초 로딩 중엔 스켈레톤으로 CLS 방지, 이후엔 날짜 변경과 무관하게 계속 표시) */}
-      {isHomeView && (
-        bannerReady
-          ? <MovieBanner onEventClick={goToEventDetail} />
-          : schedules.loading
-            ? <div className="w-full bg-gray-900/50 animate-pulse" style={{ height: "260px" }} />
-            : null
-      )}
+      {/* 히어로 배너 - ALL SCREENINGS 뷰에서만. 배너 자체가 로딩 중엔 동일한 높이의
+          스켈레톤을 그려서(MovieBanner 내부 처리) 메인 스케줄 로딩과 무관하게 바로 마운트한다.
+          이렇게 해야 배너의 주간 일정 fetch가 메인 스케줄 fetch와 동시에 시작돼 체감 대기 시간이 줄고,
+          "스켈레톤 -> 사라짐 -> 배너 등장"으로 이어지던 레이아웃 시프트도 없어진다. */}
+      {isHomeView && <MovieBanner onEventClick={goToEventDetail} />}
 
       <main className="container mx-auto px-4 pb-[calc(6rem_+_env(safe-area-inset-bottom))] pt-4 max-w-4xl min-h-screen">
         {/* 필터 영역 */}

@@ -115,8 +115,16 @@ export default function MovieBanner({ onEventClick }: MovieBannerProps) {
   }, [totalSlides, currentIndex]);
 
   // 주간 일정이 하루치씩 순차 로드되는 동안 기획전 매칭 결과가 점점 늘어나 보이는 걸 막기 위해,
-  // 전체 로딩이 끝날 때까지는 배너를 노출하지 않는다.
-  if (weekly.loading) return null;
+  // 전체 로딩이 끝날 때까지는 실제 슬라이드 대신 페이지 진입 시 스켈레톤과 동일한 높이/스타일의
+  // 플레이스홀더를 보여준다(높이가 0으로 꺼졌다가 다시 나타나는 레이아웃 시프트 방지).
+  if (weekly.loading) {
+    return (
+      <div
+        className="w-full bg-gray-900/50 animate-pulse"
+        style={{ height: "260px" }}
+      />
+    );
+  }
   if (totalSlides === 0) return null;
 
   const isQuizSlide = currentIndex === quizIndex;
