@@ -116,10 +116,12 @@ private class OfflineNavigationHandler: NSObject, WKNavigationDelegate {
             decisionHandler(.allow)
             return
         }
-        if let original = originalDelegate,
-           original.responds(to: #selector(WKNavigationDelegate.webView(_:decidePolicyFor:decisionHandler:))) {
-            original.webView?(webView, decidePolicyFor: navigationAction, decisionHandler: decisionHandler)
-        } else {
+        // original.webView?(...)는 원래 delegate가 이 구체적인 오버로드를
+        // 구현하지 않으면 아무 것도 안 하고 조용히 끝난다(nil 반환) — 그러면
+        // decisionHandler가 영영 안 불려서 네비게이션이 멈춰버리므로, 호출이
+        // 실제로 안 됐을 때는 우리가 대신 allow로 마무리한다.
+        let forwarded: Void? = originalDelegate?.webView?(webView, decidePolicyFor: navigationAction, decisionHandler: decisionHandler)
+        if forwarded == nil {
             decisionHandler(.allow)
         }
     }
