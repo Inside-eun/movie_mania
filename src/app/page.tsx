@@ -172,8 +172,18 @@ export default function Home() {
   const isToday = selectedDate === getLocalDateString(new Date());
   const isHomeView =
     !showWishlistView && !showInfoView && !showEventsView;
+
+  // 앱 최초 진입 후 스케줄이 한 번이라도 로드되면 영구히 true로 고정된다.
+  // 이후 날짜 변경 등으로 다시 로딩이 걸려도 스플래시가 아닌 기존 로딩 UI를 쓰게 하기 위함.
+  const hasLoadedOnceRef = useRef(false);
+  useEffect(() => {
+    if (!schedules.loading) {
+      hasLoadedOnceRef.current = true;
+    }
+  }, [schedules.loading]);
+
   const isInitialLoading =
-    isHomeView && schedules.loading && schedules.allMovies.length === 0;
+    !hasLoadedOnceRef.current && isHomeView && schedules.loading;
 
   return (
     <>
@@ -230,6 +240,15 @@ export default function Home() {
         {schedules.error && (
           <div className="bg-red-900/50 border border-red-700 text-red-300 px-4 py-3 mb-4">
             {schedules.error}
+          </div>
+        )}
+
+        {schedules.loading && !isInitialLoading && isHomeView && (
+          <div className="text-center py-8">
+            <div className="inline-block animate-spin rounded-full h-8 w-8 border-b-2 border-orange-500"></div>
+            <p className="mt-2 text-gray-500 text-sm">
+              상영시간표를 불러오는 중...
+            </p>
           </div>
         )}
 
