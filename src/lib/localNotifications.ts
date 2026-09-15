@@ -1,5 +1,10 @@
 import { MovieSchedule } from '@/types';
 import { Capacitor } from '@capacitor/core';
+import {
+  trackNotificationPermissionResult,
+  trackNotificationScheduled,
+  trackNotificationScheduleFailed,
+} from '@/utils/gtm';
 
 const ASK_FLAG_KEY = "notifPermissionAsked";
 const ENABLED_KEY = "showtimeNotificationsEnabled";
@@ -39,8 +44,14 @@ async function ensurePermission(): Promise<boolean> {
   const { LocalNotifications } = await import("@capacitor/local-notifications");
 
   const current = await LocalNotifications.checkPermissions();
-  if (current.display === "granted") return true;
-  if (current.display === "denied") return false;
+  if (current.display === "granted") {
+    trackNotificationPermissionResult(true, "cached");
+    return true;
+  }
+  if (current.display === "denied") {
+    trackNotificationPermissionResult(false, "cached");
+    return false;
+  }
 
   const alreadyAsked = localStorage.getItem(ASK_FLAG_KEY);
   if (!alreadyAsked) {
@@ -48,11 +59,16 @@ async function ensurePermission(): Promise<boolean> {
     const agreed = window.confirm(
       "찜한 영화 상영 30분 전에 알림을 보내드릴까요?\n설정 앱의 알림 메뉴에서 언제든 끌 수 있습니다."
     );
-    if (!agreed) return false;
+    if (!agreed) {
+      trackNotificationPermissionResult(false, "soft_ask_declined");
+      return false;
+    }
   }
 
   const result = await LocalNotifications.requestPermissions();
-  return result.display === "granted";
+  const granted = result.display === "granted";
+  trackNotificationPermissionResult(granted, "system_prompt");
+  return granted;
 }
 
 export async function scheduleShowtimeReminder(movie: MovieSchedule, showtime: Date) {
@@ -74,11 +90,14 @@ export async function scheduleShowtimeReminder(movie: MovieSchedule, showtime: D
           title: "찜한 영화의 상영이 30분 후에 시작됩니다",
           body: `${movie.title} · ${movie.theater} · ${movie.time}`,
           schedule: { at: fireAt },
+          extra: { movieTitle: movie.title, theater: movie.theater },
         },
       ],
     });
+    trackNotificationScheduled(movie.title, movie.theater);
   } catch {
     // 알림 스케줄 실패는 찜 기능 자체를 막지 않는다
+    trackNotificationScheduleFailed(movie.title, movie.theater);
   }
 }
 

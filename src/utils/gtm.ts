@@ -86,6 +86,23 @@ export const GTM_EVENTS = {
 
   // 지도 확대/축소
   MAP_ZOOM_CLICKED: 'map_zoom_clicked',
+
+  // SPA 라우트/탭 전환 시 수동 페이지뷰
+  PAGE_VIEW: 'page_view',
+
+  // 상영 알림 권한/예약 관련
+  NOTIFICATION_PERMISSION_RESULT: 'notification_permission_result',
+  NOTIFICATION_SCHEDULED: 'notification_scheduled',
+  NOTIFICATION_SCHEDULE_FAILED: 'notification_schedule_failed',
+  NOTIFICATION_OPENED: 'notification_opened',
+
+  // 앱 백그라운드 전환 / 포그라운드 복귀
+  APP_BACKGROUND: 'app_background',
+  APP_FOREGROUND: 'app_foreground',
+
+  // 앱 에러 / API 로딩 실패
+  APP_ERROR: 'app_error',
+  API_LOAD_FAILED: 'api_load_failed',
 } as const;
 
 interface GTMEventParams {
@@ -268,9 +285,26 @@ export const trackEngagementTime = (durationSec: number) => {
 
 /**
  * 하단 네비게이션 탭 전환 이벤트
+ *
+ * 탭 전환은 URL이 바뀌지 않으므로(client state), page_view도 함께 수동 전송한다.
  */
 export const trackTabChanged = (tabName: 'home' | 'wishlist' | 'events' | 'settings') => {
   trackEvent(GTM_EVENTS.TAB_CHANGED, { tab_name: tabName });
+  trackPageView(`/?tab=${tabName}`);
+};
+
+/**
+ * SPA 라우트/탭 전환 시 GA4 page_view 수동 전송
+ *
+ * layout.tsx의 gtag('config', ...)에서 send_page_view: false로
+ * 자동 전송을 꺼두었기 때문에, 라우트가 바뀔 때마다 이 함수로 직접 보낸다.
+ */
+export const trackPageView = (pagePath: string, pageTitle?: string) => {
+  trackEvent(GTM_EVENTS.PAGE_VIEW, {
+    page_path: pagePath,
+    page_title: pageTitle ?? (typeof document !== 'undefined' ? document.title : undefined),
+    page_location: typeof window !== 'undefined' ? window.location.origin + pagePath : undefined,
+  });
 };
 
 /**
@@ -400,4 +434,78 @@ export const trackCalendarDateClicked = (movieCount: number) => {
  */
 export const trackMapZoomClicked = (direction: 'in' | 'out') => {
   trackEvent(GTM_EVENTS.MAP_ZOOM_CLICKED, { direction });
+};
+
+/**
+ * 상영 알림 권한 확인/요청 결과 이벤트
+ *
+ * source: 이전에 허용/거부되어 캐시된 값인지, 소프트 애스크를 거절했는지,
+ * 시스템 권한 팝업을 통해 얻은 결과인지 구분한다.
+ */
+export const trackNotificationPermissionResult = (
+  granted: boolean,
+  source: 'cached' | 'soft_ask_declined' | 'system_prompt'
+) => {
+  trackEvent(GTM_EVENTS.NOTIFICATION_PERMISSION_RESULT, { granted, source });
+};
+
+/**
+ * 상영 알림 예약 성공 이벤트
+ */
+export const trackNotificationScheduled = (movieTitle: string, theater: string) => {
+  trackEvent(GTM_EVENTS.NOTIFICATION_SCHEDULED, {
+    movie_title: movieTitle,
+    theater,
+  });
+};
+
+/**
+ * 상영 알림 예약 실패 이벤트
+ */
+export const trackNotificationScheduleFailed = (movieTitle: string, theater: string) => {
+  trackEvent(GTM_EVENTS.NOTIFICATION_SCHEDULE_FAILED, {
+    movie_title: movieTitle,
+    theater,
+  });
+};
+
+/**
+ * 상영 알림을 눌러 앱에 진입한 이벤트
+ */
+export const trackNotificationOpened = (movieTitle?: string, theater?: string) => {
+  trackEvent(GTM_EVENTS.NOTIFICATION_OPENED, {
+    movie_title: movieTitle,
+    theater,
+  });
+};
+
+/**
+ * 앱이 백그라운드로 전환된 이벤트
+ */
+export const trackAppBackground = (screenPath: string) => {
+  trackEvent(GTM_EVENTS.APP_BACKGROUND, { screen_path: screenPath });
+};
+
+/**
+ * 앱이 포그라운드로 복귀한 이벤트
+ */
+export const trackAppForeground = (screenPath: string) => {
+  trackEvent(GTM_EVENTS.APP_FOREGROUND, { screen_path: screenPath });
+};
+
+/**
+ * React 렌더링 중 잡히지 않은 에러 (ErrorBoundary) 이벤트
+ */
+export const trackAppError = (message: string, componentStack?: string) => {
+  trackEvent(GTM_EVENTS.APP_ERROR, {
+    message: message.slice(0, 150),
+    component_stack: componentStack?.slice(0, 150),
+  });
+};
+
+/**
+ * API 데이터 로딩 실패 이벤트
+ */
+export const trackApiLoadFailed = (endpoint: string, reason: string) => {
+  trackEvent(GTM_EVENTS.API_LOAD_FAILED, { endpoint, reason });
 };

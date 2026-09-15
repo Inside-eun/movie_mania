@@ -2,11 +2,7 @@
 
 import { useEffect } from 'react';
 
-declare global {
-  interface Window {
-    gtag?: (...args: unknown[]) => void;
-  }
-}
+import { trackAppBackground, trackAppForeground, trackNotificationOpened } from '@/utils/gtm';
 
 export default function CapacitorInit() {
   useEffect(() => {
@@ -16,10 +12,11 @@ export default function CapacitorInit() {
       const { Capacitor } = await import('@capacitor/core');
       if (!Capacitor.isNativePlatform()) return;
 
-      const [{ StatusBar, Style }, { SplashScreen }, { App }] = await Promise.all([
+      const [{ StatusBar, Style }, { SplashScreen }, { App }, { LocalNotifications }] = await Promise.all([
         import('@capacitor/status-bar'),
         import('@capacitor/splash-screen'),
         import('@capacitor/app'),
+        import('@capacitor/local-notifications'),
       ]);
 
       await StatusBar.setStyle({ style: Style.Dark });
@@ -30,14 +27,28 @@ export default function CapacitorInit() {
       });
 
       const pauseListener = await App.addListener('pause', () => {
-        window.gtag?.('event', 'app_background', {
-          screen_path: window.location.pathname + window.location.search,
-        });
+        trackAppBackground(window.location.pathname + window.location.search);
       });
+
+      const resumeListener = await App.addListener('resume', () => {
+        trackAppForeground(window.location.pathname + window.location.search);
+      });
+
+      const notificationOpenedListener = await LocalNotifications.addListener(
+        'localNotificationActionPerformed',
+        (action) => {
+          const extra = action.notification.extra as
+            | { movieTitle?: string; theater?: string }
+            | undefined;
+          trackNotificationOpened(extra?.movieTitle, extra?.theater);
+        }
+      );
 
       cleanup = () => {
         backListener.remove();
         pauseListener.remove();
+        resumeListener.remove();
+        notificationOpenedListener.remove();
       };
     }
 

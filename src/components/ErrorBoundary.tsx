@@ -2,6 +2,8 @@
 
 import React from "react";
 
+import { trackAppError } from "@/utils/gtm";
+
 interface Props {
   children: React.ReactNode;
   fallback?: React.ReactNode;
@@ -24,6 +26,7 @@ export default class ErrorBoundary extends React.Component<Props, State> {
 
   componentDidCatch(error: Error, info: React.ErrorInfo) {
     console.error("[ErrorBoundary]", error, info.componentStack);
+    trackAppError(error.message, info.componentStack ?? undefined);
   }
 
   render() {

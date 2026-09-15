@@ -4,6 +4,7 @@ import { useState, useMemo, useCallback, useEffect } from "react";
 import { MovieSchedule, ScheduleResponse } from "@/types";
 import { getLocalDateString, parseMovieTime } from "@/utils/date";
 import { getTheaterCoordinates } from "@/utils/theaterCoordinates";
+import { trackApiLoadFailed } from "@/utils/gtm";
 
 const CACHE_KEY_PREFIX = "schedules_v1_";
 const CACHE_TTL_MS = 60 * 60 * 1000; // 1시간
@@ -103,11 +104,13 @@ export function useMovieSchedules(
         return true;
       } else {
         setError(data.error || "조회 실패");
+        trackApiLoadFailed("/api/schedules", data.error || "server_error");
         return false;
       }
     } catch (err) {
       setError("네트워크 오류가 발생했습니다");
       console.error("Fetch error:", err);
+      trackApiLoadFailed("/api/schedules", "network_error");
       return false;
     } finally {
       setLoading(false);

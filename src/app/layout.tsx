@@ -1,10 +1,12 @@
 import { Analytics } from "@vercel/analytics/next"
 import Script from "next/script"
+import { Suspense } from "react"
 
 import type { Metadata, Viewport } from "next";
 import "./globals.css";
 import ErrorBoundary from "@/components/ErrorBoundary";
 import CapacitorInit from "@/components/CapacitorInit";
+import PageViewTracker from "@/components/PageViewTracker";
 
 export const metadata: Metadata = {
   title: "영화방랑자",
@@ -79,7 +81,9 @@ export default function RootLayout({
               function gtag(){dataLayer.push(arguments);}
               gtag('js', new Date());
               var isDebug = window.location.search.indexOf('ga_debug=1') !== -1;
-              gtag('config', '${GA_ID}', isDebug ? { debug_mode: true } : {});
+              var configOptions = { send_page_view: false };
+              if (isDebug) configOptions.debug_mode = true;
+              gtag('config', '${GA_ID}', configOptions);
             `,
           }}
         />
@@ -94,6 +98,9 @@ export default function RootLayout({
           />
         </noscript>
         <CapacitorInit />
+        <Suspense fallback={null}>
+          <PageViewTracker />
+        </Suspense>
         <ErrorBoundary>
           {children}
         </ErrorBoundary>
