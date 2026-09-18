@@ -313,6 +313,34 @@ function MovieDetailPageInner() {
     trackMovieShareClicked(movie.title, movie.theater);
     hapticImpact("light");
 
+    const kakao = typeof window !== "undefined" ? window.Kakao : undefined;
+    if (kakao?.isInitialized?.()) {
+      try {
+        const imageUrl = posterUrl.startsWith("http")
+          ? posterUrl
+          : `${window.location.origin}${posterUrl}`;
+
+        kakao.Share.sendDefault({
+          objectType: "feed",
+          content: {
+            title: movie.title,
+            description: `${movie.theater} · ${movie.time}`,
+            imageUrl,
+            link: { mobileWebUrl: shareUrl, webUrl: shareUrl },
+          },
+          buttons: [
+            {
+              title: "자세히 보기",
+              link: { mobileWebUrl: shareUrl, webUrl: shareUrl },
+            },
+          ],
+        });
+        return;
+      } catch {
+        // 카카오톡 공유 실패 시 기본 공유로 폴백
+      }
+    }
+
     if (navigator.share) {
       try {
         await navigator.share({ title: movie.title, text: shareText, url: shareUrl });
@@ -362,7 +390,7 @@ function MovieDetailPageInner() {
                 className="flex-shrink-0 flex items-center gap-1 text-xs text-gray-300 hover:text-orange-400 transition-colors mt-0.5"
               >
                 <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8.684 13.342a4 4 0 100-5.684m0 5.684a4 4 0 100 5.684m0-5.684L15.316 9.658m-6.632 8.026L15.316 14m0-5.658a4 4 0 105.684 0 4 4 0 00-5.684 0zm0 9.316a4 4 0 105.684 0 4 4 0 00-5.684 0z" />
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 17L17 7M17 7H8M17 7v9" />
                 </svg>
                 공유
               </button>

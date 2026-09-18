@@ -6,6 +6,7 @@ import type { Metadata, Viewport } from "next";
 import "./globals.css";
 import ErrorBoundary from "@/components/ErrorBoundary";
 import CapacitorInit from "@/components/CapacitorInit";
+import KakaoInit from "@/components/KakaoInit";
 import PageViewTracker from "@/components/PageViewTracker";
 
 export const metadata: Metadata = {
@@ -98,6 +99,7 @@ export default function RootLayout({
           />
         </noscript>
         <CapacitorInit />
+        <KakaoInit />
         <Suspense fallback={null}>
           <PageViewTracker />
         </Suspense>
