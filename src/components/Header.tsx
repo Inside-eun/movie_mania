@@ -1,6 +1,28 @@
 "use client";
 
-export default function Header() {
+interface HeaderNavProps {
+  isHomeView: boolean;
+  showWishlistView: boolean;
+  showEventsView: boolean;
+  showInfoView: boolean;
+  wishlistCount: number;
+  onGoHome: () => void;
+  onGoWishlist: () => void;
+  onGoEvents: () => void;
+  onGoInfo: () => void;
+}
+
+export default function Header({
+  isHomeView,
+  showWishlistView,
+  showEventsView,
+  showInfoView,
+  wishlistCount,
+  onGoHome,
+  onGoWishlist,
+  onGoEvents,
+  onGoInfo,
+}: HeaderNavProps) {
   return (
     <header className="sticky top-0 z-50 bg-black border-b border-gray-800 shadow-sm">
       <div className="container mx-auto px-4 py-2 max-w-4xl">
@@ -26,6 +48,47 @@ export default function Header() {
               서울 예술영화관 상영시간표
             </p>
           </div>
+
+          {/* 웹(데스크톱) 전용 상단 메뉴 */}
+          <nav className="hidden lg:flex items-center gap-6 flex-shrink-0">
+            <button
+              onClick={onGoHome}
+              className={`text-sm font-semibold transition-colors ${
+                isHomeView ? "text-orange-500" : "text-gray-300 hover:text-white"
+              }`}
+            >
+              홈
+            </button>
+            <button
+              onClick={onGoWishlist}
+              className={`relative text-sm font-semibold transition-colors ${
+                showWishlistView ? "text-orange-500" : "text-gray-300 hover:text-white"
+              }`}
+            >
+              찜
+              {wishlistCount > 0 && (
+                <span className="absolute -top-2 -right-3 bg-orange-500 text-black text-[10px] rounded-full w-4 h-4 flex items-center justify-center font-bold">
+                  {wishlistCount}
+                </span>
+              )}
+            </button>
+            <button
+              onClick={onGoEvents}
+              className={`text-sm font-semibold transition-colors ${
+                showEventsView ? "text-orange-500" : "text-gray-300 hover:text-white"
+              }`}
+            >
+              기획전
+            </button>
+            <button
+              onClick={onGoInfo}
+              className={`text-sm font-semibold transition-colors ${
+                showInfoView ? "text-orange-500" : "text-gray-300 hover:text-white"
+              }`}
+            >
+              설정
+            </button>
+          </nav>
         </div>
       </div>
     </header>
