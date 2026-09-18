@@ -43,6 +43,7 @@ export default function Home() {
   const [showInfoView, setShowInfoView] = useState(false);
   const [showEventsView, setShowEventsView] = useState(false);
   const [pendingEventId, setPendingEventId] = useState<string | null>(null);
+  const [showDesktopNav, setShowDesktopNav] = useState(false);
 
   const [isRouteMapOpen, setIsRouteMapOpen] = useState(false);
   const [routeTarget, setRouteTarget] = useState<{
@@ -201,7 +202,7 @@ export default function Home() {
           "스켈레톤 -> 사라짐 -> 배너 등장"으로 이어지던 레이아웃 시프트도 없어진다. */}
       {isHomeView && <MovieBanner onEventClick={goToEventDetail} />}
 
-      <main className="container mx-auto px-4 pb-[calc(6rem_+_env(safe-area-inset-bottom))] pt-4 max-w-4xl min-h-screen">
+      <main className="container mx-auto px-4 pb-[calc(6rem_+_env(safe-area-inset-bottom))] sm:pb-[calc(8rem_+_env(safe-area-inset-bottom))] lg:pb-4 pt-4 max-w-4xl min-h-screen">
         {/* 필터 영역 */}
         {isHomeView && (
           <div className="flex gap-2 items-start mb-4">
@@ -345,9 +346,9 @@ export default function Home() {
           longitude={routeTarget?.longitude ?? null}
         />
 
-        {/* 하단 네비게이션 (모바일) */}
-        <nav className="fixed bottom-0 left-0 right-0 bg-black border-t border-gray-800 shadow-lg z-40 pb-[env(safe-area-inset-bottom)] sm:hidden">
-          <div className="flex items-center justify-around h-16">
+        {/* 하단 네비게이션 (모바일 · 태블릿) */}
+        <nav className="fixed bottom-0 left-0 right-0 bg-black border-t border-gray-800 shadow-lg z-40 pb-[env(safe-area-inset-bottom)] lg:hidden">
+          <div className="flex items-center justify-around h-16 sm:h-24">
             <button
               onClick={goToHome}
               className={`flex flex-col items-center justify-center flex-1 h-full transition-colors ${
@@ -355,7 +356,7 @@ export default function Home() {
               }`}
             >
               <svg
-                className="w-5 h-5 mb-0.5"
+                className="w-5 h-5 mb-0.5 sm:w-7 sm:h-7 sm:mb-1"
                 fill="none"
                 stroke="currentColor"
                 viewBox="0 0 24 24"
@@ -367,7 +368,7 @@ export default function Home() {
                   d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"
                 />
               </svg>
-              <span className="text-[10px] font-medium">홈</span>
+              <span className="text-[10px] font-medium sm:text-sm">홈</span>
             </button>
 
             <button
@@ -377,7 +378,7 @@ export default function Home() {
               }`}
             >
               <svg
-                className="w-5 h-5 mb-0.5"
+                className="w-5 h-5 mb-0.5 sm:w-7 sm:h-7 sm:mb-1"
                 fill={showWishlistView ? "currentColor" : "none"}
                 stroke="currentColor"
                 viewBox="0 0 24 24"
@@ -390,11 +391,11 @@ export default function Home() {
                 />
               </svg>
               {wishlist.count > 0 && (
-                <span className="absolute top-1.5 right-1/4 bg-orange-500 text-black text-[10px] rounded-full w-4 h-4 flex items-center justify-center font-bold">
+                <span className="absolute top-1.5 right-1/4 bg-orange-500 text-black text-[10px] rounded-full w-4 h-4 flex items-center justify-center font-bold sm:top-2 sm:w-5 sm:h-5 sm:text-xs">
                   {wishlist.count}
                 </span>
               )}
-              <span className="text-[10px] font-medium">찜</span>
+              <span className="text-[10px] font-medium sm:text-sm">찜</span>
             </button>
 
             <button
@@ -404,7 +405,7 @@ export default function Home() {
               }`}
             >
               <svg
-                className="w-5 h-5 mb-0.5"
+                className="w-5 h-5 mb-0.5 sm:w-7 sm:h-7 sm:mb-1"
                 fill="none"
                 stroke="currentColor"
                 viewBox="0 0 24 24"
@@ -416,7 +417,7 @@ export default function Home() {
                   d="M11 5.882V19.24a1.76 1.76 0 01-3.417.592l-2.147-6.15M18 13a3 3 0 100-6M5.436 13.683A4.001 4.001 0 017 6h1.832c4.1 0 7.625-1.234 9.168-3v14c-1.543-1.766-5.067-3-9.168-3H7a3.988 3.988 0 01-1.564-.317z"
                 />
               </svg>
-              <span className="text-[10px] font-medium">기획전</span>
+              <span className="text-[10px] font-medium sm:text-sm">기획전</span>
             </button>
 
             <button
@@ -426,7 +427,7 @@ export default function Home() {
               }`}
             >
               <svg
-                className="w-5 h-5 mb-0.5"
+                className="w-5 h-5 mb-0.5 sm:w-7 sm:h-7 sm:mb-1"
                 fill="none"
                 stroke="currentColor"
                 viewBox="0 0 24 24"
@@ -444,10 +445,175 @@ export default function Home() {
                   d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"
                 />
               </svg>
-              <span className="text-[10px] font-medium">설정</span>
+              <span className="text-[10px] font-medium sm:text-sm">설정</span>
             </button>
           </div>
         </nav>
+
+        {/* 데스크톱(웹) 전용: 우측 세로 탭 - 클릭하면 메뉴 패널이 펼쳐짐 */}
+        <div className="hidden lg:block">
+          {showDesktopNav && (
+            <div
+              className="fixed inset-0 z-30"
+              onClick={() => setShowDesktopNav(false)}
+            />
+          )}
+
+          <button
+            onClick={() => setShowDesktopNav((prev) => !prev)}
+            aria-label={showDesktopNav ? "메뉴 닫기" : "메뉴 열기"}
+            aria-expanded={showDesktopNav}
+            className={`fixed top-1/2 -translate-y-1/2 z-40 flex flex-col items-center gap-2 py-6 px-2 bg-black border border-gray-800 border-r-0 shadow-lg transition-[right] duration-300 ${
+              showDesktopNav ? "right-56" : "right-0"
+            }`}
+          >
+            <svg
+              className={`w-4 h-4 text-gray-400 transition-transform duration-300 ${
+                showDesktopNav ? "rotate-180" : ""
+              }`}
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M15 19l-7-7 7-7"
+              />
+            </svg>
+            <span className="text-[11px] font-medium text-gray-400 [writing-mode:vertical-rl]">
+              메뉴
+            </span>
+          </button>
+
+          <div
+            className={`fixed top-0 right-0 h-full w-56 bg-black border-l border-gray-800 shadow-2xl z-40 transition-transform duration-300 ${
+              showDesktopNav ? "translate-x-0" : "translate-x-full"
+            }`}
+          >
+            <div className="flex flex-col gap-1 p-4 mt-20">
+              <button
+                onClick={() => {
+                  goToHome();
+                  setShowDesktopNav(false);
+                }}
+                className={`flex items-center gap-3 px-3 py-3 text-left transition-colors ${
+                  isHomeView
+                    ? "text-orange-500"
+                    : "text-gray-400 hover:text-gray-200"
+                }`}
+              >
+                <svg
+                  className="w-5 h-5 flex-shrink-0"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"
+                  />
+                </svg>
+                <span className="font-medium">홈</span>
+              </button>
+
+              <button
+                onClick={() => {
+                  goToWishlist();
+                  setShowDesktopNav(false);
+                }}
+                className={`flex items-center gap-3 px-3 py-3 text-left transition-colors relative ${
+                  showWishlistView
+                    ? "text-orange-500"
+                    : "text-gray-400 hover:text-gray-200"
+                }`}
+              >
+                <svg
+                  className="w-5 h-5 flex-shrink-0"
+                  fill={showWishlistView ? "currentColor" : "none"}
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"
+                  />
+                </svg>
+                <span className="font-medium">찜</span>
+                {wishlist.count > 0 && (
+                  <span className="ml-auto bg-orange-500 text-black text-[10px] rounded-full w-5 h-5 flex items-center justify-center font-bold">
+                    {wishlist.count}
+                  </span>
+                )}
+              </button>
+
+              <button
+                onClick={() => {
+                  goToEvents();
+                  setShowDesktopNav(false);
+                }}
+                className={`flex items-center gap-3 px-3 py-3 text-left transition-colors ${
+                  showEventsView
+                    ? "text-orange-500"
+                    : "text-gray-400 hover:text-gray-200"
+                }`}
+              >
+                <svg
+                  className="w-5 h-5 flex-shrink-0"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M11 5.882V19.24a1.76 1.76 0 01-3.417.592l-2.147-6.15M18 13a3 3 0 100-6M5.436 13.683A4.001 4.001 0 017 6h1.832c4.1 0 7.625-1.234 9.168-3v14c-1.543-1.766-5.067-3-9.168-3H7a3.988 3.988 0 01-1.564-.317z"
+                  />
+                </svg>
+                <span className="font-medium">기획전</span>
+              </button>
+
+              <button
+                onClick={() => {
+                  goToInfo();
+                  setShowDesktopNav(false);
+                }}
+                className={`flex items-center gap-3 px-3 py-3 text-left transition-colors ${
+                  showInfoView
+                    ? "text-orange-500"
+                    : "text-gray-400 hover:text-gray-200"
+                }`}
+              >
+                <svg
+                  className="w-5 h-5 flex-shrink-0"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"
+                  />
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"
+                  />
+                </svg>
+                <span className="font-medium">설정</span>
+              </button>
+            </div>
+          </div>
+        </div>
       </main>
     </>
   );
