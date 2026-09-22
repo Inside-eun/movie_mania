@@ -124,13 +124,18 @@ async function loginWithCredentials(page: Page): Promise<void> {
     );
   }
 
-  await page.goto("https://www.instagram.com/accounts/login/", { waitUntil: "networkidle2" });
+  // 다른 goto와 마찬가지로 networkidle2는 Instagram의 백그라운드 요청 때문에
+  // 영영 안 잡힐 수 있어 domcontentloaded + 넉넉한 타임아웃으로 완화한다.
+  await page.goto("https://www.instagram.com/accounts/login/", {
+    waitUntil: "domcontentloaded",
+    timeout: 45000,
+  });
   await page.waitForSelector(SELECTORS.loginUsername, { timeout: 15000 });
   await page.type(SELECTORS.loginUsername, username, { delay: 30 });
   await page.type(SELECTORS.loginPassword, password, { delay: 30 });
   await Promise.all([
     page.click(SELECTORS.loginSubmit),
-    page.waitForNavigation({ waitUntil: "networkidle2", timeout: 30000 }).catch(() => {
+    page.waitForNavigation({ waitUntil: "domcontentloaded", timeout: 45000 }).catch(() => {
       // 챌린지(2단계 인증 등) 화면으로 전환되면 navigation이 안 잡힐 수 있음 — 아래에서 별도 확인.
     }),
   ]);
