@@ -30,8 +30,14 @@ interface CgvSearchMovie {
   movNo: string;
 }
 
+// cgvBooking.ts의 lookupMovNo와 동일한 정규화 규칙을 써야 여기서 "정확히
+// 일치"로 판단해 자동 추가한 항목이 실제 예매 조회에서도 매칭된다.
+// 괄호 부연 표기("암살자" vs "암살자(들)")와 부제 구분 문장부호 차이
+// ("타짜: ..." vs "타짜-...")를 흡수한다.
 function normalizeTitle(title: string): string {
-  return title.replace(/\s+/g, '');
+  return title
+    .replace(/\([^)]*\)/g, '')
+    .replace(/[\s:\-–—~]/g, '');
 }
 
 // CGV가 예전에 쓰던 5자리 안팎의 구형 movNo는 다른 영화에 재할당된 사례가 확인됨

@@ -71,10 +71,20 @@ export function getCGVFallbackUrl(theaterName: string): string | null {
 // 신뢰하고, 그 외 형식은 못 찾은 것으로 처리해 통합검색 폴백으로 보낸다.
 const SAFE_MOVNO_PATTERN = /^30\d{6}$/;
 
+// 크롤링 출처(KMDB 등)와 CGV 공식 표기가 부제 구분자만 다르거나("타짜: ..." vs
+// "타짜-...") 괄호 부연 표기가 있고 없고로 갈리는 경우가 있어("암살자" vs
+// "암살자(들)") 괄호 안 내용을 통째로 제거하고 공백/구분 문장부호를 지운 뒤
+// 비교한다. megaboxBooking.ts 등 다른 예매처에서 쓰는 방식과 동일한 전략.
+function normalizeTitle(title: string): string {
+  return title
+    .replace(/\([^)]*\)/g, '')
+    .replace(/[\s:\-–—~]/g, '');
+}
+
 function lookupMovNo(movieTitle: string): string | null {
-  const titleNorm = movieTitle.replace(/\s+/g, '');
+  const titleNorm = normalizeTitle(movieTitle);
   for (const [key, movNo] of Object.entries(movNoCache)) {
-    if (key.replace(/\s+/g, '') === titleNorm) {
+    if (normalizeTitle(key) === titleNorm) {
       return SAFE_MOVNO_PATTERN.test(movNo) ? movNo : null;
     }
   }
