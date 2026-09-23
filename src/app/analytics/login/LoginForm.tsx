@@ -40,16 +40,16 @@ export default function LoginForm() {
         placeholder="비밀번호"
         autoComplete="current-password"
         autoFocus
-        className="rounded border border-gray-300 px-3 py-2 text-base outline-none focus:border-gray-900"
+        className="rounded-md border border-white/10 bg-[#1a1a19] px-3 py-2 text-base text-white outline-none placeholder:text-[#898781] focus:border-[#3987e5]"
       />
       <button
         type="submit"
         disabled={pending || password.length === 0}
-        className="rounded bg-gray-900 px-3 py-2 text-white disabled:opacity-40"
+        className="rounded-md bg-[#3987e5] px-3 py-2 text-white transition-opacity disabled:opacity-40"
       >
         {pending ? "확인 중..." : "로그인"}
       </button>
-      {error && <p className="text-sm text-red-600">{error}</p>}
+      {error && <p className="text-sm text-[#d03b3b]">{error}</p>}
     </form>
   );
 }

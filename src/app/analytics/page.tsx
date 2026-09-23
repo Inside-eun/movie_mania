@@ -1,8 +1,21 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import LogoutButton from "./LogoutButton";
-import { resolveDays, toDateRange } from "@/lib/ga4";
-import { getAcquisition, getOverview, getTopEvents, getTopPages } from "@/lib/ga4Reports";
+import BarList from "./_components/BarList";
+import LineChart from "./_components/LineChart";
+import SplitBar from "./_components/SplitBar";
+import StatCard from "./_components/StatCard";
+import { channelLabel, eventLabel, formatDateLabel, isSystemEvent } from "@/lib/eventLabels";
+import { resolveDays, toDateRange, toPreviousDateRange } from "@/lib/ga4";
+import {
+  getAcquisition,
+  getAppWebSplit,
+  getDailyActiveUsers,
+  getOperatingSystems,
+  getOverview,
+  getTopEvents,
+  getTopPages,
+} from "@/lib/ga4Reports";
 
 export const dynamic = "force-dynamic";
 
@@ -12,49 +25,23 @@ export const metadata: Metadata = {
 };
 
 const RANGES = [7, 30, 90] as const;
+const APP_COLOR = "#3987e5";
+const WEB_COLOR = "#d95926";
 
-function StatCard({ label, value }: { label: string; value: number }) {
-  return (
-    <div className="rounded border border-gray-200 p-3">
-      <p className="text-xs text-gray-500">{label}</p>
-      <p className="mt-1 text-xl font-semibold tabular-nums">{value.toLocaleString()}</p>
-    </div>
-  );
-}
-
-function RankTable({
+function Section({
   title,
-  rows,
+  note,
+  children,
 }: {
   title: string;
-  rows: { label: string; primary: number; secondary: number }[];
+  note?: string;
+  children: React.ReactNode;
 }) {
   return (
-    <section className="mt-6">
-      <h2 className="mb-2 text-sm font-semibold">{title}</h2>
-      {rows.length === 0 ? (
-        <p className="text-sm text-gray-500">데이터가 없습니다.</p>
-      ) : (
-        <div className="overflow-x-auto">
-          <table className="w-full min-w-[320px] text-sm">
-            <tbody>
-              {rows.map((row) => (
-                <tr key={row.label} className="border-b border-gray-100">
-                  <td className="max-w-0 truncate py-2 pr-2" title={row.label}>
-                    {row.label}
-                  </td>
-                  <td className="w-20 py-2 text-right tabular-nums">
-                    {row.primary.toLocaleString()}
-                  </td>
-                  <td className="w-20 py-2 text-right tabular-nums text-gray-400">
-                    {row.secondary.toLocaleString()}
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
-      )}
+    <section className="mt-8 rounded-lg border border-white/10 bg-[#1a1a19] p-4">
+      <h2 className="text-sm font-semibold text-white">{title}</h2>
+      {note && <p className="mt-1 text-xs leading-relaxed text-[#898781]">{note}</p>}
+      <div className="mt-4">{children}</div>
     </section>
   );
 }
@@ -66,85 +53,173 @@ export default async function AnalyticsPage({
 }) {
   const days = resolveDays(searchParams.days, 30);
   const dateRange = toDateRange(days);
+  const previousRange = toPreviousDateRange(days);
 
   let data;
   try {
-    const [overview, events, pages, acquisition] = await Promise.all([
-      getOverview(dateRange),
-      getTopEvents(dateRange),
-      getTopPages(dateRange),
-      getAcquisition(dateRange),
-    ]);
-    data = { overview, events, pages, acquisition };
+    const [overview, previous, daily, events, pages, acquisition, operatingSystems] =
+      await Promise.all([
+        getOverview(dateRange),
+        getOverview(previousRange),
+        getDailyActiveUsers(dateRange),
+        getTopEvents(dateRange),
+        getTopPages(dateRange),
+        getAcquisition(dateRange),
+        getOperatingSystems(dateRange),
+      ]);
+    const appWeb = await getAppWebSplit(dateRange, overview.activeUsers);
+    data = { overview, previous, daily, events, pages, acquisition, operatingSystems, appWeb };
   } catch (error) {
     return (
-      <main className="mx-auto max-w-3xl px-4 py-6">
-        <h1 className="text-lg font-semibold">통계 대시보드</h1>
-        <p className="mt-4 text-sm text-red-600">
-          데이터를 불러오지 못했습니다: {error instanceof Error ? error.message : String(error)}
-        </p>
+      <main className="min-h-screen bg-[#0d0d0d] px-4 py-6">
+        <div className="mx-auto max-w-3xl">
+          <h1 className="text-lg font-semibold text-white">통계 대시보드</h1>
+          <p className="mt-4 text-sm text-[#d03b3b]">
+            데이터를 불러오지 못했습니다: {error instanceof Error ? error.message : String(error)}
+          </p>
+        </div>
       </main>
     );
   }
 
+  const serviceEvents = data.events.filter((row) => !isSystemEvent(row.event));
+  const systemEvents = data.events.filter((row) => isSystemEvent(row.event));
+
   return (
-    <main className="mx-auto max-w-3xl px-4 py-6">
-      <div className="flex items-center justify-between">
-        <h1 className="text-lg font-semibold">통계 대시보드</h1>
-        <LogoutButton />
+    <main className="min-h-screen bg-[#0d0d0d] px-4 py-6 pb-16">
+      <div className="mx-auto max-w-3xl">
+        <header className="flex items-center justify-between">
+          <h1 className="text-lg font-semibold text-white">통계 대시보드</h1>
+          <LogoutButton />
+        </header>
+
+        <nav className="mt-5 flex gap-2">
+          {RANGES.map((range) => (
+            <Link
+              key={range}
+              href={`/analytics?days=${range}`}
+              className={`rounded-md border px-3 py-1.5 text-sm transition-colors ${
+                range === days
+                  ? "border-[#3987e5] bg-[#3987e5] text-white"
+                  : "border-white/10 text-[#c3c2b7] hover:border-white/25"
+              }`}
+            >
+              최근 {range}일
+            </Link>
+          ))}
+        </nav>
+
+        <div className="mt-5 grid grid-cols-2 gap-3 sm:grid-cols-4">
+          <StatCard
+            label="활성 사용자"
+            value={data.overview.activeUsers}
+            previous={data.previous.activeUsers}
+          />
+          <StatCard
+            label="신규 사용자"
+            value={data.overview.newUsers}
+            previous={data.previous.newUsers}
+          />
+          <StatCard label="세션" value={data.overview.sessions} previous={data.previous.sessions} />
+          <StatCard
+            label="페이지뷰"
+            value={data.overview.pageViews}
+            previous={data.previous.pageViews}
+          />
+        </div>
+
+        <Section title="일별 활성 사용자">
+          <LineChart
+            points={data.daily.map((point) => ({
+              label: formatDateLabel(point.date),
+              value: point.activeUsers,
+            }))}
+          />
+        </Section>
+
+        <Section
+          title="앱 / 웹 사용자"
+          note="앱도 웹과 같은 배포본을 띄우기 때문에 GA4에는 전부 platform=web으로 들어온다. 앱 사용자 수는 네이티브에서만 발생하는 이벤트(app_background/app_foreground)를 기준으로 한 추정치이며, 앱을 켠 뒤 한 번도 백그라운드로 보내지 않은 사용자는 웹으로 분류된다."
+        >
+          <SplitBar
+            segments={[
+              { label: "앱(추정)", value: data.appWeb.appUsers, color: APP_COLOR },
+              { label: "웹", value: data.appWeb.webUsers, color: WEB_COLOR },
+            ]}
+          />
+          <h3 className="mt-6 text-xs font-semibold text-[#c3c2b7]">운영체제별 사용자</h3>
+          <p className="mb-3 mt-1 text-xs text-[#898781]">
+            앱 여부가 아니라 기기 OS 기준이다. iOS에는 사파리 방문자도 포함된다.
+          </p>
+          <BarList
+            rows={data.operatingSystems.map((row) => ({
+              label: row.channel,
+              value: row.activeUsers,
+              secondary: row.sessions,
+            }))}
+            secondaryLabel="세션"
+            unit="명"
+          />
+        </Section>
+
+        <Section title="인기 기능" note="GA4 자동 수집 이벤트를 제외한 서비스 이벤트입니다.">
+          <BarList
+            rows={serviceEvents.slice(0, 12).map((row) => ({
+              label: eventLabel(row.event),
+              value: row.count,
+              secondary: row.users,
+            }))}
+            secondaryLabel="사용자"
+            unit="회"
+          />
+
+          <details className="mt-6 border-t border-white/10 pt-4">
+            <summary className="cursor-pointer text-xs text-[#898781]">
+              시스템 이벤트 {systemEvents.length}개 보기
+            </summary>
+            <div className="mt-3">
+              <BarList
+                rows={systemEvents.map((row) => ({
+                  label: eventLabel(row.event),
+                  value: row.count,
+                  secondary: row.users,
+                }))}
+                secondaryLabel="사용자"
+                unit="회"
+              />
+            </div>
+          </details>
+        </Section>
+
+        <Section title="인기 페이지">
+          <BarList
+            rows={data.pages.slice(0, 12).map((row) => ({
+              label: row.path,
+              value: row.pageViews,
+              secondary: row.activeUsers,
+            }))}
+            secondaryLabel="사용자"
+            unit="뷰"
+          />
+        </Section>
+
+        <Section title="유입 경로">
+          <BarList
+            rows={data.acquisition.map((row) => ({
+              label: channelLabel(row.channel),
+              value: row.sessions,
+              secondary: row.activeUsers,
+            }))}
+            secondaryLabel="사용자"
+            unit="세션"
+          />
+        </Section>
+
+        <p className="mt-8 text-xs text-[#898781]">
+          막대 오른쪽 회색 숫자는 해당 항목의 사용자 수입니다. 증감률은 직전 동일 기간과 비교한
+          값입니다.
+        </p>
       </div>
-
-      <nav className="mt-4 flex gap-2">
-        {RANGES.map((range) => (
-          <Link
-            key={range}
-            href={`/analytics?days=${range}`}
-            className={`rounded border px-3 py-1 text-sm ${
-              range === days
-                ? "border-gray-900 bg-gray-900 text-white"
-                : "border-gray-300 text-gray-600"
-            }`}
-          >
-            최근 {range}일
-          </Link>
-        ))}
-      </nav>
-
-      <div className="mt-4 grid grid-cols-2 gap-2 sm:grid-cols-4">
-        <StatCard label="활성 사용자" value={data.overview.activeUsers} />
-        <StatCard label="신규 사용자" value={data.overview.newUsers} />
-        <StatCard label="세션" value={data.overview.sessions} />
-        <StatCard label="페이지뷰" value={data.overview.pageViews} />
-      </div>
-
-      <RankTable
-        title="인기 이벤트"
-        rows={data.events.map((row) => ({
-          label: row.event,
-          primary: row.count,
-          secondary: row.users,
-        }))}
-      />
-      <RankTable
-        title="인기 페이지"
-        rows={data.pages.map((row) => ({
-          label: row.path,
-          primary: row.pageViews,
-          secondary: row.activeUsers,
-        }))}
-      />
-      <RankTable
-        title="유입 경로"
-        rows={data.acquisition.map((row) => ({
-          label: row.channel,
-          primary: row.sessions,
-          secondary: row.activeUsers,
-        }))}
-      />
-
-      <p className="mt-6 text-xs text-gray-400">
-        각 표의 우측 두 열은 순서대로 주요 지표와 사용자 수입니다.
-      </p>
     </main>
   );
 }

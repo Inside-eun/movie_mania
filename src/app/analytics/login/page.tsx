@@ -8,9 +8,11 @@ export const metadata: Metadata = {
 
 export default function AnalyticsLoginPage() {
   return (
-    <main className="mx-auto flex min-h-screen max-w-sm flex-col justify-center px-4">
-      <h1 className="mb-4 text-lg font-semibold">통계 대시보드</h1>
-      <LoginForm />
+    <main className="flex min-h-screen items-center justify-center bg-[#0d0d0d] px-4">
+      <div className="w-full max-w-sm">
+        <h1 className="mb-4 text-lg font-semibold text-white">통계 대시보드</h1>
+        <LoginForm />
+      </div>
     </main>
   );
 }

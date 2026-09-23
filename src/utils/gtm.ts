@@ -126,6 +126,29 @@ export const trackEvent = (
 };
 
 /**
+ * 앱/웹 사용자 구분용 사용자 속성(app_platform) 설정.
+ *
+ * 앱은 웹과 같은 배포본을 WebView로 띄우므로 GA4에는 전부 platform=web으로 들어온다.
+ * 런타임에만 구분할 수 있어 여기서 'ios_app' | 'android_app' | 'web'을 사용자 속성으로 심는다.
+ * GA4에서 사용자 범위 맞춤 측정기준으로 등록해야 보고서/Data API에 노출된다.
+ */
+export const setAppPlatformProperty = async () => {
+  if (typeof window === 'undefined') return;
+
+  const { Capacitor } = await import('@capacitor/core');
+  const appPlatform = Capacitor.isNativePlatform()
+    ? `${Capacitor.getPlatform()}_app`
+    : 'web';
+
+  // gtag를 정의하는 스크립트가 afterInteractive라 이 시점에 아직 없을 수 있다.
+  for (let i = 0; i < 20 && !window.gtag; i++) {
+    await new Promise((resolve) => setTimeout(resolve, 250));
+  }
+
+  window.gtag?.('set', 'user_properties', { app_platform: appPlatform });
+};
+
+/**
  * 날짜 변경 이벤트
  */
 export const trackDateChange = (selectedDate: string) => {

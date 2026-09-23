@@ -73,6 +73,92 @@ export async function getTopPages(dateRange: DateRange): Promise<PageRow[]> {
   }));
 }
 
+/** 네이티브 앱에서만 발생하는 이벤트. CapacitorInit이 isNativePlatform() 검사 뒤에만 등록한다. */
+const APP_ONLY_EVENTS = ["app_background", "app_foreground"];
+
+export type DailyPoint = { date: string; activeUsers: number };
+export type PlatformRow = { platform: string; streamId: string; activeUsers: number; sessions: number };
+export type AppWebSplit = { appUsers: number; webUsers: number; totalUsers: number };
+
+export async function getDailyActiveUsers(dateRange: DateRange): Promise<DailyPoint[]> {
+  const { client, property } = getGa4Client();
+
+  const [response] = await client.runReport({
+    property,
+    dateRanges: [dateRange],
+    dimensions: [{ name: "date" }],
+    metrics: [{ name: "activeUsers" }],
+    orderBys: [{ dimension: { dimensionName: "date" } }],
+    limit: 100,
+  });
+
+  return (response.rows ?? []).map((row) => ({
+    date: row.dimensionValues?.[0]?.value ?? "",
+    activeUsers: toNumber(row.metricValues?.[0]?.value),
+  }));
+}
+
+/** GA4가 앱 트래픽도 platform=web으로 수집하므로, 앱 전용 이벤트로 앱 사용자를 추정한다. */
+export async function getAppWebSplit(
+  dateRange: DateRange,
+  totalUsers: number,
+): Promise<AppWebSplit> {
+  const { client, property } = getGa4Client();
+
+  const [response] = await client.runReport({
+    property,
+    dateRanges: [dateRange],
+    metrics: [{ name: "activeUsers" }],
+    dimensionFilter: {
+      filter: {
+        fieldName: "eventName",
+        inListFilter: { values: APP_ONLY_EVENTS },
+      },
+    },
+  });
+
+  const appUsers = toNumber(response.rows?.[0]?.metricValues?.[0]?.value);
+  return { appUsers, webUsers: Math.max(0, totalUsers - appUsers), totalUsers };
+}
+
+export async function getPlatformBreakdown(dateRange: DateRange): Promise<PlatformRow[]> {
+  const { client, property } = getGa4Client();
+
+  const [response] = await client.runReport({
+    property,
+    dateRanges: [dateRange],
+    dimensions: [{ name: "platform" }, { name: "streamId" }],
+    metrics: [{ name: "activeUsers" }, { name: "sessions" }],
+    orderBys: [{ metric: { metricName: "activeUsers" }, desc: true }],
+  });
+
+  return (response.rows ?? []).map((row) => ({
+    platform: row.dimensionValues?.[0]?.value ?? "",
+    streamId: row.dimensionValues?.[1]?.value ?? "",
+    activeUsers: toNumber(row.metricValues?.[0]?.value),
+    sessions: toNumber(row.metricValues?.[1]?.value),
+  }));
+}
+
+export async function getOperatingSystems(dateRange: DateRange): Promise<ChannelRow[]> {
+  const { client, property } = getGa4Client();
+
+  const [response] = await client.runReport({
+    property,
+    dateRanges: [dateRange],
+    dimensions: [{ name: "operatingSystem" }],
+    metrics: [{ name: "sessions" }, { name: "activeUsers" }],
+    orderBys: [{ metric: { metricName: "activeUsers" }, desc: true }],
+    limit: 10,
+  });
+
+  return (response.rows ?? []).map((row) => ({
+    channel: row.dimensionValues?.[0]?.value ?? "",
+    sessions: toNumber(row.metricValues?.[0]?.value),
+    activeUsers: toNumber(row.metricValues?.[1]?.value),
+  }));
+}
+
 export async function getAcquisition(dateRange: DateRange): Promise<ChannelRow[]> {
   const { client, property } = getGa4Client();
 

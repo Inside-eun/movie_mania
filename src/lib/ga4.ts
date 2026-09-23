@@ -43,6 +43,11 @@ export function toDateRange(days: AllowedDays): DateRange {
   return { startDate: `${days}daysAgo`, endDate: "today" };
 }
 
+/** 증감률 비교용 직전 동일 길이 구간. */
+export function toPreviousDateRange(days: AllowedDays): DateRange {
+  return { startDate: `${days * 2}daysAgo`, endDate: `${days + 1}daysAgo` };
+}
+
 /** ?days= 파라미터를 GA4 dateRange로 변환. API 기본값은 7일. */
 export function getDateRange(request: Request): DateRange {
   const raw = new URL(request.url).searchParams.get("days");

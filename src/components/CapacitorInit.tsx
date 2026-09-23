@@ -2,7 +2,12 @@
 
 import { useEffect } from 'react';
 
-import { trackAppBackground, trackAppForeground, trackNotificationOpened } from '@/utils/gtm';
+import {
+  setAppPlatformProperty,
+  trackAppBackground,
+  trackAppForeground,
+  trackNotificationOpened,
+} from '@/utils/gtm';
 
 export default function CapacitorInit() {
   useEffect(() => {
@@ -10,6 +15,10 @@ export default function CapacitorInit() {
 
     async function init() {
       const { Capacitor } = await import('@capacitor/core');
+
+      // 웹 사용자도 app_platform='web'으로 잡아야 앱/웹 비율이 나오므로 네이티브 분기 전에 호출한다.
+      setAppPlatformProperty();
+
       if (!Capacitor.isNativePlatform()) return;
 
       const [{ StatusBar, Style }, { SplashScreen }, { App }, { LocalNotifications }] = await Promise.all([
