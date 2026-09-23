@@ -5,10 +5,17 @@ import BarList from "./_components/BarList";
 import LineChart from "./_components/LineChart";
 import SplitBar from "./_components/SplitBar";
 import StatCard from "./_components/StatCard";
-import { channelLabel, eventLabel, formatDateLabel, isSystemEvent } from "@/lib/eventLabels";
+import {
+  appPlatformLabel,
+  channelLabel,
+  eventLabel,
+  formatDateLabel,
+  isSystemEvent,
+} from "@/lib/eventLabels";
 import { resolveDays, toDateRange, toPreviousDateRange } from "@/lib/ga4";
 import {
   getAcquisition,
+  getAppPlatformSplit,
   getAppWebSplit,
   getDailyActiveUsers,
   getOperatingSystems,
@@ -25,8 +32,8 @@ export const metadata: Metadata = {
 };
 
 const RANGES = [7, 30, 90] as const;
-const APP_COLOR = "#3987e5";
-const WEB_COLOR = "#d95926";
+// 검증된 카테고리 팔레트 1~3번 슬롯.
+const PLATFORM_COLORS = ["#3987e5", "#d95926", "#199e70"];
 
 function Section({
   title,
@@ -67,8 +74,19 @@ export default async function AnalyticsPage({
         getAcquisition(dateRange),
         getOperatingSystems(dateRange),
       ]);
-    const appWeb = await getAppWebSplit(dateRange, overview.activeUsers);
-    data = { overview, previous, daily, events, pages, acquisition, operatingSystems, appWeb };
+    const appPlatform = await getAppPlatformSplit(dateRange);
+    const appWeb = appPlatform ? null : await getAppWebSplit(dateRange, overview.activeUsers);
+    data = {
+      overview,
+      previous,
+      daily,
+      events,
+      pages,
+      acquisition,
+      operatingSystems,
+      appPlatform,
+      appWeb,
+    };
   } catch (error) {
     return (
       <main className="min-h-screen bg-[#0d0d0d] px-4 py-6">
@@ -139,14 +157,28 @@ export default async function AnalyticsPage({
 
         <Section
           title="앱 / 웹 사용자"
-          note="앱도 웹과 같은 배포본을 띄우기 때문에 GA4에는 전부 platform=web으로 들어온다. 앱 사용자 수는 네이티브에서만 발생하는 이벤트(app_background/app_foreground)를 기준으로 한 추정치이며, 앱을 켠 뒤 한 번도 백그라운드로 보내지 않은 사용자는 웹으로 분류된다."
+          note={
+            data.appPlatform
+              ? "app_platform 사용자 속성 기준입니다. 계측 배포 전에 방문한 사용자는 값이 없어 집계에서 빠집니다."
+              : "앱도 웹과 같은 배포본을 띄우기 때문에 GA4에는 전부 platform=web으로 들어옵니다. 아래는 네이티브에서만 발생하는 이벤트(app_background/app_foreground) 기준 추정치이며, 앱을 켠 뒤 한 번도 백그라운드로 보내지 않은 사용자는 웹으로 분류됩니다. app_platform 값이 쌓이면 정확 집계로 자동 전환됩니다."
+          }
         >
-          <SplitBar
-            segments={[
-              { label: "앱(추정)", value: data.appWeb.appUsers, color: APP_COLOR },
-              { label: "웹", value: data.appWeb.webUsers, color: WEB_COLOR },
-            ]}
-          />
+          {data.appPlatform ? (
+            <SplitBar
+              segments={data.appPlatform.map((row, index) => ({
+                label: appPlatformLabel(row.platform),
+                value: row.activeUsers,
+                color: PLATFORM_COLORS[index % PLATFORM_COLORS.length],
+              }))}
+            />
+          ) : (
+            <SplitBar
+              segments={[
+                { label: "앱(추정)", value: data.appWeb!.appUsers, color: PLATFORM_COLORS[0] },
+                { label: "웹", value: data.appWeb!.webUsers, color: PLATFORM_COLORS[1] },
+              ]}
+            />
+          )}
           <h3 className="mt-6 text-xs font-semibold text-[#c3c2b7]">운영체제별 사용자</h3>
           <p className="mb-3 mt-1 text-xs text-[#898781]">
             앱 여부가 아니라 기기 OS 기준이다. iOS에는 사파리 방문자도 포함된다.

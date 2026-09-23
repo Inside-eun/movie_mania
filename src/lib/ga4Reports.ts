@@ -121,6 +121,38 @@ export async function getAppWebSplit(
   return { appUsers, webUsers: Math.max(0, totalUsers - appUsers), totalUsers };
 }
 
+export type AppPlatformRow = { platform: string; activeUsers: number };
+
+/**
+ * app_platform 사용자 속성 기준 정확 집계.
+ *
+ * 계측 배포(2026-09-23) 이전 사용자는 (not set)으로 잡히므로 제외한다. 분류된 사용자가
+ * 아직 없으면 null을 돌려주고, 호출부는 앱 전용 이벤트 기반 추정치로 대체한다.
+ * 데이터가 충분히 쌓이면 추정 경로와 함께 이 분기를 지울 것.
+ */
+export async function getAppPlatformSplit(
+  dateRange: DateRange,
+): Promise<AppPlatformRow[] | null> {
+  const { client, property } = getGa4Client();
+
+  const [response] = await client.runReport({
+    property,
+    dateRanges: [dateRange],
+    dimensions: [{ name: "customUser:app_platform" }],
+    metrics: [{ name: "activeUsers" }],
+    orderBys: [{ metric: { metricName: "activeUsers" }, desc: true }],
+  });
+
+  const rows = (response.rows ?? [])
+    .map((row) => ({
+      platform: row.dimensionValues?.[0]?.value ?? "",
+      activeUsers: toNumber(row.metricValues?.[0]?.value),
+    }))
+    .filter((row) => row.platform !== "" && row.platform !== "(not set)" && row.activeUsers > 0);
+
+  return rows.length > 0 ? rows : null;
+}
+
 export async function getPlatformBreakdown(dateRange: DateRange): Promise<PlatformRow[]> {
   const { client, property } = getGa4Client();
 

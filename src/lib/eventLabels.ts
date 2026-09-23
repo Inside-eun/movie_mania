@@ -81,6 +81,16 @@ const CHANNEL_LABELS: Record<string, string> = {
   Unassigned: "미분류",
 };
 
+const APP_PLATFORM_LABELS: Record<string, string> = {
+  ios_app: "iOS 앱",
+  android_app: "Android 앱",
+  web: "웹",
+};
+
+export function appPlatformLabel(platform: string): string {
+  return APP_PLATFORM_LABELS[platform] ?? platform;
+}
+
 export function isSystemEvent(eventName: string): boolean {
   return SYSTEM_EVENTS.has(eventName);
 }
