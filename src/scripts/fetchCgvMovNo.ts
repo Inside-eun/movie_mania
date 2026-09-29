@@ -73,7 +73,18 @@ export async function run(titles: string[]) {
 
   const existing: Record<string, string> = JSON.parse(fs.readFileSync(CACHE_PATH, 'utf-8'));
 
-  const browser = await puppeteer.launch({ headless: true, args: ['--no-sandbox'] });
+  // 06:00 자동 실행 시 맥이 배터리 슬립 중이면 2초짜리 DarkWake 창에서만 프로세스가
+  // 돌아서 Chrome 기동이 기본 30초 안에 끝나지 못한다(9/23, 9/29 실제 실패).
+  // 기동 대기를 늘리고 한 번 재시도한다. 근본 대응은 plist의 caffeinate 래핑.
+  const launchBrowser = () =>
+    puppeteer.launch({ headless: true, args: ['--no-sandbox'], timeout: 120000 });
+  let browser;
+  try {
+    browser = await launchBrowser();
+  } catch (err) {
+    console.warn(`⚠️ 브라우저 기동 1차 실패(${err instanceof Error ? err.message : err}), 재시도...`);
+    browser = await launchBrowser();
+  }
   const page = await browser.newPage();
   await page.setUserAgent(USER_AGENT);
 
