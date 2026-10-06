@@ -5,25 +5,23 @@
 echo "🚀 스케줄 프리페치 시작..."
 echo ""
 
-# .env.local에서 토큰 읽기
+# .env.local에서 크론 시크릿 읽기 (토큰은 URL이 아니라 Authorization 헤더로 보낸다)
 if [ -f .env.local ]; then
-  PREFETCH_TOKEN=$(grep PREFETCH_TOKEN .env.local | cut -d '=' -f2-)
+  CRON_SECRET=$(grep '^CRON_SECRET=' .env.local | cut -d '=' -f2-)
 else
   echo "❌ .env.local 파일을 찾을 수 없습니다."
   exit 1
 fi
 
-if [ -z "$PREFETCH_TOKEN" ]; then
-  echo "❌ PREFETCH_TOKEN이 설정되지 않았습니다."
+if [ -z "$CRON_SECRET" ]; then
+  echo "❌ CRON_SECRET이 설정되지 않았습니다."
   exit 1
 fi
 
-# URL 인코딩
-ENCODED_TOKEN=$(echo -n "$PREFETCH_TOKEN" | jq -sRr @uri)
-
-# 프리페치 실행
+# 프리페치 실행 (오늘 날짜만. 다른 날짜는 ?daysAhead=1~6)
 echo "📡 API 호출 중... (최대 5분 소요)"
-response=$(curl -X POST "http://localhost:3000/api/schedules/prefetch?token=$ENCODED_TOKEN" \
+response=$(curl -X POST "http://localhost:3000/api/schedules/prefetch" \
+  -H "Authorization: Bearer $CRON_SECRET" \
   -H "Content-Type: application/json" \
   --max-time 300 \
   -w "\nHTTP_CODE:%{http_code}" \

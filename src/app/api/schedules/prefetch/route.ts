@@ -1,4 +1,5 @@
 import { NextResponse } from "next/server";
+import { isAuthorizedCronRequest } from "@/lib/cronAuth";
 import { getLocalDateString } from "@/utils/date";
 
 export const dynamic = "force-dynamic";
@@ -15,13 +16,8 @@ async function getCacheService() {
   return cacheService;
 }
 
-function verifyToken(request: Request): boolean {
-  const { searchParams } = new URL(request.url);
-  return searchParams.get("token") === process.env.PREFETCH_TOKEN;
-}
-
 async function handlePrefetch(request: Request) {
-  if (!verifyToken(request)) {
+  if (!isAuthorizedCronRequest(request)) {
     return NextResponse.json({ success: false, error: "Unauthorized" }, { status: 401 });
   }
 
