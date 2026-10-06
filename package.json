@@ -18,6 +18,7 @@
     "prefetch:local": "./scripts/prefetch-local.sh",
     "prefetch:prod": "./scripts/prefetch-production.sh",
     "scan:instagram": "npx tsx src/scripts/scan-instagram-events.ts",
+    "sync:instagram": "npx tsx src/scripts/sync-instagram-events.ts",
     "cgv:movno": "npx tsx src/scripts/fetchCgvMovNo.ts",
     "cgv:movno:batch": "npx tsx src/scripts/batchFetchCgvMovNo.ts",
     "status:dashboard": "npx tsx src/scripts/generateStatusDashboard.ts",

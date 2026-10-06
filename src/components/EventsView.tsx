@@ -3,7 +3,7 @@
 import { useEffect, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 
-import { mockEvents, getEvent, CuratedEvent } from "@/mock/events";
+import { mockEvents, getEvent, isEventEnded, CuratedEvent } from "@/mock/events";
 import { useWeeklySchedules } from "@/hooks/useWeeklySchedules";
 import { useEdgeSwipeBack } from "@/hooks/useEdgeSwipeBack";
 import { getLocalDateString } from "@/utils/date";
@@ -255,12 +255,21 @@ export default function EventsView({ initialEventId = null, onExitToHome }: Even
     );
   }
 
+  // 종료된 기획전은 목록에서 빼지 않고 "종료" 표시와 함께 맨 아래로 내린다(정렬은 원래 순서 유지).
+  const today = getLocalDateString(new Date());
+  const listedEvents = [
+    ...mockEvents.filter((e) => !isEventEnded(e, today)),
+    ...mockEvents.filter((e) => isEventEnded(e, today)),
+  ];
+
   return (
     <div>
       <h2 className="text-base font-bold text-white text-center mb-5">기획전</h2>
 
       <div className="space-y-3">
-        {mockEvents.map((e) => (
+        {listedEvents.map((e) => {
+          const ended = isEventEnded(e, today);
+          return (
           <button
             key={e.id}
             data-testid="event-card"
@@ -268,19 +277,25 @@ export default function EventsView({ initialEventId = null, onExitToHome }: Even
               trackEventListItemClicked(e.title);
               setSelectedEventId(e.id);
             }}
-            className="block w-full text-left bg-gray-900 border border-white/10 p-3 hover:border-orange-500/70 transition-colors"
+            className={`block w-full text-left bg-gray-900 border border-white/10 p-3 hover:border-orange-500/70 transition-colors ${
+              ended ? "opacity-50" : ""
+            }`}
           >
             <div className="flex items-center justify-between gap-2 mb-1">
               <p className="text-[10px] font-semibold uppercase tracking-[0.1em] text-orange-400">
                 {e.theaterNames.join(" · ")}
               </p>
-              <p className="shrink-0 text-[10px] text-gray-500">{e.period}</p>
+              <p className="shrink-0 text-[10px] text-gray-500">
+                {ended && <span className="mr-1.5 border border-gray-600 px-1 text-gray-400">종료</span>}
+                {e.period}
+              </p>
             </div>
             <p className="text-sm font-bold text-white leading-snug line-clamp-1">{e.title}</p>
             <p className="text-[13px] text-gray-300 mt-1.5 leading-relaxed line-clamp-2">{e.summary}</p>
             <p className="text-[11px] text-gray-500 mt-1 truncate">{formatMovieList(e.movieTitles)}</p>
           </button>
-        ))}
+          );
+        })}
       </div>
     </div>
   );

@@ -178,11 +178,30 @@ function checkInstagramScan(): CardData {
   const content = fs.readFileSync(logPath, "utf-8");
   const lastRun = fmtMtime(logPath);
 
-  const outcome = lastRunStatus(content, /=== 스캔 완료: (.+?) ===/, FAILURE_BOUNDARY_PATTERNS, FAILURE_MESSAGE_PATTERNS);
+  // 스캔 뒤에 자동 반영(sync)이 이어서 돌기 때문에, 둘 중 마지막 완료 줄을 성공 마커로 본다.
+  // (자동 반영 중 시간표 크롤러가 찍는 "Error:" 로그가 스캔 완료 줄 뒤에 와도 실패로 오판하지 않도록)
+  const outcome = lastRunStatus(
+    content,
+    /=== (?:스캔|기획전 자동 반영) 완료: (.+?) ===/,
+    FAILURE_BOUNDARY_PATTERNS,
+    FAILURE_MESSAGE_PATTERNS
+  );
+  const scanSummaries = [...content.matchAll(/=== 스캔 완료: (.+?) ===/g)];
+  const lastScanSummary = scanSummaries.length > 0 ? scanSummaries[scanSummaries.length - 1][1] : null;
 
   lines.push(`대상 계정 수: 총 ${instagramScanTargets.length}개`);
+
+  // 로그인이 풀리면 계정당 최근 12개만 보여서 게시물을 놓칠 수 있다.
+  const loginLines = content.split("\n").filter((l) => /기존 세션으로 로그인 확인됨|로그인 성공|로그인 실패/.test(l));
+  const lastLoginLine = loginLines[loginLines.length - 1];
+  const loginFailed = !!lastLoginLine && /로그인 실패/.test(lastLoginLine);
+  if (loginFailed) {
+    lines.push("⚠️ 인스타그램 로그인이 풀려 비로그인으로 스캔함 (계정당 최근 12개만 확인)");
+    lines.push("터미널에서 IG_SCRAPER_HEADLESS=false npm run scan:instagram 실행 후 창에서 로그인 필요");
+  }
+
   if (outcome.ok === true) {
-    lines.push(`마지막 실행 결과: ${outcome.detail}`);
+    if (lastScanSummary) lines.push(`마지막 스캔 결과: ${lastScanSummary}`);
   } else if (outcome.ok === false) {
     lines.push(`⚠️ 마지막 실행 실패: ${outcome.detail}`);
     lines.push("계정 스캔 도중 중단됐을 수 있음 — 로그 전체를 확인해 어느 계정까지 처리됐는지 확인 필요");
@@ -190,10 +209,35 @@ function checkInstagramScan(): CardData {
     lines.push(outcome.detail);
   }
 
+  // 자동 반영 결과 (sync-instagram-events.ts가 남기는 sync-<날짜>.json)
+  const syncFiles = fs
+    .readdirSync(path.dirname(logPath))
+    .filter((f) => /^sync-\d{8}\.json$/.test(f))
+    .sort();
+  let deployFailed = false;
+  if (syncFiles.length === 0) {
+    lines.push("자동 반영 기록 없음");
+  } else {
+    type SyncOp = { type: string; event?: { title?: string }; id?: string };
+    const sync = JSON.parse(fs.readFileSync(path.join(path.dirname(logPath), syncFiles[syncFiles.length - 1]), "utf-8")) as {
+      date: string;
+      applied: SyncOp[];
+      rejected: { operation: SyncOp; problems: string[] }[];
+      deploy: string;
+    };
+    const label = (op: SyncOp) => (op.type === "add" ? `추가 "${op.event?.title}"` : `수정 "${op.id}"`);
+    lines.push(`자동 반영(${sync.date}): 반영 ${sync.applied.length}건, 보류 ${sync.rejected.length}건, 배포 ${sync.deploy}`);
+    for (const op of sync.applied) lines.push(`· 반영: ${label(op)}`);
+    for (const r of sync.rejected) lines.push(`· 보류(확인 필요): ${label(r.operation)} — ${r.problems.join("; ")}`);
+    deployFailed = sync.deploy === "실패";
+    if (deployFailed) lines.push("⚠️ main 배포 실패 — 수동으로 events.json 커밋·push 필요");
+  }
+
   const launchctlOut = safeExec("launchctl list | grep com.moviemania.instagram-scan");
   lines.push(launchctlOut ? "launchd 작업 등록됨 (매주 월요일 07:30)" : "⚠️ launchd 작업이 등록되어 있지 않음");
 
-  const status: CardData["status"] = outcome.ok === false ? "fail" : outcome.ok === true ? "ok" : "unknown";
+  const status: CardData["status"] =
+    outcome.ok === false || loginFailed || deployFailed ? "fail" : outcome.ok === true ? "ok" : "unknown";
   return { title: "인스타그램 기획전 크롤링", status, lastRun, lines };
 }
 

@@ -4,8 +4,15 @@
 // (포스터/시간이 실제 값이 되도록). 감독/배우 매칭은 TMDB 크레딧(title 기준)을 넘겨받아 사용한다.
 import { MovieSchedule } from "@/types";
 import { TMDBMovieCredits } from "@/services/tmdbApi";
+import { getLocalDateString } from "@/utils/date";
 
-import { mockEvents } from "./events";
+import { mockEvents, isEventEnded } from "./events";
+
+// 이미 끝난 기획전으로 추천작을 묶으면 안 되므로 진행 중(또는 예정)인 기획전만 본다.
+function findOngoingEvent(title: string) {
+  const today = getLocalDateString(new Date());
+  return mockEvents.find((e) => !isEventEnded(e, today) && e.movieTitles.includes(title));
+}
 
 export interface RecommendedItem {
   title: string;
@@ -25,7 +32,7 @@ export type CreditsByTitle = Record<string, TMDBMovieCredits | null | undefined>
 // 기획전 그룹핑은 크레딧(감독/배우) 조회 없이도 바로 결정되므로,
 // 상세 페이지가 크레딧 로딩 스켈레톤을 보여줄지 판단할 때 이 함수로 먼저 걸러낸다.
 export function isEventMovie(title: string): boolean {
-  return mockEvents.some((e) => e.movieTitles.includes(title));
+  return findOngoingEvent(title) !== undefined;
 }
 
 function toItems(movies: MovieSchedule[]): RecommendedItem[] {
@@ -49,7 +56,7 @@ export function getRecommendations(
 ): RecommendationGroup {
   const others = allMovies.filter((m) => m.title !== movie.title);
 
-  const event = mockEvents.find((e) => e.movieTitles.includes(movie.title));
+  const event = findOngoingEvent(movie.title);
   if (event) {
     const siblingTitles = event.movieTitles.filter((t) => t !== movie.title);
     const items: RecommendedItem[] = siblingTitles.map((title) => {

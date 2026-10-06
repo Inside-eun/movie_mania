@@ -10,15 +10,19 @@
 //
 // 주의: 인스타그램 마크업은 예고 없이 바뀐다. 이 스크립트의 셀렉터가 깨지면
 // 아래 SELECTORS 상수 위주로 다시 확인해서 고칠 것.
-// 정규식 파서는 계정마다 캡션 포맷이 다르면 놓치거나 잘못 뽑을 수 있다 —
-// review 파일을 항상 눈으로 확인하고 src/mock/events.ts에는 검수 후 반영할 것.
+// 정규식 파서는 계정마다 캡션 포맷이 다르면 놓치거나 잘못 뽑을 수 있다 — review 파일은
+// 원본 캡션을 함께 담아 sync-instagram-events.ts로 넘기고, 거기서 claude가 다시 정리·검증한다.
 
-import "dotenv/config";
+import dotenv from "dotenv";
 import fs from "fs";
 import path from "path";
-import puppeteer, { Browser, Page, Cookie } from "puppeteer";
+import puppeteer, { Browser, Page, Cookie, TimeoutError } from "puppeteer";
 
 import { instagramScanTargets } from "./instagramTargets";
+
+// IG_SCRAPER_USERNAME/PASSWORD는 .env.local에 있다. "dotenv/config"는 .env만 읽어서
+// 그동안 로그인 정보가 로드되지 않았다.
+dotenv.config({ path: path.resolve(process.cwd(), ".env.local") });
 
 const STATE_DIR = path.join(process.cwd(), ".instagram-scan");
 const SESSION_FILE = path.join(STATE_DIR, "session.json");
@@ -26,7 +30,15 @@ const SEEN_POSTS_FILE = path.join(STATE_DIR, "seen-posts.json");
 
 const HEADLESS = process.env.IG_SCRAPER_HEADLESS !== "false";
 // 주 1회 스캔이라 한 번에 최대 40개까지 확인 (게시물이 잦은 계정도 일주일치를 놓치지 않도록).
+// 프로필 첫 화면에는 12개만 뜨므로 그보다 많이 보려면 스크롤해서 더 불러와야 한다.
 const MAX_POSTS_PER_ACCOUNT = 40;
+const MAX_SCROLL_ROUNDS = 6;
+// 프로필 상단에 고정할 수 있는 게시물 수. 이 개수만큼은 시간 순서와 무관하게 맨 앞에 온다.
+const MAX_PINNED_POSTS = 3;
+// 페이지가 45초 안에 안 열리면 이만큼 쉬었다가 한 번 더 시도한다.
+const RETRY_DELAY_MS = 10000;
+// IG_SCRAPER_HEADLESS=false로 실행했을 때 로그인 챌린지를 사람이 통과하길 기다리는 최대 시간.
+const LOGIN_CHALLENGE_WAIT_MS = 5 * 60 * 1000;
 const EVENT_KEYWORDS = ["기획전", "특별전"];
 // "#라이카기획전", "#모모기획전"처럼 해시태그에 붙어 나오는 경우도 일반 텍스트와
 // 동일하게 매칭되어야 한다. includes()는 "#라이카기획전" 안의 "기획전"도 부분
@@ -56,7 +68,9 @@ const SELECTORS = {
   captionMeta: 'meta[property="og:description"]',
 };
 
-type SeenPostsState = Record<string, string>; // username -> 마지막으로 처리한 post shortcode
+// username -> 지금까지 처리한 게시물 중 가장 최신 post shortcode.
+// 목록 순서가 아니라 shortcodeToMediaId()로 비교한 "가장 최신"이다 (고정 게시물 때문).
+type SeenPostsState = Record<string, string>;
 
 interface CandidatePost {
   username: string;
@@ -103,16 +117,44 @@ function extractShortcode(href: string): string | null {
   return match ? match[2] : null;
 }
 
+const SHORTCODE_ALPHABET = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789-_";
+
+// shortcode는 미디어 ID를 base64로 인코딩한 값이고, 미디어 ID는 상위 비트가 게시 시각이라
+// 시간순으로 커진다. 디코딩한 값을 비교하면 프로필 목록 순서와 무관하게 어느 글이 최신인지 알 수 있다.
+function shortcodeToMediaId(shortcode: string): bigint {
+  let id = BigInt(0);
+  for (const ch of shortcode) {
+    const idx = SHORTCODE_ALPHABET.indexOf(ch);
+    if (idx < 0) break;
+    id = id * BigInt(64) + BigInt(idx);
+  }
+  return id;
+}
+
 function randomDelay(): Promise<void> {
   const ms = MIN_REQUEST_DELAY_MS + Math.random() * (MAX_REQUEST_DELAY_MS - MIN_REQUEST_DELAY_MS);
   return new Promise((resolve) => setTimeout(resolve, ms));
 }
 
+// 인스타그램이 가끔 응답을 늦게 줘서 타임아웃이 나는데(10/5 스캔에서 17개 계정 중 6개),
+// 잠시 쉬었다가 한 번 더 열어본다. 타임아웃이 아닌 에러는 그대로 던진다.
+async function gotoWithRetry(page: Page, url: string): Promise<void> {
+  try {
+    await page.goto(url, { waitUntil: "domcontentloaded", timeout: 45000 });
+  } catch (err) {
+    if (!(err instanceof TimeoutError)) throw err;
+    console.log(`  · 페이지 로딩 타임아웃, ${RETRY_DELAY_MS / 1000}초 후 재시도: ${url}`);
+    await new Promise((resolve) => setTimeout(resolve, RETRY_DELAY_MS));
+    await page.goto(url, { waitUntil: "domcontentloaded", timeout: 45000 });
+  }
+}
+
+// 비로그인 홈 화면에는 로그인 입력창이 없어서 입력창 유무로는 판별이 안 된다
+// (그래서 그동안 비로그인 상태를 로그인으로 착각했다). 로그인 세션 쿠키로 확인한다.
 async function isLoggedIn(page: Page): Promise<boolean> {
-  const url = page.url();
-  if (url.includes("/accounts/login")) return false;
-  const usernameInput = await page.$(SELECTORS.loginUsername);
-  return usernameInput === null;
+  if (page.url().includes("/accounts/login")) return false;
+  const cookies = await page.cookies();
+  return cookies.some((cookie) => cookie.name === "sessionid" && cookie.value !== "");
 }
 
 async function loginWithCredentials(page: Page): Promise<void> {
@@ -140,7 +182,18 @@ async function loginWithCredentials(page: Page): Promise<void> {
     }),
   ]);
 
-  const loggedIn = await isLoggedIn(page);
+  let loggedIn = await isLoggedIn(page);
+  // 창을 띄워 실행한 경우엔 2단계 인증/사람 확인 챌린지를 사람이 창에서 직접 통과할 때까지 기다린다.
+  if (!loggedIn && !HEADLESS) {
+    console.log(
+      `👉 브라우저 창에 인증 화면이 떠 있으면 직접 완료해주세요. 최대 ${LOGIN_CHALLENGE_WAIT_MS / 60000}분 기다립니다...`
+    );
+    const deadline = Date.now() + LOGIN_CHALLENGE_WAIT_MS;
+    while (!loggedIn && Date.now() < deadline) {
+      await new Promise((resolve) => setTimeout(resolve, 3000));
+      loggedIn = await isLoggedIn(page);
+    }
+  }
   if (!loggedIn) {
     throw new Error(
       "로그인이 완료되지 않았습니다. 2단계 인증/사람 확인 챌린지가 떴을 가능성이 높습니다. " +
@@ -185,7 +238,16 @@ async function ensureSession(browser: Browser): Promise<Page> {
 
   if (!(await isLoggedIn(page))) {
     console.log("세션이 없거나 만료됨 — 로그인 시도 중...");
-    await loginWithCredentials(page);
+    try {
+      await loginWithCredentials(page);
+      console.log("로그인 성공.");
+    } catch (err) {
+      // 로그인에 실패해도 주간 스캔 자체는 멈추지 않고 비로그인 상태로 계속한다.
+      // 비로그인이면 계정당 최근 12개만 보이고 스크롤해도 더 안 불러와진다.
+      const message = err instanceof Error ? err.message : String(err);
+      console.warn(`⚠️ 로그인 실패, 비로그인 상태로 진행 (계정당 최근 12개만 확인 가능): ${message}`);
+      await gotoWithRetry(page, "https://www.instagram.com/");
+    }
   } else {
     console.log("기존 세션으로 로그인 확인됨.");
   }
@@ -196,26 +258,50 @@ async function ensureSession(browser: Browser): Promise<Page> {
   return page;
 }
 
-async function collectRecentPostUrls(page: Page, username: string): Promise<string[]> {
+// 프로필 그리드의 게시물 링크를 화면에 보이는 순서대로 모은다. 첫 화면은 12개뿐이라
+// 지난 기준점(lastSeenId)보다 오래된 글이 보일 때까지 스크롤하며 더 불러온다.
+async function collectRecentPostUrls(
+  page: Page,
+  username: string,
+  lastSeenId: bigint | null
+): Promise<string[]> {
   await randomDelay();
-  await page.goto(`https://www.instagram.com/${username}/`, {
-    waitUntil: "domcontentloaded",
-    timeout: 45000,
-  });
+  await gotoWithRetry(page, `https://www.instagram.com/${username}/`);
   await page.waitForSelector(SELECTORS.postLink, { timeout: 15000 }).catch(() => null);
 
-  const hrefs = await page.$$eval(SELECTORS.postLink, (anchors) =>
-    anchors.map((a) => (a as HTMLAnchorElement).href)
-  );
-
   const uniqueOrdered: string[] = [];
-  const seen = new Set<string>();
-  for (const href of hrefs) {
-    if (!seen.has(href)) {
-      seen.add(href);
-      uniqueOrdered.push(href);
+  const seenShortcodes = new Set<string>();
+
+  for (let round = 0; round < MAX_SCROLL_ROUNDS; round++) {
+    const hrefs = await page.$$eval(SELECTORS.postLink, (anchors) =>
+      anchors.map((a) => (a as HTMLAnchorElement).href)
+    );
+    const countBefore = uniqueOrdered.length;
+    for (const href of hrefs) {
+      const shortcode = extractShortcode(href);
+      if (shortcode && !seenShortcodes.has(shortcode)) {
+        seenShortcodes.add(shortcode);
+        uniqueOrdered.push(href);
+      }
     }
+
+    // 처음 스캔하는 계정은 예전처럼 첫 화면만 본다 (오래된 글까지 다 긁어오지 않도록).
+    if (lastSeenId === null) break;
+    if (uniqueOrdered.length >= MAX_POSTS_PER_ACCOUNT) break;
+    if (round > 0 && uniqueOrdered.length === countBefore) break; // 스크롤해도 더 안 불러와짐
+
+    // 고정 게시물 자리를 빼면 그리드는 최신순이므로, 그 뒤에서 기준점 이하인 글이
+    // 하나라도 보이면 더 아래는 전부 이미 본 글이다.
+    const reachedLastSeen = uniqueOrdered.slice(MAX_PINNED_POSTS).some((href) => {
+      const shortcode = extractShortcode(href);
+      return shortcode !== null && shortcodeToMediaId(shortcode) <= lastSeenId;
+    });
+    if (reachedLastSeen) break;
+
+    await page.evaluate(() => window.scrollTo(0, document.body.scrollHeight));
+    await randomDelay();
   }
+
   return uniqueOrdered;
 }
 
@@ -228,7 +314,7 @@ function stripOgWrapper(text: string): string {
 
 async function fetchCaption(page: Page, postUrl: string): Promise<string> {
   await randomDelay();
-  await page.goto(postUrl, { waitUntil: "domcontentloaded", timeout: 45000 });
+  await gotoWithRetry(page, postUrl);
   const metaContent = await page
     .$eval(SELECTORS.captionMeta, (el) => el.getAttribute("content") ?? "")
     .catch(() => "");
@@ -247,24 +333,39 @@ async function scanAccount(
   seenState: SeenPostsState
 ): Promise<CandidatePost[]> {
   console.log(`\n[${target.theaterName}] @${target.username} 스캔 중...`);
-  const postUrls = await collectRecentPostUrls(page, target.username);
   const lastSeen = seenState[target.username];
+  const lastSeenId = lastSeen ? shortcodeToMediaId(lastSeen) : null;
+  const postUrls = await collectRecentPostUrls(page, target.username, lastSeenId);
 
-  const newUrls: string[] = [];
-  for (const url of postUrls) {
-    const shortcode = extractShortcode(url);
-    if (!shortcode) continue;
-    if (shortcode === lastSeen) break; // 이전에 처리한 지점까지 왔으면 중단
-    newUrls.push(url);
-    if (newUrls.length >= MAX_POSTS_PER_ACCOUNT) break;
-  }
+  // 예전에는 목록 맨 앞부터 기준점을 만날 때까지를 새 글로 봤는데, 맨 앞에 오래된 고정
+  // 게시물이 있으면 그게 기준점으로 저장돼 매주 "새 게시물 0개"가 나왔다.
+  // 목록 순서 대신 미디어 ID로 기준점보다 최신인 글만 고른다.
+  const newUrls = postUrls
+    .filter((url) => {
+      const shortcode = extractShortcode(url);
+      return shortcode !== null && (lastSeenId === null || shortcodeToMediaId(shortcode) > lastSeenId);
+    })
+    .slice(0, MAX_POSTS_PER_ACCOUNT);
 
   console.log(`  새 게시물 ${newUrls.length}개 발견 (전체 ${postUrls.length}개 중)`);
 
   const candidates: CandidatePost[] = [];
+  const processedIds: bigint[] = [];
+  let oldestFailedId: bigint | null = null;
   for (const url of newUrls) {
     const shortcode = extractShortcode(url)!;
-    const caption = await fetchCaption(page, url);
+    const mediaId = shortcodeToMediaId(shortcode);
+    let caption: string;
+    try {
+      caption = await fetchCaption(page, url);
+    } catch (err) {
+      // 게시물 하나가 안 열려도 계정 전체를 버리지 않고 나머지를 계속 본다.
+      const message = err instanceof Error ? err.message : String(err);
+      console.error(`  ✗ 게시물 열기 실패, 다음 스캔에서 다시 확인: ${url} (${message})`);
+      if (oldestFailedId === null || mediaId < oldestFailedId) oldestFailedId = mediaId;
+      continue;
+    }
+    processedIds.push(mediaId);
     const hasKeyword = containsEventKeyword(caption);
     const alreadyEnded = ENDED_EVENT_PATTERN.test(caption);
     if (hasKeyword && alreadyEnded) {
@@ -281,24 +382,29 @@ async function scanAccount(
     }
   }
 
-  // 이번 실행에서 가장 최신 게시물(목록의 첫 항목)을 다음 실행의 기준점으로 저장.
-  const newestShortcode = postUrls.length > 0 ? extractShortcode(postUrls[0]) : null;
-  if (newestShortcode) {
-    seenState[target.username] = newestShortcode;
+  // 처리한 글 중 가장 최신 것을 다음 실행의 기준점으로 저장한다. 열기에 실패한 글이 있으면
+  // 그보다 오래된 글까지만 기준점을 올려서, 실패한 글이 다음 스캔에서 다시 잡히게 한다.
+  const advanceableIds = processedIds.filter((id) => oldestFailedId === null || id < oldestFailedId);
+  if (advanceableIds.length > 0) {
+    const newestId = advanceableIds.reduce((a, b) => (a > b ? a : b));
+    const newestUrl = newUrls.find((url) => shortcodeToMediaId(extractShortcode(url)!) === newestId)!;
+    seenState[target.username] = extractShortcode(newestUrl)!;
   }
 
   return candidates;
 }
 
 // 기간처럼 보이는 텍스트 패턴들. 위에서부터 먼저 매칭되는 걸 채택한다.
+// 구분자로 하이픈/물결 외에 en dash(–)와 em dash(—)를 쓰는 극장도 있어 함께 허용한다.
 const PERIOD_PATTERNS = [
   // 2026.07.18 - 2026.08.02 / 2026. 09. 16 - 10. 04 (두 번째 연도 생략 가능)
   // / 2026.9.10(목)~9.23(수) 처럼 날짜 뒤에 요일 괄호가 붙는 경우도 매칭
-  /\d{4}\.\s?\d{1,2}\.\s?\d{1,2}(?:\([^)]{1,3}\))?\s*[-~]\s*(?:\d{4}\.\s?)?\d{1,2}\.\s?\d{1,2}(?:\([^)]{1,3}\))?/,
+  // / 2026. 10. 1. — 10. 4. 처럼 일자 뒤에 마침표가 붙는 경우도 매칭
+  /\d{4}\.\s?\d{1,2}\.\s?\d{1,2}\.?(?:\([^)]{1,3}\))?\s*[-~–—]\s*(?:\d{4}\.\s?)?\d{1,2}\.\s?\d{1,2}\.?(?:\([^)]{1,3}\))?/,
   // 2026년 8월 12일(수) ~ 2026년 8월 30일(일) / 9월 1일(화) ~ 9월 12일(토) — 연도·요일 괄호는 있어도 없어도 매칭
-  /(?:\d{4}년\s*)?\d{1,2}월\s*\d{1,2}일(?:\([^)]{1,3}\))?\s*[-~]\s*(?:\d{4}년\s*)?\d{1,2}월\s*\d{1,2}일(?:\([^)]{1,3}\))?/,
-  /\d{1,2}\/\d{1,2}\s*[-~]\s*\d{1,2}\/\d{1,2}/, // 7/18 - 8/2
-  /\d{4}\.\d{1,2}\s*[-~]\s*\d{1,2}(?!\.\d)/, // 2026.8 - 9 (월 단위)
+  /(?:\d{4}년\s*)?\d{1,2}월\s*\d{1,2}일(?:\([^)]{1,3}\))?\s*[-~–—]\s*(?:\d{4}년\s*)?\d{1,2}월\s*\d{1,2}일(?:\([^)]{1,3}\))?/,
+  /\d{1,2}\/\d{1,2}\s*[-~–—]\s*\d{1,2}\/\d{1,2}/, // 7/18 - 8/2
+  /\d{4}\.\d{1,2}\s*[-~–—]\s*\d{1,2}(?!\.\d)/, // 2026.8 - 9 (월 단위)
 ];
 
 // 상영작 목록이 시작되는 지점을 찾기 위한 헤더 키워드.
@@ -342,7 +448,7 @@ function extractTitle(caption: string): string {
 function extractPeriod(caption: string): string {
   for (const pattern of PERIOD_PATTERNS) {
     const match = caption.match(pattern);
-    if (match) return match[0].replace(/\s+/g, " ").trim();
+    if (match) return match[0].replace(/\s+/g, " ").replace(/\.$/, "").trim();
   }
   return "";
 }
@@ -499,7 +605,7 @@ async function main() {
     console.log(`  원본: ${entry.postUrl}`);
   }
   console.log(`\n검토용 파일: ${reviewFile}`);
-  console.log("src/mock/events.ts에 반영하기 전에 movieTitles가 src/mock/snapshot.ts 제목과 정확히 일치하는지 확인하세요.");
+  console.log("이어서 sync-instagram-events.ts가 후보를 정리·검증해 통과한 기획전만 events.json에 자동 반영합니다.");
 }
 
 main().catch((err) => {

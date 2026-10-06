@@ -5,21 +5,15 @@
   <key>Label</key>
   <string>com.moviemania.instagram-scan</string>
 
+  <!-- 스캔 후 기획전 자동 반영(검증 통과분만 main 배포)까지 이어서 실행. PATH는 스크립트 안에서 지정. -->
   <key>ProgramArguments</key>
   <array>
-    <string>/Users/choedam-eun/.nvm/versions/node/v18.20.8/bin/npx</string>
-    <string>tsx</string>
-    <string>src/scripts/scan-instagram-events.ts</string>
+    <string>/bin/bash</string>
+    <string>scripts/instagram-scan.sh</string>
   </array>
 
   <key>WorkingDirectory</key>
   <string>/Users/choedam-eun/Desktop/work/Movie/movie_mania</string>
-
-  <key>EnvironmentVariables</key>
-  <dict>
-    <key>PATH</key>
-    <string>/Users/choedam-eun/.nvm/versions/node/v18.20.8/bin:/usr/bin:/bin:/usr/sbin:/sbin</string>
-  </dict>
 
   <!-- 매주 월요일 07:30 실행. 요일을 바꾸려면 Weekday 값을 수정 (0/7=일, 1=월 ... 6=토) -->
   <key>StartCalendarInterval</key>
