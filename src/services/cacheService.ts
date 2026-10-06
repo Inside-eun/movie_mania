@@ -99,14 +99,16 @@ export class CacheService {
     const pattern = `${type}_${dateStr}_*`;
 
     if (this.redis) {
-      let cursor = 0;
+      // @upstash/redis는 SCAN 커서를 문자열("0")로 돌려준다. 숫자 0과 비교하면 끝나지 않아서
+      // 프리페치 크론이 캐시만 지운 채 60초 타임아웃으로 죽고 있었다 — 문자열로 비교한다.
+      let cursor = "0";
       do {
         const [next, keys] = await this.redis.scan(cursor, { match: pattern, count: 100 });
-        cursor = next as number;
+        cursor = String(next);
         if (keys.length > 0) {
           await Promise.all(keys.map((k) => this.redis!.del(k).catch(() => {})));
         }
-      } while (cursor !== 0);
+      } while (cursor !== "0");
       return;
     }
 
