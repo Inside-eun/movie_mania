@@ -160,7 +160,7 @@ export default function WishlistView({
                   const isPast = movieDateTime < now;
                   const isToday = date === getLocalDateString(new Date());
                   const posterUrl =
-                    movie.tmdbPosterUrl || movie.posterUrl || "/NoPoster.png";
+                    movie.tmdbPosterUrl || movie.posterUrl || "/images/no-poster.webp";
 
                   return (
                     <div
@@ -196,7 +196,7 @@ export default function WishlistView({
                             loading="lazy"
                             className="w-full h-full object-cover"
                             onError={(e) => {
-                              (e.target as HTMLImageElement).src = "/NoPoster.png";
+                              (e.target as HTMLImageElement).src = "/images/no-poster.webp";
                             }}
                           />
                         </div>

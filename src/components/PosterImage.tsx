@@ -18,10 +18,10 @@ export default function PosterImage({
   sizes = "(max-width: 1024px) 50vw, 33vw",
   className = "object-cover",
 }: PosterImageProps) {
-  const [imgSrc, setImgSrc] = useState(src || "/NoPoster.png");
+  const [imgSrc, setImgSrc] = useState(src || "/images/no-poster.webp");
 
   useEffect(() => {
-    setImgSrc(src || "/NoPoster.png");
+    setImgSrc(src || "/images/no-poster.webp");
   }, [src]);
 
   return (
@@ -32,7 +32,7 @@ export default function PosterImage({
       priority={priority}
       sizes={sizes}
       className={className}
-      onError={() => setImgSrc("/NoPoster.png")}
+      onError={() => setImgSrc("/images/no-poster.webp")}
     />
   );
 }

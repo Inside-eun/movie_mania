@@ -381,7 +381,7 @@ export default function CalendarView({
                   );
                   const isPast = movieDateTime < now;
                   const posterUrl =
-                    movie.tmdbPosterUrl || movie.posterUrl || "/NoPoster.png";
+                    movie.tmdbPosterUrl || movie.posterUrl || "/images/no-poster.webp";
 
                   return (
                     <div
@@ -416,7 +416,7 @@ export default function CalendarView({
                             loading="lazy"
                             className="w-full h-full object-cover"
                             onError={(e) => {
-                              (e.target as HTMLImageElement).src = "/NoPoster.png";
+                              (e.target as HTMLImageElement).src = "/images/no-poster.webp";
                             }}
                           />
                         </div>

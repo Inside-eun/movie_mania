@@ -263,7 +263,7 @@ function MovieDetailPageInner() {
     return <div className="min-h-screen bg-black" />;
   }
 
-  const posterUrl = movie.tmdbPosterUrl || movie.posterUrl || "/NoPoster.png";
+  const posterUrl = movie.tmdbPosterUrl || movie.posterUrl || "/images/no-poster.webp";
   const director = kobisData?.directors?.[0]?.peopleNm || movie.director || null;
   const prodYear = kobisData?.prdtYear || movie.prodYear || null;
   const runtime = kobisData?.showTm || movie.runtime || null;

@@ -15,7 +15,7 @@ export default function SplashScreen({ visible }: SplashScreenProps) {
       aria-hidden={!visible}
     >
       <Image
-        src="/splash.png"
+        src="/images/splash.webp"
         alt=""
         fill
         priority

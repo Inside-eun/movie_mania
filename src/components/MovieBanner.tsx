@@ -220,7 +220,7 @@ export default function MovieBanner({ onEventClick }: MovieBannerProps) {
         >
           <div className="relative w-full h-full">
             <Image
-              src="/todayQuiz.png"
+              src="/images/today-quiz.webp"
               alt="오늘의 퀴즈"
               fill
               style={{ objectFit: "contain" }}
