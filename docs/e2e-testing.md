@@ -13,63 +13,63 @@ npm run test:e2e:report  # 마지막 실행 리포트 보기
 E2E_BASE_URL=<url> npm run test:e2e   # 임의 환경(예: develop 프리뷰) 대상
 ```
 
-설정은 [playwright.config.ts](playwright.config.ts), 테스트 코드는 [e2e/](e2e/) 폴더에 있다.
+설정은 [playwright.config.ts](../playwright.config.ts), 테스트 코드는 [e2e/](../e2e/) 폴더에 있다.
 
 > **Vercel 프리뷰 배포로 테스트할 때 주의**: 짧은 시간에 자동화 요청을 반복해서 보내면 Vercel의 봇 차단(Security Checkpoint)이 걸려 "Failed to verify your browser" 화면이 뜰 수 있다. 프로덕션 배포에는 이 보호 기능이 없어서 안 걸린다. 프리뷰에서 막히면 로컬(`test:e2e:local`)이나 프로덕션으로 대신 확인할 것.
 
 ## 지금 검증하는 것 (2026-09-11 기준, 23개 테스트)
 
-### 화면 로드 & 하단 네비게이션 — [e2e/navigation.spec.ts](e2e/navigation.spec.ts)
+### 화면 로드 & 하단 네비게이션 — [e2e/navigation.spec.ts](../e2e/navigation.spec.ts)
 - [x] 홈 화면 진입 시 헤더/타이틀이 정상 표시됨
 - [x] 하단 탭(홈/찜/기획전/설정)을 누르면 해당 화면으로 전환되고 활성 탭 표시(주황색)가 바뀜
 
-### 영화 상세 화면 — [e2e/movie-detail.spec.ts](e2e/movie-detail.spec.ts)
+### 영화 상세 화면 — [e2e/movie-detail.spec.ts](../e2e/movie-detail.spec.ts)
 - [x] 영화 카드 클릭 → 상세 페이지 이동, 클릭한 영화의 제목이 상세 화면에 표시됨
 - [x] 뒤로 가기 시 홈으로 정상 복귀
 - [x] 예매 버튼이 `/api/booking-url` 조회 후 실제 URL로 채워지고 `target=_blank`로 열림
 - [x] 상세 화면의 찜 버튼으로도 찜 추가/제거가 동작함
 
-### 찜 기능 — [e2e/wishlist.spec.ts](e2e/wishlist.spec.ts)
+### 찜 기능 — [e2e/wishlist.spec.ts](../e2e/wishlist.spec.ts)
 - [x] 영화를 찜하면 하단 탭 배지에 카운트가 반영됨
 - [x] 찜 목록 화면(리스트 모드)에 실제로 표시됨
 - [x] 찜 해제 시 목록에서 사라지고 빈 상태 문구가 나옴
 
-### 찜 달력 뷰(기본 모드) — [e2e/wishlist-calendar.spec.ts](e2e/wishlist-calendar.spec.ts)
+### 찜 달력 뷰(기본 모드) — [e2e/wishlist-calendar.spec.ts](../e2e/wishlist-calendar.spec.ts)
 - [x] 찜 화면 기본값이 달력 뷰인지
 - [x] 이전 달/다음 달 이동 시 월 표시가 바뀌고 되돌아옴
 
-### 필터 & 날짜 선택 — [e2e/filter.spec.ts](e2e/filter.spec.ts)
+### 필터 & 날짜 선택 — [e2e/filter.spec.ts](../e2e/filter.spec.ts)
 - [x] 필터 바텀시트가 열리고, 영화별/영화관별 탭 전환이 동작함
 - [x] 날짜를 바꾸면 선택된 날짜 표시가 갱신됨
 
-### 영화관별 필터 — [e2e/theater-filter.spec.ts](e2e/theater-filter.spec.ts)
+### 영화관별 필터 — [e2e/theater-filter.spec.ts](../e2e/theater-filter.spec.ts)
 - [x] 영화관 체크박스를 선택하면 목록이 실제로 좁혀지고, 선택한 극장 소속만 남음
 - [x] 초기화하면 필터 이전 개수로 정확히 되돌아옴
 
-### 정렬 / 보기 방식 / 지도 — [e2e/sort-and-map.spec.ts](e2e/sort-and-map.spec.ts)
+### 정렬 / 보기 방식 / 지도 — [e2e/sort-and-map.spec.ts](../e2e/sort-and-map.spec.ts)
 - [x] 정렬 방식(시간순↔거리순) 라벨 전환 및 `sort_changed` GA 이벤트
 - [x] 보기 방식(2열→3열→리스트) 순환 전환 시 카드 레이아웃 클래스가 실제로 바뀜
 - [x] 지도 아이콘 클릭 시 길찾기 모달이 열리고 닫힘
 
-### 설정 화면 & 즐겨찾는 영화관 — [e2e/settings.spec.ts](e2e/settings.spec.ts)
+### 설정 화면 & 즐겨찾는 영화관 — [e2e/settings.spec.ts](../e2e/settings.spec.ts)
 - [x] 영화관을 즐겨찾기에 추가하면 칩으로 표시됨
 - [x] 홈 화면 필터의 "★ 즐겨찾기 영화관" 그룹까지 연동되는지(오늘 상영 중일 때)
 - [x] 즐겨찾기 해제 동작
 
-### 기획전 — [e2e/events.spec.ts](e2e/events.spec.ts)
+### 기획전 — [e2e/events.spec.ts](../e2e/events.spec.ts)
 - [x] 목록에서 항목 클릭 → 상세 진입 → 목록으로 복귀
 
-### 빈 상태 — [e2e/empty-state.spec.ts](e2e/empty-state.spec.ts)
+### 빈 상태 — [e2e/empty-state.spec.ts](../e2e/empty-state.spec.ts)
 - [x] 상영 스케줄 API가 0건을 반환하면 "상영 중인 예술영화가 없습니다." 문구
 - [x] 스케줄은 있지만 전부 지난 시간이면 "현재 시간 이후의 상영시간이 없습니다." 문구
 - 날짜를 실제로 과거로 돌리는 방식은 신뢰할 수 없어서(먼 과거에도 mock/캐시 데이터가 채워질 수 있음) `/api/schedules` 응답 자체를 모킹해서 결정론적으로 재현
 
-### GA4 이벤트 트래킹 — [e2e/analytics.spec.ts](e2e/analytics.spec.ts)
+### GA4 이벤트 트래킹 — [e2e/analytics.spec.ts](../e2e/analytics.spec.ts)
 - [x] 필터 열기/탭 전환 시 `filter_opened`, `filter_tab_changed`(파라미터 포함)
 - [x] 찜 추가/제거 시 `wishlist_added`(영화 제목 파라미터 포함), `wishlist_removed`
 - [x] 하단 탭 전환 시 `tab_changed`(탭 이름 파라미터 포함)
 - [x] 정렬 전환 시 `sort_changed`(정렬 타입 파라미터 포함)
-- 실제 구글 서버로는 전송하지 않고 `window.dataLayer.push` 호출을 가로채서 검증 ([e2e/helpers.ts](e2e/helpers.ts)의 `captureGaEvents`)
+- 실제 구글 서버로는 전송하지 않고 `window.dataLayer.push` 호출을 가로채서 검증 ([e2e/helpers.ts](../e2e/helpers.ts)의 `captureGaEvents`)
 
 ## 아직 자동화 안 된 것 (To-Do)
 

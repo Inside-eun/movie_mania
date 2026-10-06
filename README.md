@@ -17,7 +17,7 @@
 - **Styling**: Tailwind CSS
 - **API**: KOBIS (영화진흥위원회), KMDB (한국영화데이터베이스)
 - **Deploy**: Vercel (서버리스)
-- **Cache**: 메모리 + 파일 이중 캐시 시스템
+- **Cache**: Upstash Redis (로컬은 `.cache/` 파일 캐시), Vercel Cron으로 7일치 미리 수집
 
 ## 시작하기
 
@@ -64,7 +64,14 @@ src/
 
 ## 배포
 
-Vercel에 배포 시 환경 변수 설정 필요. 자세한 내용은 [DEPLOYMENT.md](./DEPLOYMENT.md) 참고.
+`main` 브랜치에 push하면 Vercel이 자동 배포한다 (프로덕션: https://moviemania-olive.vercel.app).
+Vercel 환경 변수에는 위 API 키 외에 `UPSTASH_REDIS_REST_URL`/`UPSTASH_REDIS_REST_TOKEN`(캐시),
+`TMDB_API_KEY`(포스터), `CRON_SECRET`(프리페치 크론 인증)이 필요하다.
+상영 스케줄 프리페치 구조는 [docs/prefetch.md](docs/prefetch.md) 참고.
+
+## 문서
+
+설계·운영 문서는 [docs/](docs/) 폴더에 모아둔다. 목록은 [docs/README.md](docs/README.md).
 
 ## 라이선스
 
