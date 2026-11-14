@@ -20,7 +20,6 @@ export const GTM_EVENTS = {
   WISHLIST_CLEARED: 'wishlist_cleared',
 
   // 다크모드 관련
-  DARK_MODE_TOGGLED: 'dark_mode_toggled',
 
   // 정렬 관련
   SORT_CHANGED: 'sort_changed',
@@ -214,15 +213,6 @@ export const trackWishlistRemove = (
 export const trackWishlistClear = (count: number) => {
   trackEvent(GTM_EVENTS.WISHLIST_CLEARED, {
     items_count: count,
-  });
-};
-
-/**
- * 다크모드 토글 이벤트
- */
-export const trackDarkModeToggle = (isDarkMode: boolean) => {
-  trackEvent(GTM_EVENTS.DARK_MODE_TOGGLED, {
-    mode: isDarkMode ? 'dark' : 'light',
   });
 };
 

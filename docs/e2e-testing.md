@@ -75,12 +75,11 @@ E2E_BASE_URL=<url> npm run test:e2e   # 임의 환경(예: develop 프리뷰) �
 
 - [ ] **추천작**: 상세 화면 하단 추천 영화 클릭 시 해당 영화로 이동 (표시 조건이 그날 상영작 조합에 따라 달라져서 결정론적으로 재현하려면 API 모킹이 필요)
 - [ ] **GA4 이벤트 잔여분**: `booking_clicked`, `movie_detail_opened`, `recommendation_clicked`, `map_icon_clicked`, `favorite_theater_saved` 등
-- [ ] **다크모드 토글**: `DarkModeToggle` 컴포넌트 자체가 현재 어느 화면에도 렌더링되지 않는 죽은 코드라 UI로 테스트 불가 — 실제로 쓸 계획이면 화면에 연결부터 필요
 - [ ] **iOS 네이티브 기능**: 카메라/위치/알림 등 Capacitor 전용 기능은 Playwright 범위 밖 → XCUITest 등 별도 도구 필요 (아직 미착수)
 
 ## 테스트 범위 밖인 것
 
-- **크롤링/API 로직 자체**: 상영시간표가 실제로 정확한지, 극장 사이트에서 크롤링이 잘 되는지는 화면 테스트로 검증 안 됨. `npm run test:crawler`, `npm run test:art` 등 기존 스크립트가 담당.
+- **크롤링/API 로직 자체**: 상영시간표가 실제로 정확한지, 극장 사이트에서 크롤링이 잘 되는지는 화면 테스트로 검증 안 됨. `npm run test:crawler` 스크립트와 자동화 상태 대시보드가 담당.
 - **iOS 네이티브 UI**: 시뮬레이터 안의 Capacitor 앱 자체 화면은 Playwright가 손댈 수 없음(모바일 웹 뷰포트로 근사 검증만 가능).
 
 ## 최종적으로 `npm run test:e2e`가 통과하면 확인되는 것

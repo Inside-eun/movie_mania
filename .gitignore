@@ -59,3 +59,6 @@ next-env.d.ts
 **/public/workbox-*.js.map
 **/public/worker-*.js.map
 .env*
+
+# 로컬 파일 캐시 (Upstash 미설정 시 cacheService가 사용, 날짜별 TTL 24h라 커밋할 의미 없음)
+/.cache/
