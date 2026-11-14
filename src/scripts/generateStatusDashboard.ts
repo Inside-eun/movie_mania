@@ -159,7 +159,7 @@ function checkCgvMovNo(): CardData {
   }
 
   const launchctlOut = safeExec("launchctl list | grep com.moviemania.cgv-movno");
-  lines.push(launchctlOut ? "launchd 작업 등록됨 (매일 06:00)" : "⚠️ launchd 작업이 등록되어 있지 않음");
+  lines.push(launchctlOut ? "launchd 작업 등록됨 (06:00 이후 깨어 있을 때 하루 1회)" : "⚠️ launchd 작업이 등록되어 있지 않음");
 
   const deployFailed = !!lastDeployLine && /자동 배포 실패/.test(lastDeployLine);
   const status: CardData["status"] =
@@ -234,7 +234,7 @@ function checkInstagramScan(): CardData {
   }
 
   const launchctlOut = safeExec("launchctl list | grep com.moviemania.instagram-scan");
-  lines.push(launchctlOut ? "launchd 작업 등록됨 (매주 월요일 07:30)" : "⚠️ launchd 작업이 등록되어 있지 않음");
+  lines.push(launchctlOut ? "launchd 작업 등록됨 (월요일 07:30 이후 깨어 있을 때 주 1회)" : "⚠️ launchd 작업이 등록되어 있지 않음");
 
   const status: CardData["status"] =
     outcome.ok === false || loginFailed || deployFailed ? "fail" : outcome.ok === true ? "ok" : "unknown";

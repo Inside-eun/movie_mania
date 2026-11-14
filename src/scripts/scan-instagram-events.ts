@@ -18,6 +18,7 @@ import fs from "fs";
 import path from "path";
 import puppeteer, { Browser, Page, Cookie, TimeoutError } from "puppeteer";
 
+import { getLocalDateString } from "../utils/date";
 import { instagramScanTargets } from "./instagramTargets";
 
 // IG_SCRAPER_USERNAME/PASSWORD는 .env.local에 있다. "dotenv/config"는 .env만 읽어서
@@ -548,6 +549,7 @@ async function main() {
   });
 
   const reviewEntries: ReviewEntry[] = [];
+  let failedAccounts = 0;
 
   try {
     const page = await ensureSession(browser);
@@ -577,13 +579,15 @@ async function main() {
         // 계정 하나가 실패해도(비공개 전환, 페이지 구조 변경 등) 나머지 계정은 계속 스캔한다.
         const message = err instanceof Error ? err.message : String(err);
         console.error(`  ✗ [${target.theaterName}] @${target.username} 스캔 실패: ${message}`);
+        failedAccounts++;
       }
     }
   } finally {
     await browser.close();
   }
 
-  const dateStr = new Date().toISOString().slice(0, 10).replace(/-/g, "");
+  // toISOString()은 UTC라 KST 09시 전에 끝나면 전날 날짜로 저장됐다.
+  const dateStr = getLocalDateString(new Date()).replace(/-/g, "");
   const reviewFile = path.join(STATE_DIR, `review-${dateStr}.json`);
   // 같은 날 여러 번 실행할 수 있으니(수동 재실행 등) 기존 파일을 빈 결과로
   // 덮어쓰지 않도록 postUrl 기준으로 합친다.
@@ -605,6 +609,12 @@ async function main() {
     console.log(`  원본: ${entry.postUrl}`);
   }
   console.log(`\n검토용 파일: ${reviewFile}`);
+
+  // 잠자기 중 네트워크가 끊겨 계정 대부분을 못 본 채 "완료"로 끝난 적이 있다(11/09: 후보 3건).
+  // 절반 넘게 실패하면 실패로 끝내서 기획전 반영을 건너뛰고 다음 주기에 다시 스캔하게 한다.
+  if (failedAccounts > instagramScanTargets.length / 2) {
+    throw new Error(`계정 ${instagramScanTargets.length}개 중 ${failedAccounts}개 스캔 실패 — 다음 주기에 다시 시도`);
+  }
   console.log("이어서 sync-instagram-events.ts가 후보를 정리·검증해 통과한 기획전만 events.json에 자동 반영합니다.");
 }
 

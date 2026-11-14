@@ -5,33 +5,21 @@
   <key>Label</key>
   <string>com.moviemania.cgv-movno</string>
 
+  <!-- 실행 조건(06:00 이후, 완전히 깨어 있을 때, 하루 1회 성공까지 최대 3번)은 스크립트가 판단한다.
+       PATH(Node 22 필수)와 caffeinate도 스크립트 안에서 처리. -->
   <key>ProgramArguments</key>
   <array>
-    <string>/Users/choedam-eun/.nvm/versions/node/v22.23.2/bin/npx</string>
-    <string>tsx</string>
-    <string>src/scripts/batchFetchCgvMovNo.ts</string>
+    <string>/bin/bash</string>
+    <string>scripts/cgv-movno.sh</string>
   </array>
 
   <key>WorkingDirectory</key>
   <string>/Users/choedam-eun/Desktop/work/Movie/movie_mania</string>
 
-  <!-- scheduleService.js가 쓰는 cheerio/undici가 Node 18의 전역 File 누락으로
-       깨져서(ReferenceError: File is not defined) Node 22가 반드시 필요함. -->
-  <key>EnvironmentVariables</key>
-  <dict>
-    <key>PATH</key>
-    <string>/Users/choedam-eun/.nvm/versions/node/v22.23.2/bin:/usr/bin:/bin:/usr/sbin:/sbin</string>
-  </dict>
-
-  <!-- 매일 06:00 실행. 그날 CGV 상영작 movNo를 미리 채워둬서, 사용자가 예매
-       버튼을 누르는 시점엔 대부분 캐시가 이미 채워져 있게 한다. -->
-  <key>StartCalendarInterval</key>
-  <dict>
-    <key>Hour</key>
-    <integer>6</integer>
-    <key>Minute</key>
-    <integer>0</integer>
-  </dict>
+  <!-- 30분마다 깨워서, 덮개를 닫아 놓친 날도 다음에 노트북을 열었을 때 따라잡는다(scripts/automation-guard.sh).
+       그날 CGV 상영작 movNo를 미리 채워둬서 예매 버튼을 누르는 시점엔 대부분 캐시가 이미 채워져 있게 한다. -->
+  <key>StartInterval</key>
+  <integer>1800</integer>
 
   <key>StandardOutPath</key>
   <string>/Users/choedam-eun/Desktop/work/Movie/movie_mania/.cgv-movno/log.txt</string>

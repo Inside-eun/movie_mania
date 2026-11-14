@@ -15,16 +15,10 @@
   <key>WorkingDirectory</key>
   <string>/Users/choedam-eun/Desktop/work/Movie/movie_mania</string>
 
-  <!-- 매주 월요일 07:30 실행. 요일을 바꾸려면 Weekday 값을 수정 (0/7=일, 1=월 ... 6=토) -->
-  <key>StartCalendarInterval</key>
-  <dict>
-    <key>Weekday</key>
-    <integer>1</integer>
-    <key>Hour</key>
-    <integer>7</integer>
-    <key>Minute</key>
-    <integer>30</integer>
-  </dict>
+  <!-- 30분마다 깨우고, 실제 스캔은 주 1회(월요일 07:30 이후 첫 깨어 있는 시점)만 한다.
+       요일·시각을 바꾸려면 scripts/instagram-scan.sh의 PERIOD 계산을 수정. -->
+  <key>StartInterval</key>
+  <integer>1800</integer>
 
   <key>StandardOutPath</key>
   <string>/Users/choedam-eun/Desktop/work/Movie/movie_mania/.instagram-scan/log.txt</string>

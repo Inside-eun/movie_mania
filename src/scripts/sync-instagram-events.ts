@@ -101,6 +101,19 @@ function git(args: string[], options: { env?: NodeJS.ProcessEnv; input?: string 
   return execFileSync("git", args, { encoding: "utf-8", ...options }).trim();
 }
 
+// 잠자기에서 막 깨어난 직후엔 GitHub SSH가 끊기는 일이 잦아서 네트워크를 타는 git 명령은 재시도한다.
+function gitWithRetry(args: string[], attempts = 3, waitSeconds = 20): string {
+  for (let i = 1; ; i++) {
+    try {
+      return git(args);
+    } catch (err) {
+      if (i >= attempts) throw err;
+      console.warn(`⚠️ git ${args[0]} 실패(${i}/${attempts}), ${waitSeconds}초 후 재시도...`);
+      execFileSync("sleep", [String(waitSeconds)]);
+    }
+  }
+}
+
 function findLatestFile(prefix: string, exclude?: string): string | null {
   if (!fs.existsSync(STATE_DIR)) return null;
   const files = fs
@@ -347,7 +360,7 @@ function deployToMain(content: string, baseSha: string, message: string): "완�
         return "스킵";
       }
       const newCommit = git(["commit-tree", newTree, "-p", baseSha, "-m", message]);
-      git(["push", "origin", `${newCommit}:refs/heads/main`]);
+      gitWithRetry(["push", "origin", `${newCommit}:refs/heads/main`]);
       console.log(`✅ events.json → main 자동 배포 완료 (${newCommit.slice(0, 7)})`);
       return "완료";
     } finally {
@@ -470,6 +483,8 @@ async function main() {
     fs.writeFileSync(resultFile, JSON.stringify(result, null, 2), "utf-8");
   }
   console.log(`=== 기획전 자동 반영 완료: 반영 ${applied.length}건, 보류 ${rejected.length}건, 배포 ${deploy} ===`);
+  // 배포가 실패하면 scripts/instagram-scan.sh가 이번 주를 성공으로 표시하지 않고 다음 주기에 다시 시도한다.
+  if (deploy === "실패") process.exitCode = 1;
 }
 
 main().catch((err) => {
