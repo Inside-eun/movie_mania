@@ -9,7 +9,7 @@ import {
   useState,
 } from 'react';
 
-import { mockEvents, CuratedEvent } from '@/mock/events';
+import { mockEvents, CuratedEvent, isEventEnded } from '@/mock/events';
 import { getLocalDateString } from '@/utils/date';
 import { trackQuizBannerClicked, trackBannerIndicatorClicked } from '@/utils/gtm';
 
@@ -94,12 +94,9 @@ export default function MovieBanner({ onEventClick }: MovieBannerProps) {
 
   const today = getLocalDateString(new Date());
   // 노출 기간(startDate~endDate) 안에 든 기획전만 후보로 삼는다.
-  // endDate가 없으면 "상영 중"으로 보고 계속 노출한다(사람이 events.ts에서 직접 뺄 때까지).
+  // endDate가 없으면 시작한 달의 마지막 날까지만 노출한다(getEventEndDate).
   const activeEvents = useMemo(
-    () =>
-      mockEvents.filter(
-        (e) => e.startDate <= today && (e.endDate === null || today <= e.endDate)
-      ),
+    () => mockEvents.filter((e) => e.startDate <= today && !isEventEnded(e, today)),
     [today]
   );
 

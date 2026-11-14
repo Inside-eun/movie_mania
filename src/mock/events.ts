@@ -10,7 +10,7 @@ export interface CuratedEvent {
   theaterNames: string[]; // 같은 기획전이 여러 극장에서 열리는 경우 모두 나열
   period: string; // 표시용 기간 텍스트
   startDate: string; // YYYY-MM-DD, 홈 배너 노출 시작일 (이 날짜부터 노출)
-  endDate: string | null; // YYYY-MM-DD, 홈 배너 노출 종료일. "상영 중"처럼 끝이 정해지지 않았으면 null(수동으로 뺄 때까지 계속 노출)
+  endDate: string | null; // YYYY-MM-DD, 홈 배너 노출 종료일. "상영 중"처럼 끝이 정해지지 않았으면 null(시작한 달의 마지막 날까지 노출)
   summary: string;
   description: string;
   movieTitles: string[]; // 상영 시간표 데이터의 title과 매칭
@@ -19,9 +19,17 @@ export interface CuratedEvent {
 
 export const mockEvents: CuratedEvent[] = eventsData;
 
-// 종료일이 지난 기획전인지. today는 YYYY-MM-DD(로컬 날짜). endDate가 null이면 "상영 중"으로 본다.
+// 실제로 적용되는 종료일(YYYY-MM-DD). endDate가 null이면 시작한 달의 마지막 날에 끝난 것으로 본다.
+export function getEventEndDate(event: Pick<CuratedEvent, "startDate" | "endDate">): string {
+  if (event.endDate !== null) return event.endDate;
+  const [year, month] = event.startDate.split("-").map(Number);
+  const lastDay = new Date(year, month, 0).getDate();
+  return `${year}-${String(month).padStart(2, "0")}-${String(lastDay).padStart(2, "0")}`;
+}
+
+// 종료일이 지난 기획전인지. today는 YYYY-MM-DD(로컬 날짜).
 export function isEventEnded(event: CuratedEvent, today: string): boolean {
-  return event.endDate !== null && event.endDate < today;
+  return getEventEndDate(event) < today;
 }
 
 export function getEvent(id: string): CuratedEvent | undefined {

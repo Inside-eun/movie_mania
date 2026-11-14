@@ -16,7 +16,7 @@ import fs from "fs";
 import os from "os";
 import path from "path";
 
-import type { CuratedEvent } from "../mock/events";
+import { getEventEndDate, type CuratedEvent } from "../mock/events";
 import { ScheduleService } from "../services/scheduleService";
 import { getLocalDateString } from "../utils/date";
 import { instagramScanTargets } from "./instagramTargets";
@@ -259,7 +259,7 @@ function validateEvent(
     // 시간표에 있어야 한다. 이미 끝난 기획전(종료일 수정 등)과 시간표 데이터가 없는 극장
     // (CGV아트하우스 계정 등)은 확인할 수 없어 넘어간다.
     const windowEnd = addDays(ctx.today, SCHEDULE_WINDOW_DAYS - 1);
-    const stillRunning = event.endDate === null || event.endDate >= ctx.today;
+    const stillRunning = getEventEndDate(event) >= ctx.today;
     const theaterTitles = event.theaterNames
       .map((name) => ctx.titlesByTheater.get(name))
       .filter((titles): titles is Set<string> => titles !== undefined);
