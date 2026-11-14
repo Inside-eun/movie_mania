@@ -9,7 +9,7 @@ import {
   useState,
 } from 'react';
 
-import { mockEvents, CuratedEvent, isEventEnded } from '@/mock/events';
+import { mockEvents, CuratedEvent, isEventEnded } from '@/data/events';
 import { getLocalDateString } from '@/utils/date';
 import { trackQuizBannerClicked, trackBannerIndicatorClicked } from '@/utils/gtm';
 

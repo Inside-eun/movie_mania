@@ -9,7 +9,7 @@ import fs from 'fs';
 import path from 'path';
 import readline from 'readline';
 
-const CACHE_PATH = path.resolve(process.cwd(), 'src/lib/cgvMovNoCache.json');
+const CACHE_PATH = path.resolve(process.cwd(), 'src/lib/booking/cgvMovNoCache.json');
 
 interface CGVItem {
   movNm?: string;

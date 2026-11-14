@@ -3,12 +3,12 @@
 import { useEffect, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 
-import { mockEvents, getEvent, isEventEnded, CuratedEvent } from "@/mock/events";
+import { mockEvents, getEvent, isEventEnded, CuratedEvent } from "@/data/events";
 import { useWeeklySchedules } from "@/hooks/useWeeklySchedules";
 import { useEdgeSwipeBack } from "@/hooks/useEdgeSwipeBack";
 import { getLocalDateString } from "@/utils/date";
 import { MovieSchedule } from "@/types";
-import { CreditsByTitle } from "@/mock/recommendations";
+import { CreditsByTitle } from "@/lib/recommendations";
 import { trackEventListItemClicked, trackEventMovieClicked } from "@/utils/gtm";
 
 function formatMonthDay(dateStr: string): string {

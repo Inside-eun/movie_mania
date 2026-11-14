@@ -6,7 +6,7 @@ import { MovieSchedule } from "@/types";
 import { TMDBMovieCredits } from "@/services/tmdbApi";
 import { getLocalDateString } from "@/utils/date";
 
-import { mockEvents, isEventEnded } from "./events";
+import { mockEvents, isEventEnded } from "@/data/events";
 
 // 이미 끝난 기획전으로 추천작을 묶으면 안 되므로 진행 중(또는 예정)인 기획전만 본다.
 function findOngoingEvent(title: string) {

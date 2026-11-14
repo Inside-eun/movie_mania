@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 
 import MapView from "@/components/MapView";
 import { getCurrentPosition } from "@/lib/geolocation";
-import { estimateTravel } from "@/mock/mockMap";
+import { estimateTravel } from "@/lib/travelEstimate";
 
 // 위치 권한이 없을 때 기본값 (서울시청)
 const DEFAULT_USER_LOCATION = { latitude: 37.5663, longitude: 126.9779 };

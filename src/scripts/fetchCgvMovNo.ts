@@ -19,7 +19,7 @@ import path from 'path';
 import readline from 'readline';
 import puppeteer from 'puppeteer';
 
-const CACHE_PATH = path.resolve(process.cwd(), 'src/lib/cgvMovNoCache.json');
+const CACHE_PATH = path.resolve(process.cwd(), 'src/lib/booking/cgvMovNoCache.json');
 const SEARCH_PAGE_URL = 'https://cgv.co.kr/tme/itgrSrch';
 const REQUEST_DELAY_MS = 1500;
 const USER_AGENT =
@@ -30,7 +30,7 @@ interface CgvSearchMovie {
   movNo: string;
 }
 
-// cgvBooking.ts의 lookupMovNo와 동일한 정규화 규칙을 써야 여기서 "정확히
+// booking/cgv.ts의 lookupMovNo와 동일한 정규화 규칙을 써야 여기서 "정확히
 // 일치"로 판단해 자동 추가한 항목이 실제 예매 조회에서도 매칭된다.
 // 괄호 부연 표기("암살자" vs "암살자(들)")와 부제 구분 문장부호 차이
 // ("타짜: ..." vs "타짜-...")를 흡수한다.

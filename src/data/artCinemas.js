@@ -226,6 +226,11 @@ export const artCinemas = [
   },
 ];
 
+// 극장명으로 극장 정보(좌표·주소 포함) 조회
+export function findArtCinemaByName(name) {
+  return artCinemas.find((t) => t.cdNm === name);
+}
+
 // 멀티플렉스 체인 필터링용
 export const multiplexChains = ["CGV", "메가박스", "롯데시네마"];
 

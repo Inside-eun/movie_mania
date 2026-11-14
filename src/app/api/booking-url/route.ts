@@ -3,27 +3,27 @@ import {
   buildDtryxBookingUrl,
   getDtryxFallbackUrl,
   isSupportedDtryxTheater,
-} from '@/lib/dtryxBooking';
+} from '@/lib/booking/dtryx';
 import {
   buildMovieeBookingUrl,
   getMovieeFallbackUrl,
   isSupportedMovieeTheater,
-} from '@/lib/movieeBooking';
+} from '@/lib/booking/moviee';
 import {
   buildCGVBookingUrl,
   getCGVFallbackUrl,
   isSupportedCGVTheater,
-} from '@/lib/cgvBooking';
+} from '@/lib/booking/cgv';
 import {
   buildLotteBookingUrl,
   getLotteFallbackUrl,
   isSupportedLotteTheater,
-} from '@/lib/lotteCinemaBooking';
+} from '@/lib/booking/lotteCinema';
 import {
   buildMegaboxBookingUrl,
   getMegaboxFallbackUrl,
   isSupportedMegaboxTheater,
-} from '@/lib/megaboxBooking';
+} from '@/lib/booking/megabox';
 
 export const dynamic = 'force-dynamic';
 

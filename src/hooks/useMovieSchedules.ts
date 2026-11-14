@@ -3,7 +3,6 @@
 import { useState, useMemo, useCallback, useEffect } from "react";
 import { MovieSchedule, ScheduleResponse } from "@/types";
 import { getLocalDateString, parseMovieTime } from "@/utils/date";
-import { getTheaterCoordinates } from "@/utils/theaterCoordinates";
 import { trackApiLoadFailed } from "@/utils/gtm";
 
 const CACHE_KEY_PREFIX = "schedules_v1_";
@@ -50,13 +49,6 @@ export function useMovieSchedules(
   const [error, setError] = useState<string | null>(null);
   const [lastUpdate, setLastUpdate] = useState<string | null>(null);
 
-  const applyCoordinates = useCallback((movies: MovieSchedule[]) =>
-    movies.map((movie) => {
-      if (movie.latitude && movie.longitude) return movie;
-      const coords = getTheaterCoordinates(movie.theater);
-      return { ...movie, latitude: coords?.latitude, longitude: coords?.longitude };
-    }), []);
-
   // 스케줄 조회
   const fetchMovies = useCallback(async () => {
     setLoading(true);
@@ -69,16 +61,16 @@ export function useMovieSchedules(
       const data: ScheduleResponse = await response.json();
 
       if (data.success) {
-        const moviesWithCoordinates = applyCoordinates(data.data);
+        const movies = data.data;
         const timeLabel = new Date(data.timestamp).toLocaleTimeString("ko-KR", {
           timeZone: "Asia/Seoul",
         });
-        setAllMovies(moviesWithCoordinates);
+        setAllMovies(movies);
         setLastUpdate(timeLabel);
-        writeCache(selectedDate, moviesWithCoordinates, timeLabel);
+        writeCache(selectedDate, movies, timeLabel);
 
         // tmdbPosterUrl이 없는 영화가 있으면 백그라운드에서 보완
-        const hasMissingPosters = moviesWithCoordinates.some((m) => !m.tmdbPosterUrl);
+        const hasMissingPosters = movies.some((m) => !m.tmdbPosterUrl);
         if (hasMissingPosters) {
           fetch(`/api/tmdb-movies?date=${selectedDate}`)
             .then((res) => (res.ok ? res.json() : null))
@@ -115,7 +107,7 @@ export function useMovieSchedules(
     } finally {
       setLoading(false);
     }
-  }, [selectedDate, applyCoordinates]);
+  }, [selectedDate]);
 
   // 날짜 변경 시: 캐시가 있으면 즉시 표시 후 백그라운드에서 갱신
   useEffect(() => {
@@ -129,13 +121,13 @@ export function useMovieSchedules(
         .then((res) => res.json())
         .then((data: ScheduleResponse) => {
           if (!data.success) return;
-          const moviesWithCoords = applyCoordinates(data.data);
+          const movies = data.data;
           const timeLabel = new Date(data.timestamp).toLocaleTimeString("ko-KR", {
             timeZone: "Asia/Seoul",
           });
-          setAllMovies(moviesWithCoords);
+          setAllMovies(movies);
           setLastUpdate(timeLabel);
-          writeCache(selectedDate, moviesWithCoords, timeLabel);
+          writeCache(selectedDate, movies, timeLabel);
         })
         .catch(() => {});
     } else {

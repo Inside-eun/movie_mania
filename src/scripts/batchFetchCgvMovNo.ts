@@ -13,7 +13,7 @@ import os from 'os';
 import path from 'path';
 import { execFileSync } from 'child_process';
 import { ScheduleService } from '../services/scheduleService';
-import { CGV_CINEMAS } from '../lib/cgvBooking';
+import { CGV_CINEMAS } from '../lib/booking/cgv';
 import { run } from './fetchCgvMovNo';
 import { getLocalDateString } from '../utils/date';
 
@@ -23,7 +23,7 @@ interface MovieSchedule {
   [key: string]: unknown;
 }
 
-const CACHE_REL_PATH = 'src/lib/cgvMovNoCache.json';
+const CACHE_REL_PATH = 'src/lib/booking/cgvMovNoCache.json';
 
 // 잠자기에서 막 깨어난 직후엔 네트워크가 덜 붙어 GitHub SSH가 끊기는 일이 잦았다
 // ("Connection closed by ... port 22"). 네트워크를 타는 git 명령은 몇 번 재시도한다.
@@ -40,7 +40,7 @@ function gitWithRetry(args: string[], attempts = 3, waitSeconds = 20): void {
   }
 }
 
-// cgvMovNoCache.json은 cgvBooking.ts에 정적 import돼서 빌드에 박히기 때문에,
+// cgvMovNoCache.json은 booking/cgv.ts에 정적 import돼서 빌드에 박히기 때문에,
 // 로컬 파일만 갱신하고 커밋/푸시를 사람이 깜빡하면 자동화 결과가 프로덕션에
 // 영원히 반영되지 않는다(실제로 주말 동안 이 문제로 반영이 안 됐음). 그렇다고
 // 현재 로컬에서 작업 중인 브랜치(develop 등)에 자동 커밋을 얹으면 작업 중인

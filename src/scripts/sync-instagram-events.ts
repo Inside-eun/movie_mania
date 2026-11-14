@@ -16,13 +16,13 @@ import fs from "fs";
 import os from "os";
 import path from "path";
 
-import { getEventEndDate, type CuratedEvent } from "../mock/events";
+import { getEventEndDate, type CuratedEvent } from "../data/events";
 import { ScheduleService } from "../services/scheduleService";
 import { getLocalDateString } from "../utils/date";
 import { instagramScanTargets } from "./instagramTargets";
 
 const STATE_DIR = path.join(process.cwd(), ".instagram-scan");
-const EVENTS_REL_PATH = "src/mock/events.json";
+const EVENTS_REL_PATH = "src/data/events.json";
 const DRY_RUN = process.argv.includes("--dry-run");
 // 시간표 데이터로 상영작을 검증할 기간(오늘 포함). 그 뒤에 시작하는 기획전은 시간표가
 // 아직 없으므로 상영작 검증을 건너뛴다.

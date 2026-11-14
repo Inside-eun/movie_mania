@@ -6,7 +6,7 @@ import { useParams, useRouter, useSearchParams } from "next/navigation";
 
 import PosterImage from "@/components/PosterImage";
 import TheaterMap from "@/components/TheaterMap";
-import { getBookingFallbackUrl } from "@/lib/bookingFallbacks";
+import { getBookingFallbackUrl } from "@/lib/booking/fallbacks";
 import {
   trackBookingClicked,
   trackMovieDetailOpened,
@@ -19,8 +19,8 @@ import {
 import { hapticImpact } from "@/lib/haptics";
 import { useWishlist } from "@/hooks";
 import { MovieSchedule, ScheduleResponse } from "@/types";
-import { getRecommendations, isEventMovie, CreditsByTitle } from "@/mock/recommendations";
-import { getTheaterDetailByName } from "@/mock/theaterDetails";
+import { getRecommendations, isEventMovie, CreditsByTitle } from "@/lib/recommendations";
+import { findArtCinemaByName } from "@/data/artCinemas";
 
 interface KOBISMovieInfo {
   movieCd?: string;
@@ -120,7 +120,7 @@ function MovieDetailPageInner() {
 
   const movie = stored?.movie ?? null;
   const selectedDate = stored?.selectedDate;
-  const theaterDetail = movie?.theater ? getTheaterDetailByName(movie.theater) : undefined;
+  const theaterDetail = movie?.theater ? findArtCinemaByName(movie.theater) : undefined;
   const wishlist = useWishlist(selectedDate ?? "");
 
   useEffect(() => {

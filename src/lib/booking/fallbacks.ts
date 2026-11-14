@@ -1,4 +1,4 @@
-import { isSupportedCGVTheater, CGV_CINEMA_PICKER_URL } from './cgvBooking';
+import { isSupportedCGVTheater, CGV_CINEMA_PICKER_URL } from './cgv';
 
 // 클라이언트에서 즉시 사용 가능한 폴백 URL 맵 (next/cache 미사용)
 const BOOKING_FALLBACK_URLS: Record<string, string> = {
