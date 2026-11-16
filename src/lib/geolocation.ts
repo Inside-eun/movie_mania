@@ -4,7 +4,7 @@ export interface GeoCoords {
 }
 
 /**
- * 네이티브 앱(iOS/Android)에서는 @capacitor/geolocation(CoreLocation)을 쓰고,
+ * 네이티브 앱(iOS)에서는 @capacitor/geolocation(CoreLocation)을 쓰고,
  * 웹에서는 브라우저 표준 navigator.geolocation을 쓴다.
  * WKWebView는 iOS 16.4 미만에서 navigator.geolocation이 동작하지 않아 네이티브 플러그인이 필요함.
  */

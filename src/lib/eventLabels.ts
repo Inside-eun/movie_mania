@@ -83,7 +83,6 @@ const CHANNEL_LABELS: Record<string, string> = {
 
 const APP_PLATFORM_LABELS: Record<string, string> = {
   ios_app: "iOS 앱",
-  android_app: "Android 앱",
   web: "웹",
 };
 

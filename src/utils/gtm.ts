@@ -128,7 +128,7 @@ export const trackEvent = (
  * 앱/웹 사용자 구분용 사용자 속성(app_platform) 설정.
  *
  * 앱은 웹과 같은 배포본을 WebView로 띄우므로 GA4에는 전부 platform=web으로 들어온다.
- * 런타임에만 구분할 수 있어 여기서 'ios_app' | 'android_app' | 'web'을 사용자 속성으로 심는다.
+ * 런타임에만 구분할 수 있어 여기서 'ios_app' | 'web'을 사용자 속성으로 심는다.
  * GA4에서 사용자 범위 맞춤 측정기준으로 등록해야 보고서/Data API에 노출된다.
  */
 export const setAppPlatformProperty = async () => {
