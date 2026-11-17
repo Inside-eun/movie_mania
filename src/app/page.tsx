@@ -14,6 +14,7 @@ import dynamic from 'next/dynamic';
 import { useRouter } from 'next/navigation';
 
 import {
+  useIsNativeApp,
   useMovieFilter,
   useMovieSchedules,
   useWishlist,
@@ -21,6 +22,7 @@ import {
 import { MovieSchedule } from '@/types';
 import { addDaysToDateString, getLocalDateString } from '@/utils/date';
 
+import AppDownloadModal from '../components/AppDownloadModal';
 import DateSelector from '../components/DateSelector';
 import Header from '../components/Header';
 import MovieBanner from '../components/MovieBanner';
@@ -59,6 +61,7 @@ export default function Home() {
     filter.showPastSchedules
   );
   const wishlist = useWishlist(selectedDate);
+  const isNativeApp = useIsNativeApp();
 
   // 실제로 화면에 보인 누적 시간 측정 (탭 전환, 백그라운드 제외)
   const visibleSinceRef = useRef<number>(Date.now());
@@ -193,6 +196,9 @@ export default function Home() {
     <>
       <SplashScreen visible={isInitialLoading} />
 
+      {/* 웹 전용 앱 출시 안내 모달. 스플래시가 걷힌 뒤에 띄운다. */}
+      <AppDownloadModal ready={!isInitialLoading} />
+
       <Header
         isHomeView={isHomeView}
         showWishlistView={showWishlistView}
@@ -209,9 +215,11 @@ export default function Home() {
           스켈레톤을 그려서(MovieBanner 내부 처리) 메인 스케줄 로딩과 무관하게 바로 마운트한다.
           이렇게 해야 배너의 주간 일정 fetch가 메인 스케줄 fetch와 동시에 시작돼 체감 대기 시간이 줄고,
           "스켈레톤 -> 사라짐 -> 배너 등장"으로 이어지던 레이아웃 시프트도 없어진다.
-          sm 이상에서는 본문과 동일한 max-w-4xl 컨테이너에 맞춰 좌우 여백을 통일한다. */}
-      {isHomeView && (
-        <div className="sm:container sm:mx-auto sm:max-w-4xl sm:px-4">
+          sm 이상에서는 본문과 동일한 max-w-4xl 컨테이너에 맞춰 좌우 여백을 통일한다.
+          배너는 웹 전용이라 Capacitor 앱에서는 렌더하지 않는다(하이드레이션 전 첫 페인트는
+          data-hide-in-app + globals.css가 가려준다). */}
+      {isHomeView && !isNativeApp && (
+        <div data-hide-in-app className="sm:container sm:mx-auto sm:max-w-4xl sm:px-4">
           <MovieBanner onEventClick={goToEventDetail} />
         </div>
       )}

@@ -36,6 +36,8 @@ export const GTM_EVENTS = {
 
   // 배너 관련
   QUIZ_BANNER_CLICKED: 'quiz_banner_clicked',
+  APP_DOWNLOAD_MODAL_CLICKED: 'app_download_modal_clicked',
+  APP_DOWNLOAD_MODAL_DISMISSED: 'app_download_modal_dismissed',
 
   // 영화관 즐겨찾기 관련
   FAVORITE_THEATER_SAVED: 'favorite_theater_saved',
@@ -276,6 +278,17 @@ export const trackMovieShareClicked = (movieTitle: string, theater: string) => {
  */
 export const trackQuizBannerClicked = () => {
   trackEvent(GTM_EVENTS.QUIZ_BANNER_CLICKED);
+};
+
+/**
+ * 웹 앱 출시 안내 모달 - 'App Store에서 받기' 클릭 / 닫기
+ */
+export const trackAppDownloadModalClicked = () => {
+  trackEvent(GTM_EVENTS.APP_DOWNLOAD_MODAL_CLICKED);
+};
+
+export const trackAppDownloadModalDismissed = () => {
+  trackEvent(GTM_EVENTS.APP_DOWNLOAD_MODAL_DISMISSED);
 };
 
 /**

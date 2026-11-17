@@ -54,8 +54,20 @@ export default function RootLayout({
   const GA_ID = process.env.NEXT_PUBLIC_GA_ID || 'G-77TJYZ919Q';
 
   return (
-    <html lang="ko">
+    <html lang="ko" suppressHydrationWarning>
       <head>
+        {/* Capacitor 네이티브 브리지는 WebView 문서 시작 시점에 주입되므로, 여기서 바로
+            window.Capacitor를 확인해 html에 data-native를 찍을 수 있다. 앱에서만 숨길 요소를
+            첫 페인트 전에 감추기 위한 표식(globals.css의 [data-hide-in-app] 규칙). */}
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `
+              (function(){try{var c=window.Capacitor;
+              var n=!!c&&(typeof c.isNativePlatform==='function'?c.isNativePlatform():c.platform&&c.platform!=='web');
+              if(n)document.documentElement.setAttribute('data-native','true');}catch(e){}})();
+            `,
+          }}
+        />
         <Script
           id="google-tag-manager"
           strategy="afterInteractive"

@@ -63,3 +63,10 @@ html {
   background-size: 250% 100%;
   animation: skeleton-sweep 1.5s ease-in-out infinite;
 }
+
+/* 앱(Capacitor WebView)에서는 숨기고 웹에서만 보여줄 요소.
+   layout.tsx의 인라인 스크립트가 html[data-native="true"]를 찍어주므로,
+   하이드레이션으로 실제 언마운트되기 전 첫 페인트부터 보이지 않는다. */
+html[data-native="true"] [data-hide-in-app] {
+  display: none !important;
+}
